@@ -99,8 +99,6 @@ class StateContainerState extends State<StateContainer> {
   Account recentLast;
   Account recentSecondLast;
 
-  Map<String, String> natriconNonce = Map<String, String>();
-
   // If callback is locked
   bool _locked = false;
 
@@ -114,19 +112,6 @@ class StateContainerState extends State<StateContainer> {
 
   // When wallet is encrypted
   String encryptedSecret;
-
-  void updateNatriconNonce(String address, int nonce) {
-    setState(() {
-      this.natriconNonce[address] = nonce.toString();
-    });
-  }
-
-  String getNatriconNonce(String address) {
-    if (this.natriconNonce.containsKey(address)) {
-      return this.natriconNonce[address];
-    }
-    return "";
-  }
 
   @override
   void initState() {

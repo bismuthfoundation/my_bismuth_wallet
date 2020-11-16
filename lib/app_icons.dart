@@ -30,7 +30,6 @@ class AppIcons {
   static const IconData backupseed = IconData(0xe806, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData bananocurrency = IconData(0xe807, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData bananohorizontal = IconData(0xe808, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData bananologo = IconData(0xe809, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData btc = IconData(0xe80a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData changerepresentative = IconData(0xe80b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData close = IconData(0xe80c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
@@ -50,8 +49,6 @@ class AppIcons {
   static const IconData max = IconData(0xe81a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData nanocurrency = IconData(0xe81b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData nanohorizontal = IconData(0xe81c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData nanologo = IconData(0xe81d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData natricon = IconData(0xe81e, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData natriumhorizontal = IconData(0xe81f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData newwallet = IconData(0xe820, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData notifications = IconData(0xe821, fontFamily: _kFontFam, fontPackage: _kFontPkg);

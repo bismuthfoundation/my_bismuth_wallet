@@ -36,14 +36,12 @@ class SendConfirmSheet extends StatefulWidget {
   final String contactName;
   final String localCurrency;
   final bool maxSend;
-  final int natriconNonce;
 
   SendConfirmSheet(
       {this.amountRaw,
       this.destination,
       this.contactName,
       this.localCurrency,
-      this.natriconNonce,
       this.maxSend = false})
       : super();
 
@@ -312,11 +310,6 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
       String contactName = contact == null ? null : contact.name;
       Navigator.of(context).popUntil(RouteUtils.withNameLike('/home'));
       StateContainer.of(context).requestUpdate();
-      if (widget.natriconNonce != null) {
-        setState(() {
-          StateContainer.of(context).updateNatriconNonce(StateContainer.of(context).selectedAccount.address, widget.natriconNonce);
-        });
-      }
       Sheets.showAppHeightNineSheet(
           context: context,
           closeOnTap: true,

@@ -520,11 +520,6 @@ class AppLocalization {
         desc: 'notifications_settings', name: 'notifications');
   }
 
-  String get natricon {
-    return Intl.message("Natricon",
-        desc: 'natricon_settings', name: 'natricon');
-  }
-
   String get notificationTitle {
     return Intl.message("Received %1 iDNA",
         desc: 'notification_title', name: 'notificationTitle');
