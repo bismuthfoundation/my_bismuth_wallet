@@ -1,0 +1,38 @@
+import 'dart:core';
+
+import 'package:my_idena_wallet/util/idena_ffi/account/account_util.dart';
+
+// Object to represent an account address or address URI, and provide useful utilities
+class Address {
+  String _address;
+  String _amount;
+
+  Address(String value) {
+    _address = value;
+  }
+
+  String get address => _address;
+
+  String get amount => _amount;
+
+  String getShortString() {
+    if (_address == null || _address.length < 42) return "";
+    return _address.substring(0, 11) +
+        "..." +
+        _address.substring(_address.length - 6);
+  }
+
+  String getShorterString() {
+    if (_address == null || _address.length < 42) return "";
+    return _address.substring(0, 9) +
+        "..." +
+        _address.substring(_address.length - 4);
+  }
+
+  bool isValid() {
+    return _address == null
+        ? false
+        : IdenaAccounts.isValid(_address);
+  }
+
+}

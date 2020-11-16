@@ -1,0 +1,222 @@
+name: my_idena_wallet
+description: Idena Wallet app (iOS/Android).
+
+# The following line prevents the package from being accidentally published to
+# pub.dev using `pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.0
+
+  # Securley store data in a keystore
+  flutter_secure_storage: ^3.3.3
+
+  # Shared prefs
+  shared_preferences: ^0.5.12+4
+
+  # Flare for animations
+  flare_flutter: ^2.0.6
+
+  # Websockets
+  web_socket_channel: ^1.1.0
+
+  # Platform-specific build info
+  package_info: ^0.4.3+2
+
+  # Device-specific info
+  device_info: ^1.0.0
+
+  # JSON Serialization
+  json_annotation: ^3.0.1
+
+  # Localization
+  intl: ^0.16.1
+
+  # BigDecimal alternative
+  decimal: ^0.3.5
+
+  # Logger
+  logger: ^0.9.4
+
+  # Native webview plugin
+  flutter_webview_plugin: ^0.3.11
+
+  # SQLite
+  sqflite: ^1.3.2+1
+
+  # Android/iOS path provider
+  path_provider: ^1.6.24
+  
+  # TouchID/FaceID
+  local_auth: ^0.6.3+4
+
+  # Eventbus
+  event_taxi: ^0.1.5
+
+  # SVG
+  flutter_svg: ^0.19.1
+  
+  # Implementation of Bitcoin BIP39: Mnemonic code for generating deterministic keys
+  bip39: ^1.0.3
+
+  ffi: ^0.1.3
+
+  # QR Codes
+  qr_flutter: ^2.0.1 # Generator
+  barcode_scan:
+    git:
+      url: https://github.com/bbedward/flutter_barcode_reader.git
+      ref: master
+
+  # Deep link support
+  #uni_links: ^0.2.0
+  uni_links:
+    git:
+      url: https://github.com/CathalT/uni_links.git
+      ref: nfc_android
+
+  # HTTP client
+  http: ^0.12.2
+
+  # Easy hexadecimal encoding and decoding
+  hex: ^0.1.2
+
+  pointycastle: ^1.0.2
+  
+  # Vibrate
+  vibrate:
+    git:
+      url: https://github.com/bbedward/flutter_vibrate.git
+      ref: master
+
+  # Toast
+  oktoast: ^2.3.2
+
+  # Slidable list actions
+  flutter_slidable: ^0.5.7
+
+  # Lock helper
+  synchronized: ^2.2.0+2
+
+  # Service provider
+  get_it: ^5.0.1
+
+  # interaction with ethereum
+  web3dart: ^1.2.3
+
+  # A dart library to generate, checksum, and validate Ethereum addresses / EIP55
+  ethereum_address: ^1.0.1
+
+  convert: ^2.1.1
+
+  # Root/Jailbreak detection
+  root_checker:
+    git:
+      url: https://github.com/bbedward/root_checker.git
+      ref: master
+
+  # Validation utilities
+  validators: ^2.0.0+1
+
+  # Auto resize text widget
+  auto_size_text: ^2.1.0
+
+  # Avoid keyboard from overlapping text fields
+  keyboard_avoider: ^0.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  build_runner: ^1.7.0
+  json_serializable: ^3.2.5
+  intl_translation: ^0.17.9
+
+# For information on the generic Dart part of this file, see the
+# following page: https://www.dartlang.org/tools/pub/pubspec
+
+# The following section is specific to Flutter.
+flutter:
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: fonts/Roboto-Bold.ttf
+        - asset: fonts/Roboto-Regular.ttf
+        - asset: fonts/Roboto-Medium.ttf
+          weight: 400
+    - family: NunitoSans
+      fonts:
+        - asset: fonts/NunitoSans-Regular.ttf
+          weight: 600
+        - asset: fonts/NunitoSans-ExtraLight.ttf
+          weight: 100
+        - asset: fonts/NunitoSans-Light.ttf
+          weight: 200
+        - asset: fonts/NunitoSans-SemiBold.ttf
+          weight: 700
+        - asset: fonts/NunitoSans-Bold.ttf
+          weight: 800
+        - asset: fonts/NunitoSans-ExtraBold.ttf
+          weight: 900
+    - family: OverpassMono
+      fonts:
+        - asset: fonts/OverpassMono-Regular.ttf
+          weight: 600
+        - asset: fonts/OverpassMono-Light.ttf
+          weight: 100
+    - family: AppIcons
+      fonts:
+        - asset: fonts/AppIcons.ttf
+          weight: 500
+    - family: Comfortaa
+      fonts:
+        - asset: fonts/Comfortaa-Bold.ttf
+          weight: 700
+        - asset: fonts/Comfortaa-Regular.ttf
+          weight: 400
+        - asset: fonts/Comfortaa-Light.ttf
+          weight: 300
+  assets:
+    - assets/QR.svg
+    - assets/send_animation.flr
+    - assets/searchseedqr_animation_magnifyingglassonly.flr
+    - assets/searchseedqr_animation_glassonly.flr
+    - assets/searchseedqr_animation_qronly.flr
+    - assets/searchseedmanual_animation_magnifyingglassonly.flr
+    - assets/searchseedmanual_animation_glassonly.flr
+    - assets/searchseedmanual_animation_seedonly.flr
+    - assets/threedot_animation.flr
+    - assets/offline_animation.flr
+    - assets/sharecard_logo.svg
+    - assets/pulltosend_animation.flr
+    - assets/sheethandle_animation.flr
+    - assets/ntr_placeholder_animation.flr
+    
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  

@@ -1,0 +1,4 @@
+/Users/sylvain/SSE/app/my_idena_wallet/android/CMakeFiles/ed25519-donna.dir
+/Users/sylvain/SSE/app/my_idena_wallet/android/CMakeFiles/rebuild_cache.dir
+/Users/sylvain/SSE/app/my_idena_wallet/android/CMakeFiles/edit_cache.dir
+/Users/sylvain/SSE/app/my_idena_wallet/android/CMakeFiles/ed25519_blake2b.dir
