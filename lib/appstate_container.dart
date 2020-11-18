@@ -134,14 +134,17 @@ class StateContainerState extends State<StateContainer> {
   void _registerBus() {
     _subscribeEventSub =
         EventTaxiImpl.singleton().registerTo<SubscribeEvent>().listen((event) {
-      handleSubscribeResponse(event.response);
+      handleAddressResponse(event.response);
     });
     _priceEventSub =
         EventTaxiImpl.singleton().registerTo<PriceEvent>().listen((event) {
       // PriceResponse's get pushed periodically, it wasn't a request we made so don't pop the queue
       setState(() {
-        wallet.btcPrice = event.response.btcPrice.toString();
-        wallet.localCurrencyPrice = event.response.price.toString();
+        // TODO: A changer
+        wallet.btcPrice = "0";
+        wallet.localCurrencyPrice = "0";
+        //wallet.btcPrice = event.response.btcPrice.toString();
+        //wallet.localCurrencyPrice = event.response.price.toString();
       });
     });
 
@@ -278,13 +281,9 @@ class StateContainerState extends State<StateContainer> {
     });
   }
 
-  /// Handle account_subscribe response
-  void handleSubscribeResponse(SubscribeResponse response) {
-    // Combat spam by raising minimum receive if pending block count is large enough
-    if (response.pendingCount != null && response.pendingCount > 50) {
-      // Bump min receive to 0.05 iDNA
-      receiveThreshold = BigInt.from(5).pow(28).toString();
-    }
+  /// Handle address response
+  void handleAddressResponse(AddressResponse response) {
+
     // Set currency locale here for the UI to access
     sl.get<SharedPrefsUtil>().getCurrency(deviceLocale).then((currency) {
       setState(() {
@@ -292,22 +291,18 @@ class StateContainerState extends State<StateContainer> {
         curCurrency = currency;
       });
     });
-    // Server gives us a UUID for future requests on subscribe
-    if (response.uuid != null) {
-      sl.get<SharedPrefsUtil>().setUuid(response.uuid);
-    }
     setState(() {
       wallet.loading = false;
-      wallet.frontier = response.frontier;
-      wallet.openBlock = response.openBlock;
-      wallet.blockCount = response.blockCount;
-      if (response.balance == null) {
+      if (response.result == null) {
         wallet.accountBalance = BigInt.from(0);
       } else {
-        wallet.accountBalance = BigInt.tryParse(response.balance);
+        wallet.accountBalance = BigInt.tryParse(response.result.balance + response.result.stake);
       }
-      wallet.localCurrencyPrice = response.price.toString();
-      wallet.btcPrice = response.btcPrice.toString();
+      // TODO : à renseigner
+      wallet.localCurrencyPrice = "0";
+      wallet.btcPrice = "0";
+      //wallet.localCurrencyPrice = response.price.toString();
+      //wallet.btcPrice = response.btcPrice.toString();
     });
   }
 
@@ -344,12 +339,11 @@ class StateContainerState extends State<StateContainer> {
     if (wallet != null &&
         wallet.address != null &&
         Address(wallet.address).isValid()) {
-      String uuid = await sl.get<SharedPrefsUtil>().getUuid();
 
       // Request account history
-      int count = 500;
+      int count = 30;
       if (wallet.history != null && wallet.history.length > 1) {
-        count = 50;
+        count = 30;
       }
       try {
         AddressTxsResponse addressTxsResponse =

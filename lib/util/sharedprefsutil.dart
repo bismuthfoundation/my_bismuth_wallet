@@ -120,14 +120,6 @@ class SharedPrefsUtil {
     return await get(firstcontact_added, defaultValue: false);
   }
 
-  Future<void> setUuid(String uuid) async {
-    return await setEncrypted(app_uuid_key, uuid);
-  }
-
-  Future<String> getUuid() async {
-    return await getEncrypted(app_uuid_key);
-  }
-
   Future<void> setPriceConversion(PriceConversion conversion) async {
     return await set(price_conversion, conversion.index);
   }

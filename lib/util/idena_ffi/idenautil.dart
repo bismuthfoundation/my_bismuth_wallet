@@ -33,7 +33,7 @@ class IdenaUtil {
 
     String addressEIP55 = checksumEthereumAddress(address.toString()); 
     print("address EIP55: " +addressEIP55.toString());
-    return addressEIP55;
+    return address.toString();
   }
 
   Future<void> loginAccount(String seed, BuildContext context) async {

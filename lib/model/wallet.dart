@@ -12,28 +12,22 @@ class AppWallet {
   bool _historyLoading; // Whether or not we have received initial account history response
   String _address;
   BigInt _accountBalance;
-  String _frontier;
-  String _openBlock;
   String _representativeBlock;
   String _representative;
   String _localCurrencyPrice;
   String _btcPrice;
-  int _blockCount;
   List<AddressTxsResponseResult> _history;
 
 
-  AppWallet({String address, BigInt accountBalance, String frontier, String openBlock, String representativeBlock,
-                String representative, String localCurrencyPrice,String btcPrice, int blockCount,
+  AppWallet({String address, BigInt accountBalance, String representativeBlock,
+                String representative, String localCurrencyPrice,String btcPrice, 
                 List<AddressTxsResponseResult> history, bool loading, bool historyLoading}) {
     this._address = address;
     this._accountBalance = accountBalance ?? BigInt.zero;
-    this._frontier = frontier;
-    this._openBlock = openBlock;
     this._representativeBlock = representativeBlock;
     this._representative = representative;
     this._localCurrencyPrice = localCurrencyPrice ?? "0";
     this._btcPrice = btcPrice ?? "0";
-    this._blockCount = blockCount ?? 0;
     this._history = history ?? new List<AddressTxsResponseResult>();
     this._loading = loading ?? true;
     this._historyLoading = historyLoading  ?? true;
@@ -99,24 +93,6 @@ class AppWallet {
 
   set representativeBlock(String value) {
     _representativeBlock = value;
-  }
-
-  String get openBlock => _openBlock;
-
-  set openBlock(String value) {
-    _openBlock = value;
-  }
-
-  String get frontier => _frontier;
-
-  set frontier(String value) {
-    _frontier = value;
-  }
-
-  int get blockCount => _blockCount;
-
-  set blockCount(int value) {
-    _blockCount = value;
   }
 
   List<AddressTxsResponseResult> get history => _history;

@@ -32,7 +32,7 @@ class DBHelper {
 
   initDb() async {
     io.Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, "kalium.db");
+    String path = join(documentsDirectory.path, "idena.db");
     var theDb = await openDatabase(path,
         version: DB_VERSION, onCreate: _onCreate, onUpgrade: _onUpgrade);
     return theDb;
