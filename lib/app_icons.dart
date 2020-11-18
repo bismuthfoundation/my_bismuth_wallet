@@ -28,8 +28,6 @@ class AppIcons {
   static const IconData at = IconData(0xe804, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData back = IconData(0xe805, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData backupseed = IconData(0xe806, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData bananocurrency = IconData(0xe807, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData bananohorizontal = IconData(0xe808, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData btc = IconData(0xe80a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData changerepresentative = IconData(0xe80b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData close = IconData(0xe80c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
@@ -47,9 +45,6 @@ class AppIcons {
   static const IconData lock = IconData(0xe818, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData logout = IconData(0xe819, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData max = IconData(0xe81a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData nanocurrency = IconData(0xe81b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData nanohorizontal = IconData(0xe81c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData natriumhorizontal = IconData(0xe81f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData newwallet = IconData(0xe820, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData notifications = IconData(0xe821, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData paste = IconData(0xe822, fontFamily: _kFontFam, fontPackage: _kFontPkg);

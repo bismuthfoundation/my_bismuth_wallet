@@ -6,21 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:my_idena_wallet/appstate_container.dart';
 import 'package:my_idena_wallet/bus/events.dart';
 import 'package:my_idena_wallet/dimens.dart';
-import 'package:my_idena_wallet/model/db/appdb.dart';
-import 'package:my_idena_wallet/model/db/contact.dart';
-import 'package:my_idena_wallet/network/account_service.dart';
-import 'package:my_idena_wallet/network/model/response/process_response.dart';
 import 'package:my_idena_wallet/styles.dart';
 import 'package:my_idena_wallet/localization.dart';
 import 'package:my_idena_wallet/service_locator.dart';
-import 'package:my_idena_wallet/ui/send/send_complete_sheet.dart';
-import 'package:my_idena_wallet/ui/util/routes.dart';
 import 'package:my_idena_wallet/ui/widgets/buttons.dart';
 import 'package:my_idena_wallet/ui/widgets/dialog.dart';
 import 'package:my_idena_wallet/ui/util/ui_util.dart';
-import 'package:my_idena_wallet/ui/widgets/sheet_util.dart';
-import 'package:my_idena_wallet/util/idena_ffi/idenautil.dart';
-import 'package:my_idena_wallet/util/idena_ffi/keys/keys.dart';
 import 'package:my_idena_wallet/util/numberutil.dart';
 import 'package:my_idena_wallet/util/sharedprefsutil.dart';
 import 'package:my_idena_wallet/util/biometrics.dart';
@@ -292,7 +283,7 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
   }
 
   Future<void> _doSend() async {
-    try {
+   /* try {
       _showSendingAnimation(context);
       ProcessResponse resp = await sl.get<AccountService>().requestSend(
         StateContainer.of(context).wallet.representative,
@@ -326,7 +317,7 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
       }
       UIUtil.showSnackbar(AppLocalization.of(context).sendError, context);
       Navigator.of(context).pop();
-    }
+    }*/
   }
 
   Future<void> authenticateWithPin() async {

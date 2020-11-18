@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:event_taxi/event_taxi.dart';
 import 'package:logger/logger.dart';
-import 'package:my_idena_wallet/model/db/account.dart';
+import 'package:my_idena_wallet/network/model/response/address_txs_response.dart';
 import 'package:my_idena_wallet/ui/popup_button.dart';
 import 'package:my_idena_wallet/appstate_container.dart';
 import 'package:my_idena_wallet/dimens.dart';
@@ -19,7 +19,6 @@ import 'package:my_idena_wallet/model/list_model.dart';
 import 'package:my_idena_wallet/model/db/contact.dart';
 import 'package:my_idena_wallet/model/db/appdb.dart';
 import 'package:my_idena_wallet/network/model/block_types.dart';
-import 'package:my_idena_wallet/network/model/response/account_history_response_item.dart';
 import 'package:my_idena_wallet/styles.dart';
 import 'package:my_idena_wallet/app_icons.dart';
 import 'package:my_idena_wallet/ui/contacts/add_contact.dart';
@@ -28,7 +27,6 @@ import 'package:my_idena_wallet/ui/send/send_confirm_sheet.dart';
 import 'package:my_idena_wallet/ui/receive/receive_sheet.dart';
 import 'package:my_idena_wallet/ui/settings/settings_drawer.dart';
 import 'package:my_idena_wallet/ui/widgets/buttons.dart';
-import 'package:my_idena_wallet/ui/widgets/dialog.dart';
 import 'package:my_idena_wallet/ui/widgets/sheet_util.dart';
 import 'package:my_idena_wallet/ui/widgets/list_slidable.dart';
 import 'package:my_idena_wallet/ui/util/routes.dart';
@@ -68,7 +66,7 @@ class _AppHomePageState extends State<AppHomePage>
   // A separate unfortunate instance of this list, is a little unfortunate
   // but seems the only way to handle the animations
   final Map<String, GlobalKey<AnimatedListState>> _listKeyMap = Map();
-  final Map<String, ListModel<AccountHistoryResponseItem>> _historyListMap =
+  final Map<String, ListModel<AddressTxsResponseResult>> _historyListMap =
       Map();
 
   // List of contacts (Store it so we only have to query the DB once for transaction cards)
@@ -110,30 +108,6 @@ class _AppHomePageState extends State<AppHomePage>
           _sendSlideAnimation.duration * _fanimationPosition, artboard, 1.0);
     }
     return true;
-  }
-
-  Future<void> _switchToAccount(String account) async {
-    List<Account> accounts = await sl
-        .get<DBHelper>()
-        .getAccounts(await StateContainer.of(context).getSeed());
-    for (Account a in accounts) {
-      if (a.address == account &&
-          a.address != StateContainer.of(context).wallet.address) {
-        await sl.get<DBHelper>().changeAccount(a);
-        EventTaxiImpl.singleton()
-            .fire(AccountChangedEvent(account: a, delayPop: true));
-      }
-    }
-  }
-
-  /// Notification includes which account its for, automatically switch to it if they're entering app from notification
-  Future<void> _chooseCorrectAccountFromNotification(dynamic message) async {
-    if (message.containsKey("account")) {
-      String account = message['account'];
-      if (account != null) {
-        await _switchToAccount(account);
-      }
-    }
   }
 
   @override
@@ -328,12 +302,10 @@ class _AppHomePageState extends State<AppHomePage>
     switch (state) {
       case AppLifecycleState.paused:
         setAppLockEvent();
-        StateContainer.of(context).disconnect();
         super.didChangeAppLifecycleState(state);
         break;
       case AppLifecycleState.resumed:
         cancelLockEvent();
-        StateContainer.of(context).reconnect();
         if (!StateContainer.of(context).wallet.loading &&
             StateContainer.of(context).initialDeepLink != null) {
           handleDeepLink(StateContainer.of(context).initialDeepLink);
@@ -393,7 +365,7 @@ class _AppHomePageState extends State<AppHomePage>
     _contacts.forEach((contact) {
       if (contact.address ==
           _historyListMap[StateContainer.of(context).wallet.address][index]
-              .account) {
+              .from) {
         displayName = contact.name;
       }
     });
@@ -471,7 +443,7 @@ class _AppHomePageState extends State<AppHomePage>
       setState(() {
         _historyListMap.putIfAbsent(
             StateContainer.of(context).wallet.address,
-            () => ListModel<AccountHistoryResponseItem>(
+            () => ListModel<AddressTxsResponseResult>(
                   listKey:
                       _listKeyMap[StateContainer.of(context).wallet.address],
                   initialItems: StateContainer.of(context).wallet.history,
@@ -515,7 +487,7 @@ class _AppHomePageState extends State<AppHomePage>
   ///
   /// Required to do it this way for the animation
   ///
-  void diffAndUpdateHistoryList(List<AccountHistoryResponseItem> newList) {
+  void diffAndUpdateHistoryList(List<AddressTxsResponseResult> newList) {
     if (newList == null ||
         newList.length == 0 ||
         _historyListMap[StateContainer.of(context).wallet.address] == null)
@@ -532,10 +504,6 @@ class _AppHomePageState extends State<AppHomePage>
             .insertAtTop(historyItem);
       });
     });
-    // Re-subscribe if missing data
-    if (StateContainer.of(context).wallet.loading) {
-      StateContainer.of(context).requestSubscribe();
-    }
   }
 
   Future<void> handleDeepLink(link) async {
@@ -545,6 +513,7 @@ class _AppHomePageState extends State<AppHomePage>
       String contactName;
       if (address.amount != null) {
         BigInt amountBigInt = BigInt.tryParse(address.amount);
+        // TODO: Vérifier
         // Require minimum 1 rai to send, and make sure sufficient balance
         if (amountBigInt != null &&
             StateContainer.of(context).wallet.accountBalance > amountBigInt &&
@@ -772,7 +741,7 @@ class _AppHomePageState extends State<AppHomePage>
   }
 
   // Transaction Card/List Item
-  Widget _buildTransactionCard(AccountHistoryResponseItem item,
+  Widget _buildTransactionCard(AddressTxsResponseResult item,
       Animation<double> animation, String displayName, BuildContext context) {
     String text;
     IconData icon;
@@ -801,7 +770,7 @@ class _AppHomePageState extends State<AppHomePage>
           // See if a contact
           sl
               .get<DBHelper>()
-              .getContactWithAddress(item.account)
+              .getContactWithAddress(item.from)
               .then((contact) {
             // Go to send with address
             Sheets.showAppHeightNineSheet(
@@ -809,7 +778,7 @@ class _AppHomePageState extends State<AppHomePage>
                 widget: SendSheet(
                   localCurrency: StateContainer.of(context).curCurrency,
                   contact: contact,
-                  address: item.account,
+                  address: item.from,
                   quickSendAmount: item.amount,
                 ));
           });
@@ -868,7 +837,7 @@ class _AppHomePageState extends State<AppHomePage>
                   context: context,
                   widget: TransactionDetailsSheet(
                       hash: item.hash,
-                      address: item.account,
+                      address: item.from,
                       displayName: displayName),
                   animationDurationMs: 175);
             },
@@ -1663,7 +1632,8 @@ class _AppHomePageState extends State<AppHomePage>
                               Icon(
                                   _priceConversion == PriceConversion.BTC
                                       ? AppIcons.btc
-                                      : AppIcons.nanocurrency,
+                                      // TODO : pas bon
+                                      : AppIcons.accountwallet,
                                   color:
                                       _priceConversion == PriceConversion.NONE
                                           ? Colors.transparent

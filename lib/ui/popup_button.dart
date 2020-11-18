@@ -11,7 +11,6 @@ import 'package:my_idena_wallet/styles.dart';
 import 'package:my_idena_wallet/ui/send/send_confirm_sheet.dart';
 import 'package:my_idena_wallet/ui/send/send_sheet.dart';
 import 'package:my_idena_wallet/ui/util/ui_util.dart';
-import 'package:my_idena_wallet/ui/widgets/dialog.dart';
 import 'package:my_idena_wallet/ui/widgets/sheet_util.dart';
 import 'package:my_idena_wallet/util/hapticutil.dart';
 import 'package:my_idena_wallet/util/user_data_util.dart';

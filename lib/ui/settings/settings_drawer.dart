@@ -299,7 +299,6 @@ class _SettingsSheetState extends State<SettingsSheet>
         setState(() {
           StateContainer.of(context).curCurrency = AvailableCurrency(selection);
         });
-        StateContainer.of(context).requestSubscribe();
       }
     });
   }

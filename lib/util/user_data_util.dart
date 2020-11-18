@@ -8,11 +8,11 @@ import 'package:my_idena_wallet/localization.dart';
 import 'package:my_idena_wallet/model/address.dart';
 import 'package:my_idena_wallet/service_locator.dart';
 import 'package:my_idena_wallet/ui/util/ui_util.dart';
+import 'package:my_idena_wallet/util/barcode_scan.dart';
 import 'package:my_idena_wallet/util/idena_ffi/keys/seeds.dart';
 
 import 'package:quiver/strings.dart';
 import 'package:validators/validators.dart';
-import 'package:barcode_scan/barcode_scan.dart';
 
 enum DataType { RAW, URL, ADDRESS, SEED }
 

@@ -43,12 +43,22 @@ android {
         targetSdkVersion 30
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
+        multiDexEnabled true
     }
 
      buildTypes {
         release {
             signingConfig signingConfigs.release
         }
+    }
+
+     packagingOptions {
+          pickFirst 'META-INF/atomicfu.kotlin_module'
+          pickFirst 'META-INF/proguard/coroutines.pro'
+          exclude 'META-INF/LICENSE.txt'
+          exclude 'META-INF/NOTICE.txt'
+          exclude 'META-INF/LICENSE'
+          exclude 'META-INF/NOTICE'
     }
 
     externalNativeBuild {

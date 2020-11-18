@@ -21,7 +21,6 @@ import 'package:my_idena_wallet/styles.dart';
 import 'package:my_idena_wallet/ui/send/send_confirm_sheet.dart';
 import 'package:my_idena_wallet/ui/widgets/app_text_field.dart';
 import 'package:my_idena_wallet/ui/widgets/buttons.dart';
-import 'package:my_idena_wallet/ui/widgets/dialog.dart';
 import 'package:my_idena_wallet/ui/widgets/one_or_three_address_text.dart';
 import 'package:my_idena_wallet/ui/util/formatters.dart';
 import 'package:my_idena_wallet/ui/util/ui_util.dart';

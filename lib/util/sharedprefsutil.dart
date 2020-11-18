@@ -1,5 +1,4 @@
 import 'dart:ui';
-import 'dart:io';
 import 'dart:async';
 import 'package:intl/intl.dart';
 import 'package:my_idena_wallet/util/random_util.dart';

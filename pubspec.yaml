@@ -146,6 +146,8 @@ dependencies:
   # Avoid keyboard from overlapping text fields
   keyboard_avoider: ^0.1.2
 
+  tweetnacl: ^0.3.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

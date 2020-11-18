@@ -1,7 +1,7 @@
 import 'package:decimal/decimal.dart';
 import 'package:intl/intl.dart';
 import 'package:my_idena_wallet/model/available_currency.dart';
-import 'package:my_idena_wallet/network/model/response/account_history_response_item.dart';
+import 'package:my_idena_wallet/network/model/response/address_txs_response.dart';
 import 'package:my_idena_wallet/util/numberutil.dart';
 
 /// Main wallet object that's passed around the app via state
@@ -19,12 +19,12 @@ class AppWallet {
   String _localCurrencyPrice;
   String _btcPrice;
   int _blockCount;
-  List<AccountHistoryResponseItem> _history;
+  List<AddressTxsResponseResult> _history;
 
 
   AppWallet({String address, BigInt accountBalance, String frontier, String openBlock, String representativeBlock,
                 String representative, String localCurrencyPrice,String btcPrice, int blockCount,
-                List<AccountHistoryResponseItem> history, bool loading, bool historyLoading}) {
+                List<AddressTxsResponseResult> history, bool loading, bool historyLoading}) {
     this._address = address;
     this._accountBalance = accountBalance ?? BigInt.zero;
     this._frontier = frontier;
@@ -34,7 +34,7 @@ class AppWallet {
     this._localCurrencyPrice = localCurrencyPrice ?? "0";
     this._btcPrice = btcPrice ?? "0";
     this._blockCount = blockCount ?? 0;
-    this._history = history ?? new List<AccountHistoryResponseItem>();
+    this._history = history ?? new List<AddressTxsResponseResult>();
     this._loading = loading ?? true;
     this._historyLoading = historyLoading  ?? true;
   }
@@ -119,9 +119,9 @@ class AppWallet {
     _blockCount = value;
   }
 
-  List<AccountHistoryResponseItem> get history => _history;
+  List<AddressTxsResponseResult> get history => _history;
 
-  set history(List<AccountHistoryResponseItem> value) {
+  set history(List<AddressTxsResponseResult> value) {
     _history = value;
   }
 

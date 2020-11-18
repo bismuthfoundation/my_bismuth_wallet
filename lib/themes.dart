@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:barcode_scan/barcode_scan.dart';
+import 'package:my_idena_wallet/util/barcode_scan.dart';
 
 abstract class BaseTheme {
   Color primary;

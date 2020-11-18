@@ -7,8 +7,8 @@ import 'package:my_idena_wallet/bus/events.dart';
 import 'package:my_idena_wallet/localization.dart';
 import 'package:my_idena_wallet/appstate_container.dart';
 import 'package:my_idena_wallet/dimens.dart';
-import 'package:my_idena_wallet/network/account_service.dart';
-import 'package:my_idena_wallet/network/model/response/accounts_balances_response.dart';
+import 'package:my_idena_wallet/network/model/response/address_response.dart';
+import 'package:my_idena_wallet/service/idena_service.dart';
 import 'package:my_idena_wallet/service_locator.dart';
 import 'package:my_idena_wallet/model/db/appdb.dart';
 import 'package:my_idena_wallet/model/db/account.dart';
@@ -76,15 +76,15 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
     super.dispose();
   }
 
-  Future<void> _handleAccountsBalancesResponse(
-      AccountsBalancesResponse resp) async {
+  Future<void> _handleAddressResponse(
+      List<AddressResponse> addressResponseList) async {
     // Handle balances event
     widget.accounts.forEach((account) {
-      resp.balances.forEach((address, balance) {
-        String combinedBalance = (BigInt.tryParse(balance.balance) +
-                BigInt.tryParse(balance.pending))
+      addressResponseList.forEach((address) {
+        String combinedBalance = (BigInt.tryParse(address.result.balance) +
+                BigInt.tryParse(address.result.stake))
             .toString();
-        if (account.address == address && combinedBalance != account.balance) {
+        if (account.address == address.result.address && combinedBalance != account.balance) {
           sl.get<DBHelper>().updateAccountBalance(account, combinedBalance);
           setState(() {
             account.balance = combinedBalance;
@@ -135,15 +135,15 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
   Future<void> _requestBalances(
       BuildContext context, List<Account> accounts) async {
     List<String> addresses = List();
-    accounts.forEach((account) {
+    List<AddressResponse> addressResponseList = new List();
+    accounts.forEach((account) async {
       if (account.address != null) {
         addresses.add(account.address);
+        addressResponseList.add(await IdenaService().getAddressResponse(account.address));
       }
     });
     try {
-      AccountsBalancesResponse resp =
-          await sl.get<AccountService>().requestAccountsBalances(addresses);
-      await _handleAccountsBalancesResponse(resp);
+      await _handleAddressResponse(addressResponseList);
     } catch (e) {
       sl.get<Logger>().e("Error", e);
     }

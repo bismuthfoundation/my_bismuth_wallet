@@ -828,6 +828,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.1+2"
+  tweetnacl:
+    dependency: "direct main"
+    description:
+      name: tweetnacl
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.2"
   typed_data:
     dependency: transitive
     description:

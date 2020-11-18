@@ -20,10 +20,8 @@ class DBHelper {
         selected INTEGER, 
         last_accessed INTEGER,
         private_key TEXT,
+        address TEXT,
         balance TEXT)""";
-  static const String ACCOUNTS_ADD_ACCOUNT_COLUMN_SQL = """
-    ALTER TABLE Accounts ADD address TEXT
-    """;
   static Database _db;
 
   Future<Database> get db async {
@@ -44,18 +42,9 @@ class DBHelper {
     // When creating the db, create the tables
     await db.execute(CONTACTS_SQL);
     await db.execute(ACCOUNTS_SQL);
-    await db.execute(ACCOUNTS_ADD_ACCOUNT_COLUMN_SQL);
   }
 
-  void _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    if (oldVersion == 1) {
-      // Add accounts table
-      await db.execute(ACCOUNTS_SQL);
-      await db.execute(ACCOUNTS_ADD_ACCOUNT_COLUMN_SQL);
-    } else if (oldVersion == 2) {
-      await db.execute(ACCOUNTS_ADD_ACCOUNT_COLUMN_SQL);
-    }
-  }
+  void _onUpgrade(Database db, int oldVersion, int newVersion) async {}
 
   // Contacts
   Future<List<Contact>> getContacts() async {
@@ -65,10 +54,10 @@ class DBHelper {
     List<Contact> contacts = new List();
     for (int i = 0; i < list.length; i++) {
       contacts.add(new Contact(
-          id: list[i]["id"],
-          name: list[i]["name"],
-          address: list[i]["address"],
-         ));
+        id: list[i]["id"],
+        name: list[i]["name"],
+        address: list[i]["address"],
+      ));
     }
     return contacts;
   }
@@ -80,23 +69,23 @@ class DBHelper {
     List<Contact> contacts = new List();
     for (int i = 0; i < list.length; i++) {
       contacts.add(new Contact(
-          id: list[i]["id"],
-          name: list[i]["name"],
-          address: list[i]["address"],
-        ));
+        id: list[i]["id"],
+        name: list[i]["name"],
+        address: list[i]["address"],
+      ));
     }
     return contacts;
   }
 
   Future<Contact> getContactWithAddress(String address) async {
     var dbClient = await db;
-    List<Map> list = await dbClient.rawQuery(
-        'SELECT * FROM Contacts WHERE address like \'%$address\'');
+    List<Map> list = await dbClient
+        .rawQuery('SELECT * FROM Contacts WHERE address like \'%$address\'');
     if (list.length > 0) {
       return Contact(
-          id: list[0]["id"],
-          name: list[0]["name"],
-          address: list[0]["address"],
+        id: list[0]["id"],
+        name: list[0]["name"],
+        address: list[0]["address"],
       );
     }
     return null;
@@ -108,10 +97,10 @@ class DBHelper {
         .rawQuery('SELECT * FROM Contacts WHERE name = ?', [name]);
     if (list.length > 0) {
       return Contact(
-          id: list[0]["id"],
-          name: list[0]["name"],
-          address: list[0]["address"],
-        );
+        id: list[0]["id"],
+        name: list[0]["name"],
+        address: list[0]["address"],
+      );
     }
     return null;
   }
@@ -170,8 +159,8 @@ class DBHelper {
           selected: list[i]["selected"] == 1 ? true : false,
           balance: list[i]["balance"]));
     }
-    accounts.forEach((a) {
-      a.address = IdenaUtil.seedToAddress(seed, a.index);
+    accounts.forEach((a) async {
+      a.address = await IdenaUtil().seedToAddress(seed, a.index);
     });
     return accounts;
   }
@@ -192,8 +181,8 @@ class DBHelper {
           selected: list[i]["selected"] == 1 ? true : false,
           balance: list[i]["balance"]));
     }
-    accounts.forEach((a) {
-      a.address = IdenaUtil.seedToAddress(seed, a.index);
+    accounts.forEach((a) async {
+      a.address = await IdenaUtil().seedToAddress(seed, a.index);
     });
     return accounts;
   }
@@ -220,7 +209,7 @@ class DBHelper {
           name: nextName,
           lastAccess: 0,
           selected: false,
-          address: IdenaUtil.seedToAddress(seed, nextIndex));
+          address: await IdenaUtil().seedToAddress(seed, nextIndex));
       await txn.rawInsert(
           'INSERT INTO Accounts (name, acct_index, last_accessed, selected, address) values(?, ?, ?, ?, ?)',
           [
@@ -286,8 +275,6 @@ class DBHelper {
     if (list.length == 0) {
       return null;
     }
-    String address =
-        IdenaUtil.seedToAddress(seed, list[0]["acct_index"]);
     Account account = Account(
         id: list[0]["id"],
         name: list[0]["name"],
@@ -295,7 +282,8 @@ class DBHelper {
         selected: true,
         lastAccess: list[0]["last_accessed"],
         balance: list[0]["balance"],
-        address: address);
+        address: await IdenaUtil()
+        .seedToAddress(seed, list[0]["acct_index"]));
     return account;
   }
 
@@ -306,8 +294,11 @@ class DBHelper {
     if (list.length == 0) {
       return null;
     }
-    String address =
-        IdenaUtil.seedToAddress(seed, list[0]["acct_index"]);
+    String address;
+
+    IdenaUtil()
+        .seedToAddress(seed, list[0]["acct_index"])
+        .then((value) => address = value);
     Account account = Account(
         id: list[0]["id"],
         name: list[0]["name"],

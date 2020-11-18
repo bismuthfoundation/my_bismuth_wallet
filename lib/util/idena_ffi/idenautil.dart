@@ -1,22 +1,39 @@
+import 'package:ethereum_address/ethereum_address.dart';
 import 'package:flutter/material.dart';
+import 'package:hex/hex.dart';
 
 import 'package:my_idena_wallet/model/db/appdb.dart';
 import 'package:my_idena_wallet/model/db/account.dart';
 import 'package:my_idena_wallet/appstate_container.dart';
 import 'package:my_idena_wallet/localization.dart';
 import 'package:my_idena_wallet/service_locator.dart';
-import 'package:my_idena_wallet/util/idena_ffi/account/account_util.dart';
-import 'package:my_idena_wallet/util/idena_ffi/keys/keys.dart';
+import 'package:my_idena_wallet/util/hd_key.dart';
+import 'package:web3dart/web3dart.dart';
 
 class IdenaUtil {
 
-  static String seedToAddress(String seed, int index) { 
+  Future<String> seedToAddress(String seed, int index) async { 
+
+
     print("seed: " + seed);
-    String privateKey = IdenaKeys.seedToPrivate(seed, index);
-    print("privateKey: " + privateKey);
-    String pubKey = IdenaKeys.createPublicKey(privateKey);
-    print("pubKey: " + pubKey);
-    return IdenaAccounts.createAccount("028a8c59fa27d1e0f1643081ff80c3cf0392902acbf76ab0dc9c414b8d115b0ab3");
+    
+    //String privateKey = IdenaKeys.seedToPrivate(seed, index);
+    //print("privateKey: " + privateKey);
+
+    KeyData master = HDKey.getMasterKeyFromSeed(seed);
+    final privateKey = HEX.encode(master.key);
+    print("privateKey: $privateKey");
+
+    //String pubKey = IdenaKeys.createPublicKey(privateKey);
+    //print("pubKey: " + pubKey);
+
+    final ethPrivateKey = EthPrivateKey.fromHex(privateKey);
+    final address = await ethPrivateKey.extractAddress();
+    print("address: " +address.toString());
+
+    String addressEIP55 = checksumEthereumAddress(address.toString()); 
+    print("address EIP55: " +addressEIP55.toString());
+    return addressEIP55;
   }
 
   Future<void> loginAccount(String seed, BuildContext context) async {

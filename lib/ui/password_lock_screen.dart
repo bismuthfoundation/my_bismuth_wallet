@@ -220,7 +220,7 @@ class _AppPasswordLockScreenState extends State<AppPasswordLockScreen> {
 
   Future<void> _goHome() async {
     if (StateContainer.of(context).wallet != null) {
-      StateContainer.of(context).reconnect();
+      // TODO: voir
     } else {
       await IdenaUtil()
           .loginAccount(await StateContainer.of(context).getSeed(), context);
