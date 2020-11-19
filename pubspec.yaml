@@ -83,6 +83,8 @@ dependencies:
 
   ffi: ^0.1.3
 
+  flutter_launcher_icons: ^0.8.1
+
   # QR Codes
   qr_flutter: ^2.0.1 # Generator
   barcode_scan:
@@ -157,6 +159,11 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon_my_idena_wallet.png"
 
 # The following section is specific to Flutter.
 flutter:
