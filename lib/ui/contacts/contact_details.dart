@@ -163,6 +163,7 @@ class ContactDetailsSheet {
                           children: <Widget>[
                             Expanded(
                               child: CircleAvatar(
+                                backgroundColor: StateContainer.of(context).curTheme.text05,
                                 backgroundImage: NetworkImage(
                                   UIUtil.getRobohashURL(
                                       contact.address

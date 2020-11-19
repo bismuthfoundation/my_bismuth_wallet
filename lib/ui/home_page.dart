@@ -391,7 +391,7 @@ class _AppHomePageState extends State<AppHomePage>
               _buildLoadingTransactionCard(
                   "Sent", "10244000", "123456789121234", context),
               _buildLoadingTransactionCard(
-                  "Received", "100,00000", "@bbedwards1234", context),
+                  "Received", "100,00000", "@reddwarf1234", context),
               _buildLoadingTransactionCard(
                   "Sent", "14500000", "12345678912345671234", context),
               _buildLoadingTransactionCard(
@@ -512,12 +512,12 @@ class _AppHomePageState extends State<AppHomePage>
       String amount;
       String contactName;
       if (address.amount != null) {
-        BigInt amountBigInt = BigInt.tryParse(address.amount);
+        double amountDouble = double.tryParse(address.amount);
         // TODO: Vérifier
-        // Require minimum 1 rai to send, and make sure sufficient balance
-        if (amountBigInt != null &&
-            StateContainer.of(context).wallet.accountBalance > amountBigInt &&
-            amountBigInt >= BigInt.from(10).pow(24)) {
+        // Require minimum XXX iDNA to send, and make sure sufficient balance
+        if (amountDouble != null &&
+            StateContainer.of(context).wallet.accountBalance > amountDouble &&
+            amountDouble >= 0.001) {
           amount = address.amount;
         }
       }
@@ -546,7 +546,7 @@ class _AppHomePageState extends State<AppHomePage>
                 contact: contact,
                 address: address.address));
       }
-    } 
+    }
   }
 
   void paintQrCode({String address}) {
@@ -760,7 +760,7 @@ class _AppHomePageState extends State<AppHomePage>
       actionExtentRatio: 0.35,
       movementDuration: Duration(milliseconds: 300),
       enabled: StateContainer.of(context).wallet != null &&
-          StateContainer.of(context).wallet.accountBalance > BigInt.zero,
+          StateContainer.of(context).wallet.accountBalance > 0,
       onTriggered: (preempt) {
         if (preempt) {
           setState(() {
@@ -768,10 +768,7 @@ class _AppHomePageState extends State<AppHomePage>
           });
         } else {
           // See if a contact
-          sl
-              .get<DBHelper>()
-              .getContactWithAddress(item.from)
-              .then((contact) {
+          sl.get<DBHelper>().getContactWithAddress(item.from).then((contact) {
             // Go to send with address
             Sheets.showAppHeightNineSheet(
                 context: context,
@@ -1150,7 +1147,7 @@ class _AppHomePageState extends State<AppHomePage>
                                   text,
                                   textAlign: TextAlign.start,
                                   style: TextStyle(
-                                    fontFamily: "NunitoSans",
+                                    fontFamily: "Roboto",
                                     fontSize: AppFontSizes.small,
                                     fontWeight: FontWeight.w600,
                                     color: Colors.transparent,
@@ -1169,7 +1166,7 @@ class _AppHomePageState extends State<AppHomePage>
                                       text,
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                        fontFamily: "NunitoSans",
+                                        fontFamily: "Roboto",
                                         fontSize: AppFontSizes.small - 4,
                                         fontWeight: FontWeight.w600,
                                         color: Colors.transparent,
@@ -1189,7 +1186,7 @@ class _AppHomePageState extends State<AppHomePage>
                                   amount,
                                   textAlign: TextAlign.start,
                                   style: TextStyle(
-                                      fontFamily: "NunitoSans",
+                                      fontFamily: "Roboto",
                                       color: Colors.transparent,
                                       fontSize: AppFontSizes.smallest,
                                       fontWeight: FontWeight.w600),
@@ -1207,7 +1204,7 @@ class _AppHomePageState extends State<AppHomePage>
                                       amount,
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                          fontFamily: "NunitoSans",
+                                          fontFamily: "Roboto",
                                           color: Colors.transparent,
                                           fontSize: AppFontSizes.smallest - 3,
                                           fontWeight: FontWeight.w600),
@@ -1340,6 +1337,7 @@ class _AppHomePageState extends State<AppHomePage>
                     child: Hero(
                       tag: "avatar",
                       child: CircleAvatar(
+                        backgroundColor: StateContainer.of(context).curTheme.text05,
                         backgroundImage: NetworkImage(UIUtil.getRobohashURL(
                             StateContainer.of(context)
                                 .selectedAccount
@@ -1396,7 +1394,7 @@ class _AppHomePageState extends State<AppHomePage>
                           "1234567",
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              fontFamily: "NunitoSans",
+                              fontFamily: "Roboto",
                               fontSize: AppFontSizes.small,
                               fontWeight: FontWeight.w600,
                               color: Colors.transparent),
@@ -1412,7 +1410,7 @@ class _AppHomePageState extends State<AppHomePage>
                               "1234567",
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  fontFamily: "NunitoSans",
+                                  fontFamily: "Roboto",
                                   fontSize: AppFontSizes.small - 3,
                                   fontWeight: FontWeight.w600,
                                   color: Colors.transparent),
@@ -1432,7 +1430,7 @@ class _AppHomePageState extends State<AppHomePage>
                   AutoSizeText(
                     "1234567",
                     style: TextStyle(
-                        fontFamily: "NunitoSans",
+                        fontFamily: "Roboto",
                         fontSize: AppFontSizes.largestc,
                         fontWeight: FontWeight.w900,
                         color: Colors.transparent),
@@ -1450,7 +1448,7 @@ class _AppHomePageState extends State<AppHomePage>
                       child: AutoSizeText(
                         "1234567",
                         style: TextStyle(
-                            fontFamily: "NunitoSans",
+                            fontFamily: "Roboto",
                             fontSize: AppFontSizes.largestc - 8,
                             fontWeight: FontWeight.w900,
                             color: Colors.transparent),
@@ -1472,7 +1470,7 @@ class _AppHomePageState extends State<AppHomePage>
                           "1234567",
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              fontFamily: "NunitoSans",
+                              fontFamily: "Roboto",
                               fontSize: AppFontSizes.small,
                               fontWeight: FontWeight.w600,
                               color: Colors.transparent),
@@ -1488,7 +1486,7 @@ class _AppHomePageState extends State<AppHomePage>
                               "1234567",
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  fontFamily: "NunitoSans",
+                                  fontFamily: "Roboto",
                                   fontSize: AppFontSizes.small - 3,
                                   fontWeight: FontWeight.w600,
                                   color: Colors.transparent),
@@ -1543,11 +1541,10 @@ class _AppHomePageState extends State<AppHomePage>
         child: _priceConversion == PriceConversion.HIDDEN
             ? Center(
                 child: Container(
-                  child: Text(
-                    "iDNA",
-                    style: TextStyle(
-                        fontSize: 32,
-                        color: StateContainer.of(context).curTheme.primary),
+                  child: SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: Image.asset("assets/icon.png"),
                   ),
                 ),
               )
@@ -1581,25 +1578,12 @@ class _AppHomePageState extends State<AppHomePage>
                             child: AutoSizeText.rich(
                               TextSpan(
                                 children: [
-                                  // Currency Icon
-                                  TextSpan(
-                                    text: "",
-                                    style: TextStyle(
-                                      fontFamily: 'AppIcons',
-                                      color: StateContainer.of(context)
-                                          .curTheme
-                                          .primary,
-                                      fontSize: _priceConversion ==
-                                              PriceConversion.BTC
-                                          ? 26.0
-                                          : 20,
-                                    ),
-                                  ),
                                   // Main balance text
                                   TextSpan(
                                     text: StateContainer.of(context)
-                                        .wallet
-                                        .getAccountBalanceDisplay(),
+                                            .wallet
+                                            .getAccountBalanceDisplay() +
+                                        " iDNA",
                                     style: _priceConversion ==
                                             PriceConversion.BTC
                                         ? AppStyles.textStyleCurrency(context)

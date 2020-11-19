@@ -853,12 +853,13 @@ class _SendSheetState extends State<SendSheet> {
         _amountValidationText = AppLocalization.of(context).amountMissing;
       });
     } else {
-      String bananoAmount = _localCurrencyMode
+      // TODO: A vérifier
+      /*String bananoAmount = _localCurrencyMode
           ? _convertLocalCurrencyToCrypto()
           : _rawAmount == null
               ? _sendAmountController.text
               : NumberUtil.getRawAsUsableString(_rawAmount);
-      BigInt balanceRaw = StateContainer.of(context).wallet.accountBalance;
+      double balanceRaw = StateContainer.of(context).wallet.accountBalance;
       BigInt sendAmount =
           BigInt.tryParse(NumberUtil.getAmountAsRaw(bananoAmount));
       if (sendAmount == null || sendAmount == BigInt.zero) {
@@ -872,7 +873,7 @@ class _SendSheetState extends State<SendSheet> {
           _amountValidationText =
               AppLocalization.of(context).insufficientBalance;
         });
-      }
+      }*/
     }
     // Validate address
     bool isContact = _sendAddressController.text.startsWith("@");

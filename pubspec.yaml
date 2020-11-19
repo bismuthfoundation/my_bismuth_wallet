@@ -201,6 +201,7 @@ flutter:
           weight: 300
   assets:
     - assets/QR.svg
+    - assets/icon.png
     - assets/send_animation.flr
     - assets/searchseedqr_animation_magnifyingglassonly.flr
     - assets/searchseedqr_animation_glassonly.flr

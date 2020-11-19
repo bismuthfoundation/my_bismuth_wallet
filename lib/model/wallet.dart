@@ -11,7 +11,7 @@ class AppWallet {
   bool _loading; // Whether or not app is initially loading
   bool _historyLoading; // Whether or not we have received initial account history response
   String _address;
-  BigInt _accountBalance;
+  double _accountBalance;
   String _representativeBlock;
   String _representative;
   String _localCurrencyPrice;
@@ -19,11 +19,11 @@ class AppWallet {
   List<AddressTxsResponseResult> _history;
 
 
-  AppWallet({String address, BigInt accountBalance, String representativeBlock,
+  AppWallet({String address, double accountBalance, String representativeBlock,
                 String representative, String localCurrencyPrice,String btcPrice, 
                 List<AddressTxsResponseResult> history, bool loading, bool historyLoading}) {
     this._address = address;
-    this._accountBalance = accountBalance ?? BigInt.zero;
+    this._accountBalance = accountBalance ?? 0;
     this._representativeBlock = representativeBlock;
     this._representative = representative;
     this._localCurrencyPrice = localCurrencyPrice ?? "0";
@@ -39,9 +39,9 @@ class AppWallet {
     this._address = address;
   }
 
-  BigInt get accountBalance => _accountBalance;
+  double get accountBalance => _accountBalance;
 
-  set accountBalance(BigInt accountBalance) {
+  set accountBalance(double accountBalance) {
     this._accountBalance = accountBalance;
   }
 
@@ -73,7 +73,7 @@ class AppWallet {
     if (converted >= Decimal.parse("0.0001")) {
       return new NumberFormat("#,##0.0000", "en_US").format(converted.toDouble());
     } else {
-      return new NumberFormat("#,##0.000000", "en_US").format(converted.toDouble());
+      return new NumberFormat("#,##0.000000000", "en_US").format(converted.toDouble());
     }
   }
 

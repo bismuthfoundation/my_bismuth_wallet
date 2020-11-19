@@ -395,6 +395,7 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
                                   width: 64.0,
                                   height: 64.0,
                                   child: CircleAvatar(
+                                    backgroundColor: StateContainer.of(context).curTheme.text05,
                                     backgroundImage: NetworkImage(
                                       UIUtil.getRobohashURL(account.address),
                                     ),

@@ -50,10 +50,8 @@ class _AppPopupButtonState extends State<AppPopupButton> {
         // See if this address belongs to a contact
         Contact contact = await sl.get<DBHelper>().getContactWithAddress(address.address);
         // If amount is present, fill it and go to SendConfirm
-        BigInt amountBigInt = address.amount != null ? BigInt.tryParse(address.amount) : null;
-        if (amountBigInt != null && amountBigInt < BigInt.from(10).pow(24)) {
-          UIUtil.showSnackbar(AppLocalization.of(context).minimumSend.replaceAll("%1", "0.000001"), context);
-        } else if (amountBigInt != null && StateContainer.of(context).wallet.accountBalance > amountBigInt) {
+        double amount = address.amount != null ? double.tryParse(address.amount) : null;
+        if (amount != null && StateContainer.of(context).wallet.accountBalance > amount) {
           // Go to confirm sheet
           Sheets.showAppHeightNineSheet(
             context: context,
@@ -104,7 +102,7 @@ class _AppPopupButtonState extends State<AppPopupButton> {
         GestureDetector(
           onVerticalDragStart: (StateContainer.of(context).wallet != null &&
                   StateContainer.of(context).wallet.accountBalance >
-                      BigInt.zero)
+                      0)
               ? (value) {
                   setState(() {
                     popupColor = StateContainer.of(context).curTheme.primary;
@@ -113,7 +111,7 @@ class _AppPopupButtonState extends State<AppPopupButton> {
               : (value) {},
           onVerticalDragEnd: (StateContainer.of(context).wallet != null &&
                   StateContainer.of(context).wallet.accountBalance >
-                      BigInt.zero)
+                      0)
               ? (value) {
                   isSendButtonColorPrimary = true;
                   firstTime = true;
@@ -131,7 +129,7 @@ class _AppPopupButtonState extends State<AppPopupButton> {
               : (value) {},
           onVerticalDragUpdate: (StateContainer.of(context).wallet != null &&
                   StateContainer.of(context).wallet.accountBalance >
-                      BigInt.zero)
+                      0)
               ? (dragUpdateDetails) {
                   if (dragUpdateDetails.localPosition.dy < -60) {
                     isScrolledUpEnough = true;
@@ -183,7 +181,7 @@ class _AppPopupButtonState extends State<AppPopupButton> {
                   borderRadius: BorderRadius.circular(100.0)),
               color: StateContainer.of(context).wallet != null &&
                       StateContainer.of(context).wallet.accountBalance >
-                          BigInt.zero
+                          0
                   ? isSendButtonColorPrimary
                       ? StateContainer.of(context).curTheme.primary
                       : StateContainer.of(context).curTheme.success
@@ -198,7 +196,7 @@ class _AppPopupButtonState extends State<AppPopupButton> {
               onPressed: () {
                 if (StateContainer.of(context).wallet != null &&
                     StateContainer.of(context).wallet.accountBalance >
-                        BigInt.zero) {
+                        0) {
                   Sheets.showAppHeightNineSheet(
                       context: context,
                       widget: SendSheet(
@@ -208,12 +206,12 @@ class _AppPopupButtonState extends State<AppPopupButton> {
               },
               highlightColor: StateContainer.of(context).wallet != null &&
                       StateContainer.of(context).wallet.accountBalance >
-                          BigInt.zero
+                          0
                   ? StateContainer.of(context).curTheme.background40
                   : Colors.transparent,
               splashColor: StateContainer.of(context).wallet != null &&
                       StateContainer.of(context).wallet.accountBalance >
-                          BigInt.zero
+                          0
                   ? StateContainer.of(context).curTheme.background40
                   : Colors.transparent,
             ),

@@ -140,11 +140,9 @@ class StateContainerState extends State<StateContainer> {
         EventTaxiImpl.singleton().registerTo<PriceEvent>().listen((event) {
       // PriceResponse's get pushed periodically, it wasn't a request we made so don't pop the queue
       setState(() {
-        // TODO: A changer
-        wallet.btcPrice = "0";
-        wallet.localCurrencyPrice = "0";
-        //wallet.btcPrice = event.response.btcPrice.toString();
-        //wallet.localCurrencyPrice = event.response.price.toString();
+  
+        wallet.btcPrice = event.response.btcPrice.toString();
+        wallet.localCurrencyPrice = event.response.localCurrencyPrice.toString();
       });
     });
 
@@ -228,6 +226,8 @@ class StateContainerState extends State<StateContainer> {
   Future<void> updateWallet({Account account}) async {
     String address;
     address = await IdenaUtil().seedToAddress(await getSeed(), account.index);
+    IdenaService().getAddressResponse(address.toString());
+    IdenaService().getSimplePrice(curCurrency.getIso4217Code());
     account.address = address;
     selectedAccount = account;
     updateRecentlyUsedAccounts();
@@ -267,6 +267,14 @@ class StateContainerState extends State<StateContainer> {
     });
   }
 
+  // Change curency
+  void updateCurrency(AvailableCurrency currency) {
+    setState(() {
+      IdenaService().getSimplePrice(currency.getIso4217Code());
+      curCurrency = currency;
+    });
+  }
+
   // Set encrypted secret
   void setEncryptedSecret(String secret) {
     setState(() {
@@ -294,9 +302,9 @@ class StateContainerState extends State<StateContainer> {
     setState(() {
       wallet.loading = false;
       if (response.result == null) {
-        wallet.accountBalance = BigInt.from(0);
+        wallet.accountBalance = 0;
       } else {
-        wallet.accountBalance = BigInt.tryParse(response.result.balance + response.result.stake);
+        wallet.accountBalance = double.tryParse(response.result.balance + response.result.stake);
       }
       // TODO : à renseigner
       wallet.localCurrencyPrice = "0";

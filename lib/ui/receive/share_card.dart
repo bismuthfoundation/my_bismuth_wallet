@@ -118,6 +118,7 @@ class _AppShareCardState extends State<AppShareCard> {
                         height: 25.44,
                         margin: EdgeInsetsDirectional.only(top: 1.44545),
                         child: CircleAvatar(
+                          backgroundColor: StateContainer.of(context).curTheme.text05,
                           backgroundImage: NetworkImage(
                             UIUtil.getRobohashURL(StateContainer.of(context)
                                 .selectedAccount

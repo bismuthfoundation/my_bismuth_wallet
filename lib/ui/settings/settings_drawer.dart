@@ -298,6 +298,7 @@ class _SettingsSheetState extends State<SettingsSheet>
       if (StateContainer.of(context).curCurrency.currency != selection) {
         setState(() {
           StateContainer.of(context).curCurrency = AvailableCurrency(selection);
+          StateContainer.of(context).updateCurrency(AvailableCurrency(selection));
         });
       }
     });
@@ -480,10 +481,11 @@ class _SettingsSheetState extends State<SettingsSheet>
                                       color: StateContainer.of(context)
                                           .curTheme
                                           .primary,
-                                      width: 1.5),
+                                      width: 0),
                                 ),
                                 alignment: AlignmentDirectional(-1, 0),
                                 child: CircleAvatar(
+                                  backgroundColor: StateContainer.of(context).curTheme.text05,
                                   backgroundImage: NetworkImage(
                                     UIUtil.getRobohashURL(
                                         StateContainer.of(context)
@@ -538,6 +540,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                                           height: 52,
                                           width: 52,
                                           child: CircleAvatar(
+                                            backgroundColor: StateContainer.of(context).curTheme.text05,
                                             backgroundImage: NetworkImage(
                                               UIUtil.getRobohashURL(
                                                   StateContainer.of(context)
@@ -605,6 +608,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                                           height: 52,
                                           width: 52,
                                           child: CircleAvatar(
+                                            backgroundColor: StateContainer.of(context).curTheme.text05,
                                             backgroundImage: NetworkImage(
                                               UIUtil.getRobohashURL(
                                                 StateContainer.of(context)
@@ -738,7 +742,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                             child: Text(
                               StateContainer.of(context).selectedAccount.name,
                               style: TextStyle(
-                                fontFamily: "NunitoSans",
+                                fontFamily: "Roboto",
                                 fontWeight: FontWeight.w600,
                                 fontSize: 16.0,
                                 color: StateContainer.of(context).curTheme.text,
@@ -756,7 +760,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                                   ? StateContainer.of(context)
                                       .wallet
                                       ?.address
-                                      ?.substring(0, 12)
+                                      
                                   : "",
                               style: TextStyle(
                                 fontFamily: "OverpassMono",

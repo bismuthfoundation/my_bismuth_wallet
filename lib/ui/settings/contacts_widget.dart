@@ -271,6 +271,7 @@ class _ContactsListState extends State<ContactsList> {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: CircleAvatar(
+                    backgroundColor: StateContainer.of(context).curTheme.text05,
                     backgroundImage:
                         NetworkImage(UIUtil.getRobohashURL(contact.address)),
                     radius: 50.0,
