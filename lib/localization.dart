@@ -541,7 +541,7 @@ class AppLocalization {
   // Scan
 
   String get scanInstructions {
-    return Intl.message("Scan a Nano \naddress QR code",
+    return Intl.message("Scan an Idena \naddress QR code",
         desc: 'scan_send_instruction_label', name: 'scanInstructions');
   }
 
@@ -549,12 +549,12 @@ class AppLocalization {
 
   String get unlockPin {
     return Intl.message("Enter PIN to Unlock my Idena Wallet",
-        desc: 'unlock_kalium_pin', name: 'unlockPin');
+        desc: 'unlock_idena_pin', name: 'unlockPin');
   }
 
   String get unlockBiometrics {
     return Intl.message("Authenticate to Unlock my Idena Wallet",
-        desc: 'unlock_kalium_bio', name: 'unlockBiometrics');
+        desc: 'unlock_idena_bio', name: 'unlockBiometrics');
   }
 
   String get lockAppSetting {

@@ -12,19 +12,17 @@ class AppWallet {
   bool _historyLoading; // Whether or not we have received initial account history response
   String _address;
   double _accountBalance;
-  String _representativeBlock;
   String _representative;
   String _localCurrencyPrice;
   String _btcPrice;
   List<AddressTxsResponseResult> _history;
 
 
-  AppWallet({String address, double accountBalance, String representativeBlock,
+  AppWallet({String address, double accountBalance, 
                 String representative, String localCurrencyPrice,String btcPrice, 
                 List<AddressTxsResponseResult> history, bool loading, bool historyLoading}) {
     this._address = address;
     this._accountBalance = accountBalance ?? 0;
-    this._representativeBlock = representativeBlock;
     this._representative = representative;
     this._localCurrencyPrice = localCurrencyPrice ?? "0";
     this._btcPrice = btcPrice ?? "0";
@@ -87,12 +85,6 @@ class AppWallet {
 
   set representative(String value) {
     _representative = value;
-  }
-
-  String get representativeBlock => _representativeBlock;
-
-  set representativeBlock(String value) {
-    _representativeBlock = value;
   }
 
   List<AddressTxsResponseResult> get history => _history;

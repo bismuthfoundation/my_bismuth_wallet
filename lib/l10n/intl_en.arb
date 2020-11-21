@@ -552,12 +552,6 @@
     "type": "text",
     "placeholders": {}
   },
-  "kaliumWallet": "my Idena Wallet Wallet",
-  "@kaliumWallet": {
-    "description": "kalium_wallet",
-    "type": "text",
-    "placeholders": {}
-  },
   "manualEntry": "Manual Entry",
   "@manualEntry": {
     "description": "transfer_manual_entry",
@@ -576,7 +570,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "scanInstructions": "Scan a Nano \naddress QR code",
+  "scanInstructions": "Scan an Idena \naddress QR code",
   "@scanInstructions": {
     "description": "scan_send_instruction_label",
     "type": "text",
@@ -584,13 +578,13 @@
   },
   "unlockPin": "Enter PIN to Unlock my Idena Wallet",
   "@unlockPin": {
-    "description": "unlock_kalium_pin",
+    "description": "unlock_idena_pin",
     "type": "text",
     "placeholders": {}
   },
   "unlockBiometrics": "Authenticate to Unlock my Idena Wallet",
   "@unlockBiometrics": {
-    "description": "unlock_kalium_bio",
+    "description": "unlock_idena_bio",
     "type": "text",
     "placeholders": {}
   },

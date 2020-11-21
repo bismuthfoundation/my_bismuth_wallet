@@ -117,7 +117,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "removeAccountText" : MessageLookupByLibrary.simpleMessage("Are you sure you want to hide this account? You can re-add it later by tapping the \"%1\" button."),
     "removeContact" : MessageLookupByLibrary.simpleMessage("Remove Contact"),
     "removeContactConfirmation" : MessageLookupByLibrary.simpleMessage("Are you sure you want to delete %1?"),
-    "scanInstructions" : MessageLookupByLibrary.simpleMessage("Scan a Nano \naddress QR code"),
+    "scanInstructions" : MessageLookupByLibrary.simpleMessage("Scan an Idena \naddress QR code"),
     "scanQrCode" : MessageLookupByLibrary.simpleMessage("Scan QR Code"),
     "secretInfo" : MessageLookupByLibrary.simpleMessage("In the next screen, you will see your secret phrase. It is a password to access your funds. It is crucial that you back it up and never share it with anyone."),
     "secretInfoHeader" : MessageLookupByLibrary.simpleMessage("Safety First!"),

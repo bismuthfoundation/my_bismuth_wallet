@@ -20,7 +20,6 @@ import 'package:my_idena_wallet/model/address.dart';
 import 'package:my_idena_wallet/model/vault.dart';
 import 'package:my_idena_wallet/model/db/appdb.dart';
 import 'package:my_idena_wallet/model/db/account.dart';
-import 'package:my_idena_wallet/network/model/response/subscribe_response.dart';
 import 'package:my_idena_wallet/util/sharedprefsutil.dart';
 import 'package:my_idena_wallet/util/idena_ffi/idenautil.dart';
 import 'package:my_idena_wallet/bus/events.dart';
@@ -92,9 +91,6 @@ class StateContainerState extends State<StateContainer> {
   String initialDeepLink;
   // Deep link changes
   StreamSubscription _deepLinkSub;
-
-  List<String> pendingRequests = [];
-  List<String> alreadyReceived = [];
 
   // When wallet is encrypted
   String encryptedSecret;

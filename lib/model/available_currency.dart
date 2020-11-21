@@ -22,7 +22,7 @@ class AvailableCurrency extends SettingSelectionItem {
   }
 
   String getDisplayNameNoSymbol() {
-    switch (getIso4217Code()) {
+    switch (getIso4217Code()) { 
       case "ARS":
           return "Argentine Peso";
       case "AUD":
