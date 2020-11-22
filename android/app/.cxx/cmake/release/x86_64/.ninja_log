@@ -1,0 +1,14 @@
+# ninja log v5
+3	100	0	CMakeFiles/ed25519-donna.dir/Users/sylvain/SSE/app/my_idena_wallet/ios/Classes/ed25519_blake2b/ed25519-donna/memzero.c.o	7eba554ea1a539cb
+1	112	0	CMakeFiles/ed25519-donna.dir/Users/sylvain/SSE/app/my_idena_wallet/ios/Classes/ed25519_blake2b/ed25519-donna/ed25519-donna-32bit-tables.c.o	9873be9339a465cd
+1	127	0	CMakeFiles/ed25519-donna.dir/Users/sylvain/SSE/app/my_idena_wallet/ios/Classes/ed25519_blake2b/ed25519-donna/curve25519-donna-helpers.c.o	a910a2ef10941564
+1	139	0	CMakeFiles/ed25519-donna.dir/Users/sylvain/SSE/app/my_idena_wallet/ios/Classes/ed25519_blake2b/ed25519-donna/curve25519-donna-scalarmult-base.c.o	db2f9251c4b7276b
+2	186	0	CMakeFiles/ed25519-donna.dir/Users/sylvain/SSE/app/my_idena_wallet/ios/Classes/ed25519_blake2b/ed25519-donna/ed25519-donna-basepoint-table.c.o	96b338265e1e20cc
+2	213	0	CMakeFiles/ed25519-donna.dir/Users/sylvain/SSE/app/my_idena_wallet/ios/Classes/ed25519_blake2b/ed25519-donna/ed25519.c.o	9dbb323714c54ace
+3	520	0	CMakeFiles/ed25519-donna.dir/Users/sylvain/SSE/app/my_idena_wallet/ios/Classes/ed25519_blake2b/ed25519-donna/modm-donna-32bit.c.o	2b55e61cf8e111f8
+2	533	0	CMakeFiles/ed25519-donna.dir/Users/sylvain/SSE/app/my_idena_wallet/ios/Classes/ed25519_blake2b/ed25519-donna/ed25519-donna-impl-base.c.o	f6ebb2a73cc46bf
+1	545	0	CMakeFiles/ed25519-donna.dir/Users/sylvain/SSE/app/my_idena_wallet/ios/Classes/ed25519_blake2b/ed25519-donna/curve25519-donna-32bit.c.o	82296efd05e21d6f
+0	930	0	CMakeFiles/ed25519-donna.dir/Users/sylvain/SSE/app/my_idena_wallet/ios/Classes/ed25519_blake2b/ed25519-donna/blake2b.c.o	17f49963e7610504
+930	1349	0	libed25519-donna.a	f32b84c5f5a677fc
+1350	1420	0	CMakeFiles/ed25519_blake2b.dir/Users/sylvain/SSE/app/my_idena_wallet/ios/Classes/ed25519_blake2b/ed25519_blake2b.c.o	469f76b8425c24e4
+1420	1452	0	/Users/sylvain/SSE/app/my_idena_wallet/build/app/intermediates/cmake/release/obj/x86_64/libed25519_blake2b.so	a14e080aa46d7264

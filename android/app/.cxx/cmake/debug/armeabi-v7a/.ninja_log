@@ -1,0 +1,15 @@
+# ninja log v5
+12	134	0	CMakeFiles/ed25519-donna.dir/Users/sylvain/SSE/app/my_idena_wallet/ios/Classes/ed25519_blake2b/ed25519-donna/memzero.c.o	e2607845d3ba228f
+3	146	0	CMakeFiles/ed25519-donna.dir/Users/sylvain/SSE/app/my_idena_wallet/ios/Classes/ed25519_blake2b/ed25519-donna/curve25519-donna-helpers.c.o	985bc604f41296f8
+6	147	0	CMakeFiles/ed25519-donna.dir/Users/sylvain/SSE/app/my_idena_wallet/ios/Classes/ed25519_blake2b/ed25519-donna/ed25519-donna-32bit-tables.c.o	733177eb6bfc885c
+5	159	0	CMakeFiles/ed25519-donna.dir/Users/sylvain/SSE/app/my_idena_wallet/ios/Classes/ed25519_blake2b/ed25519-donna/curve25519-donna-scalarmult-base.c.o	556c1960a8f611e2
+11	197	0	CMakeFiles/ed25519-donna.dir/Users/sylvain/SSE/app/my_idena_wallet/ios/Classes/ed25519_blake2b/ed25519-donna/ed25519.c.o	f2e038d58c339c5d
+9	250	0	CMakeFiles/ed25519-donna.dir/Users/sylvain/SSE/app/my_idena_wallet/ios/Classes/ed25519_blake2b/ed25519-donna/ed25519-donna-impl-base.c.o	73d6b7c2f7fe76da
+8	259	0	CMakeFiles/ed25519-donna.dir/Users/sylvain/SSE/app/my_idena_wallet/ios/Classes/ed25519_blake2b/ed25519-donna/ed25519-donna-basepoint-table.c.o	18c07dd938f3a9d8
+14	331	0	CMakeFiles/ed25519-donna.dir/Users/sylvain/SSE/app/my_idena_wallet/ios/Classes/ed25519_blake2b/ed25519-donna/modm-donna-32bit.c.o	533876e0d05147e4
+2	336	0	CMakeFiles/ed25519-donna.dir/Users/sylvain/SSE/app/my_idena_wallet/ios/Classes/ed25519_blake2b/ed25519-donna/curve25519-donna-32bit.c.o	e614c18cdf486d70
+0	479	0	CMakeFiles/ed25519-donna.dir/Users/sylvain/SSE/app/my_idena_wallet/ios/Classes/ed25519_blake2b/ed25519-donna/blake2b.c.o	c725a9b807c3d237
+479	670	0	libed25519-donna.a	584355a7e2853024
+670	728	0	CMakeFiles/ed25519_blake2b.dir/Users/sylvain/SSE/app/my_idena_wallet/ios/Classes/ed25519_blake2b/ed25519_blake2b.c.o	8ee9fd66a9cec5b4
+728	763	0	/Users/sylvain/SSE/app/my_idena_wallet/build/app/intermediates/cmake/debug/obj/armeabi-v7a/libed25519_blake2b.so	e618851c1b6314e0
+2	298	0	/Users/sylvain/SSE/app/my_idena_wallet/build/app/intermediates/cmake/debug/obj/armeabi-v7a/libed25519_blake2b.so	e618851c1b6314e0

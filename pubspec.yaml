@@ -87,10 +87,6 @@ dependencies:
 
   # QR Codes
   qr_flutter: ^2.0.1 # Generator
-  barcode_scan:
-    git:
-      url: https://github.com/bbedward/flutter_barcode_reader.git
-      ref: master
 
   # Deep link support
   #uni_links: ^0.2.0

@@ -23,6 +23,7 @@ if (flutterVersionName == null) {
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
@@ -43,7 +44,6 @@ android {
         targetSdkVersion 30
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
-        multiDexEnabled true
     }
 
     signingConfigs {
@@ -74,7 +74,7 @@ android {
 
     externalNativeBuild {
     cmake {
-        path "CMakeLists.txt"
+        path "../CMakeLists.txt"
     }
     }  
 }
@@ -85,4 +85,5 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "com.bottlerocketstudios:vault:1.4.2"
 }

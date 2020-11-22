@@ -1,0 +1,70 @@
+{
+  "variant": {
+    "module": {
+      "rootBuildGradleFolder": "/Users/sylvain/SSE/app/my_idena_wallet/android",
+      "sdkFolder": "/Users/sylvain/Library/Android/sdk",
+      "isNativeCompilerSettingsCacheEnabled": false,
+      "isBuildOnlyTargetAbiEnabled": true,
+      "splitsAbiFilterSet": [],
+      "intermediatesFolder": "/Users/sylvain/SSE/app/my_idena_wallet/build/app/intermediates",
+      "gradleModulePathName": ":app",
+      "moduleRootFolder": "/Users/sylvain/SSE/app/my_idena_wallet/android/app",
+      "makeFile": "/Users/sylvain/SSE/app/my_idena_wallet/android/CMakeLists.txt",
+      "buildSystem": "CMAKE",
+      "compilerSettingsCacheFolder": "/Users/sylvain/SSE/app/my_idena_wallet/android/.cxx",
+      "cxxFolder": "/Users/sylvain/SSE/app/my_idena_wallet/android/app/.cxx",
+      "ndkFolder": "/Users/sylvain/Library/Android/sdk/ndk/21.3.6528147",
+      "ndkVersion": "21.3.6528147",
+      "ndkSupportedAbiList": [
+        "ARMEABI_V7A",
+        "ARM64_V8A",
+        "X86",
+        "X86_64"
+      ],
+      "ndkDefaultAbiList": [
+        "ARMEABI_V7A",
+        "ARM64_V8A",
+        "X86",
+        "X86_64"
+      ],
+      "cmakeToolchainFile": "."
+    },
+    "buildSystemArgumentList": [],
+    "cFlagList": [],
+    "cppFlagsList": [],
+    "variantName": "debug",
+    "soFolder": "/Users/sylvain/SSE/app/my_idena_wallet/build/app/intermediates/cmake/debug/lib",
+    "objFolder": "/Users/sylvain/SSE/app/my_idena_wallet/build/app/intermediates/cmake/debug/obj",
+    "jsonFolder": "/Users/sylvain/SSE/app/my_idena_wallet/android/app/.cxx/cmake/debug",
+    "gradleBuildOutputFolder": "/Users/sylvain/SSE/app/my_idena_wallet/android/app/.cxx/cxx/debug",
+    "isDebuggableEnabled": true,
+    "validAbiList": [
+      "ARMEABI_V7A",
+      "ARM64_V8A",
+      "X86",
+      "X86_64"
+    ],
+    "buildTargetSet": []
+  },
+  "abi": "X86_64",
+  "abiPlatformVersion": 18,
+  "cxxBuildFolder": "/Users/sylvain/SSE/app/my_idena_wallet/android/app/.cxx/cmake/debug/x86_64",
+  "jsonFile": "/Users/sylvain/SSE/app/my_idena_wallet/android/app/.cxx/cmake/debug/x86_64/android_gradle_build.json",
+  "gradleBuildOutputFolder": "/Users/sylvain/SSE/app/my_idena_wallet/android/app/.cxx/cxx/debug/x86_64",
+  "objFolder": "/Users/sylvain/SSE/app/my_idena_wallet/build/app/intermediates/cmake/debug/obj/x86_64",
+  "buildCommandFile": "/Users/sylvain/SSE/app/my_idena_wallet/android/app/.cxx/cmake/debug/x86_64/build_command.txt",
+  "buildOutputFile": "/Users/sylvain/SSE/app/my_idena_wallet/android/app/.cxx/cmake/debug/x86_64/build_output.txt",
+  "modelOutputFile": "/Users/sylvain/SSE/app/my_idena_wallet/android/app/.cxx/cmake/debug/x86_64/build_model.json",
+  "cmake": {
+    "cmakeListsWrapperFile": "/Users/sylvain/SSE/app/my_idena_wallet/android/app/.cxx/cxx/debug/x86_64/CMakeLists.txt",
+    "toolchainWrapperFile": "/Users/sylvain/SSE/app/my_idena_wallet/android/app/.cxx/cxx/debug/x86_64/android_gradle_build.toolchain.cmake",
+    "buildGenerationStateFile": "/Users/sylvain/SSE/app/my_idena_wallet/android/app/.cxx/cxx/debug/x86_64/build_generation_state.json",
+    "cacheKeyFile": "/Users/sylvain/SSE/app/my_idena_wallet/android/app/.cxx/cxx/debug/x86_64/compiler_cache_key.json",
+    "compilerCacheUseFile": "/Users/sylvain/SSE/app/my_idena_wallet/android/app/.cxx/cxx/debug/x86_64/compiler_cache_use.json",
+    "compilerCacheWriteFile": "/Users/sylvain/SSE/app/my_idena_wallet/android/app/.cxx/cxx/debug/x86_64/compiler_cache_write.json",
+    "toolchainSettingsFromCacheFile": "/Users/sylvain/SSE/app/my_idena_wallet/android/app/.cxx/cxx/debug/x86_64/compiler_settings_cache.cmake",
+    "cmakeWrappingBaseFolder": "."
+  },
+  "jsonGenerationLoggingRecordFile": "/Users/sylvain/SSE/app/my_idena_wallet/android/app/.cxx/cmake/debug/x86_64/json_generation_record.json",
+  "compileCommandsJsonFile": "/Users/sylvain/SSE/app/my_idena_wallet/android/app/.cxx/cmake/debug/x86_64/compile_commands.json"
+}

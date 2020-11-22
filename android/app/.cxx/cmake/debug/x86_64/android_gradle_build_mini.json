@@ -1,0 +1,22 @@
+{
+  "buildFiles": [
+    "/Users/sylvain/SSE/app/my_idena_wallet/android/CMakeLists.txt"
+  ],
+  "cleanCommands": [
+    "/Users/sylvain/Library/Android/sdk/cmake/3.6.4111459/bin/cmake --build /Users/sylvain/SSE/app/my_idena_wallet/android/app/.cxx/cmake/debug/x86_64 --target clean"
+  ],
+  "libraries": {
+    "ed25519-donna-Debug-x86_64": {
+      "artifactName": "ed25519-donna",
+      "buildCommand": "/Users/sylvain/Library/Android/sdk/cmake/3.6.4111459/bin/cmake --build /Users/sylvain/SSE/app/my_idena_wallet/android/app/.cxx/cmake/debug/x86_64 --target ed25519-donna",
+      "abi": "x86_64",
+      "output": "/Users/sylvain/SSE/app/my_idena_wallet/android/app/.cxx/cmake/debug/x86_64/libed25519-donna.a"
+    },
+    "ed25519_blake2b-Debug-x86_64": {
+      "artifactName": "ed25519_blake2b",
+      "buildCommand": "/Users/sylvain/Library/Android/sdk/cmake/3.6.4111459/bin/cmake --build /Users/sylvain/SSE/app/my_idena_wallet/android/app/.cxx/cmake/debug/x86_64 --target ed25519_blake2b",
+      "abi": "x86_64",
+      "output": "/Users/sylvain/SSE/app/my_idena_wallet/build/app/intermediates/cmake/debug/obj/x86_64/libed25519_blake2b.so"
+    }
+  }
+}

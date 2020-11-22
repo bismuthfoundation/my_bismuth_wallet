@@ -75,7 +75,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "enterAmount" : MessageLookupByLibrary.simpleMessage("Saisir le montant"),
     "enterPasswordHint" : MessageLookupByLibrary.simpleMessage("Entrer le mot de passe"),
     "exampleCardFrom" : MessageLookupByLibrary.simpleMessage("de quelqu\'un"),
-    "exampleCardIntro" : MessageLookupByLibrary.simpleMessage("Bienvenue sur my Idena Wallet. Lorsque vous recevrez des iDNA, les transactions apparaîtront içi."),
+    "exampleCardIntro" : MessageLookupByLibrary.simpleMessage("Bienvenue sur my Idena Wallet. Lorsque vous recevrez des iDNA, les transactions apparaîtront ici."),
     "exampleCardLittle" : MessageLookupByLibrary.simpleMessage("Un peu de"),
     "exampleCardLot" : MessageLookupByLibrary.simpleMessage("Beaucoup de"),
     "exampleCardTo" : MessageLookupByLibrary.simpleMessage("à quelqu\'un"),

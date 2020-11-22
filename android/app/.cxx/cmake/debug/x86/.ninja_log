@@ -1,0 +1,15 @@
+# ninja log v5
+0	108	0	CMakeFiles/ed25519-donna.dir/Users/sylvain/SSE/app/my_idena_wallet/ios/Classes/ed25519_blake2b/ed25519-donna/curve25519-donna-helpers.c.o	f474f5615246458d
+2	130	0	CMakeFiles/ed25519-donna.dir/Users/sylvain/SSE/app/my_idena_wallet/ios/Classes/ed25519_blake2b/ed25519-donna/memzero.c.o	ab8e40b16d20f690
+1	162	0	CMakeFiles/ed25519-donna.dir/Users/sylvain/SSE/app/my_idena_wallet/ios/Classes/ed25519_blake2b/ed25519-donna/ed25519-donna-32bit-tables.c.o	54c1eb49dd9e053a
+1	169	0	CMakeFiles/ed25519-donna.dir/Users/sylvain/SSE/app/my_idena_wallet/ios/Classes/ed25519_blake2b/ed25519-donna/curve25519-donna-scalarmult-base.c.o	ca2a14ddfe8edf20
+2	215	0	CMakeFiles/ed25519-donna.dir/Users/sylvain/SSE/app/my_idena_wallet/ios/Classes/ed25519_blake2b/ed25519-donna/ed25519.c.o	7329013e0bad32b4
+1	268	0	CMakeFiles/ed25519-donna.dir/Users/sylvain/SSE/app/my_idena_wallet/ios/Classes/ed25519_blake2b/ed25519-donna/ed25519-donna-impl-base.c.o	9c6c2ab7f832c696
+1	298	0	CMakeFiles/ed25519-donna.dir/Users/sylvain/SSE/app/my_idena_wallet/ios/Classes/ed25519_blake2b/ed25519-donna/ed25519-donna-basepoint-table.c.o	3c2f5facc9d93048
+3	345	0	CMakeFiles/ed25519-donna.dir/Users/sylvain/SSE/app/my_idena_wallet/ios/Classes/ed25519_blake2b/ed25519-donna/modm-donna-32bit.c.o	e08551fbee4dbe5
+0	360	0	CMakeFiles/ed25519-donna.dir/Users/sylvain/SSE/app/my_idena_wallet/ios/Classes/ed25519_blake2b/ed25519-donna/curve25519-donna-32bit.c.o	9297d56090d3d8e9
+0	596	0	CMakeFiles/ed25519-donna.dir/Users/sylvain/SSE/app/my_idena_wallet/ios/Classes/ed25519_blake2b/ed25519-donna/blake2b.c.o	8f0c22c4573dad5c
+596	1043	0	libed25519-donna.a	c4cf4da402e20de2
+1043	1112	0	CMakeFiles/ed25519_blake2b.dir/Users/sylvain/SSE/app/my_idena_wallet/ios/Classes/ed25519_blake2b/ed25519_blake2b.c.o	6e337d4897cc7dc5
+1112	1148	0	/Users/sylvain/SSE/app/my_idena_wallet/build/app/intermediates/cmake/debug/obj/x86/libed25519_blake2b.so	5979449111dbe3ec
+1	74	0	/Users/sylvain/SSE/app/my_idena_wallet/build/app/intermediates/cmake/debug/obj/x86/libed25519_blake2b.so	5979449111dbe3ec
