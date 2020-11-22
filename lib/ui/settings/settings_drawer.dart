@@ -291,17 +291,21 @@ class _SettingsSheetState extends State<SettingsSheet>
                 children: _buildCurrencyOptions(),
               );
             });
-    sl
-        .get<SharedPrefsUtil>()
-        .setCurrency(AvailableCurrency(selection))
-        .then((result) {
-      if (StateContainer.of(context).curCurrency.currency != selection) {
-        setState(() {
-          StateContainer.of(context).curCurrency = AvailableCurrency(selection);
-          StateContainer.of(context).updateCurrency(AvailableCurrency(selection));
-        });
-      }
-    });
+    if (selection != null) {
+      sl
+          .get<SharedPrefsUtil>()
+          .setCurrency(AvailableCurrency(selection))
+          .then((result) {
+        if (StateContainer.of(context).curCurrency.currency != selection) {
+          setState(() {
+            StateContainer.of(context).curCurrency =
+                AvailableCurrency(selection);
+            StateContainer.of(context)
+                .updateCurrency(AvailableCurrency(selection));
+          });
+        }
+      });
+    }
   }
 
   List<Widget> _buildLanguageOptions() {
@@ -338,16 +342,19 @@ class _SettingsSheetState extends State<SettingsSheet>
             children: _buildLanguageOptions(),
           );
         });
-    sl
-        .get<SharedPrefsUtil>()
-        .setLanguage(LanguageSetting(selection))
-        .then((result) {
-      if (StateContainer.of(context).curLanguage.language != selection) {
-        setState(() {
-          StateContainer.of(context).updateLanguage(LanguageSetting(selection));
-        });
-      }
-    });
+    if (selection != null) {
+      sl
+          .get<SharedPrefsUtil>()
+          .setLanguage(LanguageSetting(selection))
+          .then((result) {
+        if (StateContainer.of(context).curLanguage.language != selection) {
+          setState(() {
+            StateContainer.of(context)
+                .updateLanguage(LanguageSetting(selection));
+          });
+        }
+      });
+    }
   }
 
   List<Widget> _buildLockTimeoutOptions() {
@@ -400,6 +407,7 @@ class _SettingsSheetState extends State<SettingsSheet>
       }
     });
   }
+
   Future<bool> _onBackButtonPressed() async {
     if (_contactsOpen) {
       setState(() {
@@ -485,7 +493,9 @@ class _SettingsSheetState extends State<SettingsSheet>
                                 ),
                                 alignment: AlignmentDirectional(-1, 0),
                                 child: CircleAvatar(
-                                  backgroundColor: StateContainer.of(context).curTheme.text05,
+                                  backgroundColor: StateContainer.of(context)
+                                      .curTheme
+                                      .text05,
                                   backgroundImage: NetworkImage(
                                     UIUtil.getRobohashURL(
                                         StateContainer.of(context)
@@ -540,7 +550,10 @@ class _SettingsSheetState extends State<SettingsSheet>
                                           height: 52,
                                           width: 52,
                                           child: CircleAvatar(
-                                            backgroundColor: StateContainer.of(context).curTheme.text05,
+                                            backgroundColor:
+                                                StateContainer.of(context)
+                                                    .curTheme
+                                                    .text05,
                                             backgroundImage: NetworkImage(
                                               UIUtil.getRobohashURL(
                                                   StateContainer.of(context)
@@ -608,7 +621,10 @@ class _SettingsSheetState extends State<SettingsSheet>
                                           height: 52,
                                           width: 52,
                                           child: CircleAvatar(
-                                            backgroundColor: StateContainer.of(context).curTheme.text05,
+                                            backgroundColor:
+                                                StateContainer.of(context)
+                                                    .curTheme
+                                                    .text05,
                                             backgroundImage: NetworkImage(
                                               UIUtil.getRobohashURL(
                                                 StateContainer.of(context)
@@ -757,10 +773,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                                               .wallet
                                               .address !=
                                           null
-                                  ? StateContainer.of(context)
-                                      .wallet
-                                      ?.address
-                                      
+                                  ? StateContainer.of(context).wallet?.address
                                   : "",
                               style: TextStyle(
                                 fontFamily: "OverpassMono",

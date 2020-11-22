@@ -33,7 +33,7 @@ android {
     }
 
     lintOptions {
-        disable 'InvalidPackage'
+        abortOnError false
     }
 
     defaultConfig {
@@ -44,6 +44,17 @@ android {
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
         multiDexEnabled true
+    }
+
+    signingConfigs {
+        release {
+       
+                keyAlias System.getenv("keystore_alias")
+                keyPassword System.getenv("keystore_password")
+                storeFile System.getenv("storeFile") ? file(System.getenv("storeFile")) : null
+                storePassword System.getenv("keystore_alias_password")
+       
+        }
     }
 
      buildTypes {

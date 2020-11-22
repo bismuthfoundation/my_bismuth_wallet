@@ -6,7 +6,6 @@ import 'package:my_idena_wallet/model/db/appdb.dart';
 import 'package:my_idena_wallet/model/db/account.dart';
 import 'package:my_idena_wallet/appstate_container.dart';
 import 'package:my_idena_wallet/localization.dart';
-import 'package:my_idena_wallet/service/idena_service.dart';
 import 'package:my_idena_wallet/service_locator.dart';
 import 'package:my_idena_wallet/util/hd_key.dart';
 import 'package:web3dart/web3dart.dart';

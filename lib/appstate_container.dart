@@ -401,11 +401,6 @@ class StateContainerState extends State<StateContainer> {
     sl.get<DBHelper>().dropAccounts();
   }
 
-  Future<String> _getPrivKey() async {
-    String seed = await getSeed();
-    return IdenaKeys.seedToPrivate(seed, selectedAccount.index);
-  }
-
   Future<String> getSeed() async {
     String seed;
     if (encryptedSecret != null) {

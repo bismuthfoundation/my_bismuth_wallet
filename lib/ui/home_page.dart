@@ -1347,25 +1347,7 @@ class _AppHomePageState extends State<AppHomePage>
                     ),
                   ),
                 ),
-                Center(
-                  child: Container(
-                    color: Colors.transparent,
-                    child: FlatButton(
-                      onPressed: () {
-                        Navigator.of(context).pushNamed('/avatar_page');
-                      },
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(100.0)),
-                      highlightColor:
-                          StateContainer.of(context).curTheme.text15,
-                      splashColor: StateContainer.of(context).curTheme.text15,
-                      padding: EdgeInsets.all(0.0),
-                      child: Container(
-                        color: Colors.transparent,
-                      ),
-                    ),
-                  ),
-                ),
+                
               ],
             ),
           )
