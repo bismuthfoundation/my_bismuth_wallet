@@ -227,12 +227,6 @@ class AnimationLoadingOverlay extends ModalRoute<void> {
               animation: "main",
               fit: BoxFit.contain,
             ),
-            FlareActor(
-              "assets/transfer_animation_natriumwalletonly.flr",
-              animation: "main",
-              fit: BoxFit.contain,
-              color: StateContainer.of(context).curTheme.primary,
-            ),
           ],
         );
       case AnimationType.GENERIC:
