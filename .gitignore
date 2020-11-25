@@ -43,3 +43,6 @@ ios/fastlane/Appfile
 android/secret/api-5373400179997468599-215172-2a68660d069f.json
 android/fastlane/Appfile
 android/app/keystore/key.jks
+
+/ios/build/
+/ios/build/XCBuildData/

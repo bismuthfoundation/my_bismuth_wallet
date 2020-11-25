@@ -260,7 +260,7 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
                 height: 15,
               ),
               //A row with Add Account button
-              Row(
+              /*Row(
                 children: <Widget>[
                   widget.accounts == null ||
                           widget.accounts.length >= MAX_ACCOUNTS
@@ -318,7 +318,7 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
                           },
                         ),
                 ],
-              ),
+              ),*/
               //A row with Close button
               Row(
                 children: <Widget>[

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
@@ -8,7 +9,6 @@ import 'package:my_idena_wallet/localization.dart';
 import 'package:my_idena_wallet/model/address.dart';
 import 'package:my_idena_wallet/service_locator.dart';
 import 'package:my_idena_wallet/ui/util/ui_util.dart';
-import 'package:my_idena_wallet/util/barcode_scan.dart';
 import 'package:my_idena_wallet/util/idena_ffi/keys/seeds.dart';
 
 import 'package:quiver/strings.dart';

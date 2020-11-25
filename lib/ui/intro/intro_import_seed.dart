@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
@@ -11,7 +12,6 @@ import 'package:my_idena_wallet/ui/util/formatters.dart';
 import 'package:my_idena_wallet/ui/util/ui_util.dart';
 import 'package:my_idena_wallet/ui/widgets/app_text_field.dart';
 import 'package:my_idena_wallet/ui/widgets/tap_outside_unfocus.dart';
-import 'package:my_idena_wallet/util/barcode_scan.dart';
 import 'package:my_idena_wallet/util/idena_ffi/keys/mnemonics.dart';
 import 'package:my_idena_wallet/util/idena_ffi/keys/seeds.dart';
 import 'package:my_idena_wallet/util/sharedprefsutil.dart';

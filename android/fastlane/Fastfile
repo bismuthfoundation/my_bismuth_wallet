@@ -16,23 +16,83 @@
 default_platform(:android)
 
 platform :android do
-  desc "Runs all the tests"
-  lane :test do
-    gradle(task: "test")
-  end
-
-  desc "Submit a new Beta Build to Crashlytics Beta"
-  lane :beta do
-    gradle(task: "clean assembleRelease")
-    crashlytics
+  desc "Deploy to internal test application"
   
-    # sh "your_script.sh"
-    # You can also use other beta testing services here
+  lane :internal do 
+    version_code = getVersionCode(getVersionInfo())
+    version_name = getVersionName(getVersionInfo())
+    flutter_build(version_name,version_code)
+
+    upload_to_play_store(
+      track: 'internal',
+      version_code: version_code,
+      aab: '../build/app/outputs/bundle/release/app-release.aab',
+    )
   end
 
-  desc "Deploy a new version to the Google Play"
-  lane :deploy do
-    gradle(task: "clean assembleRelease")
-    upload_to_play_store
+  lane :alpha do 
+    version_code = getVersionCode(getVersionInfo())
+    version_name = getVersionName(getVersionInfo())
+    flutter_build(version_name,version_code)
+
+    upload_to_play_store(
+      track: 'alpha',
+      version_code: version_code,
+      aab: '../build/app/outputs/bundle/release/app-release.aab',
+    )
   end
+
+
+  lane :beta do 
+    version_code = getVersionCode(getVersionInfo())
+    version_name = getVersionName(getVersionInfo())
+    flutter_build(version_name,version_code)
+
+    upload_to_play_store(
+      track: 'beta',
+      version_code: version_code,
+      aab: '../build/app/outputs/bundle/release/app-release.aab',
+    )
+  end
+
+  lane :production do 
+    version_code = getVersionCode(getVersionInfo())
+    version_name = getVersionName(getVersionInfo())
+    flutter_build(version_name,version_code)
+
+    upload_to_play_store(
+      track: 'production',
+      version_code: version_code,
+      aab: '../build/app/outputs/bundle/release/app-release.aab',
+    )
+  end
+
+
+  def getVersionInfo()
+    version_info = flutter_version(
+      pubspec_location: '../pubspec.yaml'
+    )
+  end
+
+  def getVersionCode(version_info)
+    return version_info['version_code']
+  end
+
+  def getVersionName(version_info)
+    return version_info['version_name']
+  end
+
+  def flutter_build(versionName,number)
+  
+    Dir.chdir '../../' do
+      sh('flutter', 'packages', 'get')
+      sh('flutter', 'clean')
+      sh(
+        "flutter build appbundle --build-name=#{
+          versionName
+        } --build-number=#{number.to_s}"
+      )
+    end
+  end
+
 end
