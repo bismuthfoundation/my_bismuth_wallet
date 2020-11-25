@@ -121,6 +121,8 @@ app.*.symbols
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 !/dev/ci/**/Gemfile.lock
 ios/fastlane/Appfile
+ios/Runner.app.dSYM.zip
+ios/Runner.ipa
 android/fastlane/Appfile
 android/secret/api-5373400179997468599-215172-2a68660d069f.json
 
