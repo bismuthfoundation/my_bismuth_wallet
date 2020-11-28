@@ -135,9 +135,9 @@ class StateContainerState extends State<StateContainer> {
         EventTaxiImpl.singleton().registerTo<PriceEvent>().listen((event) {
       // PriceResponse's get pushed periodically, it wasn't a request we made so don't pop the queue
       setState(() {
-  
         wallet.btcPrice = event.response.btcPrice.toString();
-        wallet.localCurrencyPrice = event.response.localCurrencyPrice.toString();
+        wallet.localCurrencyPrice =
+            event.response.localCurrencyPrice.toString();
       });
     });
 
@@ -286,7 +286,6 @@ class StateContainerState extends State<StateContainer> {
 
   /// Handle address response
   void handleAddressResponse(AddressResponse response) {
-
     // Set currency locale here for the UI to access
     sl.get<SharedPrefsUtil>().getCurrency(deviceLocale).then((currency) {
       setState(() {
@@ -299,7 +298,8 @@ class StateContainerState extends State<StateContainer> {
       if (response.result == null) {
         wallet.accountBalance = 0;
       } else {
-        wallet.accountBalance = double.tryParse(response.result.balance + response.result.stake);
+        wallet.accountBalance =
+            double.tryParse(response.result.balance + response.result.stake);
       }
       // TODO : à renseigner
       wallet.localCurrencyPrice = "0";
@@ -342,7 +342,6 @@ class StateContainerState extends State<StateContainer> {
     if (wallet != null &&
         wallet.address != null &&
         Address(wallet.address).isValid()) {
-
       // Request account history
       int count = 30;
       if (wallet.history != null && wallet.history.length > 1) {
@@ -358,7 +357,18 @@ class StateContainerState extends State<StateContainer> {
         if (addressTxsResponse != null && addressTxsResponse.result != null) {
           for (AddressTxsResponseResult item in addressTxsResponse.result) {
             // If current list doesn't contain this item, insert it and the rest of the items in list and exit loop
-            if (!wallet.history.contains(item)) {
+            bool newItem = false;
+            for(int i=0; i < wallet.history.length; i++)
+            {
+              if(wallet.history[i].timestamp != item.timestamp 
+              || wallet.history[i].hash != item.hash)
+              {
+                newItem = true;
+                break;
+              }
+            }
+
+            if (newItem) {
               int startIndex = 0; // Index to start inserting into the list
               int lastIndex = addressTxsResponse.result.indexWhere((item) =>
                   wallet.history.contains(

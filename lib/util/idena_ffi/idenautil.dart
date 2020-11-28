@@ -23,7 +23,8 @@ class IdenaUtil {
 
     EthPrivateKey ethPrivateKey;
     String addressEIP55;
-    for(int numAddress = 0; numAddress < 10; numAddress ++)
+    // TODO: Distinct new address and regeneration of known address
+   /* for(int numAddress = 0; numAddress < 10; numAddress ++)
    {
       ethPrivateKey =
           EthPrivateKey.fromHex(HEX.encode(child.derive(numAddress).privateKey));
@@ -35,7 +36,13 @@ class IdenaUtil {
         if (addressResponse.result == null) {
           break;
         }
-    }
+    }*/
+     ethPrivateKey =
+          EthPrivateKey.fromHex(HEX.encode(child.derive(0).privateKey));
+      final address = await ethPrivateKey.extractAddress();
+      addressEIP55 = checksumEthereumAddress(address.toString());
+      //print("address EIP55 ("+numAddress.toString()+"): " + addressEIP55.toString());
+
     return addressEIP55;
   }
 
