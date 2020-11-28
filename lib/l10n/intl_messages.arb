@@ -120,18 +120,6 @@
     "type": "text",
     "placeholders": {}
   },
-  "contactsImportErr": "Failed to import contacts",
-  "@contactsImportErr": {
-    "description": "contact_import_error",
-    "type": "text",
-    "placeholders": {}
-  },
-  "viewDetails": "View Details",
-  "@viewDetails": {
-    "description": "transaction_details",
-    "type": "text",
-    "placeholders": {}
-  },
   "qrInvalidSeed": "QR code does not contain a valid seed or private key",
   "@qrInvalidSeed": {
     "description": "qr_invalid_seed",
@@ -195,24 +183,6 @@
   "contactInvalid": "Invalid Contact Name",
   "@contactInvalid": {
     "description": "contact_invalid_name",
-    "type": "text",
-    "placeholders": {}
-  },
-  "noContactsExport": "There's no contacts to export.",
-  "@noContactsExport": {
-    "description": "contact_export_none",
-    "type": "text",
-    "placeholders": {}
-  },
-  "noContactsImport": "No new contacts to import.",
-  "@noContactsImport": {
-    "description": "contact_import_none",
-    "type": "text",
-    "placeholders": {}
-  },
-  "contactsImportSuccess": "Sucessfully imported %1 contacts.",
-  "@contactsImportSuccess": {
-    "description": "contact_import_success",
     "type": "text",
     "placeholders": {}
   },
@@ -408,21 +378,9 @@
     "type": "text",
     "placeholders": {}
   },
-  "themeHeader": "Theme",
-  "@themeHeader": {
-    "description": "theme_header",
-    "type": "text",
-    "placeholders": {}
-  },
   "pickFromList": "Pick From a List",
   "@pickFromList": {
     "description": "pick rep from list",
-    "type": "text",
-    "placeholders": {}
-  },
-  "uptime": "Uptime",
-  "@uptime": {
-    "description": "Rep uptime",
     "type": "text",
     "placeholders": {}
   },
@@ -561,30 +519,6 @@
   "systemDefault": "System Default",
   "@systemDefault": {
     "description": "settings_default_language_string",
-    "type": "text",
-    "placeholders": {}
-  },
-  "notifications": "Notifications",
-  "@notifications": {
-    "description": "notifications_settings",
-    "type": "text",
-    "placeholders": {}
-  },
-  "notificationTitle": "Received %1 iDNA",
-  "@notificationTitle": {
-    "description": "notification_title",
-    "type": "text",
-    "placeholders": {}
-  },
-  "notificationBody": "Open my Idena Wallet to view this transaction",
-  "@notificationBody": {
-    "description": "notification_body",
-    "type": "text",
-    "placeholders": {}
-  },
-  "notificationHeaderSupplement": "Tap to open",
-  "@notificationHeaderSupplement": {
-    "description": "notificaiton_header_suplement",
     "type": "text",
     "placeholders": {}
   },

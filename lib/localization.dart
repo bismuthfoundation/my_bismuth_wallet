@@ -119,16 +119,6 @@ class AppLocalization {
         desc: 'send_scan_qr', name: 'scanQrCode');
   }
 
-  String get contactsImportErr {
-    return Intl.message('Failed to import contacts',
-        desc: 'contact_import_error', name: 'contactsImportErr');
-  }
-
-  String get viewDetails {
-    return Intl.message("View Details",
-        desc: "transaction_details", name: 'viewDetails');
-  }
-
   String get qrInvalidSeed {
     return Intl.message("QR code does not contain a valid seed or private key",
         desc: "qr_invalid_seed", name: 'qrInvalidSeed');
@@ -188,21 +178,6 @@ class AppLocalization {
   String get contactInvalid {
     return Intl.message("Invalid Contact Name",
         desc: 'contact_invalid_name', name: 'contactInvalid');
-  }
-
-  String get noContactsExport {
-    return Intl.message("There's no contacts to export.",
-        desc: 'contact_export_none', name: 'noContactsExport');
-  }
-
-  String get noContactsImport {
-    return Intl.message("No new contacts to import.",
-        desc: 'contact_import_none', name: 'noContactsImport');
-  }
-
-  String get contactsImportSuccess {
-    return Intl.message("Sucessfully imported %1 contacts.",
-        desc: 'contact_import_success', name: 'contactsImportSuccess');
   }
 
   String get contactAdded {
@@ -381,9 +356,6 @@ class AppLocalization {
 
   /// -- SETTINGS ITEMS
 
-  String get themeHeader {
-    return Intl.message("Theme", desc: 'theme_header', name: 'themeHeader');
-  }
   String get pickFromList {
     return Intl.message("Pick From a List",
         desc: 'pick rep from list', name: 'pickFromList');
@@ -513,27 +485,6 @@ class AppLocalization {
   String get systemDefault {
     return Intl.message("System Default",
         desc: 'settings_default_language_string', name: 'systemDefault');
-  }
-
-  String get notifications {
-    return Intl.message("Notifications",
-        desc: 'notifications_settings', name: 'notifications');
-  }
-
-  String get notificationTitle {
-    return Intl.message("Received %1 iDNA",
-        desc: 'notification_title', name: 'notificationTitle');
-  }
-
-  String get notificationBody {
-    return Intl.message("Open my Idena Wallet to view this transaction",
-        desc: 'notification_body', name: 'notificationBody');
-  }
-
-  String get notificationHeaderSupplement {
-    return Intl.message("Tap to open",
-        desc: 'notificaiton_header_suplement',
-        name: 'notificationHeaderSupplement');
   }
 
   /// -- END SETTINGS ITEMS
