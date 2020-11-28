@@ -82,11 +82,9 @@ class IdenaService {
       HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {
         String reply = await response.transform(utf8.decoder).join();
-        print(reply);
         addressTxsResponse = addressTxsResponseFromJson(reply);
       }
     } catch (e) {
-      print(e);
     } finally {
       httpClient.close();
     }

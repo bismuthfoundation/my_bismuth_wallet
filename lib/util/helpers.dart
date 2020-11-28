@@ -14,11 +14,6 @@ class IdenaHelpers {
     return result;
   }
 
-  /// Converts a Uint8List to a hex string
-  static String byteToHex(Uint8List bytes) {
-    return HEX.encode(bytes);
-  }
-
   static BigInt byteToBigInt(Uint8List bigIntBytes) {
     return _decodeBigInt(bigIntBytes);
   }
@@ -111,7 +106,7 @@ class IdenaHelpers {
   static Uint8List concat(List<Uint8List> bytes) {
     String hex = '';
     bytes.forEach((v) {
-      hex += IdenaHelpers.byteToHex(v);
+      hex += HEX.encode(v);
     });
     return IdenaHelpers.hexToBytes(hex);
   }

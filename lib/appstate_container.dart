@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:hex/hex.dart';
 import 'package:logger/logger.dart';
 import 'package:my_idena_wallet/model/wallet.dart';
 import 'package:event_taxi/event_taxi.dart';
@@ -8,9 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:my_idena_wallet/network/model/response/address_response.dart';
 import 'package:my_idena_wallet/network/model/response/address_txs_response.dart';
 import 'package:my_idena_wallet/service/idena_service.dart';
-import 'package:my_idena_wallet/util/helpers.dart';
 import 'package:my_idena_wallet/util/idena_ffi/encrypt/crypter.dart';
-import 'package:my_idena_wallet/util/idena_ffi/keys/keys.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:my_idena_wallet/themes.dart';
 import 'package:my_idena_wallet/service_locator.dart';
@@ -404,7 +403,7 @@ class StateContainerState extends State<StateContainer> {
   Future<String> getSeed() async {
     String seed;
     if (encryptedSecret != null) {
-      seed = IdenaHelpers.byteToHex(IdenaCrypt.decrypt(
+      seed = HEX.encode(IdenaCrypt.decrypt(
           encryptedSecret, await sl.get<Vault>().getSessionKey()));
     } else {
       seed = await sl.get<Vault>().getSeed();

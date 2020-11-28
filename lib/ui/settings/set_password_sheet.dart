@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:hex/hex.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:my_idena_wallet/appstate_container.dart';
 import 'package:my_idena_wallet/dimens.dart';
@@ -270,10 +271,10 @@ class _SetPasswordSheetState extends State<SetPasswordSheet> {
       UIUtil.showSnackbar(
           AppLocalization.of(context).encryptionFailedError, context);
     } else {
-      String encryptedSeed = IdenaHelpers.byteToHex(
+      String encryptedSeed = HEX.encode(
           IdenaCrypt.encrypt(seed, confirmPasswordController.text));
       await sl.get<Vault>().setSeed(encryptedSeed);
-      StateContainer.of(context).setEncryptedSecret(IdenaHelpers.byteToHex(
+      StateContainer.of(context).setEncryptedSecret(HEX.encode(
           IdenaCrypt.encrypt(seed, await sl.get<Vault>().getSessionKey())));
       UIUtil.showSnackbar(
           AppLocalization.of(context).setPasswordSuccess, context);

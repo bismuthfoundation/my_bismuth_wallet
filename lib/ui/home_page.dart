@@ -746,6 +746,7 @@ class _AppHomePageState extends State<AppHomePage>
     String text;
     IconData icon;
     Color iconColor;
+    // TODO: vérifier
     if (item.type == BlockTypes.SEND) {
       text = AppLocalization.of(context).sent;
       icon = AppIcons.sent;

@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:hex/hex.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:my_idena_wallet/appstate_container.dart';
 import 'package:my_idena_wallet/dimens.dart';
@@ -12,7 +13,6 @@ import 'package:my_idena_wallet/ui/widgets/app_text_field.dart';
 import 'package:my_idena_wallet/ui/widgets/buttons.dart';
 import 'package:my_idena_wallet/ui/widgets/security.dart';
 import 'package:my_idena_wallet/ui/widgets/tap_outside_unfocus.dart';
-import 'package:my_idena_wallet/util/helpers.dart';
 import 'package:my_idena_wallet/util/idena_ffi/encrypt/crypter.dart';
 import 'package:my_idena_wallet/util/idena_ffi/idenautil.dart';
 import 'package:my_idena_wallet/model/vault.dart';
@@ -282,9 +282,9 @@ class _IntroPasswordState extends State<IntroPassword> {
         });
       }
     } else if (widget.seed != null) {
-      String encryptedSeed = IdenaHelpers.byteToHex(IdenaCrypt.encrypt(widget.seed, confirmPasswordController.text));
+      String encryptedSeed = HEX.encode(IdenaCrypt.encrypt(widget.seed, confirmPasswordController.text));
       await sl.get<Vault>().setSeed(encryptedSeed);
-      StateContainer.of(context).setEncryptedSecret(IdenaHelpers.byteToHex(IdenaCrypt.encrypt(widget.seed, await sl.get<Vault>().getSessionKey())));
+      StateContainer.of(context).setEncryptedSecret(HEX.encode(IdenaCrypt.encrypt(widget.seed, await sl.get<Vault>().getSessionKey())));
       await sl.get<DBHelper>().dropAccounts();
       await IdenaUtil().loginAccount(widget.seed, context);
       StateContainer.of(context).requestUpdate();
@@ -298,10 +298,10 @@ class _IntroPasswordState extends State<IntroPassword> {
     } else {
       // Generate a new seed and encrypt
       String seed = IdenaSeeds.generateSeed();
-      String encryptedSeed = IdenaHelpers.byteToHex(IdenaCrypt.encrypt(seed, confirmPasswordController.text));
+      String encryptedSeed = HEX.encode(IdenaCrypt.encrypt(seed, confirmPasswordController.text));
       await sl.get<Vault>().setSeed(encryptedSeed);
       // Also encrypt it with the session key, so user doesnt need password to sign blocks within the app
-      StateContainer.of(context).setEncryptedSecret(IdenaHelpers.byteToHex(IdenaCrypt.encrypt(seed, await sl.get<Vault>().getSessionKey())));
+      StateContainer.of(context).setEncryptedSecret(HEX.encode(IdenaCrypt.encrypt(seed, await sl.get<Vault>().getSessionKey())));
       // Update wallet
       IdenaUtil().loginAccount(await StateContainer.of(context).getSeed(), context).then((_) {
         StateContainer.of(context).requestUpdate();

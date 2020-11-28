@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hex/hex.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:my_idena_wallet/app_icons.dart';
 import 'package:my_idena_wallet/service_locator.dart';
@@ -7,7 +8,6 @@ import 'package:my_idena_wallet/styles.dart';
 import 'package:my_idena_wallet/ui/widgets/app_text_field.dart';
 import 'package:my_idena_wallet/ui/widgets/dialog.dart';
 import 'package:my_idena_wallet/ui/widgets/tap_outside_unfocus.dart';
-import 'package:my_idena_wallet/util/helpers.dart';
 import 'package:my_idena_wallet/util/idena_ffi/encrypt/crypter.dart';
 import 'package:my_idena_wallet/util/idena_ffi/idenautil.dart';
 import 'package:my_idena_wallet/util/caseconverter.dart';
@@ -201,11 +201,11 @@ class _AppPasswordLockScreenState extends State<AppPasswordLockScreen> {
 
   Future<void> validateAndDecrypt() async {
     try {
-      String decryptedSeed = IdenaHelpers.byteToHex(
+      String decryptedSeed = HEX.encode(
           IdenaCrypt.decrypt(await sl.get<Vault>().getSeed(),
               enterPasswordController.text));
       StateContainer.of(context).setEncryptedSecret(
-          IdenaHelpers.byteToHex(IdenaCrypt.encrypt(decryptedSeed,
+          HEX.encode(IdenaCrypt.encrypt(decryptedSeed,
               await sl.get<Vault>().getSessionKey())));
       _goHome();
     } catch (e) {

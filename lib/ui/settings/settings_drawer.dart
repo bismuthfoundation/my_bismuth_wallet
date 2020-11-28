@@ -683,7 +683,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                                 )
                               : SizedBox(),
                           // Account switcher
-                          Container(
+                          /*Container(
                             height: 36,
                             width: 36,
                             margin: EdgeInsets.symmetric(horizontal: 6.0),
@@ -730,7 +730,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                                           .curTheme
                                           .primary),
                             ),
-                          ),
+                          ),*/
                         ],
                       ),
                     ],

@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:hex/hex.dart';
 import 'package:my_idena_wallet/appstate_container.dart';
 import 'package:my_idena_wallet/app_icons.dart';
 import 'package:my_idena_wallet/dimens.dart';
@@ -10,7 +11,6 @@ import 'package:my_idena_wallet/styles.dart';
 import 'package:my_idena_wallet/model/vault.dart';
 import 'package:my_idena_wallet/ui/widgets/buttons.dart';
 import 'package:my_idena_wallet/ui/widgets/plainseed_display.dart';
-import 'package:my_idena_wallet/util/helpers.dart';
 import 'package:my_idena_wallet/util/idena_ffi/encrypt/crypter.dart';
 import 'package:my_idena_wallet/util/idena_ffi/idenautil.dart';
 import 'package:my_idena_wallet/ui/widgets/mnemonic_display.dart';
@@ -43,7 +43,7 @@ class _IntroBackupSeedState extends State<IntroBackupSeedPage> {
     } else {
       sl.get<Vault>().getSessionKey().then((key) {
         setState(() {
-          _seed = IdenaHelpers.byteToHex(IdenaCrypt.decrypt(widget.encryptedSeed, key));
+          _seed = HEX.encode(IdenaCrypt.decrypt(widget.encryptedSeed, key));
           _mnemonic = IdenaMnemomics.seedToMnemonic(_seed);
         });
       });

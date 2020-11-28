@@ -471,7 +471,11 @@ class UIUtil {
   }
 
   static String getRobohashURL(String address) {
-    return "https://robohash.org/$address";
-    
+    if (address == null) {
+      return "https://robohash.org/";
+    } else {
+      address = address.toLowerCase();
+      return "https://robohash.org/$address";
+    }
   }
 }

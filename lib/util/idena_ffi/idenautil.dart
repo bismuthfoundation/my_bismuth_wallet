@@ -1,67 +1,49 @@
-import 'dart:convert';
-
+import 'package:bip32/bip32.dart' as bip32;
+import 'package:bip39/bip39.dart' as bip39;
 import 'package:ethereum_address/ethereum_address.dart';
 import 'package:flutter/material.dart';
 import 'package:hex/hex.dart';
-import 'package:sha3/sha3.dart';
 import 'package:my_idena_wallet/model/db/appdb.dart';
-import 'package:my_idena_wallet/model/db/account.dart';
+import 'package:my_idena_wallet/model/db/account.dart' as Account;
 import 'package:my_idena_wallet/appstate_container.dart';
 import 'package:my_idena_wallet/localization.dart';
+import 'package:my_idena_wallet/network/model/response/address_response.dart';
+import 'package:my_idena_wallet/service/idena_service.dart';
 import 'package:my_idena_wallet/service_locator.dart';
-import 'package:my_idena_wallet/util/hd_key.dart';
-import 'package:web3dart/crypto.dart';
 import 'package:web3dart/web3dart.dart';
-import 'package:secp256k1/secp256k1.dart';
-import 'package:quartet/quartet.dart';
 
 class IdenaUtil {
   Future<String> seedToAddress(String seed, int index) async {
-    print("seed: " + seed);
+    String mnemonic = bip39.entropyToMnemonic(seed);
 
-    //String privateKey = IdenaKeys.seedToPrivate(seed, index);
-    //print("privateKey: " + privateKey);
+    final bip39Seed = bip39.mnemonicToSeed(mnemonic);
+    final root = bip32.BIP32.fromSeed(bip39Seed);
+    bip32.BIP32 node = bip32.BIP32.fromBase58(root.toBase58());
+    bip32.BIP32 child = node.derivePath("m/44'/515'/0'/0");
 
-    KeyData master = HDKey.getMasterKeyFromSeed(seed);
-    String privateKey = HEX.encode(master.key);
-    /*String privateKey =
-        "771f43592e56eb3ee0cbb6e9d46b9c00eb196b9c1267e3829d04d11f1154c4f0a4ef1aebe47e71749c7cd1e9fc5a30fbbd2ec64251111154e416d4d0";
-    print("privateKey: $privateKey");
-    var pk = PrivateKey.fromHex(privateKey);
-    var pub = pk.publicKey;
-    print("pub: " + pub.toHex());
-    print("pubComp: " + pub.toCompressedHex());
-
-    
-     const pubKey = ec
-    .keyFromPrivate(key)
-    .getPublic()
-    .encode('array')
-    return toHexString(sha3.keccak_256.array(pubKey.slice(1)).slice(12), true)
-    
-    var k = SHA3(256, KECCAK_PADDING, 256);
-    k.update(utf8.encode(slice(pub.toCompressedHex(), 1)));
-    var hash = k.digest();
-    print("hash: " + HEX.encode(hash));
-    print("hash slice12: " + slice(HEX.encode(hash), 12));
-    
-    */
-    //String pubKey = IdenaKeys.createPublicKey(privateKey);
-    //print("pubKey: " + pubKey);
-    final ethPrivateKey = EthPrivateKey.fromHex(privateKey);
-    final address = await ethPrivateKey.extractAddress();
-    print("address: " + address.toString());
-
-    String addressEIP55 = checksumEthereumAddress(address.toString());
-    print("address EIP55: " + addressEIP55.toString());
-
-    return address.toString();
+    EthPrivateKey ethPrivateKey;
+    String addressEIP55;
+    for(int numAddress = 0; numAddress < 10; numAddress ++)
+   {
+      ethPrivateKey =
+          EthPrivateKey.fromHex(HEX.encode(child.derive(numAddress).privateKey));
+      final address0 = await ethPrivateKey.extractAddress();
+      addressEIP55 = checksumEthereumAddress(address0.toString());
+      //print("address EIP55 ("+numAddress.toString()+"): " + addressEIP55.toString());
+      AddressResponse addressResponse =
+        await IdenaService().getAddressResponse(addressEIP55);
+        if (addressResponse.result == null) {
+          break;
+        }
+    }
+    return addressEIP55;
   }
 
   Future<void> loginAccount(String seed, BuildContext context) async {
-    Account selectedAcct = await sl.get<DBHelper>().getSelectedAccount(seed);
+    Account.Account selectedAcct =
+        await sl.get<DBHelper>().getSelectedAccount(seed);
     if (selectedAcct == null) {
-      selectedAcct = Account(
+      selectedAcct = Account.Account(
           index: 0,
           lastAccess: 0,
           name: AppLocalization.of(context).defaultAccountName,

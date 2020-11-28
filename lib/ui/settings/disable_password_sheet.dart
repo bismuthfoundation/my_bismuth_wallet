@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hex/hex.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:my_idena_wallet/appstate_container.dart';
 import 'package:my_idena_wallet/dimens.dart';
@@ -13,7 +14,6 @@ import 'package:my_idena_wallet/ui/widgets/app_text_field.dart';
 import 'package:my_idena_wallet/ui/widgets/buttons.dart';
 import 'package:my_idena_wallet/ui/widgets/tap_outside_unfocus.dart';
 import 'package:my_idena_wallet/util/caseconverter.dart';
-import 'package:my_idena_wallet/util/helpers.dart';
 import 'package:my_idena_wallet/util/idena_ffi/encrypt/crypter.dart';
 import 'package:my_idena_wallet/util/idena_ffi/keys/seeds.dart';
 
@@ -191,7 +191,7 @@ class _DisablePasswordSheetState extends State<DisablePasswordSheet> {
       }
     } else {
       try {
-        String decryptedSeed = IdenaHelpers.byteToHex(
+        String decryptedSeed = HEX.encode(
             IdenaCrypt.decrypt(encryptedSeed, passwordController.text));
         throwIf(!IdenaSeeds.isValidSeed(decryptedSeed), FormatException());
         await sl.get<Vault>().setSeed(decryptedSeed);
