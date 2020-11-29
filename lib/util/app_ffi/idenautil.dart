@@ -7,8 +7,6 @@ import 'package:my_idena_wallet/model/db/appdb.dart';
 import 'package:my_idena_wallet/model/db/account.dart' as Account;
 import 'package:my_idena_wallet/appstate_container.dart';
 import 'package:my_idena_wallet/localization.dart';
-import 'package:my_idena_wallet/network/model/response/address_response.dart';
-import 'package:my_idena_wallet/service/idena_service.dart';
 import 'package:my_idena_wallet/service_locator.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -32,7 +30,7 @@ class IdenaUtil {
       addressEIP55 = checksumEthereumAddress(address0.toString());
       //print("address EIP55 ("+numAddress.toString()+"): " + addressEIP55.toString());
       AddressResponse addressResponse =
-        await IdenaService().getAddressResponse(addressEIP55);
+        await AppService().getAddressResponse(addressEIP55);
         if (addressResponse.result == null) {
           break;
         }

@@ -11,10 +11,10 @@ import 'package:my_idena_wallet/styles.dart';
 import 'package:my_idena_wallet/model/vault.dart';
 import 'package:my_idena_wallet/ui/widgets/buttons.dart';
 import 'package:my_idena_wallet/ui/widgets/plainseed_display.dart';
-import 'package:my_idena_wallet/util/idena_ffi/encrypt/crypter.dart';
-import 'package:my_idena_wallet/util/idena_ffi/idenautil.dart';
+import 'package:my_idena_wallet/util/app_ffi/encrypt/crypter.dart';
+import 'package:my_idena_wallet/util/app_ffi/idenautil.dart';
 import 'package:my_idena_wallet/ui/widgets/mnemonic_display.dart';
-import 'package:my_idena_wallet/util/idena_ffi/keys/mnemonics.dart';
+import 'package:my_idena_wallet/util/app_ffi/keys/mnemonics.dart';
 
 class IntroBackupSeedPage extends StatefulWidget {
   final String encryptedSeed;
@@ -37,14 +37,14 @@ class _IntroBackupSeedState extends State<IntroBackupSeedPage> {
       sl.get<Vault>().getSeed().then((seed) {
         setState(() {
           _seed = seed;
-          _mnemonic = IdenaMnemomics.seedToMnemonic(seed);
+          _mnemonic = AppMnemomics.seedToMnemonic(seed);
         });
       });
     } else {
       sl.get<Vault>().getSessionKey().then((key) {
         setState(() {
           _seed = HEX.encode(IdenaCrypt.decrypt(widget.encryptedSeed, key));
-          _mnemonic = IdenaMnemomics.seedToMnemonic(_seed);
+          _mnemonic = AppMnemomics.seedToMnemonic(_seed);
         });
       });
     }

@@ -13,10 +13,10 @@ import 'package:my_idena_wallet/ui/widgets/app_text_field.dart';
 import 'package:my_idena_wallet/ui/widgets/buttons.dart';
 import 'package:my_idena_wallet/ui/widgets/security.dart';
 import 'package:my_idena_wallet/ui/widgets/tap_outside_unfocus.dart';
-import 'package:my_idena_wallet/util/idena_ffi/encrypt/crypter.dart';
-import 'package:my_idena_wallet/util/idena_ffi/idenautil.dart';
+import 'package:my_idena_wallet/util/app_ffi/encrypt/crypter.dart';
+import 'package:my_idena_wallet/util/app_ffi/idenautil.dart';
 import 'package:my_idena_wallet/model/vault.dart';
-import 'package:my_idena_wallet/util/idena_ffi/keys/seeds.dart';
+import 'package:my_idena_wallet/util/app_ffi/keys/seeds.dart';
 import 'package:my_idena_wallet/util/sharedprefsutil.dart';
 
 class IntroPassword extends StatefulWidget {
@@ -297,7 +297,7 @@ class _IntroPasswordState extends State<IntroPassword> {
       }
     } else {
       // Generate a new seed and encrypt
-      String seed = IdenaSeeds.generateSeed();
+      String seed = AppSeeds.generateSeed();
       String encryptedSeed = HEX.encode(IdenaCrypt.encrypt(seed, confirmPasswordController.text));
       await sl.get<Vault>().setSeed(encryptedSeed);
       // Also encrypt it with the session key, so user doesnt need password to sign blocks within the app

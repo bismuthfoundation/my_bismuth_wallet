@@ -72,7 +72,7 @@ class _AppHomePageState extends State<AppHomePage>
   // List of contacts (Store it so we only have to query the DB once for transaction cards)
   List<Contact> _contacts = List();
 
-  // Price conversion state (BTC, iDNA, NONE)
+  // Price conversion state (BTC, app cryptocurrency, NONE)
   PriceConversion _priceConversion;
 
   bool _isRefreshing = false;
@@ -514,7 +514,7 @@ class _AppHomePageState extends State<AppHomePage>
       if (address.amount != null) {
         double amountDouble = double.tryParse(address.amount);
         // TODO: Vérifier
-        // Require minimum XXX iDNA to send, and make sure sufficient balance
+        // Require minimum XXX cryptocurrency to send, and make sure sufficient balance
         if (amountDouble != null &&
             StateContainer.of(context).wallet.accountBalance > amountDouble &&
             amountDouble >= 0.001) {
@@ -1012,7 +1012,7 @@ class _AppHomePageState extends State<AppHomePage>
         style: AppStyles.textStyleTransactionWelcome(context),
       );
     }
-    // Colorize iDNA
+    // Colorize cryptocurrency
     List<String> splitStr = workingStr.split("iDNA");
     if (splitStr.length != 2) {
       return TextSpan(

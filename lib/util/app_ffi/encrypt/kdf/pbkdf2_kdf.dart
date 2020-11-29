@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:my_idena_wallet/util/helpers.dart';
-import 'package:my_idena_wallet/util/idena_ffi/encrypt/kdf/kdf.dart';
-import 'package:my_idena_wallet/util/idena_ffi/encrypt/model/keyiv.dart';
+import 'package:my_idena_wallet/util/app_ffi/encrypt/kdf/kdf.dart';
+import 'package:my_idena_wallet/util/app_ffi/encrypt/model/keyiv.dart';
 import 'package:pointycastle/export.dart';
 
 /// pbkdf2 Key derivation function with a random salt

@@ -764,8 +764,8 @@ class _SendSheetState extends State<SendSheet> {
   }
 
   void toggleLocalCurrency() {
-    // Keep a cache of previous amounts because, it's kinda nice to see approx what idna is worth
-    // this way you can tap button and tap back and not end up with X.9993451 iDNA
+    // Keep a cache of previous amounts because, it's kinda nice to see approx what cryptocurrency is worth
+    // this way you can tap button and tap back and not end up with X.9993451 cryptocurrency
     if (_localCurrencyMode) {
       // Switching to crypto-mode
       String cryptoAmountStr;

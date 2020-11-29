@@ -45,7 +45,7 @@ import 'package:my_idena_wallet/network/model/response/simple_price_response_twd
 import 'package:my_idena_wallet/network/model/response/simple_price_response_usd.dart';
 import 'package:my_idena_wallet/network/model/response/simple_price_response_zar.dart';
 
-class IdenaService {
+class AppService {
   var logger = Logger();
 
   Future<AddressResponse> getAddressResponse(String address) async {

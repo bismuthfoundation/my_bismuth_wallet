@@ -1,17 +1,17 @@
 import 'package:bip39/bip39.dart' as bip39;
-import 'package:my_idena_wallet/util/idena_ffi/keys/seeds.dart';
+import 'package:my_idena_wallet/util/app_ffi/keys/seeds.dart';
 
-class IdenaMnemomics {
-  /// Converts a idena seed to a 24-word mnemonic word list
+class AppMnemomics {
+  /// Converts a seed to a 24-word mnemonic word list
   static List<String> seedToMnemonic(String seed) {
-    if (!IdenaSeeds.isValidSeed(seed)) {
+    if (!AppSeeds.isValidSeed(seed)) {
       throw Exception('Invalid Seed');
     }
     String words = bip39.entropyToMnemonic(seed);
     return words.split(' ');
   }
 
-  /// Convert a 24-word mnemonic word list to a idena seed
+  /// Convert a 24-word mnemonic word list to a seed
   static String mnemonicListToSeed(List<String> words) {
     if (words.length != 24) {
       throw Exception('Expected a 24-word list, got a ${words.length} list');

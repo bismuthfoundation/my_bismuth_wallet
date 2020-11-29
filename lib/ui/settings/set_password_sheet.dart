@@ -14,8 +14,8 @@ import 'package:my_idena_wallet/ui/widgets/buttons.dart';
 import 'package:my_idena_wallet/ui/widgets/tap_outside_unfocus.dart';
 import 'package:my_idena_wallet/util/caseconverter.dart';
 import 'package:my_idena_wallet/util/helpers.dart';
-import 'package:my_idena_wallet/util/idena_ffi/encrypt/crypter.dart';
-import 'package:my_idena_wallet/util/idena_ffi/keys/seeds.dart';
+import 'package:my_idena_wallet/util/app_ffi/encrypt/crypter.dart';
+import 'package:my_idena_wallet/util/app_ffi/keys/seeds.dart';
 
 class SetPasswordSheet extends StatefulWidget {
   _SetPasswordSheetState createState() => _SetPasswordSheetState();
@@ -266,7 +266,7 @@ class _SetPasswordSheetState extends State<SetPasswordSheet> {
           passwordError = AppLocalization.of(context).passwordsDontMatch;
         });
       }
-    } else if (seed == null || !IdenaSeeds.isValidSeed(seed)) {
+    } else if (seed == null || !AppSeeds.isValidSeed(seed)) {
       Navigator.pop(context);
       UIUtil.showSnackbar(
           AppLocalization.of(context).encryptionFailedError, context);

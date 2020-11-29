@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:my_idena_wallet/util/helpers.dart';
 
-class IdenaSeeds {
+class AppSeeds {
   // Returns true if a seed is valid, false otherwise
   static bool isValidSeed(String seed) {
     // Ensure seed is 64 characters long

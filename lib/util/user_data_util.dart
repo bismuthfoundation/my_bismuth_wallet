@@ -9,7 +9,7 @@ import 'package:my_idena_wallet/localization.dart';
 import 'package:my_idena_wallet/model/address.dart';
 import 'package:my_idena_wallet/service_locator.dart';
 import 'package:my_idena_wallet/ui/util/ui_util.dart';
-import 'package:my_idena_wallet/util/idena_ffi/keys/seeds.dart';
+import 'package:my_idena_wallet/util/app_ffi/keys/seeds.dart';
 
 import 'package:quiver/strings.dart';
 import 'package:validators/validators.dart';
@@ -46,7 +46,7 @@ class UserDataUtil {
       }
     } else if (type == DataType.SEED) {
       // Check if valid seed
-      if (IdenaSeeds.isValidSeed(data)) {
+      if (AppSeeds.isValidSeed(data)) {
         return data;
       }
     }
@@ -104,7 +104,7 @@ class UserDataUtil {
       });
       setStream = delayed.asStream().listen((_) {
         Clipboard.getData("text/plain").then((data) {
-          if (data != null && data.text != null && IdenaSeeds.isValidSeed(data.text)) {
+          if (data != null && data.text != null && AppSeeds.isValidSeed(data.text)) {
             Clipboard.setData(ClipboardData(text: ""));
           }
         });

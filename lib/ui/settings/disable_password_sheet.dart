@@ -14,8 +14,8 @@ import 'package:my_idena_wallet/ui/widgets/app_text_field.dart';
 import 'package:my_idena_wallet/ui/widgets/buttons.dart';
 import 'package:my_idena_wallet/ui/widgets/tap_outside_unfocus.dart';
 import 'package:my_idena_wallet/util/caseconverter.dart';
-import 'package:my_idena_wallet/util/idena_ffi/encrypt/crypter.dart';
-import 'package:my_idena_wallet/util/idena_ffi/keys/seeds.dart';
+import 'package:my_idena_wallet/util/app_ffi/encrypt/crypter.dart';
+import 'package:my_idena_wallet/util/app_ffi/keys/seeds.dart';
 
 class DisablePasswordSheet extends StatefulWidget {
   _DisablePasswordSheetState createState() => _DisablePasswordSheetState();
@@ -193,7 +193,7 @@ class _DisablePasswordSheetState extends State<DisablePasswordSheet> {
       try {
         String decryptedSeed = HEX.encode(
             IdenaCrypt.decrypt(encryptedSeed, passwordController.text));
-        throwIf(!IdenaSeeds.isValidSeed(decryptedSeed), FormatException());
+        throwIf(!AppSeeds.isValidSeed(decryptedSeed), FormatException());
         await sl.get<Vault>().setSeed(decryptedSeed);
         StateContainer.of(context).resetEncryptedSecret();
         UIUtil.showSnackbar(

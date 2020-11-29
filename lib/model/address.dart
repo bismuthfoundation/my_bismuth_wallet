@@ -1,6 +1,6 @@
 import 'dart:core';
 
-import 'package:my_idena_wallet/util/idena_ffi/account/account_util.dart';
+import 'package:ethereum_address/ethereum_address.dart';
 
 // Object to represent an account address or address URI, and provide useful utilities
 class Address {
@@ -32,7 +32,8 @@ class Address {
   bool isValid() {
     return _address == null
         ? false
-        : IdenaAccounts.isValid(_address);
+        : isValidEthereumAddress(_address);
+
   }
 
 }

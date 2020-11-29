@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-11-18T14:21:37.057157",
+  "@@last_modified": "2020-11-29T10:31:54.907689",
   "cancel": "Cancel",
   "@cancel": {
     "description": "dialog_cancel",
@@ -381,6 +381,12 @@
   "pickFromList": "Pick From a List",
   "@pickFromList": {
     "description": "pick rep from list",
+    "type": "text",
+    "placeholders": {}
+  },
+  "uptime": "Uptime",
+  "@uptime": {
+    "description": "Rep uptime",
     "type": "text",
     "placeholders": {}
   },

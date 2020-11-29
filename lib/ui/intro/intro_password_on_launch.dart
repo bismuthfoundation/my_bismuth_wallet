@@ -9,9 +9,9 @@ import 'package:my_idena_wallet/app_icons.dart';
 import 'package:my_idena_wallet/service_locator.dart';
 import 'package:my_idena_wallet/ui/widgets/buttons.dart';
 import 'package:my_idena_wallet/ui/widgets/security.dart';
-import 'package:my_idena_wallet/util/idena_ffi/idenautil.dart';
+import 'package:my_idena_wallet/util/app_ffi/idenautil.dart';
 import 'package:my_idena_wallet/model/vault.dart';
-import 'package:my_idena_wallet/util/idena_ffi/keys/seeds.dart';
+import 'package:my_idena_wallet/util/app_ffi/keys/seeds.dart';
 import 'package:my_idena_wallet/util/sharedprefsutil.dart';
 
 class IntroPasswordOnLaunch extends StatefulWidget {
@@ -136,7 +136,7 @@ class _IntroPasswordOnLaunchState extends State<IntroPasswordOnLaunch> {
                               _pinEnteredCallback(pin);
                             }
                         } else {
-                          sl.get<Vault>().setSeed(IdenaSeeds.generateSeed()).then((result) {
+                          sl.get<Vault>().setSeed(AppSeeds.generateSeed()).then((result) {
                             // Update wallet
                             StateContainer.of(context).getSeed().then((seed) {
                               IdenaUtil().loginAccount(seed, context).then((_) {

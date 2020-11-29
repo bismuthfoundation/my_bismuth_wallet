@@ -8,7 +8,7 @@ import 'package:my_idena_wallet/localization.dart';
 import 'package:my_idena_wallet/appstate_container.dart';
 import 'package:my_idena_wallet/dimens.dart';
 import 'package:my_idena_wallet/network/model/response/address_response.dart';
-import 'package:my_idena_wallet/service/idena_service.dart';
+import 'package:my_idena_wallet/service/app_service.dart';
 import 'package:my_idena_wallet/service_locator.dart';
 import 'package:my_idena_wallet/model/db/appdb.dart';
 import 'package:my_idena_wallet/model/db/account.dart';
@@ -139,7 +139,7 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
     accounts.forEach((account) async {
       if (account.address != null) {
         addresses.add(account.address);
-        addressResponseList.add(await IdenaService().getAddressResponse(account.address));
+        addressResponseList.add(await AppService().getAddressResponse(account.address));
       }
     });
     try {

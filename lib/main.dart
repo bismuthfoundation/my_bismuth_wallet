@@ -30,7 +30,7 @@ import 'package:my_idena_wallet/ui/intro/intro_backup_confirm.dart';
 import 'package:my_idena_wallet/ui/intro/intro_import_seed.dart';
 import 'package:my_idena_wallet/ui/util/routes.dart';
 import 'package:my_idena_wallet/model/vault.dart';
-import 'package:my_idena_wallet/util/idena_ffi/idenautil.dart';
+import 'package:my_idena_wallet/util/app_ffi/idenautil.dart';
 import 'package:my_idena_wallet/util/sharedprefsutil.dart';
 import 'package:root_checker/root_checker.dart';
 

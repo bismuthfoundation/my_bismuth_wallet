@@ -8,8 +8,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:my_idena_wallet/network/model/response/address_response.dart';
 import 'package:my_idena_wallet/network/model/response/address_txs_response.dart';
-import 'package:my_idena_wallet/service/idena_service.dart';
-import 'package:my_idena_wallet/util/idena_ffi/encrypt/crypter.dart';
+import 'package:my_idena_wallet/service/app_service.dart';
+import 'package:my_idena_wallet/util/app_ffi/encrypt/crypter.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:my_idena_wallet/themes.dart';
 import 'package:my_idena_wallet/service_locator.dart';
@@ -20,7 +20,7 @@ import 'package:my_idena_wallet/model/vault.dart';
 import 'package:my_idena_wallet/model/db/appdb.dart';
 import 'package:my_idena_wallet/model/db/account.dart';
 import 'package:my_idena_wallet/util/sharedprefsutil.dart';
-import 'package:my_idena_wallet/util/idena_ffi/idenautil.dart';
+import 'package:my_idena_wallet/util/app_ffi/idenautil.dart';
 import 'package:my_idena_wallet/bus/events.dart';
 
 import 'util/sharedprefsutil.dart';
@@ -70,7 +70,7 @@ class StateContainer extends StatefulWidget {
 class StateContainerState extends State<StateContainer> {
   final Logger log = sl.get<Logger>();
 
-  // Minimum receive = 0.000001 iDNA
+  // Minimum receive = 0.000001
   String receiveThreshold = BigInt.from(10).pow(24).toString();
 
   AppWallet wallet;
@@ -221,8 +221,8 @@ class StateContainerState extends State<StateContainer> {
   Future<void> updateWallet({Account account}) async {
     String address;
     address = await IdenaUtil().seedToAddress(await getSeed(), account.index);
-    IdenaService().getAddressResponse(address.toString());
-    IdenaService().getSimplePrice(curCurrency.getIso4217Code());
+    AppService().getAddressResponse(address.toString());
+    AppService().getSimplePrice(curCurrency.getIso4217Code());
     account.address = address;
     selectedAccount = account;
     updateRecentlyUsedAccounts();
@@ -265,7 +265,7 @@ class StateContainerState extends State<StateContainer> {
   // Change curency
   void updateCurrency(AvailableCurrency currency) {
     setState(() {
-      IdenaService().getSimplePrice(currency.getIso4217Code());
+      AppService().getSimplePrice(currency.getIso4217Code());
       curCurrency = currency;
     });
   }
@@ -319,7 +319,7 @@ class StateContainerState extends State<StateContainer> {
       if (account.address != null) {
         addressToRequest.add(account.address);
         addressResponseList
-            .add(await IdenaService().getAddressResponse(account.address));
+            .add(await AppService().getAddressResponse(account.address));
       }
     });
 
@@ -349,7 +349,7 @@ class StateContainerState extends State<StateContainer> {
       }
       try {
         AddressTxsResponse addressTxsResponse =
-            await IdenaService().getAddressTxsResponse(wallet.address, count);
+            await AppService().getAddressTxsResponse(wallet.address, count);
 
         _requestBalances();
         bool postedToHome = false;

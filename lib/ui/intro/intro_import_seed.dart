@@ -12,8 +12,8 @@ import 'package:my_idena_wallet/ui/util/formatters.dart';
 import 'package:my_idena_wallet/ui/util/ui_util.dart';
 import 'package:my_idena_wallet/ui/widgets/app_text_field.dart';
 import 'package:my_idena_wallet/ui/widgets/tap_outside_unfocus.dart';
-import 'package:my_idena_wallet/util/idena_ffi/keys/mnemonics.dart';
-import 'package:my_idena_wallet/util/idena_ffi/keys/seeds.dart';
+import 'package:my_idena_wallet/util/app_ffi/keys/mnemonics.dart';
+import 'package:my_idena_wallet/util/app_ffi/keys/seeds.dart';
 import 'package:my_idena_wallet/util/sharedprefsutil.dart';
 
 class IntroImportSeedPage extends StatefulWidget {
@@ -173,7 +173,7 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                 prefixButton: TextFieldButton(
                                   icon: AppIcons.scan,
                                   onPressed: () {
-                                    if (IdenaSeeds.isValidSeed(
+                                    if (AppSeeds.isValidSeed(
                                         _seedInputController
                                             .text)) {
                                       return;
@@ -181,12 +181,12 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                     // Scan QR for seed
                                     UIUtil.cancelLockEvent();
                                     BarcodeScanner.scan(StateContainer.of(context).curTheme.qrScanTheme).then((result) {
-                                      if (result != null && IdenaSeeds.isValidSeed(result)) {
+                                      if (result != null && AppSeeds.isValidSeed(result)) {
                                         _seedInputController.text = result;
                                         setState(() {
                                           _seedIsValid = true;
                                         });
-                                      } else if (result != null && IdenaMnemomics.validateMnemonic(result.split(' '))) {
+                                      } else if (result != null && AppMnemomics.validateMnemonic(result.split(' '))) {
                                         _mnemonicController.text = result;
                                         _mnemonicFocusNode.unfocus();
                                         _seedInputFocusNode.unfocus();
@@ -202,11 +202,11 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                   },
                                 ),
                                 fadePrefixOnCondition: true,
-                                prefixShowFirstCondition: !IdenaSeeds.isValidSeed(_seedInputController.text),
+                                prefixShowFirstCondition: !AppSeeds.isValidSeed(_seedInputController.text),
                                 suffixButton: TextFieldButton(
                                   icon: AppIcons.paste,
                                   onPressed: () {
-                                    if (IdenaSeeds.isValidSeed(
+                                    if (AppSeeds.isValidSeed(
                                         _seedInputController
                                             .text)) {
                                       return;
@@ -216,14 +216,14 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                       if (data == null ||
                                           data.text == null) {
                                         return;
-                                      } else if (IdenaSeeds
+                                      } else if (AppSeeds
                                           .isValidSeed(data.text)) {
                                         _seedInputController.text =
                                             data.text;
                                         setState(() {
                                           _seedIsValid = true;
                                         });
-                                      } else if (IdenaMnemomics.validateMnemonic(data.text.split(' '))) {
+                                      } else if (AppMnemomics.validateMnemonic(data.text.split(' '))) {
                                         _mnemonicController.text = data.text;
                                         _mnemonicFocusNode.unfocus();
                                         _seedInputFocusNode.unfocus();
@@ -237,7 +237,7 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                   },
                                 ),
                                 fadeSuffixOnCondition: true,
-                                suffixShowFirstCondition: !IdenaSeeds.isValidSeed(_seedInputController.text),
+                                suffixShowFirstCondition: !AppSeeds.isValidSeed(_seedInputController.text),
                                 keyboardType: TextInputType.text,
                                 style: _seedIsValid ?AppStyles.textStyleSeed(context) : AppStyles.textStyleSeedGray(context),
                                 onChanged: (text) {
@@ -246,7 +246,7 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                     _showSeedError = false;
                                   });
                                   // If valid seed, clear focus/close keyboard
-                                  if (IdenaSeeds.isValidSeed(text)) {
+                                  if (AppSeeds.isValidSeed(text)) {
                                     _seedInputFocusNode.unfocus();
                                     setState(() {
                                       _seedIsValid = true;
@@ -275,19 +275,19 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                 prefixButton: TextFieldButton(
                                   icon: AppIcons.scan,
                                   onPressed: () {
-                                    if (IdenaMnemomics.validateMnemonic(
+                                    if (AppMnemomics.validateMnemonic(
                                         _mnemonicController.text.split(' '))) {
                                       return;
                                     }
                                     // Scan QR for mnemonic
                                     UIUtil.cancelLockEvent();
                                     BarcodeScanner.scan(StateContainer.of(context).curTheme.qrScanTheme).then((result) {
-                                      if (result != null && IdenaMnemomics.validateMnemonic(result.split(' '))) {
+                                      if (result != null && AppMnemomics.validateMnemonic(result.split(' '))) {
                                         _mnemonicController.text = result;
                                         setState(() {
                                           _mnemonicIsValid = true;
                                         });
-                                      } else if (result != null && IdenaSeeds.isValidSeed(result)) {
+                                      } else if (result != null && AppSeeds.isValidSeed(result)) {
                                         _seedInputController.text = result;
                                         _mnemonicFocusNode.unfocus();
                                         _seedInputFocusNode.unfocus();
@@ -303,11 +303,11 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                   },
                                 ),
                                 fadePrefixOnCondition: true,
-                                prefixShowFirstCondition: !IdenaMnemomics.validateMnemonic(_mnemonicController.text.split(' ')),
+                                prefixShowFirstCondition: !AppMnemomics.validateMnemonic(_mnemonicController.text.split(' ')),
                                 suffixButton: TextFieldButton(
                                   icon: AppIcons.paste,
                                   onPressed: () {
-                                    if (IdenaMnemomics.validateMnemonic(
+                                    if (AppMnemomics.validateMnemonic(
                                         _mnemonicController.text.split(' '))) {
                                       return;
                                     }
@@ -316,13 +316,13 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                       if (data == null ||
                                           data.text == null) {
                                         return;
-                                      } else if (IdenaMnemomics.validateMnemonic(data.text.split(' '))) {
+                                      } else if (AppMnemomics.validateMnemonic(data.text.split(' '))) {
                                         _mnemonicController.text =
                                             data.text;
                                         setState(() {
                                           _mnemonicIsValid = true;
                                         });
-                                      } else if (IdenaSeeds.isValidSeed(data.text)) {
+                                      } else if (AppSeeds.isValidSeed(data.text)) {
                                         _seedInputController.text = data.text;
                                         _mnemonicFocusNode.unfocus();
                                         _seedInputFocusNode.unfocus();
@@ -336,7 +336,7 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                   },
                                 ),
                                 fadeSuffixOnCondition: true,
-                                suffixShowFirstCondition: !IdenaMnemomics.validateMnemonic(_mnemonicController.text.split(' ')),                      
+                                suffixShowFirstCondition: !AppMnemomics.validateMnemonic(_mnemonicController.text.split(' ')),                      
                                 keyboardType: TextInputType.text,
                                 style: _mnemonicIsValid ? AppStyles.textStyleParagraphPrimary(context) : AppStyles.textStyleParagraph(context),
                                 onChanged: (text) {
@@ -352,7 +352,7 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                     }
                                   }
                                   // If valid mnemonic, clear focus/close keyboard
-                                  if (IdenaMnemomics.validateMnemonic(text.split(' '))) {
+                                  if (AppMnemomics.validateMnemonic(text.split(' '))) {
                                     _mnemonicFocusNode.unfocus();
                                     setState(() {
                                       _mnemonicIsValid = true;
@@ -371,7 +371,7 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                         lastSpaceIndex++;
                                       }
                                       String lastWord = text.substring(lastSpaceIndex, text.length - 1);
-                                      if (!IdenaMnemomics.isValidWord(lastWord)) {
+                                      if (!AppMnemomics.isValidWord(lastWord)) {
                                         setState(() {
                                           _mnemonicIsValid = false;
                                           setState(() {
@@ -422,7 +422,7 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                             if (_seedMode) {
                               _seedInputFocusNode.unfocus();
                               // If seed valid, log them in
-                              if (IdenaSeeds.isValidSeed(
+                              if (AppSeeds.isValidSeed(
                                   _seedInputController.text)) {
                                 sl.get<SharedPrefsUtil>()
                                     .setSeedBackedUp(true)
@@ -438,11 +438,11 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                             } else {
                               // mnemonic mode
                               _mnemonicFocusNode.unfocus();
-                              if (IdenaMnemomics.validateMnemonic(_mnemonicController.text.split(' '))) {
+                              if (AppMnemomics.validateMnemonic(_mnemonicController.text.split(' '))) {
                                 sl.get<SharedPrefsUtil>()
                                     .setSeedBackedUp(true)
                                     .then((result) {
-                                  Navigator.pushNamed(context, '/intro_password_on_launch', arguments: IdenaMnemomics.mnemonicListToSeed(_mnemonicController.text.split(' ')));
+                                  Navigator.pushNamed(context, '/intro_password_on_launch', arguments: AppMnemomics.mnemonicListToSeed(_mnemonicController.text.split(' ')));
                                 });                                  
                               } else {
                                 // Show mnemonic error
@@ -453,7 +453,7 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                   });
                                 } else {
                                   _mnemonicController.text.split(' ').forEach((word) {
-                                    if (!IdenaMnemomics.isValidWord(word)) {
+                                    if (!AppMnemomics.isValidWord(word)) {
                                       setState(() {
                                         _mnemonicIsValid = false;
                                         _mnemonicError = AppLocalization.of(context).mnemonicInvalidWord.replaceAll("%1", word);

@@ -11,7 +11,7 @@ import 'package:my_idena_wallet/ui/widgets/sheets.dart';
 import 'package:my_idena_wallet/ui/widgets/buttons.dart';
 import 'package:my_idena_wallet/styles.dart';
 import 'package:my_idena_wallet/util/caseconverter.dart';
-import 'package:my_idena_wallet/util/idena_ffi/keys/mnemonics.dart';
+import 'package:my_idena_wallet/util/app_ffi/keys/mnemonics.dart';
 import 'package:my_idena_wallet/util/user_data_util.dart';
 
 class AppSeedBackupSheet {
@@ -31,7 +31,7 @@ class AppSeedBackupSheet {
   mainBottomSheet(BuildContext context) {
     _seedCopied = false;
     _mnemonicCopied = false;
-    _mnemonic = IdenaMnemomics.seedToMnemonic(_seed);
+    _mnemonic = AppMnemomics.seedToMnemonic(_seed);
     bool showMnemonic = true;
     AppSheets.showAppHeightNineSheet(
         context: context,
