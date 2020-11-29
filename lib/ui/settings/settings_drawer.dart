@@ -3,7 +3,6 @@ import 'package:event_taxi/event_taxi.dart';
 import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 import 'package:my_idena_wallet/ui/accounts/accountdetails_sheet.dart';
-import 'package:my_idena_wallet/ui/accounts/accounts_sheet.dart';
 import 'package:my_idena_wallet/ui/settings/disable_password_sheet.dart';
 import 'package:my_idena_wallet/ui/settings/set_password_sheet.dart';
 import 'package:my_idena_wallet/ui/widgets/app_simpledialog.dart';
