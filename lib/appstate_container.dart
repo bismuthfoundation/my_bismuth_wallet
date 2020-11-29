@@ -20,7 +20,7 @@ import 'package:my_idena_wallet/model/vault.dart';
 import 'package:my_idena_wallet/model/db/appdb.dart';
 import 'package:my_idena_wallet/model/db/account.dart';
 import 'package:my_idena_wallet/util/sharedprefsutil.dart';
-import 'package:my_idena_wallet/util/app_ffi/idenautil.dart';
+import 'package:my_idena_wallet/util/app_ffi/apputil.dart';
 import 'package:my_idena_wallet/bus/events.dart';
 
 import 'util/sharedprefsutil.dart';

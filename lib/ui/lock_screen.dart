@@ -6,7 +6,7 @@ import 'package:my_idena_wallet/model/vault.dart';
 import 'package:my_idena_wallet/styles.dart';
 import 'package:my_idena_wallet/ui/widgets/dialog.dart';
 import 'package:my_idena_wallet/util/biometrics.dart';
-import 'package:my_idena_wallet/util/app_ffi/idenautil.dart';
+import 'package:my_idena_wallet/util/app_ffi/apputil.dart';
 import 'package:my_idena_wallet/util/sharedprefsutil.dart';
 import 'package:my_idena_wallet/util/caseconverter.dart';
 import 'package:my_idena_wallet/ui/widgets/buttons.dart';

@@ -5,7 +5,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:my_idena_wallet/model/db/account.dart';
 import 'package:my_idena_wallet/model/db/contact.dart';
-import 'package:my_idena_wallet/util/app_ffi/idenautil.dart';
+import 'package:my_idena_wallet/util/app_ffi/apputil.dart';
 
 class DBHelper {
   static const int DB_VERSION = 1;

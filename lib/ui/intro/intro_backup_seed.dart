@@ -12,7 +12,7 @@ import 'package:my_idena_wallet/model/vault.dart';
 import 'package:my_idena_wallet/ui/widgets/buttons.dart';
 import 'package:my_idena_wallet/ui/widgets/plainseed_display.dart';
 import 'package:my_idena_wallet/util/app_ffi/encrypt/crypter.dart';
-import 'package:my_idena_wallet/util/app_ffi/idenautil.dart';
+import 'package:my_idena_wallet/util/app_ffi/apputil.dart';
 import 'package:my_idena_wallet/ui/widgets/mnemonic_display.dart';
 import 'package:my_idena_wallet/util/app_ffi/keys/mnemonics.dart';
 

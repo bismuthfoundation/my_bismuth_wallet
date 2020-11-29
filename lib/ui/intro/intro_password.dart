@@ -14,7 +14,7 @@ import 'package:my_idena_wallet/ui/widgets/buttons.dart';
 import 'package:my_idena_wallet/ui/widgets/security.dart';
 import 'package:my_idena_wallet/ui/widgets/tap_outside_unfocus.dart';
 import 'package:my_idena_wallet/util/app_ffi/encrypt/crypter.dart';
-import 'package:my_idena_wallet/util/app_ffi/idenautil.dart';
+import 'package:my_idena_wallet/util/app_ffi/apputil.dart';
 import 'package:my_idena_wallet/model/vault.dart';
 import 'package:my_idena_wallet/util/app_ffi/keys/seeds.dart';
 import 'package:my_idena_wallet/util/sharedprefsutil.dart';
