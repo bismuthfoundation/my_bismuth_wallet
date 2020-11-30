@@ -5,7 +5,7 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:ffi/ffi.dart';
-import 'package:my_idena_wallet/util/helpers.dart';
+import 'package:my_bismuth_wallet/util/helpers.dart';
 
 // Get if lib set in environment
 final String libraryPath = Platform.environment.containsKey("ED215519_SO_FILE")
@@ -153,7 +153,7 @@ class Ed25519Blake2b {
     Uint8List account, Uint8List previous, Uint8List rep, Uint8List balance, Uint8List link
   ) {
       final Pointer<Uint8> hashP = allocate<Uint8>(count: 32);
-      final Pointer<Uint8> preambleP = _bytesToPointer(IdenaHelpers.hexToBytes("0000000000000000000000000000000000000000000000000000000000000006"));
+      final Pointer<Uint8> preambleP = _bytesToPointer(BismuthHelpers.hexToBytes("0000000000000000000000000000000000000000000000000000000000000006"));
       final Pointer<Uint8> accountP = _bytesToPointer(account);
       final Pointer<Uint8> previousP = _bytesToPointer(previous);
       final Pointer<Uint8> repP = _bytesToPointer(rep);

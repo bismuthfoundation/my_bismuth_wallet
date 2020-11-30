@@ -1,10 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:my_idena_wallet/appstate_container.dart';
-import 'package:my_idena_wallet/app_icons.dart';
-import 'package:my_idena_wallet/styles.dart';
-import 'package:my_idena_wallet/model/setting_item.dart';
-import 'package:my_idena_wallet/ui/util/ui_util.dart';
+import 'package:my_bismuth_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/app_icons.dart';
+import 'package:my_bismuth_wallet/styles.dart';
+import 'package:my_bismuth_wallet/model/setting_item.dart';
+import 'package:my_bismuth_wallet/ui/util/ui_util.dart';
 
 class AppSettings {
   //Settings item with a dropdown option

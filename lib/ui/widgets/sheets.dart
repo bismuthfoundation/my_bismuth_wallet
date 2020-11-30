@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:my_idena_wallet/appstate_container.dart';
-import 'package:my_idena_wallet/ui/util/routes.dart';
+import 'package:my_bismuth_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/ui/util/routes.dart';
 
 /** TODO - Replace all usage with the class in sheet_util.dart */
 class AppSheets {

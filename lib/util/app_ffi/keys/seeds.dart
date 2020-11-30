@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'package:my_idena_wallet/util/helpers.dart';
+import 'package:my_bismuth_wallet/util/helpers.dart';
 
 class AppSeeds {
   // Returns true if a seed is valid, false otherwise
@@ -9,7 +9,7 @@ class AppSeeds {
       return false;
     }
     // Ensure seed only contains hex characters, 0-9;A-F
-    return IdenaHelpers.isHexString(seed);
+    return BismuthHelpers.isHexString(seed);
   }
 
   static String generateSeed() {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_idena_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/appstate_container.dart';
 
 class AppStyles {
   // Text style for paragraph text.

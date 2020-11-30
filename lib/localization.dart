@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:my_idena_wallet/model/available_language.dart';
+import 'package:my_bismuth_wallet/model/available_language.dart';
 
 import 'l10n/messages_all.dart';
 
@@ -241,7 +241,7 @@ class AppLocalization {
 
   String get welcomeText {
     return Intl.message(
-        "Welcome to my Idena Wallet. To begin, you may create a new wallet or import an existing one.",
+        "Welcome to my Bismuth Wallet. To begin, you may create a new wallet or import an existing one.",
         desc: 'intro_welcome_title',
         name: 'welcomeText');
   }
@@ -272,7 +272,7 @@ class AppLocalization {
   }
 
   String get sendAmountConfirm {
-    return Intl.message("Send %1 iDNA",
+    return Intl.message("Send %1 BIS",
         desc: 'send_pin_description', name: 'sendAmountConfirm');
   }
 
@@ -311,7 +311,7 @@ class AppLocalization {
   }
 
   String get minimumSend {
-    return Intl.message("Minimum send amount is %1 iDNA",
+    return Intl.message("Minimum send amount is %1 BIS",
         desc: 'send_minimum_error', name: 'minimumSend');
   }
 
@@ -430,7 +430,7 @@ class AppLocalization {
 
   String get logoutDetail {
     return Intl.message(
-        "Logging out will remove your seed and all my Idena Wallet-related data from this device. If your seed is not backed up, you will never be able to access your funds again",
+        "Logging out will remove your seed and all my Bismuth Wallet-related data from this device. If your seed is not backed up, you will never be able to access your funds again",
         desc: 'settings_logout_alert_message',
         name: 'logoutDetail');
   }
@@ -492,20 +492,20 @@ class AppLocalization {
   // Scan
 
   String get scanInstructions {
-    return Intl.message("Scan an Idena \naddress QR code",
+    return Intl.message("Scan a Bismuth \naddress QR code",
         desc: 'scan_send_instruction_label', name: 'scanInstructions');
   }
 
   /// -- LOCK SCREEN
 
   String get unlockPin {
-    return Intl.message("Enter PIN to Unlock my Idena Wallet",
-        desc: 'unlock_idena_pin', name: 'unlockPin');
+    return Intl.message("Enter PIN to Unlock my Bismuth Wallet",
+        desc: 'unlock_bismuth_pin', name: 'unlockPin');
   }
 
   String get unlockBiometrics {
-    return Intl.message("Authenticate to Unlock my Idena Wallet",
-        desc: 'unlock_idena_bio', name: 'unlockBiometrics');
+    return Intl.message("Authenticate to Unlock my Bismuth Wallet",
+        desc: 'unlock_bismuth_bio', name: 'unlockBiometrics');
   }
 
   String get lockAppSetting {
@@ -595,7 +595,7 @@ class AppLocalization {
 
   String get exampleCardIntro {
     return Intl.message(
-        "Welcome to my Idena Wallet. Once you receive iDNA, transactions will show up like this:",
+        "Welcome to my Bismuth Wallet. Once you receive BIS, transactions will show up like this:",
         desc: 'example_card_intro',
         name: 'exampleCardIntro');
   }
@@ -637,7 +637,7 @@ class AppLocalization {
 
   String get newAccountIntro {
     return Intl.message(
-        "This is your new account. Once you receive iDNA, transactions will show up like this:",
+        "This is your new account. Once you receive BIS, transactions will show up like this:",
         desc: 'Alternate account intro card',
         name: 'newAccountIntro');
   }
@@ -840,16 +840,16 @@ class AppLocalization {
 
   /// PARAGRAPS
   String get passwordWillBeRequiredToOpenParagraph {
-    return Intl.message("This password will be required to open my Idena Wallet.",
+    return Intl.message("This password will be required to open my Bismuth Wallet.",
         desc:
-            'A paragraph that tells the users that the created password will be required to open my Idena Wallet.',
+            'A paragraph that tells the users that the created password will be required to open my Bismuth Wallet.',
         name: 'passwordWillBeRequiredToOpenParagraph');
   }
 
   String get passwordNoLongerRequiredToOpenParagraph {
-    return Intl.message("You will not need a password to open my Idena Wallet anymore.",
+    return Intl.message("You will not need a password to open my Bismuth Wallet anymore.",
         desc:
-            'An info paragraph that tells the user a password will no longer be needed to open my Idena Wallet',
+            'An info paragraph that tells the user a password will no longer be needed to open my Bismuth Wallet',
         name: 'passwordNoLongerRequiredToOpenParagraph');
   }
 
@@ -891,9 +891,9 @@ class AppLocalization {
   }
 
   String get requireAPasswordToOpenHeader {
-    return Intl.message("Require a password to open my Idena Wallet?",
+    return Intl.message("Require a password to open my Bismuth Wallet?",
         desc:
-            'A paragraph that asks the users if they would like a password to be required to open my Idena Wallet.',
+            'A paragraph that asks the users if they would like a password to be required to open my Bismuth Wallet.',
         name: 'requireAPasswordToOpenHeader');
   }
 
@@ -941,7 +941,7 @@ class AppLocalization {
   String get connectingHeader {
     return Intl.message("Connecting",
         desc:
-            'A header to let the user now that my Idena Wallet is currently connecting to (or loading) live chat.',
+            'A header to let the user now that my Bismuth Wallet is currently connecting to (or loading) live chat.',
         name: 'connectingHeader');
   }
 

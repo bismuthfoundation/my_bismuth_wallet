@@ -1,15 +1,15 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:my_idena_wallet/appstate_container.dart';
-import 'package:my_idena_wallet/dimens.dart';
-import 'package:my_idena_wallet/styles.dart';
-import 'package:my_idena_wallet/localization.dart';
-import 'package:my_idena_wallet/app_icons.dart';
-import 'package:my_idena_wallet/service_locator.dart';
-import 'package:my_idena_wallet/ui/widgets/buttons.dart';
-import 'package:my_idena_wallet/ui/widgets/security.dart';
-import 'package:my_idena_wallet/util/sharedprefsutil.dart';
-import 'package:my_idena_wallet/model/vault.dart';
+import 'package:my_bismuth_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/dimens.dart';
+import 'package:my_bismuth_wallet/styles.dart';
+import 'package:my_bismuth_wallet/localization.dart';
+import 'package:my_bismuth_wallet/app_icons.dart';
+import 'package:my_bismuth_wallet/service_locator.dart';
+import 'package:my_bismuth_wallet/ui/widgets/buttons.dart';
+import 'package:my_bismuth_wallet/ui/widgets/security.dart';
+import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
+import 'package:my_bismuth_wallet/model/vault.dart';
 
 class IntroBackupConfirm extends StatefulWidget {
   @override

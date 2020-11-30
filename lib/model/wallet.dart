@@ -1,8 +1,8 @@
 import 'package:decimal/decimal.dart';
 import 'package:intl/intl.dart';
-import 'package:my_idena_wallet/model/available_currency.dart';
-import 'package:my_idena_wallet/network/model/response/address_txs_response.dart';
-import 'package:my_idena_wallet/util/numberutil.dart';
+import 'package:my_bismuth_wallet/model/available_currency.dart';
+import 'package:my_bismuth_wallet/network/model/response/address_txs_response.dart';
+import 'package:my_bismuth_wallet/util/numberutil.dart';
 
 /// Main wallet object that's passed around the app via state
 class AppWallet {

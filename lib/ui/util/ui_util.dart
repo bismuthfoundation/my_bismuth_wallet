@@ -5,11 +5,11 @@ import 'package:http/http.dart' as http;
 import 'package:oktoast/oktoast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
-import 'package:my_idena_wallet/appstate_container.dart';
-import 'package:my_idena_wallet/styles.dart';
-import 'package:my_idena_wallet/localization.dart';
-import 'package:my_idena_wallet/bus/events.dart';
-import 'package:my_idena_wallet/ui/util/exceptions.dart';
+import 'package:my_bismuth_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/styles.dart';
+import 'package:my_bismuth_wallet/localization.dart';
+import 'package:my_bismuth_wallet/bus/events.dart';
+import 'package:my_bismuth_wallet/ui/util/exceptions.dart';
 
 enum ThreeLineAddressTextType { PRIMARY60, PRIMARY, SUCCESS, SUCCESS_FULL }
 enum OneLineAddressTextType { PRIMARY60, PRIMARY, SUCCESS }
@@ -471,11 +471,11 @@ class UIUtil {
   }
 
   static String getRobohashURL(String address) {
+    
     if (address == null) {
-      return "https://robohash.org/0x";
+      return "https://robohash.org/bismuth?set=set4";
     } else {
-      address = address.toLowerCase();
-      return "https://robohash.org/$address";
+      return "https://robohash.org/$address?set=set4";
     }
   }
 }

@@ -1,4 +1,4 @@
-package io.reddwarf.my_idena_wallet;
+package io.reddwarf.my_bismuth_wallet;
 
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -9,7 +9,7 @@ import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugins.GeneratedPluginRegistrant;
 import io.flutter.view.FlutterMain;
 
-public class MainActivityMyIdenaWallet extends FlutterActivity {
+public class MainActivityMyBismuthWallet extends FlutterActivity {
   private static final String CHANNEL = "fappchannel";
 
 

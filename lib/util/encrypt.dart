@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:hex/hex.dart';
-import 'package:my_idena_wallet/util/helpers.dart';
+import 'package:my_bismuth_wallet/util/helpers.dart';
 import 'package:pointycastle/api.dart' show ParametersWithIV, KeyParameter;
 import 'package:pointycastle/stream/salsa20.dart';
 
@@ -35,7 +35,7 @@ class Salsa20Encryptor {
       ..reset()
       ..init(false, _params);
 
-    final input = IdenaHelpers.hexToBytes(cipherText);
+    final input = BismuthHelpers.hexToBytes(cipherText);
     final output = _cipher.process(input);
 
     return String.fromCharCodes(output);

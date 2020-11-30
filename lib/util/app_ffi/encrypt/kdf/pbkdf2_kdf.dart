@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
-import 'package:my_idena_wallet/util/helpers.dart';
-import 'package:my_idena_wallet/util/app_ffi/encrypt/kdf/kdf.dart';
-import 'package:my_idena_wallet/util/app_ffi/encrypt/model/keyiv.dart';
+import 'package:my_bismuth_wallet/util/helpers.dart';
+import 'package:my_bismuth_wallet/util/app_ffi/encrypt/kdf/kdf.dart';
+import 'package:my_bismuth_wallet/util/app_ffi/encrypt/model/keyiv.dart';
 import 'package:pointycastle/export.dart';
 
 /// pbkdf2 Key derivation function with a random salt
@@ -11,7 +11,7 @@ class PBKDF2 extends KDF {
   /// Expects password to be a utf-8 string
   /// If salt is not provided, a random 8-byte one will be generated
   KeyIV deriveKey(String password, {Uint8List salt}) {
-    Uint8List pwBytes = IdenaHelpers.stringToBytesUtf8(password);
+    Uint8List pwBytes = BismuthHelpers.stringToBytesUtf8(password);
     Uint8List saltBytes = salt == null ? Uint8List(1) : salt;
 
     // Use pbkdf2 from pointycastle

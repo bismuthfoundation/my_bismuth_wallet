@@ -2,7 +2,7 @@ import 'dart:typed_data';
 import 'dart:convert';
 import 'package:hex/hex.dart';
 
-class IdenaHelpers {
+class BismuthHelpers {
   static List<String> hexArray = '0123456789ABCDEF'.split('');
 
   /// Decode a BigInt from bytes in big-endian encoding.
@@ -86,7 +86,7 @@ class IdenaHelpers {
       ret[i] = integer & 0xff;
       integer = (integer - ret[i]) ~/ 256;
     }
-    return IdenaHelpers.reverse(ret);
+    return BismuthHelpers.reverse(ret);
   }
 
   /// Convert string to byte array
@@ -108,6 +108,6 @@ class IdenaHelpers {
     bytes.forEach((v) {
       hex += HEX.encode(v);
     });
-    return IdenaHelpers.hexToBytes(hex);
+    return BismuthHelpers.hexToBytes(hex);
   }
 }

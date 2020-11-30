@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import 'package:my_idena_wallet/util/app_ffi/encrypt/model/keyiv.dart';
+import 'package:my_bismuth_wallet/util/app_ffi/encrypt/model/keyiv.dart';
 
 /// KDF (Key derivator function) base class
 abstract class KDF {

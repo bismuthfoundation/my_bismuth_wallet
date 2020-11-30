@@ -1,5 +1,5 @@
 import 'package:event_taxi/event_taxi.dart';
-import 'package:my_idena_wallet/model/db/account.dart';
+import 'package:my_bismuth_wallet/model/db/account.dart';
 
 class AccountChangedEvent implements Event {
   final Account account;

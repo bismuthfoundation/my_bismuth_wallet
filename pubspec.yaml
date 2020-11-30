@@ -1,5 +1,5 @@
-name: my_idena_wallet
-description: Idena Wallet app (iOS/Android).
+name: my_bismuth_wallet
+description: Bismuth Wallet app (iOS/Android).
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -165,7 +165,7 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/icon_my_idena_wallet.png"
+  image_path: "assets/icon_my_bismuth_wallet.png"
 
 # The following section is specific to Flutter.
 flutter:

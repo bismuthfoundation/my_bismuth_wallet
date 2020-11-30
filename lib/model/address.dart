@@ -32,7 +32,7 @@ class Address {
   bool isValid() {
     return _address == null
         ? false
-        : isValidEthereumAddress(_address);
+        : true;
 
   }
 

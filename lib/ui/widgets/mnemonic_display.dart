@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
-import 'package:my_idena_wallet/appstate_container.dart';
-import 'package:my_idena_wallet/localization.dart';
-import 'package:my_idena_wallet/styles.dart';
-import 'package:my_idena_wallet/util/user_data_util.dart';
+import 'package:my_bismuth_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/localization.dart';
+import 'package:my_bismuth_wallet/styles.dart';
+import 'package:my_bismuth_wallet/util/user_data_util.dart';
 
 /// A widget for displaying a mnemonic phrase
 class MnemonicDisplay extends StatefulWidget {

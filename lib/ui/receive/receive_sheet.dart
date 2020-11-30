@@ -1,15 +1,15 @@
 import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
-import 'package:my_idena_wallet/localization.dart';
+import 'package:my_bismuth_wallet/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/rendering.dart';
-import 'package:my_idena_wallet/dimens.dart';
-import 'package:my_idena_wallet/ui/widgets/buttons.dart';
-import 'package:my_idena_wallet/ui/util/ui_util.dart';
-import 'package:my_idena_wallet/ui/receive/share_card.dart';
-import 'package:my_idena_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/dimens.dart';
+import 'package:my_bismuth_wallet/ui/widgets/buttons.dart';
+import 'package:my_bismuth_wallet/ui/util/ui_util.dart';
+import 'package:my_bismuth_wallet/ui/receive/share_card.dart';
+import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class ReceiveSheet extends StatefulWidget {

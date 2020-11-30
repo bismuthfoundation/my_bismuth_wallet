@@ -4,12 +4,12 @@ import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
-import 'package:my_idena_wallet/appstate_container.dart';
-import 'package:my_idena_wallet/localization.dart';
-import 'package:my_idena_wallet/model/address.dart';
-import 'package:my_idena_wallet/service_locator.dart';
-import 'package:my_idena_wallet/ui/util/ui_util.dart';
-import 'package:my_idena_wallet/util/app_ffi/keys/seeds.dart';
+import 'package:my_bismuth_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/localization.dart';
+import 'package:my_bismuth_wallet/model/address.dart';
+import 'package:my_bismuth_wallet/service_locator.dart';
+import 'package:my_bismuth_wallet/ui/util/ui_util.dart';
+import 'package:my_bismuth_wallet/util/app_ffi/keys/seeds.dart';
 
 import 'package:quiver/strings.dart';
 import 'package:validators/validators.dart';

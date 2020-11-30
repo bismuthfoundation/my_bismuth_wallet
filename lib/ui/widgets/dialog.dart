@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flare_flutter/flare_actor.dart';
-import 'package:my_idena_wallet/localization.dart';
-import 'package:my_idena_wallet/styles.dart';
-import 'package:my_idena_wallet/appstate_container.dart';
-import 'package:my_idena_wallet/ui/widgets/app_simpledialog.dart';
+import 'package:my_bismuth_wallet/localization.dart';
+import 'package:my_bismuth_wallet/styles.dart';
+import 'package:my_bismuth_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/ui/widgets/app_simpledialog.dart';
 
 class AppDialogs {
   static void showConfirmDialog(

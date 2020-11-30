@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:my_idena_wallet/app_icons.dart';
+import 'package:my_bismuth_wallet/app_icons.dart';
 
 class BeforeScanScreen extends StatefulWidget {
   @override

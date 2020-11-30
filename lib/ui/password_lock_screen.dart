@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:hex/hex.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
-import 'package:my_idena_wallet/app_icons.dart';
-import 'package:my_idena_wallet/service_locator.dart';
-import 'package:my_idena_wallet/model/vault.dart';
-import 'package:my_idena_wallet/styles.dart';
-import 'package:my_idena_wallet/ui/widgets/app_text_field.dart';
-import 'package:my_idena_wallet/ui/widgets/dialog.dart';
-import 'package:my_idena_wallet/ui/widgets/tap_outside_unfocus.dart';
-import 'package:my_idena_wallet/util/app_ffi/encrypt/crypter.dart';
-import 'package:my_idena_wallet/util/app_ffi/apputil.dart';
-import 'package:my_idena_wallet/util/caseconverter.dart';
-import 'package:my_idena_wallet/ui/widgets/buttons.dart';
-import 'package:my_idena_wallet/appstate_container.dart';
-import 'package:my_idena_wallet/localization.dart';
-import 'package:my_idena_wallet/dimens.dart';
-import 'package:my_idena_wallet/util/sharedprefsutil.dart';
+import 'package:my_bismuth_wallet/app_icons.dart';
+import 'package:my_bismuth_wallet/service_locator.dart';
+import 'package:my_bismuth_wallet/model/vault.dart';
+import 'package:my_bismuth_wallet/styles.dart';
+import 'package:my_bismuth_wallet/ui/widgets/app_text_field.dart';
+import 'package:my_bismuth_wallet/ui/widgets/dialog.dart';
+import 'package:my_bismuth_wallet/ui/widgets/tap_outside_unfocus.dart';
+import 'package:my_bismuth_wallet/util/app_ffi/encrypt/crypter.dart';
+import 'package:my_bismuth_wallet/util/app_ffi/apputil.dart';
+import 'package:my_bismuth_wallet/util/caseconverter.dart';
+import 'package:my_bismuth_wallet/ui/widgets/buttons.dart';
+import 'package:my_bismuth_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/localization.dart';
+import 'package:my_bismuth_wallet/dimens.dart';
+import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
 
 class AppPasswordLockScreen extends StatefulWidget {
   @override
@@ -202,10 +202,10 @@ class _AppPasswordLockScreenState extends State<AppPasswordLockScreen> {
   Future<void> validateAndDecrypt() async {
     try {
       String decryptedSeed = HEX.encode(
-          IdenaCrypt.decrypt(await sl.get<Vault>().getSeed(),
+          AppCrypt.decrypt(await sl.get<Vault>().getSeed(),
               enterPasswordController.text));
       StateContainer.of(context).setEncryptedSecret(
-          HEX.encode(IdenaCrypt.encrypt(decryptedSeed,
+          HEX.encode(AppCrypt.encrypt(decryptedSeed,
               await sl.get<Vault>().getSessionKey())));
       _goHome();
     } catch (e) {
@@ -222,7 +222,7 @@ class _AppPasswordLockScreenState extends State<AppPasswordLockScreen> {
     if (StateContainer.of(context).wallet != null) {
       // TODO: voir
     } else {
-      await IdenaUtil()
+      await AppUtil()
           .loginAccount(await StateContainer.of(context).getSeed(), context);
     }
     StateContainer.of(context).requestUpdate();

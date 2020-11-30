@@ -2,26 +2,26 @@ import 'dart:async';
 
 import 'package:hex/hex.dart';
 import 'package:logger/logger.dart';
-import 'package:my_idena_wallet/model/wallet.dart';
+import 'package:my_bismuth_wallet/model/wallet.dart';
 import 'package:event_taxi/event_taxi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:my_idena_wallet/network/model/response/address_response.dart';
-import 'package:my_idena_wallet/network/model/response/address_txs_response.dart';
-import 'package:my_idena_wallet/service/app_service.dart';
-import 'package:my_idena_wallet/util/app_ffi/encrypt/crypter.dart';
+import 'package:my_bismuth_wallet/network/model/response/address_response.dart';
+import 'package:my_bismuth_wallet/network/model/response/address_txs_response.dart';
+import 'package:my_bismuth_wallet/service/app_service.dart';
+import 'package:my_bismuth_wallet/util/app_ffi/encrypt/crypter.dart';
 import 'package:uni_links/uni_links.dart';
-import 'package:my_idena_wallet/themes.dart';
-import 'package:my_idena_wallet/service_locator.dart';
-import 'package:my_idena_wallet/model/available_currency.dart';
-import 'package:my_idena_wallet/model/available_language.dart';
-import 'package:my_idena_wallet/model/address.dart';
-import 'package:my_idena_wallet/model/vault.dart';
-import 'package:my_idena_wallet/model/db/appdb.dart';
-import 'package:my_idena_wallet/model/db/account.dart';
-import 'package:my_idena_wallet/util/sharedprefsutil.dart';
-import 'package:my_idena_wallet/util/app_ffi/apputil.dart';
-import 'package:my_idena_wallet/bus/events.dart';
+import 'package:my_bismuth_wallet/themes.dart';
+import 'package:my_bismuth_wallet/service_locator.dart';
+import 'package:my_bismuth_wallet/model/available_currency.dart';
+import 'package:my_bismuth_wallet/model/available_language.dart';
+import 'package:my_bismuth_wallet/model/address.dart';
+import 'package:my_bismuth_wallet/model/vault.dart';
+import 'package:my_bismuth_wallet/model/db/appdb.dart';
+import 'package:my_bismuth_wallet/model/db/account.dart';
+import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
+import 'package:my_bismuth_wallet/util/app_ffi/apputil.dart';
+import 'package:my_bismuth_wallet/bus/events.dart';
 
 import 'util/sharedprefsutil.dart';
 
@@ -78,7 +78,7 @@ class StateContainerState extends State<StateContainer> {
   Locale deviceLocale = Locale('en', 'US');
   AvailableCurrency curCurrency = AvailableCurrency(AvailableCurrencyEnum.USD);
   LanguageSetting curLanguage = LanguageSetting(AvailableLanguage.DEFAULT);
-  BaseTheme curTheme = IdenaTheme();
+  BaseTheme curTheme = BismuthTheme();
   // Currently selected account
   Account selectedAccount =
       Account(id: 1, name: "AB", index: 0, lastAccess: 0, selected: true);
@@ -220,7 +220,7 @@ class StateContainerState extends State<StateContainer> {
   // Update the global wallet instance with a new address
   Future<void> updateWallet({Account account}) async {
     String address;
-    address = await IdenaUtil().seedToAddress(await getSeed(), account.index);
+    address = await AppUtil().seedToAddress(await getSeed(), account.index);
     AppService().getAddressResponse(address.toString());
     AppService().getSimplePrice(curCurrency.getIso4217Code());
     account.address = address;
@@ -413,7 +413,7 @@ class StateContainerState extends State<StateContainer> {
   Future<String> getSeed() async {
     String seed;
     if (encryptedSecret != null) {
-      seed = HEX.encode(IdenaCrypt.decrypt(
+      seed = HEX.encode(AppCrypt.decrypt(
           encryptedSecret, await sl.get<Vault>().getSessionKey()));
     } else {
       seed = await sl.get<Vault>().getSeed();

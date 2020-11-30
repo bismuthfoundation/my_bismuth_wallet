@@ -1,9 +1,9 @@
 import 'dart:typed_data';
 
-import 'package:my_idena_wallet/util/helpers.dart';
-import 'package:my_idena_wallet/util/app_ffi/encrypt/kdf/kdf.dart';
-import 'package:my_idena_wallet/util/app_ffi/encrypt/model/keyiv.dart';
-import 'package:my_idena_wallet/util/sha.dart';
+import 'package:my_bismuth_wallet/util/helpers.dart';
+import 'package:my_bismuth_wallet/util/app_ffi/encrypt/kdf/kdf.dart';
+import 'package:my_bismuth_wallet/util/app_ffi/encrypt/model/keyiv.dart';
+import 'package:my_bismuth_wallet/util/sha.dart';
 
 /// Sha256 Key Derivation Function
 /// It's not very anti-brute forceable, but it's fast which is an important feature
@@ -12,7 +12,7 @@ import 'package:my_idena_wallet/util/sha.dart';
 class Sha256KDF extends KDF {
   /// Gets the key and iv
   KeyIV deriveKey(String password, {Uint8List salt}) {
-    Uint8List pwBytes = IdenaHelpers.stringToBytesUtf8(password);
+    Uint8List pwBytes = BismuthHelpers.stringToBytesUtf8(password);
     Uint8List saltBytes = salt == null ? Uint8List(1) : salt;
 
     // Key = sha256 (password + salt);

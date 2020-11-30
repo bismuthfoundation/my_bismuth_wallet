@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:my_idena_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/appstate_container.dart';
 
 /// Custom locale-specific uppercase/lowercase methods
 class CaseChange {

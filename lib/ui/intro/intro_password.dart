@@ -2,22 +2,22 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:hex/hex.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
-import 'package:my_idena_wallet/appstate_container.dart';
-import 'package:my_idena_wallet/dimens.dart';
-import 'package:my_idena_wallet/model/db/appdb.dart';
-import 'package:my_idena_wallet/styles.dart';
-import 'package:my_idena_wallet/localization.dart';
-import 'package:my_idena_wallet/app_icons.dart';
-import 'package:my_idena_wallet/service_locator.dart';
-import 'package:my_idena_wallet/ui/widgets/app_text_field.dart';
-import 'package:my_idena_wallet/ui/widgets/buttons.dart';
-import 'package:my_idena_wallet/ui/widgets/security.dart';
-import 'package:my_idena_wallet/ui/widgets/tap_outside_unfocus.dart';
-import 'package:my_idena_wallet/util/app_ffi/encrypt/crypter.dart';
-import 'package:my_idena_wallet/util/app_ffi/apputil.dart';
-import 'package:my_idena_wallet/model/vault.dart';
-import 'package:my_idena_wallet/util/app_ffi/keys/seeds.dart';
-import 'package:my_idena_wallet/util/sharedprefsutil.dart';
+import 'package:my_bismuth_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/dimens.dart';
+import 'package:my_bismuth_wallet/model/db/appdb.dart';
+import 'package:my_bismuth_wallet/styles.dart';
+import 'package:my_bismuth_wallet/localization.dart';
+import 'package:my_bismuth_wallet/app_icons.dart';
+import 'package:my_bismuth_wallet/service_locator.dart';
+import 'package:my_bismuth_wallet/ui/widgets/app_text_field.dart';
+import 'package:my_bismuth_wallet/ui/widgets/buttons.dart';
+import 'package:my_bismuth_wallet/ui/widgets/security.dart';
+import 'package:my_bismuth_wallet/ui/widgets/tap_outside_unfocus.dart';
+import 'package:my_bismuth_wallet/util/app_ffi/encrypt/crypter.dart';
+import 'package:my_bismuth_wallet/util/app_ffi/apputil.dart';
+import 'package:my_bismuth_wallet/model/vault.dart';
+import 'package:my_bismuth_wallet/util/app_ffi/keys/seeds.dart';
+import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
 
 class IntroPassword extends StatefulWidget {
   final String seed;
@@ -282,11 +282,11 @@ class _IntroPasswordState extends State<IntroPassword> {
         });
       }
     } else if (widget.seed != null) {
-      String encryptedSeed = HEX.encode(IdenaCrypt.encrypt(widget.seed, confirmPasswordController.text));
+      String encryptedSeed = HEX.encode(AppCrypt.encrypt(widget.seed, confirmPasswordController.text));
       await sl.get<Vault>().setSeed(encryptedSeed);
-      StateContainer.of(context).setEncryptedSecret(HEX.encode(IdenaCrypt.encrypt(widget.seed, await sl.get<Vault>().getSessionKey())));
+      StateContainer.of(context).setEncryptedSecret(HEX.encode(AppCrypt.encrypt(widget.seed, await sl.get<Vault>().getSessionKey())));
       await sl.get<DBHelper>().dropAccounts();
-      await IdenaUtil().loginAccount(widget.seed, context);
+      await AppUtil().loginAccount(widget.seed, context);
       StateContainer.of(context).requestUpdate();
       String pin = await Navigator.of(context).push(
         MaterialPageRoute(builder: (BuildContext context) {
@@ -298,12 +298,12 @@ class _IntroPasswordState extends State<IntroPassword> {
     } else {
       // Generate a new seed and encrypt
       String seed = AppSeeds.generateSeed();
-      String encryptedSeed = HEX.encode(IdenaCrypt.encrypt(seed, confirmPasswordController.text));
+      String encryptedSeed = HEX.encode(AppCrypt.encrypt(seed, confirmPasswordController.text));
       await sl.get<Vault>().setSeed(encryptedSeed);
       // Also encrypt it with the session key, so user doesnt need password to sign blocks within the app
-      StateContainer.of(context).setEncryptedSecret(HEX.encode(IdenaCrypt.encrypt(seed, await sl.get<Vault>().getSessionKey())));
+      StateContainer.of(context).setEncryptedSecret(HEX.encode(AppCrypt.encrypt(seed, await sl.get<Vault>().getSessionKey())));
       // Update wallet
-      IdenaUtil().loginAccount(await StateContainer.of(context).getSeed(), context).then((_) {
+      AppUtil().loginAccount(await StateContainer.of(context).getSeed(), context).then((_) {
         StateContainer.of(context).requestUpdate();
         Navigator.of(context)
             .pushNamed('/intro_backup_safety');

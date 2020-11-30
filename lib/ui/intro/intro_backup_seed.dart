@@ -1,20 +1,20 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:hex/hex.dart';
-import 'package:my_idena_wallet/appstate_container.dart';
-import 'package:my_idena_wallet/app_icons.dart';
-import 'package:my_idena_wallet/dimens.dart';
-import 'package:my_idena_wallet/localization.dart';
-import 'package:my_idena_wallet/model/db/appdb.dart';
-import 'package:my_idena_wallet/service_locator.dart';
-import 'package:my_idena_wallet/styles.dart';
-import 'package:my_idena_wallet/model/vault.dart';
-import 'package:my_idena_wallet/ui/widgets/buttons.dart';
-import 'package:my_idena_wallet/ui/widgets/plainseed_display.dart';
-import 'package:my_idena_wallet/util/app_ffi/encrypt/crypter.dart';
-import 'package:my_idena_wallet/util/app_ffi/apputil.dart';
-import 'package:my_idena_wallet/ui/widgets/mnemonic_display.dart';
-import 'package:my_idena_wallet/util/app_ffi/keys/mnemonics.dart';
+import 'package:my_bismuth_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/app_icons.dart';
+import 'package:my_bismuth_wallet/dimens.dart';
+import 'package:my_bismuth_wallet/localization.dart';
+import 'package:my_bismuth_wallet/model/db/appdb.dart';
+import 'package:my_bismuth_wallet/service_locator.dart';
+import 'package:my_bismuth_wallet/styles.dart';
+import 'package:my_bismuth_wallet/model/vault.dart';
+import 'package:my_bismuth_wallet/ui/widgets/buttons.dart';
+import 'package:my_bismuth_wallet/ui/widgets/plainseed_display.dart';
+import 'package:my_bismuth_wallet/util/app_ffi/encrypt/crypter.dart';
+import 'package:my_bismuth_wallet/util/app_ffi/apputil.dart';
+import 'package:my_bismuth_wallet/ui/widgets/mnemonic_display.dart';
+import 'package:my_bismuth_wallet/util/app_ffi/keys/mnemonics.dart';
 
 class IntroBackupSeedPage extends StatefulWidget {
   final String encryptedSeed;
@@ -43,7 +43,7 @@ class _IntroBackupSeedState extends State<IntroBackupSeedPage> {
     } else {
       sl.get<Vault>().getSessionKey().then((key) {
         setState(() {
-          _seed = HEX.encode(IdenaCrypt.decrypt(widget.encryptedSeed, key));
+          _seed = HEX.encode(AppCrypt.decrypt(widget.encryptedSeed, key));
           _mnemonic = AppMnemomics.seedToMnemonic(_seed);
         });
       });
@@ -193,7 +193,7 @@ class _IntroBackupSeedState extends State<IntroBackupSeedPage> {
                           // Update wallet
                           sl.get<DBHelper>().dropAccounts().then((_) {
                             StateContainer.of(context).getSeed().then((seed) {
-                              IdenaUtil().loginAccount(seed, context).then((_) {
+                              AppUtil().loginAccount(seed, context).then((_) {
                                 StateContainer.of(context).requestUpdate();
                                 Navigator.of(context)
                                     .pushNamed('/intro_backup_confirm');

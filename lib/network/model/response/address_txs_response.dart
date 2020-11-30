@@ -4,8 +4,8 @@
 
 import 'dart:convert';
 
-import 'package:my_idena_wallet/model/address.dart';
-import 'package:my_idena_wallet/util/numberutil.dart';
+import 'package:my_bismuth_wallet/model/address.dart';
+import 'package:my_bismuth_wallet/util/numberutil.dart';
 
 AddressTxsResponse addressTxsResponseFromJson(String str) =>
     AddressTxsResponse.fromJson(json.decode(str));

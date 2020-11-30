@@ -1,16 +1,16 @@
 import 'dart:ui';
 import 'dart:async';
 import 'package:intl/intl.dart';
-import 'package:my_idena_wallet/util/random_util.dart';
+import 'package:my_bismuth_wallet/util/random_util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:my_idena_wallet/service_locator.dart';
-import 'package:my_idena_wallet/util/encrypt.dart';
-import 'package:my_idena_wallet/model/authentication_method.dart';
-import 'package:my_idena_wallet/model/available_currency.dart';
-import 'package:my_idena_wallet/model/available_language.dart';
-import 'package:my_idena_wallet/model/device_lock_timeout.dart';
-import 'package:my_idena_wallet/model/vault.dart';
-import 'package:my_idena_wallet/model/wallet.dart';
+import 'package:my_bismuth_wallet/service_locator.dart';
+import 'package:my_bismuth_wallet/util/encrypt.dart';
+import 'package:my_bismuth_wallet/model/authentication_method.dart';
+import 'package:my_bismuth_wallet/model/available_currency.dart';
+import 'package:my_bismuth_wallet/model/available_language.dart';
+import 'package:my_bismuth_wallet/model/device_lock_timeout.dart';
+import 'package:my_bismuth_wallet/model/vault.dart';
+import 'package:my_bismuth_wallet/model/wallet.dart';
 
 /// Price conversion preference values
 enum PriceConversion { BTC, NONE, HIDDEN }
@@ -18,26 +18,26 @@ enum PriceConversion { BTC, NONE, HIDDEN }
 /// Singleton wrapper for shared preferences
 class SharedPrefsUtil {
   // Keys
-  static const String first_launch_key = 'fidena_first_launch';
-  static const String seed_backed_up_key = 'fidena_seed_backup';
-  static const String app_uuid_key = 'fidena_app_uuid';
-  static const String price_conversion = 'fidena_price_conversion_pref';
-  static const String auth_method = 'fidena_auth_method';
-  static const String cur_currency = 'fidena_currency_pref';
-  static const String cur_language = 'fidena_language_pref';
-  static const String cur_theme = 'fidena_theme_pref';
+  static const String first_launch_key = 'fbismuth_first_launch';
+  static const String seed_backed_up_key = 'fbismuth_seed_backup';
+  static const String app_uuid_key = 'fbismuth_app_uuid';
+  static const String price_conversion = 'fbismuth_price_conversion_pref';
+  static const String auth_method = 'fbismuth_auth_method';
+  static const String cur_currency = 'fbismuth_currency_pref';
+  static const String cur_language = 'fbismuth_language_pref';
+  static const String cur_theme = 'fbismuth_theme_pref';
   static const String user_representative =
-      'fidena_user_rep'; // For when non-opened accounts have set a representative
-  static const String firstcontact_added = 'fidena_first_c_added';
-  static const String lock_kalium = 'fidena_lock_dev';
-  static const String kalium_lock_timeout = 'fidena_lock_timeout';
+      'fbismuth_user_rep'; // For when non-opened accounts have set a representative
+  static const String firstcontact_added = 'fbismuth_first_c_added';
+  static const String lock_kalium = 'fbismuth_lock_dev';
+  static const String kalium_lock_timeout = 'fbismuth_lock_timeout';
   static const String has_shown_root_warning =
-      'fidena_root_warn'; // If user has seen the root/jailbreak warning yet
+      'fbismuth_root_warn'; // If user has seen the root/jailbreak warning yet
   // For maximum pin attempts
-  static const String pin_attempts = 'fidena_pin_attempts';
-  static const String pin_lock_until = 'fidena_lock_duraton';
+  static const String pin_attempts = 'fbismuth_pin_attempts';
+  static const String pin_lock_until = 'fbismuth_lock_duraton';
   // For certain keystore incompatible androids
-  static const String use_legacy_storage = 'fidena_legacy_storage';
+  static const String use_legacy_storage = 'fbismuth_legacy_storage';
 
   // For plain-text data
   Future<void> set(String key, value) async {

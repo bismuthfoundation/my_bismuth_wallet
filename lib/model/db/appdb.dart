@@ -3,9 +3,9 @@ import 'dart:io' as io;
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:my_idena_wallet/model/db/account.dart';
-import 'package:my_idena_wallet/model/db/contact.dart';
-import 'package:my_idena_wallet/util/app_ffi/apputil.dart';
+import 'package:my_bismuth_wallet/model/db/account.dart';
+import 'package:my_bismuth_wallet/model/db/contact.dart';
+import 'package:my_bismuth_wallet/util/app_ffi/apputil.dart';
 
 class DBHelper {
   static const int DB_VERSION = 1;
@@ -32,7 +32,7 @@ class DBHelper {
 
   initDb() async {
     io.Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, "idena.db");
+    String path = join(documentsDirectory.path, "bismuth.db");
     var theDb = await openDatabase(path,
         version: DB_VERSION, onCreate: _onCreate, onUpgrade: _onUpgrade);
     return theDb;
@@ -160,7 +160,7 @@ class DBHelper {
           balance: list[i]["balance"]));
     }
     accounts.forEach((a) async {
-      a.address = await IdenaUtil().seedToAddress(seed, a.index);
+      a.address = await AppUtil().seedToAddress(seed, a.index);
     });
     return accounts;
   }
@@ -182,7 +182,7 @@ class DBHelper {
           balance: list[i]["balance"]));
     }
     accounts.forEach((a) async {
-      a.address = await IdenaUtil().seedToAddress(seed, a.index);
+      a.address = await AppUtil().seedToAddress(seed, a.index);
     });
     return accounts;
   }
@@ -209,7 +209,7 @@ class DBHelper {
           name: nextName,
           lastAccess: 0,
           selected: false,
-          address: await IdenaUtil().seedToAddress(seed, nextIndex));
+          address: await AppUtil().seedToAddress(seed, nextIndex));
       await txn.rawInsert(
           'INSERT INTO Accounts (name, acct_index, last_accessed, selected, address) values(?, ?, ?, ?, ?)',
           [
@@ -282,7 +282,7 @@ class DBHelper {
         selected: true,
         lastAccess: list[0]["last_accessed"],
         balance: list[0]["balance"],
-        address: await IdenaUtil()
+        address: await AppUtil()
         .seedToAddress(seed, list[0]["acct_index"]));
     return account;
   }
@@ -296,7 +296,7 @@ class DBHelper {
     }
     String address;
 
-    IdenaUtil()
+    AppUtil()
         .seedToAddress(seed, list[0]["acct_index"])
         .then((value) => address = value);
     Account account = Account(

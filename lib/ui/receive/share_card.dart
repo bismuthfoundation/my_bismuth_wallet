@@ -1,8 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:my_idena_wallet/appstate_container.dart';
-import 'package:my_idena_wallet/ui/util/ui_util.dart';
+import 'package:my_bismuth_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/ui/util/ui_util.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class AppShareCard extends StatefulWidget {
@@ -165,7 +165,7 @@ class _AppShareCardState extends State<AppShareCard> {
                           width: 60,
                           margin: EdgeInsets.only(top: 1),
                           child: AutoSizeText(
-                            "iDNA",
+                            "BIS",
                             style: TextStyle(
                               color:
                                   StateContainer.of(context).curTheme.primary,

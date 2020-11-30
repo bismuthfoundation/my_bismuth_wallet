@@ -7,31 +7,31 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
-import 'package:my_idena_wallet/model/available_language.dart';
-import 'package:my_idena_wallet/ui/before_scan_screen.dart';
-import 'package:my_idena_wallet/ui/intro/intro_backup_safety.dart';
-import 'package:my_idena_wallet/ui/intro/intro_password.dart';
-import 'package:my_idena_wallet/ui/intro/intro_password_on_launch.dart';
-import 'package:my_idena_wallet/ui/password_lock_screen.dart';
-import 'package:my_idena_wallet/ui/widgets/dialog.dart';
-import 'package:my_idena_wallet/util/caseconverter.dart';
-import 'package:my_idena_wallet/util/helpers.dart';
+import 'package:my_bismuth_wallet/model/available_language.dart';
+import 'package:my_bismuth_wallet/ui/before_scan_screen.dart';
+import 'package:my_bismuth_wallet/ui/intro/intro_backup_safety.dart';
+import 'package:my_bismuth_wallet/ui/intro/intro_password.dart';
+import 'package:my_bismuth_wallet/ui/intro/intro_password_on_launch.dart';
+import 'package:my_bismuth_wallet/ui/password_lock_screen.dart';
+import 'package:my_bismuth_wallet/ui/widgets/dialog.dart';
+import 'package:my_bismuth_wallet/util/caseconverter.dart';
+import 'package:my_bismuth_wallet/util/helpers.dart';
 import 'package:oktoast/oktoast.dart';
 
-import 'package:my_idena_wallet/styles.dart';
-import 'package:my_idena_wallet/appstate_container.dart';
-import 'package:my_idena_wallet/localization.dart';
-import 'package:my_idena_wallet/service_locator.dart';
-import 'package:my_idena_wallet/ui/home_page.dart';
-import 'package:my_idena_wallet/ui/lock_screen.dart';
-import 'package:my_idena_wallet/ui/intro/intro_welcome.dart';
-import 'package:my_idena_wallet/ui/intro/intro_backup_seed.dart';
-import 'package:my_idena_wallet/ui/intro/intro_backup_confirm.dart';
-import 'package:my_idena_wallet/ui/intro/intro_import_seed.dart';
-import 'package:my_idena_wallet/ui/util/routes.dart';
-import 'package:my_idena_wallet/model/vault.dart';
-import 'package:my_idena_wallet/util/app_ffi/apputil.dart';
-import 'package:my_idena_wallet/util/sharedprefsutil.dart';
+import 'package:my_bismuth_wallet/styles.dart';
+import 'package:my_bismuth_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/localization.dart';
+import 'package:my_bismuth_wallet/service_locator.dart';
+import 'package:my_bismuth_wallet/ui/home_page.dart';
+import 'package:my_bismuth_wallet/ui/lock_screen.dart';
+import 'package:my_bismuth_wallet/ui/intro/intro_welcome.dart';
+import 'package:my_bismuth_wallet/ui/intro/intro_backup_seed.dart';
+import 'package:my_bismuth_wallet/ui/intro/intro_backup_confirm.dart';
+import 'package:my_bismuth_wallet/ui/intro/intro_import_seed.dart';
+import 'package:my_bismuth_wallet/ui/util/routes.dart';
+import 'package:my_bismuth_wallet/model/vault.dart';
+import 'package:my_bismuth_wallet/util/app_ffi/apputil.dart';
+import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
 import 'package:root_checker/root_checker.dart';
 
 void main() async {
@@ -72,7 +72,7 @@ class _AppState extends State<App> {
       backgroundColor: StateContainer.of(context).curTheme.backgroundDark,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'my Idena Wallet',
+        title: 'my Bismuth Wallet',
         theme: ThemeData(
           dialogBackgroundColor:
               StateContainer.of(context).curTheme.backgroundDark,
@@ -257,8 +257,8 @@ class SplashState extends State<Splash> with WidgetsBindingObserver {
       return false;
     }
     try {
-      String salted = IdenaHelpers.bytesToUtf8String(
-          IdenaHelpers.hexToBytes(seed.substring(0, 16)));
+      String salted = BismuthHelpers.bytesToUtf8String(
+          BismuthHelpers.hexToBytes(seed.substring(0, 16)));
       if (salted == "Salted__") {
         return true;
       }
@@ -329,7 +329,7 @@ class SplashState extends State<Splash> with WidgetsBindingObserver {
             await sl.get<SharedPrefsUtil>().shouldLock()) {
           Navigator.of(context).pushReplacementNamed('/lock_screen');
         } else {
-          await IdenaUtil().loginAccount(seed, context);
+          await AppUtil().loginAccount(seed, context);
           PriceConversion conversion =
               await sl.get<SharedPrefsUtil>().getPriceConversion();
           Navigator.of(context)

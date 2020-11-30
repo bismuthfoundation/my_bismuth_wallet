@@ -1,5 +1,5 @@
 import 'package:bip39/bip39.dart' as bip39;
-import 'package:my_idena_wallet/util/app_ffi/keys/seeds.dart';
+import 'package:my_bismuth_wallet/util/app_ffi/keys/seeds.dart';
 
 class AppMnemomics {
   /// Converts a seed to a 24-word mnemonic word list

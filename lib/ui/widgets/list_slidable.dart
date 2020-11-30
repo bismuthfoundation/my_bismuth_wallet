@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import 'package:my_idena_wallet/service_locator.dart';
-import 'package:my_idena_wallet/util/hapticutil.dart';
+import 'package:my_bismuth_wallet/service_locator.dart';
+import 'package:my_bismuth_wallet/util/hapticutil.dart';
 
 const double _kActionsExtentRatio = 0.25;
 const double _kFastThreshold = 2500.0;

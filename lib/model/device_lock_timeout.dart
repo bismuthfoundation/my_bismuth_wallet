@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_idena_wallet/localization.dart';
-import 'package:my_idena_wallet/model/setting_item.dart';
+import 'package:my_bismuth_wallet/localization.dart';
+import 'package:my_bismuth_wallet/model/setting_item.dart';
 
 enum LockTimeoutOption { ZERO, ONE, FIVE, FIFTEEN, THIRTY, SIXTY }
 

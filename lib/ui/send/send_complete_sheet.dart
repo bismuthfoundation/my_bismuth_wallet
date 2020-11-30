@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:my_idena_wallet/appstate_container.dart';
-import 'package:my_idena_wallet/dimens.dart';
-import 'package:my_idena_wallet/app_icons.dart';
-import 'package:my_idena_wallet/localization.dart';
-import 'package:my_idena_wallet/ui/widgets/buttons.dart';
-import 'package:my_idena_wallet/ui/util/ui_util.dart';
-import 'package:my_idena_wallet/util/caseconverter.dart';
-import 'package:my_idena_wallet/util/numberutil.dart';
+import 'package:my_bismuth_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/dimens.dart';
+import 'package:my_bismuth_wallet/app_icons.dart';
+import 'package:my_bismuth_wallet/localization.dart';
+import 'package:my_bismuth_wallet/ui/widgets/buttons.dart';
+import 'package:my_bismuth_wallet/ui/util/ui_util.dart';
+import 'package:my_bismuth_wallet/util/caseconverter.dart';
+import 'package:my_bismuth_wallet/util/numberutil.dart';
 
 class SendCompleteSheet extends StatefulWidget {
   final String amountRaw;
@@ -101,7 +101,7 @@ class _SendCompleteSheetState extends State<SendCompleteSheet> {
                             ),
                           ),
                           TextSpan(
-                            text: " iDNA",
+                            text: " BIS",
                             style: TextStyle(
                               color:
                                   StateContainer.of(context).curTheme.success,

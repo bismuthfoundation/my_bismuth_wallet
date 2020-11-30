@@ -3,26 +3,31 @@ import 'package:bip39/bip39.dart' as bip39;
 import 'package:ethereum_address/ethereum_address.dart';
 import 'package:flutter/material.dart';
 import 'package:hex/hex.dart';
-import 'package:my_idena_wallet/model/db/appdb.dart';
-import 'package:my_idena_wallet/model/db/account.dart' as Account;
-import 'package:my_idena_wallet/appstate_container.dart';
-import 'package:my_idena_wallet/localization.dart';
-import 'package:my_idena_wallet/service_locator.dart';
+import 'package:my_bismuth_wallet/model/db/appdb.dart';
+import 'package:my_bismuth_wallet/model/db/account.dart' as Account;
+import 'package:my_bismuth_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/localization.dart';
+import 'package:my_bismuth_wallet/service_locator.dart';
 import 'package:web3dart/web3dart.dart';
 
-class IdenaUtil {
+class AppUtil {
   Future<String> seedToAddress(String seed, int index) async {
+    
     String mnemonic = bip39.entropyToMnemonic(seed);
 
     final bip39Seed = bip39.mnemonicToSeed(mnemonic);
     final root = bip32.BIP32.fromSeed(bip39Seed);
     bip32.BIP32 node = bip32.BIP32.fromBase58(root.toBase58());
-    bip32.BIP32 child = node.derivePath("m/44'/515'/0'/0");
+    print("BIP 32 node (private Key) : " + HEX.encode(node.privateKey));
+    print("BIP 32 node (public Key) : " + HEX.encode(node.publicKey));
+    bip32.BIP32 child = node.derivePath("m/44'/209'/0'/0");
+    print("BIP 32 child (private Key) : " + HEX.encode(child.privateKey));
+    print("BIP 32 child (public Key) : " + HEX.encode(child.publicKey));
 
-    EthPrivateKey ethPrivateKey;
+    /*EthPrivateKey ethPrivateKey;
     String addressEIP55;
     // TODO: Distinct new address and regeneration of known address
-   /* for(int numAddress = 0; numAddress < 10; numAddress ++)
+    for(int numAddress = 0; numAddress < 10; numAddress ++)
    {
       ethPrivateKey =
           EthPrivateKey.fromHex(HEX.encode(child.derive(numAddress).privateKey));
@@ -35,13 +40,13 @@ class IdenaUtil {
           break;
         }
     }*/
-     ethPrivateKey =
+     /*ethPrivateKey =
           EthPrivateKey.fromHex(HEX.encode(child.derive(0).privateKey));
       final address = await ethPrivateKey.extractAddress();
       addressEIP55 = checksumEthereumAddress(address.toString());
       //print("address EIP55 ("+numAddress.toString()+"): " + addressEIP55.toString());
-
-    return addressEIP55;
+*/
+    return HEX.encode(child.publicKey);
   }
 
   Future<void> loginAccount(String seed, BuildContext context) async {

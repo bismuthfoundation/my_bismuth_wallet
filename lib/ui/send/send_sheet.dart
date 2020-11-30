@@ -8,27 +8,27 @@ import 'package:decimal/decimal.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 
-import 'package:my_idena_wallet/appstate_container.dart';
-import 'package:my_idena_wallet/dimens.dart';
-import 'package:my_idena_wallet/localization.dart';
-import 'package:my_idena_wallet/model/available_currency.dart';
-import 'package:my_idena_wallet/service_locator.dart';
-import 'package:my_idena_wallet/app_icons.dart';
-import 'package:my_idena_wallet/model/address.dart';
-import 'package:my_idena_wallet/model/db/contact.dart';
-import 'package:my_idena_wallet/model/db/appdb.dart';
-import 'package:my_idena_wallet/styles.dart';
-import 'package:my_idena_wallet/ui/send/send_confirm_sheet.dart';
-import 'package:my_idena_wallet/ui/widgets/app_text_field.dart';
-import 'package:my_idena_wallet/ui/widgets/buttons.dart';
-import 'package:my_idena_wallet/ui/widgets/one_or_three_address_text.dart';
-import 'package:my_idena_wallet/ui/util/formatters.dart';
-import 'package:my_idena_wallet/ui/util/ui_util.dart';
-import 'package:my_idena_wallet/ui/widgets/sheet_util.dart';
-import 'package:my_idena_wallet/util/numberutil.dart';
-import 'package:my_idena_wallet/util/caseconverter.dart';
-import 'package:my_idena_wallet/util/sharedprefsutil.dart';
-import 'package:my_idena_wallet/util/user_data_util.dart';
+import 'package:my_bismuth_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/dimens.dart';
+import 'package:my_bismuth_wallet/localization.dart';
+import 'package:my_bismuth_wallet/model/available_currency.dart';
+import 'package:my_bismuth_wallet/service_locator.dart';
+import 'package:my_bismuth_wallet/app_icons.dart';
+import 'package:my_bismuth_wallet/model/address.dart';
+import 'package:my_bismuth_wallet/model/db/contact.dart';
+import 'package:my_bismuth_wallet/model/db/appdb.dart';
+import 'package:my_bismuth_wallet/styles.dart';
+import 'package:my_bismuth_wallet/ui/send/send_confirm_sheet.dart';
+import 'package:my_bismuth_wallet/ui/widgets/app_text_field.dart';
+import 'package:my_bismuth_wallet/ui/widgets/buttons.dart';
+import 'package:my_bismuth_wallet/ui/widgets/one_or_three_address_text.dart';
+import 'package:my_bismuth_wallet/ui/util/formatters.dart';
+import 'package:my_bismuth_wallet/ui/util/ui_util.dart';
+import 'package:my_bismuth_wallet/ui/widgets/sheet_util.dart';
+import 'package:my_bismuth_wallet/util/numberutil.dart';
+import 'package:my_bismuth_wallet/util/caseconverter.dart';
+import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
+import 'package:my_bismuth_wallet/util/user_data_util.dart';
 
 class SendSheet extends StatefulWidget {
   final AvailableCurrency localCurrency;
@@ -348,7 +348,7 @@ class _SendSheetState extends State<SendSheet> {
                                               TextSpan(
                                                 text: _localCurrencyMode
                                                     ? ")"
-                                                    : " iDNA)",
+                                                    : " BIS)",
                                                 style: TextStyle(
                                                   color:
                                                       StateContainer.of(context)

@@ -1,19 +1,19 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:my_idena_wallet/app_icons.dart';
-import 'package:my_idena_wallet/appstate_container.dart';
-import 'package:my_idena_wallet/localization.dart';
-import 'package:my_idena_wallet/model/address.dart';
-import 'package:my_idena_wallet/model/db/appdb.dart';
-import 'package:my_idena_wallet/model/db/contact.dart';
-import 'package:my_idena_wallet/service_locator.dart';
-import 'package:my_idena_wallet/styles.dart';
-import 'package:my_idena_wallet/ui/send/send_confirm_sheet.dart';
-import 'package:my_idena_wallet/ui/send/send_sheet.dart';
-import 'package:my_idena_wallet/ui/util/ui_util.dart';
-import 'package:my_idena_wallet/ui/widgets/sheet_util.dart';
-import 'package:my_idena_wallet/util/hapticutil.dart';
-import 'package:my_idena_wallet/util/user_data_util.dart';
+import 'package:my_bismuth_wallet/app_icons.dart';
+import 'package:my_bismuth_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/localization.dart';
+import 'package:my_bismuth_wallet/model/address.dart';
+import 'package:my_bismuth_wallet/model/db/appdb.dart';
+import 'package:my_bismuth_wallet/model/db/contact.dart';
+import 'package:my_bismuth_wallet/service_locator.dart';
+import 'package:my_bismuth_wallet/styles.dart';
+import 'package:my_bismuth_wallet/ui/send/send_confirm_sheet.dart';
+import 'package:my_bismuth_wallet/ui/send/send_sheet.dart';
+import 'package:my_bismuth_wallet/ui/util/ui_util.dart';
+import 'package:my_bismuth_wallet/ui/widgets/sheet_util.dart';
+import 'package:my_bismuth_wallet/util/hapticutil.dart';
+import 'package:my_bismuth_wallet/util/user_data_util.dart';
 
 class AppPopupButton extends StatefulWidget {
   @override

@@ -2,24 +2,24 @@ import 'dart:async';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:my_idena_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:event_taxi/event_taxi.dart';
 
-import 'package:my_idena_wallet/dimens.dart';
-import 'package:my_idena_wallet/app_icons.dart';
-import 'package:my_idena_wallet/styles.dart';
-import 'package:my_idena_wallet/localization.dart';
-import 'package:my_idena_wallet/service_locator.dart';
-import 'package:my_idena_wallet/bus/events.dart';
-import 'package:my_idena_wallet/model/db/contact.dart';
-import 'package:my_idena_wallet/model/db/appdb.dart';
-import 'package:my_idena_wallet/ui/send/send_sheet.dart';
-import 'package:my_idena_wallet/ui/util/ui_util.dart';
-import 'package:my_idena_wallet/ui/widgets/buttons.dart';
-import 'package:my_idena_wallet/ui/widgets/dialog.dart';
-import 'package:my_idena_wallet/ui/widgets/sheet_util.dart';
-import 'package:my_idena_wallet/ui/widgets/sheets.dart';
-import 'package:my_idena_wallet/util/caseconverter.dart';
+import 'package:my_bismuth_wallet/dimens.dart';
+import 'package:my_bismuth_wallet/app_icons.dart';
+import 'package:my_bismuth_wallet/styles.dart';
+import 'package:my_bismuth_wallet/localization.dart';
+import 'package:my_bismuth_wallet/service_locator.dart';
+import 'package:my_bismuth_wallet/bus/events.dart';
+import 'package:my_bismuth_wallet/model/db/contact.dart';
+import 'package:my_bismuth_wallet/model/db/appdb.dart';
+import 'package:my_bismuth_wallet/ui/send/send_sheet.dart';
+import 'package:my_bismuth_wallet/ui/util/ui_util.dart';
+import 'package:my_bismuth_wallet/ui/widgets/buttons.dart';
+import 'package:my_bismuth_wallet/ui/widgets/dialog.dart';
+import 'package:my_bismuth_wallet/ui/widgets/sheet_util.dart';
+import 'package:my_bismuth_wallet/ui/widgets/sheets.dart';
+import 'package:my_bismuth_wallet/util/caseconverter.dart';
 
 // Contact Details Sheet
 class ContactDetailsSheet {

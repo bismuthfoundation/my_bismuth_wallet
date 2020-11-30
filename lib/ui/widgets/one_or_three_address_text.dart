@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_idena_wallet/styles.dart';
+import 'package:my_bismuth_wallet/styles.dart';
 
 enum AddressTextType { PRIMARY60, PRIMARY, SUCCESS }
 

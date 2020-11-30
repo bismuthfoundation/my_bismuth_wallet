@@ -1,21 +1,21 @@
 import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:my_idena_wallet/util/helpers.dart';
-import 'package:my_idena_wallet/util/app_ffi/encrypt/aes/aes_cbcpkcs7.dart';
-import 'package:my_idena_wallet/util/app_ffi/encrypt/kdf/kdf.dart';
-import 'package:my_idena_wallet/util/app_ffi/encrypt/kdf/sha256_kdf.dart';
-import 'package:my_idena_wallet/util/app_ffi/encrypt/model/keyiv.dart';
+import 'package:my_bismuth_wallet/util/helpers.dart';
+import 'package:my_bismuth_wallet/util/app_ffi/encrypt/aes/aes_cbcpkcs7.dart';
+import 'package:my_bismuth_wallet/util/app_ffi/encrypt/kdf/kdf.dart';
+import 'package:my_bismuth_wallet/util/app_ffi/encrypt/kdf/sha256_kdf.dart';
+import 'package:my_bismuth_wallet/util/app_ffi/encrypt/model/keyiv.dart';
 
 /// Utility for encrypting and decrypting
-class IdenaCrypt {
+class AppCrypt {
   /// Decrypts a value with a password using AES/CBC/PKCS7
   /// KDF is Sha256KDF if not specified
   static Uint8List decrypt(dynamic value, String password, {KDF kdf}) {
     kdf = kdf ?? Sha256KDF();
     Uint8List valBytes;
     if (value is String) {
-      valBytes = IdenaHelpers.hexToBytes(value);
+      valBytes = BismuthHelpers.hexToBytes(value);
     } else if (value is Uint8List) {
       valBytes = value;
     } else {
@@ -37,7 +37,7 @@ class IdenaCrypt {
     kdf = kdf ?? Sha256KDF();
     Uint8List valBytes;
     if (value is String) {
-      valBytes = IdenaHelpers.hexToBytes(value);
+      valBytes = BismuthHelpers.hexToBytes(value);
     } else if (value is Uint8List) {
       valBytes = value;
     } else {
@@ -56,7 +56,7 @@ class IdenaCrypt {
     Uint8List seedEncrypted =
         AesCbcPkcs7.encrypt(valBytes, key: keyInfo.key, iv: keyInfo.iv);
 
-    return IdenaHelpers.concat(
-        [IdenaHelpers.stringToBytesUtf8("Salted__"), salt, seedEncrypted]);
+    return BismuthHelpers.concat(
+        [BismuthHelpers.stringToBytesUtf8("Salted__"), salt, seedEncrypted]);
   }
 }

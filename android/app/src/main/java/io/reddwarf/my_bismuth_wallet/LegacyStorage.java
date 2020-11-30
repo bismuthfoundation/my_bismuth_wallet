@@ -1,4 +1,4 @@
-package io.reddwarf.my_idena_wallet;
+package io.reddwarf.my_bismuth_wallet;
 
 import android.util.Base64;
 

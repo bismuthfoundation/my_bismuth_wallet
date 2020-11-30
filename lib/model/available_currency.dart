@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
-import 'package:my_idena_wallet/model/setting_item.dart';
+import 'package:my_bismuth_wallet/model/setting_item.dart';
 
 enum AvailableCurrencyEnum { USD, ARS, AUD, BRL, CAD, CHF, CLP, CNY, CZK, DKK,
                   EUR, GBP, HKD, HUF, IDR, ILS, INR, JPY, KRW, KWD,

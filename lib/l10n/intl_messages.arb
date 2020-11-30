@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-11-29T10:31:54.907689",
+  "@@last_modified": "2020-11-29T14:06:46.354354",
   "cancel": "Cancel",
   "@cancel": {
     "description": "dialog_cancel",
@@ -252,7 +252,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "welcomeText": "Welcome to my Idena Wallet. To begin, you may create a new wallet or import an existing one.",
+  "welcomeText": "Welcome to my Bismuth Wallet. To begin, you may create a new wallet or import an existing one.",
   "@welcomeText": {
     "description": "intro_welcome_title",
     "type": "text",
@@ -288,7 +288,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "sendAmountConfirm": "Send %1 iDNA",
+  "sendAmountConfirm": "Send %1 BIS",
   "@sendAmountConfirm": {
     "description": "send_pin_description",
     "type": "text",
@@ -330,7 +330,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "minimumSend": "Minimum send amount is %1 iDNA",
+  "minimumSend": "Minimum send amount is %1 BIS",
   "@minimumSend": {
     "description": "send_minimum_error",
     "type": "text",
@@ -462,7 +462,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "logoutDetail": "Logging out will remove your seed and all my Idena Wallet-related data from this device. If your seed is not backed up, you will never be able to access your funds again",
+  "logoutDetail": "Logging out will remove your seed and all my Bismuth Wallet-related data from this device. If your seed is not backed up, you will never be able to access your funds again",
   "@logoutDetail": {
     "description": "settings_logout_alert_message",
     "type": "text",
@@ -528,21 +528,21 @@
     "type": "text",
     "placeholders": {}
   },
-  "scanInstructions": "Scan an Idena \naddress QR code",
+  "scanInstructions": "Scan a Bismuth \naddress QR code",
   "@scanInstructions": {
     "description": "scan_send_instruction_label",
     "type": "text",
     "placeholders": {}
   },
-  "unlockPin": "Enter PIN to Unlock my Idena Wallet",
+  "unlockPin": "Enter PIN to Unlock my Bismuth Wallet",
   "@unlockPin": {
-    "description": "unlock_idena_pin",
+    "description": "unlock_bismuth_pin",
     "type": "text",
     "placeholders": {}
   },
-  "unlockBiometrics": "Authenticate to Unlock my Idena Wallet",
+  "unlockBiometrics": "Authenticate to Unlock my Bismuth Wallet",
   "@unlockBiometrics": {
-    "description": "unlock_idena_bio",
+    "description": "unlock_bismuth_bio",
     "type": "text",
     "placeholders": {}
   },
@@ -636,7 +636,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "exampleCardIntro": "Welcome to my Idena Wallet. Once you receive iDNA, transactions will show up like this:",
+  "exampleCardIntro": "Welcome to my Bismuth Wallet. Once you receive BIS, transactions will show up like this:",
   "@exampleCardIntro": {
     "description": "example_card_intro",
     "type": "text",
@@ -678,7 +678,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "newAccountIntro": "This is your new account. Once you receive iDNA, transactions will show up like this:",
+  "newAccountIntro": "This is your new account. Once you receive BIS, transactions will show up like this:",
   "@newAccountIntro": {
     "description": "Alternate account intro card",
     "type": "text",
@@ -888,15 +888,15 @@
     "type": "text",
     "placeholders": {}
   },
-  "passwordWillBeRequiredToOpenParagraph": "This password will be required to open my Idena Wallet.",
+  "passwordWillBeRequiredToOpenParagraph": "This password will be required to open my Bismuth Wallet.",
   "@passwordWillBeRequiredToOpenParagraph": {
-    "description": "A paragraph that tells the users that the created password will be required to open my Idena Wallet.",
+    "description": "A paragraph that tells the users that the created password will be required to open my Bismuth Wallet.",
     "type": "text",
     "placeholders": {}
   },
-  "passwordNoLongerRequiredToOpenParagraph": "You will not need a password to open my Idena Wallet anymore.",
+  "passwordNoLongerRequiredToOpenParagraph": "You will not need a password to open my Bismuth Wallet anymore.",
   "@passwordNoLongerRequiredToOpenParagraph": {
-    "description": "An info paragraph that tells the user a password will no longer be needed to open my Idena Wallet",
+    "description": "An info paragraph that tells the user a password will no longer be needed to open my Bismuth Wallet",
     "type": "text",
     "placeholders": {}
   },
@@ -930,9 +930,9 @@
     "type": "text",
     "placeholders": {}
   },
-  "requireAPasswordToOpenHeader": "Require a password to open my Idena Wallet?",
+  "requireAPasswordToOpenHeader": "Require a password to open my Bismuth Wallet?",
   "@requireAPasswordToOpenHeader": {
-    "description": "A paragraph that asks the users if they would like a password to be required to open my Idena Wallet.",
+    "description": "A paragraph that asks the users if they would like a password to be required to open my Bismuth Wallet.",
     "type": "text",
     "placeholders": {}
   },
@@ -974,7 +974,7 @@
   },
   "connectingHeader": "Connecting",
   "@connectingHeader": {
-    "description": "A header to let the user now that my Idena Wallet is currently connecting to (or loading) live chat.",
+    "description": "A header to let the user now that my Bismuth Wallet is currently connecting to (or loading) live chat.",
     "type": "text",
     "placeholders": {}
   }

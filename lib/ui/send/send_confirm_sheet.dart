@@ -3,23 +3,23 @@ import 'dart:async';
 import 'package:event_taxi/event_taxi.dart';
 import 'package:flutter/material.dart';
 
-import 'package:my_idena_wallet/appstate_container.dart';
-import 'package:my_idena_wallet/bus/events.dart';
-import 'package:my_idena_wallet/dimens.dart';
-import 'package:my_idena_wallet/styles.dart';
-import 'package:my_idena_wallet/localization.dart';
-import 'package:my_idena_wallet/service_locator.dart';
-import 'package:my_idena_wallet/ui/widgets/buttons.dart';
-import 'package:my_idena_wallet/ui/widgets/dialog.dart';
-import 'package:my_idena_wallet/ui/util/ui_util.dart';
-import 'package:my_idena_wallet/util/numberutil.dart';
-import 'package:my_idena_wallet/util/sharedprefsutil.dart';
-import 'package:my_idena_wallet/util/biometrics.dart';
-import 'package:my_idena_wallet/util/hapticutil.dart';
-import 'package:my_idena_wallet/util/caseconverter.dart';
-import 'package:my_idena_wallet/model/authentication_method.dart';
-import 'package:my_idena_wallet/model/vault.dart';
-import 'package:my_idena_wallet/ui/widgets/security.dart';
+import 'package:my_bismuth_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/bus/events.dart';
+import 'package:my_bismuth_wallet/dimens.dart';
+import 'package:my_bismuth_wallet/styles.dart';
+import 'package:my_bismuth_wallet/localization.dart';
+import 'package:my_bismuth_wallet/service_locator.dart';
+import 'package:my_bismuth_wallet/ui/widgets/buttons.dart';
+import 'package:my_bismuth_wallet/ui/widgets/dialog.dart';
+import 'package:my_bismuth_wallet/ui/util/ui_util.dart';
+import 'package:my_bismuth_wallet/util/numberutil.dart';
+import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
+import 'package:my_bismuth_wallet/util/biometrics.dart';
+import 'package:my_bismuth_wallet/util/hapticutil.dart';
+import 'package:my_bismuth_wallet/util/caseconverter.dart';
+import 'package:my_bismuth_wallet/model/authentication_method.dart';
+import 'package:my_bismuth_wallet/model/vault.dart';
+import 'package:my_bismuth_wallet/ui/widgets/security.dart';
 
 class SendConfirmSheet extends StatefulWidget {
   final String amountRaw;
@@ -160,7 +160,7 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
                             ),
                           ),
                           TextSpan(
-                            text: " iDNA",
+                            text: " BIS",
                             style: TextStyle(
                               color:
                                   StateContainer.of(context).curTheme.primary,
@@ -291,7 +291,7 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
         widget.amountRaw,
         destinationAltered,
         StateContainer.of(context).wallet.address,
-        IdenaKeys.seedToPrivate(await StateContainer.of(context).getSeed(), StateContainer.of(context).selectedAccount.index),
+        AppKeys.seedToPrivate(await StateContainer.of(context).getSeed(), StateContainer.of(context).selectedAccount.index),
         max: widget.maxSend
       );
       StateContainer.of(context).wallet.frontier = resp.hash;

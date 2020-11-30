@@ -8,35 +8,35 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:event_taxi/event_taxi.dart';
 import 'package:logger/logger.dart';
-import 'package:my_idena_wallet/network/model/response/address_txs_response.dart';
-import 'package:my_idena_wallet/ui/popup_button.dart';
-import 'package:my_idena_wallet/appstate_container.dart';
-import 'package:my_idena_wallet/dimens.dart';
-import 'package:my_idena_wallet/localization.dart';
-import 'package:my_idena_wallet/service_locator.dart';
-import 'package:my_idena_wallet/model/address.dart';
-import 'package:my_idena_wallet/model/list_model.dart';
-import 'package:my_idena_wallet/model/db/contact.dart';
-import 'package:my_idena_wallet/model/db/appdb.dart';
-import 'package:my_idena_wallet/network/model/block_types.dart';
-import 'package:my_idena_wallet/styles.dart';
-import 'package:my_idena_wallet/app_icons.dart';
-import 'package:my_idena_wallet/ui/contacts/add_contact.dart';
-import 'package:my_idena_wallet/ui/send/send_sheet.dart';
-import 'package:my_idena_wallet/ui/send/send_confirm_sheet.dart';
-import 'package:my_idena_wallet/ui/receive/receive_sheet.dart';
-import 'package:my_idena_wallet/ui/settings/settings_drawer.dart';
-import 'package:my_idena_wallet/ui/widgets/buttons.dart';
-import 'package:my_idena_wallet/ui/widgets/sheet_util.dart';
-import 'package:my_idena_wallet/ui/widgets/list_slidable.dart';
-import 'package:my_idena_wallet/ui/util/routes.dart';
-import 'package:my_idena_wallet/ui/widgets/reactive_refresh.dart';
-import 'package:my_idena_wallet/ui/util/ui_util.dart';
-import 'package:my_idena_wallet/util/sharedprefsutil.dart';
-import 'package:my_idena_wallet/util/hapticutil.dart';
-import 'package:my_idena_wallet/util/caseconverter.dart';
+import 'package:my_bismuth_wallet/network/model/response/address_txs_response.dart';
+import 'package:my_bismuth_wallet/ui/popup_button.dart';
+import 'package:my_bismuth_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/dimens.dart';
+import 'package:my_bismuth_wallet/localization.dart';
+import 'package:my_bismuth_wallet/service_locator.dart';
+import 'package:my_bismuth_wallet/model/address.dart';
+import 'package:my_bismuth_wallet/model/list_model.dart';
+import 'package:my_bismuth_wallet/model/db/contact.dart';
+import 'package:my_bismuth_wallet/model/db/appdb.dart';
+import 'package:my_bismuth_wallet/network/model/block_types.dart';
+import 'package:my_bismuth_wallet/styles.dart';
+import 'package:my_bismuth_wallet/app_icons.dart';
+import 'package:my_bismuth_wallet/ui/contacts/add_contact.dart';
+import 'package:my_bismuth_wallet/ui/send/send_sheet.dart';
+import 'package:my_bismuth_wallet/ui/send/send_confirm_sheet.dart';
+import 'package:my_bismuth_wallet/ui/receive/receive_sheet.dart';
+import 'package:my_bismuth_wallet/ui/settings/settings_drawer.dart';
+import 'package:my_bismuth_wallet/ui/widgets/buttons.dart';
+import 'package:my_bismuth_wallet/ui/widgets/sheet_util.dart';
+import 'package:my_bismuth_wallet/ui/widgets/list_slidable.dart';
+import 'package:my_bismuth_wallet/ui/util/routes.dart';
+import 'package:my_bismuth_wallet/ui/widgets/reactive_refresh.dart';
+import 'package:my_bismuth_wallet/ui/util/ui_util.dart';
+import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
+import 'package:my_bismuth_wallet/util/hapticutil.dart';
+import 'package:my_bismuth_wallet/util/caseconverter.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:my_idena_wallet/bus/events.dart';
+import 'package:my_bismuth_wallet/bus/events.dart';
 
 class AppHomePage extends StatefulWidget {
   PriceConversion priceConversion;
@@ -874,7 +874,7 @@ class _AppHomePageState extends State<AppHomePage>
                                               context),
                                     ),
                                     TextSpan(
-                                      text: " iDNA",
+                                      text: " BIS",
                                       style: AppStyles.textStyleTransactionUnit(
                                           context),
                                     ),
@@ -969,7 +969,7 @@ class _AppHomePageState extends State<AppHomePage>
                                       context),
                                 ),
                                 TextSpan(
-                                  text: " iDNA",
+                                  text: " BIS",
                                   style: AppStyles.textStyleTransactionUnit(
                                       context),
                                 ),
@@ -1006,14 +1006,14 @@ class _AppHomePageState extends State<AppHomePage>
     } else {
       workingStr = AppLocalization.of(context).newAccountIntro;
     }
-    if (!workingStr.contains("iDNA")) {
+    if (!workingStr.contains("BIS")) {
       return TextSpan(
         text: workingStr,
         style: AppStyles.textStyleTransactionWelcome(context),
       );
     }
     // Colorize cryptocurrency
-    List<String> splitStr = workingStr.split("iDNA");
+    List<String> splitStr = workingStr.split("BIS");
     if (splitStr.length != 2) {
       return TextSpan(
         text: workingStr,
@@ -1028,7 +1028,7 @@ class _AppHomePageState extends State<AppHomePage>
           style: AppStyles.textStyleTransactionWelcome(context),
         ),
         TextSpan(
-          text: "iDNA",
+          text: "BIS",
           style: AppStyles.textStyleTransactionWelcomePrimary(context),
         ),
         TextSpan(
@@ -1566,7 +1566,7 @@ class _AppHomePageState extends State<AppHomePage>
                                     text: StateContainer.of(context)
                                             .wallet
                                             .getAccountBalanceDisplay() +
-                                        " iDNA",
+                                        " BIS",
                                     style: _priceConversion ==
                                             PriceConversion.BTC
                                         ? AppStyles.textStyleCurrency(context)

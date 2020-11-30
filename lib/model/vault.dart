@@ -1,18 +1,18 @@
 import 'package:flutter/services.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:my_idena_wallet/util/random_util.dart';
+import 'package:my_bismuth_wallet/util/random_util.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:my_idena_wallet/service_locator.dart';
-import 'package:my_idena_wallet/util/encrypt.dart';
-import 'package:my_idena_wallet/util/sharedprefsutil.dart';
+import 'package:my_bismuth_wallet/service_locator.dart';
+import 'package:my_bismuth_wallet/util/encrypt.dart';
+import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
 
 // Singleton for keystore access methods in android/iOS
 class Vault {
-  static const String seedKey = 'fidena_seed';
-  static const String encryptionKey = 'fidena_secret_phrase';
-  static const String pinKey = 'fidena_pin';
+  static const String seedKey = 'fbismuth_seed';
+  static const String encryptionKey = 'fbismuth_secret_phrase';
+  static const String pinKey = 'fbismuth_pin';
   static const String sessionKey = 'fencsess_key';
   final FlutterSecureStorage secureStorage = new FlutterSecureStorage();
 

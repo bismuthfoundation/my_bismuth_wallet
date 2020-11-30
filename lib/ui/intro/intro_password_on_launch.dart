@@ -1,18 +1,18 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:my_idena_wallet/appstate_container.dart';
-import 'package:my_idena_wallet/dimens.dart';
-import 'package:my_idena_wallet/model/db/appdb.dart';
-import 'package:my_idena_wallet/styles.dart';
-import 'package:my_idena_wallet/localization.dart';
-import 'package:my_idena_wallet/app_icons.dart';
-import 'package:my_idena_wallet/service_locator.dart';
-import 'package:my_idena_wallet/ui/widgets/buttons.dart';
-import 'package:my_idena_wallet/ui/widgets/security.dart';
-import 'package:my_idena_wallet/util/app_ffi/apputil.dart';
-import 'package:my_idena_wallet/model/vault.dart';
-import 'package:my_idena_wallet/util/app_ffi/keys/seeds.dart';
-import 'package:my_idena_wallet/util/sharedprefsutil.dart';
+import 'package:my_bismuth_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/dimens.dart';
+import 'package:my_bismuth_wallet/model/db/appdb.dart';
+import 'package:my_bismuth_wallet/styles.dart';
+import 'package:my_bismuth_wallet/localization.dart';
+import 'package:my_bismuth_wallet/app_icons.dart';
+import 'package:my_bismuth_wallet/service_locator.dart';
+import 'package:my_bismuth_wallet/ui/widgets/buttons.dart';
+import 'package:my_bismuth_wallet/ui/widgets/security.dart';
+import 'package:my_bismuth_wallet/util/app_ffi/apputil.dart';
+import 'package:my_bismuth_wallet/model/vault.dart';
+import 'package:my_bismuth_wallet/util/app_ffi/keys/seeds.dart';
+import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
 
 class IntroPasswordOnLaunch extends StatefulWidget {
   final String seed;
@@ -123,7 +123,7 @@ class _IntroPasswordOnLaunchState extends State<IntroPasswordOnLaunch> {
                         if (widget.seed != null) {
                             await sl.get<Vault>().setSeed(widget.seed);
                             await sl.get<DBHelper>().dropAccounts();
-                            await IdenaUtil().loginAccount(widget.seed, context);
+                            await AppUtil().loginAccount(widget.seed, context);
                             StateContainer.of(context).requestUpdate();
                             String pin = await Navigator.of(context).push(
                                 MaterialPageRoute(builder:
@@ -139,7 +139,7 @@ class _IntroPasswordOnLaunchState extends State<IntroPasswordOnLaunch> {
                           sl.get<Vault>().setSeed(AppSeeds.generateSeed()).then((result) {
                             // Update wallet
                             StateContainer.of(context).getSeed().then((seed) {
-                              IdenaUtil().loginAccount(seed, context).then((_) {
+                              AppUtil().loginAccount(seed, context).then((_) {
                                 StateContainer.of(context).requestUpdate();
                                 Navigator.of(context)
                                     .pushNamed('/intro_backup_safety');

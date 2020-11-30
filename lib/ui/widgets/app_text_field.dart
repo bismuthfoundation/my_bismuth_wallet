@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:my_idena_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/appstate_container.dart';
 
 /// TextField button
 class TextFieldButton extends StatelessWidget {

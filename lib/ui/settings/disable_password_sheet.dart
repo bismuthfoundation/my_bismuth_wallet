@@ -3,19 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hex/hex.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
-import 'package:my_idena_wallet/appstate_container.dart';
-import 'package:my_idena_wallet/dimens.dart';
-import 'package:my_idena_wallet/localization.dart';
-import 'package:my_idena_wallet/model/vault.dart';
-import 'package:my_idena_wallet/service_locator.dart';
-import 'package:my_idena_wallet/styles.dart';
-import 'package:my_idena_wallet/ui/util/ui_util.dart';
-import 'package:my_idena_wallet/ui/widgets/app_text_field.dart';
-import 'package:my_idena_wallet/ui/widgets/buttons.dart';
-import 'package:my_idena_wallet/ui/widgets/tap_outside_unfocus.dart';
-import 'package:my_idena_wallet/util/caseconverter.dart';
-import 'package:my_idena_wallet/util/app_ffi/encrypt/crypter.dart';
-import 'package:my_idena_wallet/util/app_ffi/keys/seeds.dart';
+import 'package:my_bismuth_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/dimens.dart';
+import 'package:my_bismuth_wallet/localization.dart';
+import 'package:my_bismuth_wallet/model/vault.dart';
+import 'package:my_bismuth_wallet/service_locator.dart';
+import 'package:my_bismuth_wallet/styles.dart';
+import 'package:my_bismuth_wallet/ui/util/ui_util.dart';
+import 'package:my_bismuth_wallet/ui/widgets/app_text_field.dart';
+import 'package:my_bismuth_wallet/ui/widgets/buttons.dart';
+import 'package:my_bismuth_wallet/ui/widgets/tap_outside_unfocus.dart';
+import 'package:my_bismuth_wallet/util/caseconverter.dart';
+import 'package:my_bismuth_wallet/util/app_ffi/encrypt/crypter.dart';
+import 'package:my_bismuth_wallet/util/app_ffi/keys/seeds.dart';
 
 class DisablePasswordSheet extends StatefulWidget {
   _DisablePasswordSheetState createState() => _DisablePasswordSheetState();
@@ -192,7 +192,7 @@ class _DisablePasswordSheetState extends State<DisablePasswordSheet> {
     } else {
       try {
         String decryptedSeed = HEX.encode(
-            IdenaCrypt.decrypt(encryptedSeed, passwordController.text));
+            AppCrypt.decrypt(encryptedSeed, passwordController.text));
         throwIf(!AppSeeds.isValidSeed(decryptedSeed), FormatException());
         await sl.get<Vault>().setSeed(decryptedSeed);
         StateContainer.of(context).resetEncryptedSecret();
