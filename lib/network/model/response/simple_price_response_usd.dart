@@ -10,28 +10,28 @@ String simplePriceUsdResponseToJson(SimplePriceUsdResponse data) => json.encode(
 
 class SimplePriceUsdResponse {
     SimplePriceUsdResponse({
-        this.idena,
+        this.bismuth,
     });
 
-    Idena idena;
+    Bismuth bismuth;
 
     factory SimplePriceUsdResponse.fromJson(Map<String, dynamic> json) => SimplePriceUsdResponse(
-        idena: Idena.fromJson(json["idena"]),
+        bismuth: Bismuth.fromJson(json["bismuth"]),
     );
 
     Map<String, dynamic> toJson() => {
-        "idena": idena.toJson(),
+        "bismuth": bismuth.toJson(),
     };
 }
 
-class Idena {
-    Idena({
+class Bismuth {
+    Bismuth({
         this.usd,
     });
 
     double usd;
 
-    factory Idena.fromJson(Map<String, dynamic> json) => Idena(
+    factory Bismuth.fromJson(Map<String, dynamic> json) => Bismuth(
         usd: json["usd"].toDouble(),
     );
 

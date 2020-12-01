@@ -7,7 +7,7 @@ import 'package:my_bismuth_wallet/bus/events.dart';
 import 'package:my_bismuth_wallet/localization.dart';
 import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:my_bismuth_wallet/dimens.dart';
-import 'package:my_bismuth_wallet/network/model/response/address_response.dart';
+import 'package:my_bismuth_wallet/network/model/response/balance_get_response.dart';
 import 'package:my_bismuth_wallet/service/app_service.dart';
 import 'package:my_bismuth_wallet/service_locator.dart';
 import 'package:my_bismuth_wallet/model/db/appdb.dart';
@@ -77,14 +77,13 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
   }
 
   Future<void> _handleAddressResponse(
-      List<AddressResponse> addressResponseList) async {
+      List<BalanceGetResponse> balanceGetResponseList) async {
     // Handle balances event
     widget.accounts.forEach((account) {
-      addressResponseList.forEach((address) {
-        String combinedBalance = (BigInt.tryParse(address.result.balance) +
-                BigInt.tryParse(address.result.stake))
+      balanceGetResponseList.forEach((balanceGetResponse) {
+        String combinedBalance = (BigInt.tryParse(balanceGetResponse.balance))
             .toString();
-        if (account.address == address.result.address && combinedBalance != account.balance) {
+        if (account.address == balanceGetResponse.address && combinedBalance != account.balance) {
           sl.get<DBHelper>().updateAccountBalance(account, combinedBalance);
           setState(() {
             account.balance = combinedBalance;
@@ -135,15 +134,15 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
   Future<void> _requestBalances(
       BuildContext context, List<Account> accounts) async {
     List<String> addresses = List();
-    List<AddressResponse> addressResponseList = new List();
+    List<BalanceGetResponse> balanceGetResponseList = new List();
     accounts.forEach((account) async {
       if (account.address != null) {
         addresses.add(account.address);
-        addressResponseList.add(await AppService().getAddressResponse(account.address));
+        balanceGetResponseList.add(await AppService().getBalanceGetResponse(account.address));
       }
     });
     try {
-      await _handleAddressResponse(addressResponseList);
+      await _handleAddressResponse(balanceGetResponseList);
     } catch (e) {
       sl.get<Logger>().e("Error", e);
     }

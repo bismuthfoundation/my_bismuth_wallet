@@ -10,28 +10,28 @@ String simplePriceBtcResponseToJson(SimplePriceBtcResponse data) => json.encode(
 
 class SimplePriceBtcResponse {
     SimplePriceBtcResponse({
-        this.idena,
+        this.bismuth,
     });
 
-    Idena idena;
+    Bismuth bismuth;
 
     factory SimplePriceBtcResponse.fromJson(Map<String, dynamic> json) => SimplePriceBtcResponse(
-        idena: Idena.fromJson(json["idena"]),
+        bismuth: Bismuth.fromJson(json["bismuth"]),
     );
 
     Map<String, dynamic> toJson() => {
-        "idena": idena.toJson(),
+        "bismuth": bismuth.toJson(),
     };
 }
 
-class Idena {
-    Idena({
+class Bismuth {
+    Bismuth({
         this.btc,
     });
 
     double btc;
 
-    factory Idena.fromJson(Map<String, dynamic> json) => Idena(
+    factory Bismuth.fromJson(Map<String, dynamic> json) => Bismuth(
         btc: json["btc"].toDouble(),
     );
 

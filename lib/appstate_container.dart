@@ -6,8 +6,8 @@ import 'package:my_bismuth_wallet/model/wallet.dart';
 import 'package:event_taxi/event_taxi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:my_bismuth_wallet/network/model/response/address_response.dart';
 import 'package:my_bismuth_wallet/network/model/response/address_txs_response.dart';
+import 'package:my_bismuth_wallet/network/model/response/balance_get_response.dart';
 import 'package:my_bismuth_wallet/service/app_service.dart';
 import 'package:my_bismuth_wallet/util/app_ffi/encrypt/crypter.dart';
 import 'package:uni_links/uni_links.dart';
@@ -221,7 +221,7 @@ class StateContainerState extends State<StateContainer> {
   Future<void> updateWallet({Account account}) async {
     String address;
     address = await AppUtil().seedToAddress(await getSeed(), account.index);
-    AppService().getAddressResponse(address.toString());
+    AppService().getBalanceGetResponse(address.toString());
     AppService().getSimplePrice(curCurrency.getIso4217Code());
     account.address = address;
     selectedAccount = account;
@@ -285,7 +285,7 @@ class StateContainerState extends State<StateContainer> {
   }
 
   /// Handle address response
-  void handleAddressResponse(AddressResponse response) {
+  void handleAddressResponse(BalanceGetResponse response) {
     // Set currency locale here for the UI to access
     sl.get<SharedPrefsUtil>().getCurrency(deviceLocale).then((currency) {
       setState(() {
@@ -295,11 +295,11 @@ class StateContainerState extends State<StateContainer> {
     });
     setState(() {
       wallet.loading = false;
-      if (response.result == null) {
+      if (response == null) {
         wallet.accountBalance = 0;
       } else {
         wallet.accountBalance =
-            double.tryParse(response.result.balance + response.result.stake);
+            double.tryParse(response.balance);
       }
       // TODO : à renseigner
       wallet.localCurrencyPrice = "0";
@@ -314,22 +314,21 @@ class StateContainerState extends State<StateContainer> {
     List<Account> accounts =
         await sl.get<DBHelper>().getAccounts(await getSeed());
     List<String> addressToRequest = List();
-    List<AddressResponse> addressResponseList = new List();
+    List<BalanceGetResponse> balanceGetResponseList = new List();
     accounts.forEach((account) async {
       if (account.address != null) {
         addressToRequest.add(account.address);
-        addressResponseList
-            .add(await AppService().getAddressResponse(account.address));
+        balanceGetResponseList
+            .add(await AppService().getBalanceGetResponse(account.address));
       }
     });
 
     sl.get<DBHelper>().getAccounts(await getSeed()).then((accounts) {
       accounts.forEach((account) {
-        addressResponseList.forEach((address) {
-          String combinedBalance = (BigInt.tryParse(address.result.balance) +
-                  BigInt.tryParse(address.result.stake))
+        balanceGetResponseList.forEach((balanceGetResponse) {
+          String combinedBalance = (BigInt.tryParse(balanceGetResponse.balance))
               .toString();
-          if (account.address == address.result.address &&
+          if (account.address == balanceGetResponse.address &&
               combinedBalance != account.balance) {
             sl.get<DBHelper>().updateAccountBalance(account, combinedBalance);
           }
