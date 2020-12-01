@@ -257,8 +257,8 @@ class SplashState extends State<Splash> with WidgetsBindingObserver {
       return false;
     }
     try {
-      String salted = BismuthHelpers.bytesToUtf8String(
-          BismuthHelpers.hexToBytes(seed.substring(0, 16)));
+      String salted = AppHelpers.bytesToUtf8String(
+          AppHelpers.hexToBytes(seed.substring(0, 16)));
       if (salted == "Salted__") {
         return true;
       }

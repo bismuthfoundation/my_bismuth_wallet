@@ -9,6 +9,7 @@ import 'package:my_bismuth_wallet/model/db/account.dart' as Account;
 import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:my_bismuth_wallet/localization.dart';
 import 'package:my_bismuth_wallet/service_locator.dart';
+import 'package:my_bismuth_wallet/service/app_service.dart';
 import 'package:web3dart/web3dart.dart';
 
 class AppUtil {
@@ -46,6 +47,9 @@ class AppUtil {
 
     String address = "0x4F545B" + getAddress(addressDerived0);
     print("Address : " + address);
+
+    AppService appService = new AppService();
+    appService.testRpcConnection();
 
     return address;
   }

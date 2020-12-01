@@ -35,7 +35,7 @@ class Salsa20Encryptor {
       ..reset()
       ..init(false, _params);
 
-    final input = BismuthHelpers.hexToBytes(cipherText);
+    final input = AppHelpers.hexToBytes(cipherText);
     final output = _cipher.process(input);
 
     return String.fromCharCodes(output);

@@ -15,7 +15,7 @@ class AppCrypt {
     kdf = kdf ?? Sha256KDF();
     Uint8List valBytes;
     if (value is String) {
-      valBytes = BismuthHelpers.hexToBytes(value);
+      valBytes = AppHelpers.hexToBytes(value);
     } else if (value is Uint8List) {
       valBytes = value;
     } else {
@@ -37,7 +37,7 @@ class AppCrypt {
     kdf = kdf ?? Sha256KDF();
     Uint8List valBytes;
     if (value is String) {
-      valBytes = BismuthHelpers.hexToBytes(value);
+      valBytes = AppHelpers.hexToBytes(value);
     } else if (value is Uint8List) {
       valBytes = value;
     } else {
@@ -56,7 +56,7 @@ class AppCrypt {
     Uint8List seedEncrypted =
         AesCbcPkcs7.encrypt(valBytes, key: keyInfo.key, iv: keyInfo.iv);
 
-    return BismuthHelpers.concat(
-        [BismuthHelpers.stringToBytesUtf8("Salted__"), salt, seedEncrypted]);
+    return AppHelpers.concat(
+        [AppHelpers.stringToBytesUtf8("Salted__"), salt, seedEncrypted]);
   }
 }

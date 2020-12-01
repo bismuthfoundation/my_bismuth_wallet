@@ -9,7 +9,7 @@ class AppSeeds {
       return false;
     }
     // Ensure seed only contains hex characters, 0-9;A-F
-    return BismuthHelpers.isHexString(seed);
+    return AppHelpers.isHexString(seed);
   }
 
   static String generateSeed() {
