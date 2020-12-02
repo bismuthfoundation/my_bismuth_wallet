@@ -52,8 +52,7 @@ import 'package:my_bismuth_wallet/network/model/response/simple_price_response_z
 class AppService {
   var logger = Logger();
 
-  String getLengthBuffer(String message)
-  {
+  String getLengthBuffer(String message) {
     return message == null ? null : message.length.toString().padLeft(10, '0');
   }
 
@@ -124,22 +123,30 @@ class AppService {
 
     BalanceGetResponse balanceGetResponse = new BalanceGetResponse();
     try {
-      Socket.connect("46.101.186.35", 8150).then((Socket socket) {
+      ServerWalletLegacyResponse serverWalletLegacyResponse =
+          await getBestServerWalletLegacyResponse();
+      print("serverWalletLegacyResponse.ip : " + serverWalletLegacyResponse.ip);
+      print("serverWalletLegacyResponse.port : " +
+          serverWalletLegacyResponse.port.toString());
+      Socket.connect(
+              serverWalletLegacyResponse.ip, serverWalletLegacyResponse.port)
+          .then((Socket socket) {
         print('Connected to: '
             '${socket.remoteAddress.address}:${socket.remotePort}');
         //Establish the onData, and onDone callbacks
         socket.listen((data) {
-          if(data != null)
-          {
+          if (data != null) {
             String message = new String.fromCharCodes(data).trim();
-            message = message.substring(10, 10 + int.tryParse(message.substring(0, 10)));
+            message = message.substring(
+                10, 10 + int.tryParse(message.substring(0, 10)));
             balanceGetResponse = balanceGetResponseFromJson(message);
             balanceGetResponse.address = address;
             print(message);
-            EventTaxiImpl.singleton().fire(SubscribeEvent(response: balanceGetResponse));
+            EventTaxiImpl.singleton()
+                .fire(SubscribeEvent(response: balanceGetResponse));
+            socket.close();
             return balanceGetResponse;
           }
-
         }, onDone: () {
           print("Done");
           socket.destroy();
@@ -149,7 +156,8 @@ class AppService {
         String method = '"balancegetjson"';
         String param = '"' + address + '"';
 
-        socket.write(getLengthBuffer(method) + method + getLengthBuffer(param) + param);
+        socket.write(
+            getLengthBuffer(method) + method + getLengthBuffer(param) + param);
       });
     } catch (e) {
       print("pb socket" + e.toString());
@@ -415,15 +423,14 @@ class AppService {
                 simplePriceZarResponseFromJson(reply);
             simplePriceResponse.localCurrencyPrice =
                 simplePriceLocalResponse.bismuth.zar;
-            break; 
+            break;
           case "USD":
           default:
-             SimplePriceUsdResponse simplePriceLocalResponse =
+            SimplePriceUsdResponse simplePriceLocalResponse =
                 simplePriceUsdResponseFromJson(reply);
             simplePriceResponse.localCurrencyPrice =
                 simplePriceLocalResponse.bismuth.usd;
             break;
-
         }
       }
       // Post to callbacks
