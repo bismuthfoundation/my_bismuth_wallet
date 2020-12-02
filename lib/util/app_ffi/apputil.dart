@@ -36,46 +36,47 @@ class AppUtil {
     final bip39Seed = bip39.mnemonicToSeed(mnemonic);
     print("BIP 39 Seed : " + HEX.encode(bip39Seed));
 
-    final root = bip32.BIP32.fromSeed(bip39Seed);
-    print("BIP 32 Root Key : " + root.toBase58());
-    bip32.BIP32 node = bip32.BIP32.fromBase58(root.toBase58());
-    print("BIP 32 node (private Key) : " + HEX.encode(node.privateKey));
-    print("BIP 32 node (public Key) : " + HEX.encode(node.publicKey));
+    final rootKey = bip32.BIP32.fromSeed(bip39Seed);
+    print("BIP 32 Root Key : " + rootKey.toBase58());
+    bip32.BIP32 node = bip32.BIP32.fromBase58(rootKey.toBase58());
+    //print("BIP 32 node (private Key) : " + HEX.encode(node.privateKey));
+    //print("BIP 32 node (public Key) : " + HEX.encode(node.publicKey));
     bip32.BIP32 child = node.derivePath("m/44'/209'/0'/0");
-    print("BIP 32 Extended private Key : " + child.toBase58());
-    bip32.BIP32 childNeutered = child.neutered();
-    print("BIP 32 Extended public Key : " + childNeutered.toBase58());
+    //print("BIP 32 Extended private Key : " + child.toBase58());
+    //bip32.BIP32 childNeutered = child.neutered();
+    //print("BIP 32 Extended public Key : " + childNeutered.toBase58());
 
-    print("BIP 32 child (private Key) : " + HEX.encode(child.privateKey));
-    print("BIP 32 child (public Key) : " + HEX.encode(child.publicKey));
+    //print("BIP 32 child (private Key) : " + HEX.encode(child.privateKey));
+    //print("BIP 32 child (public Key) : " + HEX.encode(child.publicKey));
 
     bip32.BIP32 addressDerived0 = child.derive(0);
-    print("Public Key Derived Address (account 0) : " + HEX.encode(addressDerived0.publicKey));
-    print("Private Key Derived Address (account 0) : " + HEX.encode(addressDerived0.privateKey));
-    print("Private Key Wif : " + addressDerived0.toWIF());
+    String publicKey = HEX.encode(addressDerived0.publicKey);
+    String privateKey = HEX.encode(addressDerived0.privateKey);
+    print("Public Key Derived Address (account 0) : " + publicKey);
+    print("Private Key Derived Address (account 0) : " + privateKey);
+    //print("Private Key Wif : " + addressDerived0.toWIF());
 
-    var bytes1 = utf8.encode(HEX.encode(addressDerived0.publicKey));  
-    var sha256 = SHA256();
-    var hashSha256 = sha256.update(bytes1).digest();
-    print("Public Key (SHA256) : " + HEX.encode(hashSha256));
-    var ripemd160 = RIPEMD160();
-    var hashRipemd160 = ripemd160.update(hashSha256).digest();
-    print("Public Key (RIPEMD160) : " + HEX.encode(hashRipemd160));
-    var hashRipemd160WithPrefix = ("0x4f545b" + HEX.encode(hashRipemd160));
-    /*Uint8List addressUint8List;
-    addressUint8List.add(AppHelpers.hexToBytes("4f"));
-    addressUint8List.add(0x54);
-    addressUint8List.add(0x5b);
-    addressUint8List.addAll(hashRipemd160);
-    print("Address : " + HEX.encode(addressUint8List));*/
+    //var bytesPublicKey = utf8.encode(publicKey);  
+    //var sha256 = SHA256();
+    //var hashSha256 = sha256.update(bytesPublicKey).digest();
+    //print("Public Key (SHA256) : " + HEX.encode(hashSha256));
+    //var ripemd160 = RIPEMD160();
+    //var hashRipemd160 = ripemd160.update(hashSha256).digest();
+    //print("Public Key (RIPEMD160) : " + HEX.encode(hashRipemd160));
 
-    String address = bs58check.encode(hashRipemd160);
-    print("Address (BS58Checksum) : " + address);
+    //print("AdresseDerived0 identifier : " + HEX.encode(addressDerived0.identifier));
+  
+    Uint8List buffer = new Uint8List(addressDerived0.identifier.length + 3);
+    ByteData bytes = buffer.buffer.asByteData();
+    bytes.setUint8(0, 0x4f);
+    bytes.setUint8(1, 0x54);
+    bytes.setUint8(2, 0x5b);
+    buffer.setRange(3, addressDerived0.identifier.length + 3, addressDerived0.identifier);    
+    String address = bs58check.encode(buffer);
 
-    AppService appService = new AppService();
-    appService.testRpcConnection();
+    print("Address bs58check : " + address);
 
-    return HEX.encode(hashRipemd160);
+    return address;
   }
 
   Future<void> loginAccount(String seed, BuildContext context) async {
