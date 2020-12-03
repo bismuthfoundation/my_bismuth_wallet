@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:event_taxi/event_taxi.dart';
-import 'package:hex/hex.dart';
 import 'package:logger/logger.dart';
 import 'package:my_bismuth_wallet/bus/events.dart';
 import 'package:my_bismuth_wallet/bus/subscribe_event.dart';
+import 'package:my_bismuth_wallet/network/model/response/addlistlim_response.dart';
 import 'package:my_bismuth_wallet/network/model/response/address_txs_response.dart';
 import 'package:my_bismuth_wallet/network/model/response/balance_get_response.dart';
 import 'package:my_bismuth_wallet/network/model/response/servers_wallet_legacy.dart';
@@ -97,30 +97,7 @@ class AppService {
     return serverWalletLegacyResponse;
   }
 
-  void testRpcConnection() {
-    try {
-      Socket.connect("46.101.186.35", 8150).then((Socket socket) {
-        print('Connected to: '
-            '${socket.remoteAddress.address}:${socket.remotePort}');
-        //Establish the onData, and onDone callbacks
-        socket.listen((data) {
-          print(new String.fromCharCodes(data).trim());
-        }, onDone: () {
-          print("Done");
-          socket.destroy();
-        });
-
-        //Send the request
-        socket.write('0000000012"wstatusget"\n');
-      });
-    } catch (e) {
-      print("pb socket" + e.toString());
-    } finally {}
-  }
-
   Future<BalanceGetResponse> getBalanceGetResponse(String address) async {
-    address = "0634b5046b1e2b6a69006280fbe91951d5bb5604c6f469baa2bcd840";
-
     BalanceGetResponse balanceGetResponse = new BalanceGetResponse();
     try {
       ServerWalletLegacyResponse serverWalletLegacyResponse =
@@ -167,26 +144,61 @@ class AppService {
   Future<AddressTxsResponse> getAddressTxsResponse(
       String address, int limit) async {
     AddressTxsResponse addressTxsResponse = new AddressTxsResponse();
-    addressTxsResponse.result = new List<AddressTxsResponseResult>();
-    /*HttpClient httpClient = new HttpClient();
-    try {
-      HttpClientRequest request = await httpClient.getUrl(Uri.parse(
-          "https://api.idena.io/api/Address/" +
-              address +
-              "/Txs?limit=" +
-              limit.toString()));
-      request.headers.set('content-type', 'application/json');
-      HttpClientResponse response = await request.close();
-      if (response.statusCode == 200) {
-        String reply = await response.transform(utf8.decoder).join();
-        addressTxsResponse = addressTxsResponseFromJson(reply);
-      }
-    } catch (e) {
-    } finally {
-      httpClient.close();
-    }*/
 
-    return addressTxsResponse;
+    addressTxsResponse.result = new List<AddressTxsResponseResult>();
+    Completer<AddressTxsResponse> _completer =
+        new Completer<AddressTxsResponse>();
+    try {
+      ServerWalletLegacyResponse serverWalletLegacyResponse =
+          await getBestServerWalletLegacyResponse();
+      print("serverWalletLegacyResponse.ip : " + serverWalletLegacyResponse.ip);
+      print("serverWalletLegacyResponse.port : " +
+          serverWalletLegacyResponse.port.toString());
+
+      Socket _socket = await Socket.connect(
+          serverWalletLegacyResponse.ip, serverWalletLegacyResponse.port);
+
+      print('Connected to: '
+          '${_socket.remoteAddress.address}:${_socket.remotePort}');
+      //Establish the onData, and onDone callbacks
+      _socket.listen((data) {
+        if (data != null) {
+          String message = new String.fromCharCodes(data).trim();
+
+          message = message.substring(
+              10, 10 + int.tryParse(message.substring(0, 10)));
+          print(message);
+          List txs = addlistlimResponseFromJson(message);
+          for (int i = 0; i < txs.length; i++) {
+            AddressTxsResponseResult addressTxResponse =
+                new AddressTxsResponseResult();
+            addressTxResponse.populate(txs[i], address);
+            addressTxsResponse.result.add(addressTxResponse);
+          }
+          _completer.complete(addressTxsResponse);
+        }
+      }, onError: ((error, StackTrace trace) {
+        print("Error");
+        _completer.complete(addressTxsResponse);
+      }), onDone: () {
+        print("Done");
+        _socket.destroy();
+      }, cancelOnError: false);
+
+      //Send the request
+      String method = '"addlistlim"';
+      String param1 = '"' + address + '"';
+      String param2 = '"' + limit.toString() + '"';
+      _socket.write(getLengthBuffer(method) +
+          method +
+          getLengthBuffer(param1) +
+          param1 +
+          getLengthBuffer(param2) +
+          param2);
+    } catch (e) {
+      print("pb socket" + e.toString());
+    } finally {}
+    return _completer.future;
   }
 
   Future<SimplePriceResponse> getSimplePrice(String currency) async {

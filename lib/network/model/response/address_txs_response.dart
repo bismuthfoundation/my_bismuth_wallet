@@ -2,63 +2,50 @@
 //
 //     final addressTxsResponse = addressTxsResponseFromJson(jsonString);
 
-import 'dart:convert';
-
 import 'package:my_bismuth_wallet/model/address.dart';
+import 'package:my_bismuth_wallet/network/model/block_types.dart';
 import 'package:my_bismuth_wallet/util/numberutil.dart';
-
-AddressTxsResponse addressTxsResponseFromJson(String str) =>
-    AddressTxsResponse.fromJson(json.decode(str));
-
-String addressTxsResponseToJson(AddressTxsResponse data) =>
-    json.encode(data.toJson());
 
 class AddressTxsResponse {
   AddressTxsResponse({
     this.result,
-    this.continuationToken,
   });
 
   List<AddressTxsResponseResult> result;
-  String continuationToken;
-
-  factory AddressTxsResponse.fromJson(Map<String, dynamic> json) =>
-      AddressTxsResponse(
-        result: List<AddressTxsResponseResult>.from(
-            json["result"].map((x) => AddressTxsResponseResult.fromJson(x))),
-        continuationToken: json["continuationToken"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "result": List<dynamic>.from(result.map((x) => x.toJson())),
-        "continuationToken": continuationToken,
-      };
 }
 
 class AddressTxsResponseResult {
   AddressTxsResponseResult({
-    this.hash,
-    this.type,
+    this.blockHeight,
     this.timestamp,
     this.from,
+    this.recipient,
     this.amount,
-    this.tips,
-    this.maxFee,
+    this.signature,
+    this.publicKey,
+    this.blockHash,
     this.fee,
-    this.size,
-    this.data,
+    this.reward,
+    this.operation,
+    this.openfield,
+    this.type,
+    this.hash
   });
 
-  String hash;
-  String type;
+  int blockHeight;
   DateTime timestamp;
   String from;
+  String recipient;
   String amount;
-  String tips;
-  String maxFee;
-  String fee;
-  int size;
-  Data data;
+  String signature;
+  String publicKey;
+  String blockHash;
+  double fee;
+  int reward;
+  String operation;
+  String openfield;
+  String type;
+  String hash;
 
   String getShortString() {
     return new Address(this.from).getShortString();
@@ -68,57 +55,35 @@ class AddressTxsResponseResult {
     return new Address(this.from).getShorterString();
   }
 
-  /**
+  /*
    * Return amount formatted for use in the UI
    */
   String getFormattedAmount() {
-    return NumberUtil.getRawAsUsableString(amount);
+    return NumberUtil.getRawAsUsableString(amount.toString());
   }
 
-  factory AddressTxsResponseResult.fromJson(Map<String, dynamic> json) =>
-      AddressTxsResponseResult(
-        hash: json["hash"],
-        type: json["type"],
-        timestamp: DateTime.parse(json["timestamp"]),
-        from: json["from"],
-        amount: json["amount"],
-        tips: json["tips"],
-        maxFee: json["maxFee"],
-        fee: json["fee"],
-        size: json["size"],
-        data: json["data"] == null ? null : Data.fromJson(json["data"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "hash": hash,
-        "type": type,
-        "timestamp": timestamp.toIso8601String(),
-        "from": from,
-        "amount": amount,
-        "tips": tips,
-        "maxFee": maxFee,
-        "fee": fee,
-        "size": size,
-        "data": data == null ? null : data.toJson(),
-      };
-}
-
-class Data {
-  Data({
-    this.becomeOnline,
-    this.dataBecomeOnline,
-  });
-
-  bool becomeOnline;
-  bool dataBecomeOnline;
-
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-        becomeOnline: json["BecomeOnline"],
-        dataBecomeOnline: json["becomeOnline"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "BecomeOnline": becomeOnline,
-        "becomeOnline": dataBecomeOnline,
-      };
+  void populate(List txs, String address) {
+    blockHeight = txs[0];
+    // TODO: pourquoi double ?
+    
+   // timestamp = DateTime.fromMillisecondsSinceEpoch(int.parse(txs[1]) * 1000);
+    timestamp = DateTime.now();
+    from = txs[2];
+    recipient = txs[3];
+    amount = txs[4].toString();
+    signature = txs[5];
+    hash = signature.length > 56 ? signature.substring(0, 55) : signature;
+    publicKey = txs[6];
+    blockHash = txs[7];
+    fee = txs[8];
+    reward = txs[9];
+    operation = txs[10];
+    openfield = txs[11];
+    // TODO: a améliorer
+    if (recipient == address) {
+      type = BlockTypes.RECEIVE;
+    } else {
+      type = BlockTypes.SEND;
+    }
+  }
 }

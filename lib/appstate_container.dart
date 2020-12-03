@@ -298,8 +298,7 @@ class StateContainerState extends State<StateContainer> {
       if (response == null) {
         wallet.accountBalance = 0;
       } else {
-        wallet.accountBalance =
-            double.tryParse(response.balance);
+        wallet.accountBalance = double.tryParse(response.balance);
       }
       // TODO : à renseigner
       wallet.localCurrencyPrice = "0";
@@ -326,8 +325,8 @@ class StateContainerState extends State<StateContainer> {
     sl.get<DBHelper>().getAccounts(await getSeed()).then((accounts) {
       accounts.forEach((account) {
         balanceGetResponseList.forEach((balanceGetResponse) {
-          String combinedBalance = (BigInt.tryParse(balanceGetResponse.balance))
-              .toString();
+          String combinedBalance =
+              (BigInt.tryParse(balanceGetResponse.balance)).toString();
           if (account.address == balanceGetResponse.address &&
               combinedBalance != account.balance) {
             sl.get<DBHelper>().updateAccountBalance(account, combinedBalance);
@@ -356,14 +355,14 @@ class StateContainerState extends State<StateContainer> {
         if (addressTxsResponse != null && addressTxsResponse.result != null) {
           for (AddressTxsResponseResult item in addressTxsResponse.result) {
             // If current list doesn't contain this item, insert it and the rest of the items in list and exit loop
-            bool newItem = false;
-            for(int i=0; i < wallet.history.length; i++)
-            {
-              if(wallet.history[i].timestamp != item.timestamp 
-              || wallet.history[i].hash != item.hash)
-              {
-                newItem = true;
-                break;
+            bool newItem = true;
+            if (wallet.history.length > 0) {
+              for (int i = 0; i < wallet.history.length; i++) {
+                if (wallet.history[i].timestamp != item.timestamp ||
+                    wallet.history[i].hash != item.hash) {
+                  newItem = false;
+                  break;
+                }
               }
             }
 
