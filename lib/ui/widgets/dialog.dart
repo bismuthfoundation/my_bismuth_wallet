@@ -157,6 +157,7 @@ class AnimationLoadingOverlay extends ModalRoute<void> {
     switch (type) {
       case AnimationType.SEND:
         return Center(
+          // TODO: Remplacer par autre chose....
           child: FlareActor(
             "assets/send_animation.flr",
             animation: "main",

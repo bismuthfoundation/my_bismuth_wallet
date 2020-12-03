@@ -56,14 +56,14 @@ class SendTxRequest {
 
   String buildCommand()
   {
-    String command = '"' + tx.timestamp + '",';
+    String command = '["' + tx.timestamp + '",';
     command += '"' + tx.address + '", ';
     command += '"' + tx.recipient + '", ';
     command += '"' + tx.amount + '", ';
     command += '"' + signature + '", ';
     command += '"' + publicKey + '", ';
     command += '"' + tx.operation + '", ';
-    command += '"' + tx.openfield + '"';
+    command += '"' + tx.openfield + '"]';
     print("command : " + command);
     return command;
 
@@ -106,7 +106,7 @@ class Tx {
       };
 
   String buildBufferValue() {
-    return "('" +
+    String _buffer = "('" +
         timestamp +
         "', '" +
         address +
@@ -119,6 +119,8 @@ class Tx {
         "', '" +
         openfield +
         "')";
+        print("_buffer : " + _buffer);
+        return _buffer;
   }
 
 

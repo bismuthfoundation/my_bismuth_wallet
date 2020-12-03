@@ -460,14 +460,14 @@ class AppService {
   }
 
   Future<String> sendTx(String address, String amount, String destination,
-      String privateKey) async {
+      String publicKey) async {
     List<SendTxRequest> sendTxRequestList = new List<SendTxRequest>();
     SendTxRequest sendTxRequest = new SendTxRequest();
     Tx tx = new Tx();
     print("address : " + address);
     print("amount : " + amount);
     print("destination : " + destination);
-    print("privateKey : " + privateKey);
+    print("publicKey : " + publicKey);
 
     Completer<String> _completer = new Completer<String>();
     try {
@@ -502,26 +502,41 @@ class AppService {
       }, cancelOnError: false);
 
       //Send the request
-      tx.timestamp = DateTime.now().toUtc().microsecondsSinceEpoch.toString().substring(0, 10) + "." + DateTime.now().toUtc().microsecondsSinceEpoch.toString().substring(10, 12);
-      tx.address = address;
-      tx.recipient = destination;
-      tx.amount = double.tryParse(amount).toStringAsFixed(8);
+      /*tx.timestamp = DateTime.now()
+              .toUtc()
+              .microsecondsSinceEpoch
+              .toString()
+              .substring(0, 10) +
+          "." +
+          DateTime.now()
+              .toUtc()
+              .microsecondsSinceEpoch
+              .toString()
+              .substring(10, 12);*/
+      tx.timestamp = "1559472321.00";
+      //tx.address = address;
+      tx.address = "Bis1SAk19HCWpDAThwFiaP9xA6zWjzsga7Hog";
+      //tx.recipient = destination;
+      tx.recipient = "f6c0363ca1c5aa28cc584252e65a63998493ff0a5ec1bb16beda9bac";
+      //tx.amount = double.tryParse(amount).toStringAsFixed(8);
+      tx.amount = "0.63000000";
       tx.operation = "";
-      tx.openfield = "";
-     
+      tx.openfield = "fake_tx_info";
+
       sendTxRequest.id = 0;
       sendTxRequest.tx = tx;
       sendTxRequest.buffer = tx.buildBufferValue();
       sendTxRequest.buildSignature();
-      sendTxRequest.publicKey = "";
+      //sendTxRequest.publicKey = publicKey;
+      sendTxRequest.publicKey = "A0l0a6ARznKt6nWOCSFZYiuqpQCfrKcq1DFnktgot3lq";
       sendTxRequest.websocketCommand = "";
-  
+
       String method = '"mpinsert"';
-      String param = '[' + sendTxRequest.buildCommand() + ']';
-      _socket.write(getLengthBuffer(method) +
-          method +
-          getLengthBuffer(param) +
-          param);
+      String param = sendTxRequest.buildCommand();
+      String message =
+          getLengthBuffer(method) + method + getLengthBuffer(param) + param;
+      print(message);
+      _socket.write(message);
     } catch (e) {
       print("pb socket" + e.toString());
     } finally {}

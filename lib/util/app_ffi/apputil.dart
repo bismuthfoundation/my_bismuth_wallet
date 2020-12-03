@@ -13,12 +13,6 @@ import 'package:my_bismuth_wallet/model/db/account.dart' as Account;
 import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:my_bismuth_wallet/localization.dart';
 import 'package:my_bismuth_wallet/service_locator.dart';
-import 'package:my_bismuth_wallet/service/app_service.dart';
-import 'package:my_bismuth_wallet/util/app_ffi/crypto/sha.dart';
-import 'package:my_bismuth_wallet/util/helpers.dart';
-import 'package:pointycastle/digests/ripemd160.dart';
-import 'package:web3dart/web3dart.dart';
-import 'package:crypto/crypto.dart';
 import 'package:bs58check/bs58check.dart' as bs58check;
 
 class AppUtil {
@@ -79,6 +73,32 @@ class AppUtil {
     return address;
   }
 
+ Future<String> seedToPublicKey(String seed) async {
+    
+    String mnemonic = bip39.entropyToMnemonic(seed);
+    print("Mnemonic : " + mnemonic);
+    final bip39Seed = bip39.mnemonicToSeed(mnemonic);
+    print("BIP 39 Seed : " + HEX.encode(bip39Seed));
+
+    final rootKey = bip32.BIP32.fromSeed(bip39Seed);
+    print("BIP 32 Root Key : " + rootKey.toBase58());
+    bip32.BIP32 node = bip32.BIP32.fromBase58(rootKey.toBase58());
+    //print("BIP 32 node (private Key) : " + HEX.encode(node.privateKey));
+    //print("BIP 32 node (public Key) : " + HEX.encode(node.publicKey));
+    bip32.BIP32 child = node.derivePath("m/44'/209'/0'/0");
+    //print("BIP 32 Extended private Key : " + child.toBase58());
+    //bip32.BIP32 childNeutered = child.neutered();
+    //print("BIP 32 Extended public Key : " + childNeutered.toBase58());
+
+    //print("BIP 32 child (private Key) : " + HEX.encode(child.privateKey));
+    //print("BIP 32 child (public Key) : " + HEX.encode(child.publicKey));
+
+    bip32.BIP32 addressDerived0 = child.derive(0);
+    String publicKey = HEX.encode(addressDerived0.publicKey);
+    print("Public Key Derived Address (account 0) : " + publicKey);
+
+    return publicKey;
+  }
   Future<void> loginAccount(String seed, BuildContext context) async {
     Account.Account selectedAcct =
         await sl.get<DBHelper>().getSelectedAccount(seed);
