@@ -949,12 +949,8 @@ class AppLocalization {
     return 'https://scan.idena.io/identity/$account';
   }
 
-  String get eulaUrl {
-    return 'https://github.com/redDwarf03/my-idena';
-  }
-
   String get privacyUrl {
-    return 'https://github.com/redDwarf03/my-idena/blob/master/Privacy%20Policy.md';
+    return 'https://github.com/redDwarf03/my_bismuth_wallet/blob/master/Privacy%20Policy.md';
   }
 
   /// -- END NON-TRANSLATABLE ITEMS

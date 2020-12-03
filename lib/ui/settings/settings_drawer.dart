@@ -977,19 +977,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                                   AppLocalization.of(context).privacyPolicy,
                                   style: AppStyles.textStyleVersionUnderline(
                                       context))),
-                          Text(" | ",
-                              style: AppStyles.textStyleVersion(context)),
-                          GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (BuildContext context) {
-                                  return UIUtil.showWebview(context,
-                                      AppLocalization.of(context).eulaUrl);
-                                }));
-                              },
-                              child: Text("EULA",
-                                  style: AppStyles.textStyleVersionUnderline(
-                                      context))),
+                        
                         ],
                       ),
                     ),
