@@ -35,8 +35,8 @@ class _SendCompleteSheetState extends State<SendCompleteSheet> {
     } else {
       amount = NumberUtil.truncateDecimal(
                   NumberUtil.getRawAsUsableDecimal(widget.amountRaw),
-                  digits: 6)
-              .toStringAsFixed(6) +
+                  digits: 8)
+              .toStringAsFixed(8) +
           "~";
     }
     destinationAltered = widget.destination;

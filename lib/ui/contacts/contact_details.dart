@@ -161,7 +161,9 @@ class ContactDetailsSheet {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Expanded(
+                            Container(
+                              width: 128.0,
+                                  height: 128.0,
                               child: CircleAvatar(
                                 backgroundColor: StateContainer.of(context).curTheme.text05,
                                 backgroundImage: NetworkImage(
@@ -172,6 +174,8 @@ class ContactDetailsSheet {
                                 radius: 50.0,
                               ),
                             ),
+                            SizedBox(height:12),
+
                             // Contact Name container
                             Container(
                               width: double.infinity,

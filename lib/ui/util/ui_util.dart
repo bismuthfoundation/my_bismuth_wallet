@@ -177,7 +177,7 @@ class UIUtil {
                 children: [
                   TextSpan(
                     text: stringPartOne,
-                    style: AppStyles.textStyleAddressSuccess(context),
+                    style: AppStyles.textStyleAddressText90(context),
                   ),
                   TextSpan(
                     text: stringPartTwo,
@@ -209,7 +209,7 @@ class UIUtil {
                   ),
                   TextSpan(
                     text: stringPartFive,
-                    style: AppStyles.textStyleAddressSuccess(context),
+                    style: AppStyles.textStyleAddressText90(context),
                   ),
                 ],
               ),
@@ -226,11 +226,11 @@ class UIUtil {
                 children: [
                   TextSpan(
                     text: stringPartOne,
-                    style: AppStyles.textStyleAddressSuccess(context),
+                    style: AppStyles.textStyleAddressText90(context),
                   ),
                   TextSpan(
                     text: stringPartTwo,
-                    style: AppStyles.textStyleAddressSuccess(context),
+                    style: AppStyles.textStyleAddressText90(context),
                   ),
                 ],
               ),
@@ -242,7 +242,7 @@ class UIUtil {
                 children: [
                   TextSpan(
                     text: stringPartThree,
-                    style: AppStyles.textStyleAddressSuccess(context),
+                    style: AppStyles.textStyleAddressText90(context),
                   ),
                 ],
               ),
@@ -254,11 +254,11 @@ class UIUtil {
                 children: [
                   TextSpan(
                     text: stringPartFour,
-                    style: AppStyles.textStyleAddressSuccess(context),
+                    style: AppStyles.textStyleAddressText90(context),
                   ),
                   TextSpan(
                     text: stringPartFive,
-                    style: AppStyles.textStyleAddressSuccess(context),
+                    style: AppStyles.textStyleAddressText90(context),
                   ),
                 ],
               ),

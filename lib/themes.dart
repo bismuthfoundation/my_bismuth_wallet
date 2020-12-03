@@ -79,7 +79,7 @@ static const teal = Color(0xFF873999);
   static const black = Color(0xFF000000);
 
   Color primary = teal;
-  Color primary60 = teal.withOpacity(0.6);
+  Color primary60 = white.withOpacity(0.6);
   Color primary45 = teal.withOpacity(0.45);
   Color primary30 = teal.withOpacity(0.3);
   Color primary20 = teal.withOpacity(0.2);

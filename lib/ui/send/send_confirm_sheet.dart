@@ -6,12 +6,18 @@ import 'package:flutter/material.dart';
 import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:my_bismuth_wallet/bus/events.dart';
 import 'package:my_bismuth_wallet/dimens.dart';
+import 'package:my_bismuth_wallet/model/db/appdb.dart';
+import 'package:my_bismuth_wallet/model/db/contact.dart';
+import 'package:my_bismuth_wallet/service/app_service.dart';
 import 'package:my_bismuth_wallet/styles.dart';
 import 'package:my_bismuth_wallet/localization.dart';
 import 'package:my_bismuth_wallet/service_locator.dart';
+import 'package:my_bismuth_wallet/ui/send/send_complete_sheet.dart';
+import 'package:my_bismuth_wallet/ui/util/routes.dart';
 import 'package:my_bismuth_wallet/ui/widgets/buttons.dart';
 import 'package:my_bismuth_wallet/ui/widgets/dialog.dart';
 import 'package:my_bismuth_wallet/ui/util/ui_util.dart';
+import 'package:my_bismuth_wallet/ui/widgets/sheet_util.dart';
 import 'package:my_bismuth_wallet/util/numberutil.dart';
 import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
 import 'package:my_bismuth_wallet/util/biometrics.dart';
@@ -283,19 +289,19 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
   }
 
   Future<void> _doSend() async {
-   /* try {
+    // TODO: implémenter méthode send
+   try {
       _showSendingAnimation(context);
-      ProcessResponse resp = await sl.get<AccountService>().requestSend(
-        StateContainer.of(context).wallet.representative,
-        StateContainer.of(context).wallet.frontier,
-        widget.amountRaw,
-        destinationAltered,
-        StateContainer.of(context).wallet.address,
-        AppKeys.seedToPrivate(await StateContainer.of(context).getSeed(), StateContainer.of(context).selectedAccount.index),
-        max: widget.maxSend
-      );
-      StateContainer.of(context).wallet.frontier = resp.hash;
-      StateContainer.of(context).wallet.accountBalance += BigInt.parse(widget.amountRaw);
+
+      // Send tx
+      AppService appService = new AppService();
+      // Géénrer le private key
+      String privateKey = "";
+      appService.sendTx(StateContainer.of(context).wallet.address, widget.amountRaw, destinationAltered, privateKey);
+      // TODO: pq + ?
+      //StateContainer.of(context).wallet.accountBalance += double.parse(widget.amountRaw);
+      StateContainer.of(context).wallet.accountBalance -= double.parse(widget.amountRaw);
+
       // Show complete
       Contact contact = await sl.get<DBHelper>().getContactWithAddress(widget.destination);
       String contactName = contact == null ? null : contact.name;
@@ -317,7 +323,7 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
       }
       UIUtil.showSnackbar(AppLocalization.of(context).sendError, context);
       Navigator.of(context).pop();
-    }*/
+    }
   }
 
   Future<void> authenticateWithPin() async {

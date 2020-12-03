@@ -194,7 +194,7 @@ class _AppHomePageState extends State<AppHomePage>
     bool contactAdded = await sl.get<SharedPrefsUtil>().getFirstContactAdded();
     if (!contactAdded) {
       bool addressExists = await sl.get<DBHelper>().contactExistsWithAddress(
-          "0xf429e36d68be10428d730784391589572ee0f72b");
+          "Bis1bfvr9pQe2L8WccDcHetZdeENBuFDMCxbg");
       if (addressExists) {
         return;
       }
@@ -206,7 +206,7 @@ class _AppHomePageState extends State<AppHomePage>
       await sl.get<SharedPrefsUtil>().setFirstContactAdded(true);
       Contact c = Contact(
           name: "@RedDwarfDonations",
-          address: "0xf429e36d68be10428d730784391589572ee0f72b");
+          address: "Bis1bfvr9pQe2L8WccDcHetZdeENBuFDMCxbg");
       await sl.get<DBHelper>().saveContact(c);
     }
   }

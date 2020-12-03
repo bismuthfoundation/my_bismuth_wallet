@@ -5,6 +5,7 @@ import 'package:event_taxi/event_taxi.dart';
 import 'package:logger/logger.dart';
 import 'package:my_bismuth_wallet/bus/events.dart';
 import 'package:my_bismuth_wallet/bus/subscribe_event.dart';
+import 'package:my_bismuth_wallet/network/model/request/send_tx_request.dart';
 import 'package:my_bismuth_wallet/network/model/response/addlistlim_response.dart';
 import 'package:my_bismuth_wallet/network/model/response/address_txs_response.dart';
 import 'package:my_bismuth_wallet/network/model/response/balance_get_response.dart';
@@ -99,46 +100,52 @@ class AppService {
 
   Future<BalanceGetResponse> getBalanceGetResponse(String address) async {
     BalanceGetResponse balanceGetResponse = new BalanceGetResponse();
+    Completer<BalanceGetResponse> _completer =
+        new Completer<BalanceGetResponse>();
     try {
       ServerWalletLegacyResponse serverWalletLegacyResponse =
           await getBestServerWalletLegacyResponse();
       print("serverWalletLegacyResponse.ip : " + serverWalletLegacyResponse.ip);
       print("serverWalletLegacyResponse.port : " +
           serverWalletLegacyResponse.port.toString());
-      Socket.connect(
-              serverWalletLegacyResponse.ip, serverWalletLegacyResponse.port)
-          .then((Socket socket) {
-        print('Connected to: '
-            '${socket.remoteAddress.address}:${socket.remotePort}');
-        //Establish the onData, and onDone callbacks
-        socket.listen((data) {
-          if (data != null) {
-            String message = new String.fromCharCodes(data).trim();
-            message = message.substring(
-                10, 10 + int.tryParse(message.substring(0, 10)));
-            balanceGetResponse = balanceGetResponseFromJson(message);
-            balanceGetResponse.address = address;
-            print(message);
-            EventTaxiImpl.singleton()
-                .fire(SubscribeEvent(response: balanceGetResponse));
-            socket.close();
-            return balanceGetResponse;
-          }
-        }, onDone: () {
-          print("Done");
-          socket.destroy();
-        });
 
-        //Send the request
-        String method = '"balancegetjson"';
-        String param = '"' + address + '"';
+      Socket _socket = await Socket.connect(
+          serverWalletLegacyResponse.ip, serverWalletLegacyResponse.port);
 
-        socket.write(
-            getLengthBuffer(method) + method + getLengthBuffer(param) + param);
-      });
+      print('Connected to: '
+          '${_socket.remoteAddress.address}:${_socket.remotePort}');
+      //Establish the onData, and onDone callbacks
+
+      _socket.listen((data) {
+        if (data != null) {
+          String message = new String.fromCharCodes(data).trim();
+          message = message.substring(
+              10, 10 + int.tryParse(message.substring(0, 10)));
+          balanceGetResponse = balanceGetResponseFromJson(message);
+          balanceGetResponse.address = address;
+          print(message);
+          EventTaxiImpl.singleton()
+              .fire(SubscribeEvent(response: balanceGetResponse));
+          _completer.complete(balanceGetResponse);
+        }
+      }, onError: ((error, StackTrace trace) {
+        print("Error");
+        _completer.complete(balanceGetResponse);
+      }), onDone: () {
+        print("Done");
+        _socket.destroy();
+      }, cancelOnError: false);
+
+      //Send the request
+      String method = '"balancegetjson"';
+      String param = '"' + address + '"';
+
+      _socket.write(
+          getLengthBuffer(method) + method + getLengthBuffer(param) + param);
     } catch (e) {
       print("pb socket" + e.toString());
     } finally {}
+    return _completer.future;
   }
 
   Future<AddressTxsResponse> getAddressTxsResponse(
@@ -164,7 +171,6 @@ class AppService {
       _socket.listen((data) {
         if (data != null) {
           String message = new String.fromCharCodes(data).trim();
-
           message = message.substring(
               10, 10 + int.tryParse(message.substring(0, 10)));
           print(message);
@@ -450,9 +456,92 @@ class AppService {
     } catch (e) {} finally {
       httpClient.close();
     }
-    simplePriceResponse.localCurrencyPrice = 0;
-    simplePriceResponse.btcPrice = 0;
-    EventTaxiImpl.singleton().fire(PriceEvent(response: simplePriceResponse));
     return simplePriceResponse;
+  }
+
+  Future<String> sendTx(String address, String amount, String destination,
+      String privateKey) async {
+    List<SendTxRequest> sendTxRequestList = new List<SendTxRequest>();
+    SendTxRequest sendTxRequest = new SendTxRequest();
+    Tx tx = new Tx();
+    print("address : " + address);
+    print("amount : " + amount);
+    print("destination : " + destination);
+    print("privateKey : " + privateKey);
+
+    Completer<String> _completer = new Completer<String>();
+    try {
+      ServerWalletLegacyResponse serverWalletLegacyResponse =
+          await getBestServerWalletLegacyResponse();
+      print("serverWalletLegacyResponse.ip : " + serverWalletLegacyResponse.ip);
+      print("serverWalletLegacyResponse.port : " +
+          serverWalletLegacyResponse.port.toString());
+
+      Socket _socket = await Socket.connect(
+          serverWalletLegacyResponse.ip, serverWalletLegacyResponse.port);
+
+      print('Connected to: '
+          '${_socket.remoteAddress.address}:${_socket.remotePort}');
+      //Establish the onData, and onDone callbacks
+      _socket.listen((data) {
+        if (data != null) {
+          String message = new String.fromCharCodes(data).trim();
+
+          message = message.substring(
+              10, 10 + int.tryParse(message.substring(0, 10)));
+          print(message);
+
+          _completer.complete("Sucess");
+        }
+      }, onError: ((error, StackTrace trace) {
+        print("Error");
+        _completer.complete("Error");
+      }), onDone: () {
+        print("Done");
+        _socket.destroy();
+      }, cancelOnError: false);
+
+      //Send the request
+      tx.timestamp = DateTime.now().toUtc().microsecondsSinceEpoch.toString().substring(0, 10) + "." + DateTime.now().toUtc().microsecondsSinceEpoch.toString().substring(10, 12);
+      tx.address = address;
+      tx.recipient = destination;
+      tx.amount = double.tryParse(amount).toStringAsFixed(8);
+      tx.operation = "";
+      tx.openfield = "";
+     
+      sendTxRequest.id = 0;
+      sendTxRequest.tx = tx;
+      sendTxRequest.buffer = tx.buildBufferValue();
+      sendTxRequest.buildSignature();
+      sendTxRequest.publicKey = "";
+      sendTxRequest.websocketCommand = "";
+  
+      String method = '"mpinsert"';
+      String param = '[' + sendTxRequest.buildCommand() + ']';
+      _socket.write(getLengthBuffer(method) +
+          method +
+          getLengthBuffer(param) +
+          param);
+    } catch (e) {
+      print("pb socket" + e.toString());
+    } finally {}
+    return _completer.future;
+  }
+
+  double getFeesEstimation(Tx tx) {
+    const double FEE_BASE = 0.01;
+    double fees = FEE_BASE;
+    fees += tx.openfield.length * 100000;
+    if (tx.operation == "token:issue") {
+      fees += 10;
+    }
+    if (tx.operation == "alias:register") {
+      fees += 1;
+    }
+    if (tx.openfield.startsWith("alias=")) {
+      fees += 1;
+    }
+    print("getFeesEstimation: " + fees.toString());
+    return fees;
   }
 }

@@ -915,20 +915,20 @@ class _SendSheetState extends State<SendSheet> {
       ),
       inputFormatters: _rawAmount == null
           ? [
-              LengthLimitingTextInputFormatter(13),
+              LengthLimitingTextInputFormatter(16),
               _localCurrencyMode
                   ? CurrencyFormatter(
                       decimalSeparator:
                           _localCurrencyFormat.symbols.DECIMAL_SEP,
                       commaSeparator: _localCurrencyFormat.symbols.GROUP_SEP,
-                      maxDecimalDigits: 2)
+                      maxDecimalDigits: 8)
                   : CurrencyFormatter(
                       maxDecimalDigits: NumberUtil.maxDecimalDigits),
               LocalCurrencyFormatter(
                   active: _localCurrencyMode,
                   currencyFormat: _localCurrencyFormat)
             ]
-          : [LengthLimitingTextInputFormatter(13)],
+          : [LengthLimitingTextInputFormatter(16)],
       onChanged: (text) {
         // Always reset the error message to be less annoying
         setState(() {
@@ -939,7 +939,7 @@ class _SendSheetState extends State<SendSheet> {
       },
       textInputAction: TextInputAction.next,
       maxLines: null,
-      autocorrect: false,
+      autocorrect: false, 
       hintText:
           _amountHint == null ? "" : AppLocalization.of(context).enterAmount,
       prefixButton: _rawAmount == null
