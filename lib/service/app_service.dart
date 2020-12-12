@@ -50,6 +50,9 @@ import 'package:my_bismuth_wallet/network/model/response/simple_price_response_t
 import 'package:my_bismuth_wallet/network/model/response/simple_price_response_usd.dart';
 import 'package:my_bismuth_wallet/network/model/response/simple_price_response_zar.dart';
 
+
+import 'package:bs58check/bs58check.dart' as bs58check;
+
 class AppService {
   var logger = Logger();
 
@@ -460,7 +463,7 @@ class AppService {
   }
 
   Future<String> sendTx(String address, String amount, String destination,
-      String publicKey) async {
+      String publicKey, String privateKey) async {
     List<SendTxRequest> sendTxRequestList = new List<SendTxRequest>();
     SendTxRequest sendTxRequest = new SendTxRequest();
     Tx tx = new Tx();
@@ -468,6 +471,7 @@ class AppService {
     print("amount : " + amount);
     print("destination : " + destination);
     print("publicKey : " + publicKey);
+    print("privateKey : " + privateKey);
 
     Completer<String> _completer = new Completer<String>();
     try {
@@ -502,7 +506,7 @@ class AppService {
       }, cancelOnError: false);
 
       //Send the request
-      /*tx.timestamp = DateTime.now()
+      tx.timestamp = DateTime.now()
               .toUtc()
               .microsecondsSinceEpoch
               .toString()
@@ -512,23 +516,24 @@ class AppService {
               .toUtc()
               .microsecondsSinceEpoch
               .toString()
-              .substring(10, 12);*/
-      tx.timestamp = "1559472321.00";
+              .substring(10, 12);
+      //tx.timestamp = "1559472321.00";
       //tx.address = address;
       tx.address = "Bis1SAk19HCWpDAThwFiaP9xA6zWjzsga7Hog";
-      //tx.recipient = destination;
-      tx.recipient = "f6c0363ca1c5aa28cc584252e65a63998493ff0a5ec1bb16beda9bac";
-      //tx.amount = double.tryParse(amount).toStringAsFixed(8);
-      tx.amount = "0.63000000";
+      tx.recipient = destination;
+      //tx.recipient = "f6c0363ca1c5aa28cc584252e65a63998493ff0a5ec1bb16beda9bac";
+      tx.amount = double.tryParse(amount).toStringAsFixed(8);
+      //tx.amount = "0.63000000";
       tx.operation = "";
       tx.openfield = "fake_tx_info";
 
       sendTxRequest.id = 0;
       sendTxRequest.tx = tx;
       sendTxRequest.buffer = tx.buildBufferValue();
-      sendTxRequest.buildSignature();
+      
       //sendTxRequest.publicKey = publicKey;
-      sendTxRequest.publicKey = "A0l0a6ARznKt6nWOCSFZYiuqpQCfrKcq1DFnktgot3lq";
+      sendTxRequest.publicKey = "0349746ba011ce72adea758e092159622baaa5009faca72ad4316792d828b7796a";
+      sendTxRequest.buildSignature(bs58check.encode(utf8.encode("e5b42f3c3fe02e161d42ff4707a174a5715b2badc7d4d3aebbea9081bd9123d5")));
       sendTxRequest.websocketCommand = "";
 
       String method = '"mpinsert"';

@@ -7,8 +7,6 @@ import 'package:my_bismuth_wallet/bus/events.dart';
 import 'package:my_bismuth_wallet/localization.dart';
 import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:my_bismuth_wallet/dimens.dart';
-import 'package:my_bismuth_wallet/network/model/response/balance_get_response.dart';
-import 'package:my_bismuth_wallet/service/app_service.dart';
 import 'package:my_bismuth_wallet/service_locator.dart';
 import 'package:my_bismuth_wallet/model/db/appdb.dart';
 import 'package:my_bismuth_wallet/model/db/account.dart';
@@ -20,7 +18,7 @@ import 'package:my_bismuth_wallet/ui/widgets/dialog.dart';
 import 'package:my_bismuth_wallet/styles.dart';
 import 'package:my_bismuth_wallet/util/caseconverter.dart';
 import 'package:my_bismuth_wallet/util/numberutil.dart';
-import 'package:logger/logger.dart';
+
 
 class AppAccountsSheet {
   List<Account> accounts;
@@ -46,27 +44,18 @@ class AppAccountsWidget extends StatefulWidget {
 }
 
 class _AppAccountsWidgetState extends State<AppAccountsWidget> {
-  static const int MAX_ACCOUNTS = 50;
+
   final GlobalKey expandedKey = GlobalKey();
 
-  bool _addingAccount;
   ScrollController _scrollController = new ScrollController();
 
   StreamSubscription<AccountModifiedEvent> _accountModifiedSub;
   bool _accountIsChanging;
 
-  Future<bool> _onWillPop() async {
-    if (_accountModifiedSub != null) {
-      _accountModifiedSub.cancel();
-    }
-    return true;
-  }
-
   @override
   void initState() {
     super.initState();
     _registerBus();
-    this._addingAccount = false;
     this._accountIsChanging = false;
   }
 
@@ -74,23 +63,6 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
   void dispose() {
     _destroyBus();
     super.dispose();
-  }
-
-  Future<void> _handleAddressResponse(
-      List<BalanceGetResponse> balanceGetResponseList) async {
-    // Handle balances event
-    widget.accounts.forEach((account) {
-      balanceGetResponseList.forEach((balanceGetResponse) {
-        String combinedBalance = (BigInt.tryParse(balanceGetResponse.balance))
-            .toString();
-        if (account.address == balanceGetResponse.address && combinedBalance != account.balance) {
-          sl.get<DBHelper>().updateAccountBalance(account, combinedBalance);
-          setState(() {
-            account.balance = combinedBalance;
-          });
-        }
-      });
-    });
   }
 
   void _registerBus() {
@@ -128,23 +100,6 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
   void _destroyBus() {
     if (_accountModifiedSub != null) {
       _accountModifiedSub.cancel();
-    }
-  }
-
-  Future<void> _requestBalances(
-      BuildContext context, List<Account> accounts) async {
-    List<String> addresses = List();
-    List<BalanceGetResponse> balanceGetResponseList = new List();
-    accounts.forEach((account) async {
-      if (account.address != null) {
-        addresses.add(account.address);
-        balanceGetResponseList.add(await AppService().getBalanceGetResponse(account.address));
-      }
-    });
-    try {
-      await _handleAddressResponse(balanceGetResponseList);
-    } catch (e) {
-      sl.get<Logger>().e("Error", e);
     }
   }
 

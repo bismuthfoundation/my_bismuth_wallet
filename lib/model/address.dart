@@ -1,7 +1,5 @@
 import 'dart:core';
 
-import 'package:ethereum_address/ethereum_address.dart';
-
 // Object to represent an account address or address URI, and provide useful utilities
 class Address {
   String _address;

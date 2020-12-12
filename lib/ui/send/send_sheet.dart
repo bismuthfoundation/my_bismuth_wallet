@@ -853,7 +853,7 @@ class _SendSheetState extends State<SendSheet> {
         _amountValidationText = AppLocalization.of(context).amountMissing;
       });
     } else {
-      // TODO: Envoyer DNA
+      // TODO: Envoyer BIS
       /*String bananoAmount = _localCurrencyMode
           ? _convertLocalCurrencyToCrypto()
           : _rawAmount == null

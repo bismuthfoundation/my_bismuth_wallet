@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:event_taxi/event_taxi.dart';
 import 'package:flutter/material.dart';
-import 'package:hex/hex.dart';
 
 import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:my_bismuth_wallet/bus/events.dart';
@@ -20,7 +19,6 @@ import 'package:my_bismuth_wallet/ui/widgets/dialog.dart';
 import 'package:my_bismuth_wallet/ui/util/ui_util.dart';
 import 'package:my_bismuth_wallet/ui/widgets/sheet_util.dart';
 import 'package:my_bismuth_wallet/util/app_ffi/apputil.dart';
-import 'package:my_bismuth_wallet/util/app_ffi/encrypt/crypter.dart';
 import 'package:my_bismuth_wallet/util/numberutil.dart';
 import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
 import 'package:my_bismuth_wallet/util/biometrics.dart';
@@ -292,14 +290,13 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
   }
   
   Future<void> _doSend() async {
-    // TODO: implémenter méthode send
    try {
       _showSendingAnimation(context);
 
       // Send tx
       AppService appService = new AppService();
       
-      appService.sendTx(StateContainer.of(context).wallet.address, widget.amountRaw, destinationAltered, await AppUtil().seedToPublicKey(await StateContainer.of(context).getSeed()));
+      appService.sendTx(StateContainer.of(context).wallet.address, widget.amountRaw, destinationAltered, await AppUtil().seedToPublicKey(await StateContainer.of(context).getSeed()), await AppUtil().seedToPrivateKey(await StateContainer.of(context).getSeed()));
       // TODO: pq + ?
       //StateContainer.of(context).wallet.accountBalance += double.parse(widget.amountRaw);
       StateContainer.of(context).wallet.accountBalance -= double.parse(widget.amountRaw);

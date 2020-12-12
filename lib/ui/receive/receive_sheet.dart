@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:typed_data';
-import 'dart:ui' as ui;
 import 'package:my_bismuth_wallet/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -30,19 +29,6 @@ class _ReceiveSheetStateState extends State<ReceiveSheet> {
   bool _addressCopied;
   // Timer reference so we can cancel repeated events
   Timer _addressCopiedTimer;
-
-  Future<Uint8List> _capturePng() async {
-    if (shareCardKey != null && shareCardKey.currentContext != null) {
-      RenderRepaintBoundary boundary =
-          shareCardKey.currentContext.findRenderObject();
-      ui.Image image = await boundary.toImage(pixelRatio: 5.0);
-      ByteData byteData =
-          await image.toByteData(format: ui.ImageByteFormat.png);
-      return byteData.buffer.asUint8List();
-    } else {
-      return null;
-    }
-  }
 
   @override
   void initState() {

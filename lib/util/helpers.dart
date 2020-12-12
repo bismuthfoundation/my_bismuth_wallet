@@ -14,6 +14,11 @@ class AppHelpers {
     return result;
   }
 
+  /// Converts a Uint8List to a hex string
+  static String byteToHex(Uint8List bytes) {
+    return HEX.encode(bytes).toUpperCase();
+  }
+  
   static BigInt byteToBigInt(Uint8List bigIntBytes) {
     return _decodeBigInt(bigIntBytes);
   }

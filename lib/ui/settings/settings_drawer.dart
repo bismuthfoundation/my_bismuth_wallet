@@ -58,7 +58,6 @@ class _SettingsSheetState extends State<SettingsSheet>
       LockTimeoutSetting(LockTimeoutOption.ONE);
 
   bool _securityOpen;
-  bool _loadingAccounts;
 
   bool _contactsOpen;
 
@@ -69,7 +68,6 @@ class _SettingsSheetState extends State<SettingsSheet>
     super.initState();
     _contactsOpen = false;
     _securityOpen = false;
-    _loadingAccounts = false;
     // Determine if they have face or fingerprint enrolled, if not hide the setting
     sl.get<BiometricUtil>().hasBiometrics().then((bool hasBiometrics) {
       setState(() {
@@ -681,55 +679,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                                   ),
                                 )
                               : SizedBox(),
-                          // Account switcher
-                          /*Container(
-                            height: 36,
-                            width: 36,
-                            margin: EdgeInsets.symmetric(horizontal: 6.0),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                            ),
-                            child: FlatButton(
-                              onPressed: () {
-                                if (!_loadingAccounts) {
-                                  setState(() {
-                                    _loadingAccounts = true;
-                                  });
-                                  StateContainer.of(context)
-                                      .getSeed()
-                                      .then((seed) {
-                                    sl
-                                        .get<DBHelper>()
-                                        .getAccounts(seed)
-                                        .then((accounts) {
-                                      setState(() {
-                                        _loadingAccounts = false;
-                                      });
-                                      AppAccountsSheet(accounts)
-                                          .mainBottomSheet(context);
-                                    });
-                                  });
-                                }
-                              },
-                              padding: EdgeInsets.all(0.0),
-                              shape: CircleBorder(),
-                              splashColor: _loadingAccounts
-                                  ? Colors.transparent
-                                  : StateContainer.of(context).curTheme.text30,
-                              highlightColor: _loadingAccounts
-                                  ? Colors.transparent
-                                  : StateContainer.of(context).curTheme.text15,
-                              child: Icon(AppIcons.accountswitcher,
-                                  size: 36,
-                                  color: _loadingAccounts
-                                      ? StateContainer.of(context)
-                                          .curTheme
-                                          .primary60
-                                      : StateContainer.of(context)
-                                          .curTheme
-                                          .primary),
-                            ),
-                          ),*/
+                         
                         ],
                       ),
                     ],
