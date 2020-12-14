@@ -6,12 +6,13 @@ import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:crypto/crypto.dart';
+
+import 'package:pointycastle/export.dart';
 import 'package:pointycastle/pointycastle.dart';
-
-import 'package:bs58check/bs58check.dart' as bs58check;
-
 import 'package:pointycastle/random/fortuna_random.dart';
-import 'package:pointycastle/signers/ecdsa_signer.dart';
+import 'package:asn1lib/asn1lib.dart' as asn1lib;
+
 
 List<SendTxRequest> sendTxRequestFromJson(String str) =>
     List<SendTxRequest>.from(
@@ -70,29 +71,35 @@ class SendTxRequest {
     return result;
   }
 
-  String signString(String privateKey58, String msgToSign) {
+  String signString(String privateKey, String msgToSign) {
 
-    final Signer signer = Signer('SHA-1/ECDSA');
-    final privateKey = ECPrivateKey(
-      uint8ListToBigInt(bs58check.decode(privateKey58)),
+    final Signer signer = Signer('SHA-256/ECDSA');
+
+    final _privateKey = ECPrivateKey(
+      BigInt.parse(privateKey, radix: 16),
       ECDomainParameters('secp256k1'),
     );
+    var privParams = PrivateKeyParameter(_privateKey);
 
-    final privParams = () => ParametersWithRandom(
-          PrivateKeyParameter<ECPrivateKey>(privateKey),
-          genSecure(),
-        );
+    final rnd = new SecureRandom("AES/CTR/PRNG");
+    final key = new Uint8List(16);
+    final keyParam = new KeyParameter(key);
+    final params = new ParametersWithIV(keyParam, new Uint8List(16));
+    rnd.seed(params);
 
     signer.reset();
-    signer.init(true, privParams());
-    final Signature s = signer.generateSignature(stringToUint8List(msgToSign));
-    final String sig = s.toString();
-    final List sigXY = sig.substring(1, sig.length - 1).split(',');
-    final Uint8List sigX = bigIntToUint8List(BigInt.parse(sigXY[0]));
-    final Uint8List sigY = bigIntToUint8List(BigInt.parse(sigXY[1]));
-    final String sig58 = bs58check.encode(Uint8List.fromList(sigX + sigY));
-    print("sig58: " + sig58);
-    return sig58;
+    signer.init(true, new ParametersWithRandom(privParams, rnd));
+    final ECSignature sig = signer.generateSignature(utf8.encode(msgToSign));
+
+    var topLevel = new asn1lib.ASN1Sequence();
+    topLevel.add(asn1lib.ASN1Integer(sig.r));
+    topLevel.add(asn1lib.ASN1Integer(sig.s));
+
+    var sig64 = base64.encode(topLevel.encodedBytes);
+
+    print("return sig64 : " + sig64);
+    return sig64;
+  
   }
 
   Uint8List stringToUint8List(String s) => Uint8List.fromList(s.codeUnits);
@@ -116,15 +123,8 @@ class SendTxRequest {
   }
 
   void buildSignature(String privateKey) async {
-    String privateKey58 = bs58check.encode(utf8.encode(privateKey));
-    signature = signString(privateKey58, buffer);
+    signature = signString(privateKey, buffer);
     print("signature: " + signature);
-
-    //signature = base64.encode(bs58check.decode(signature));
-    signature = base64.encode(utf8.encode(signature));
-    print("signature: " + signature);
-
-    
   }
 
   factory SendTxRequest.fromJson(Map<String, dynamic> json) => SendTxRequest(
@@ -212,3 +212,4 @@ class Tx {
     return _buffer;
   }
 }
+

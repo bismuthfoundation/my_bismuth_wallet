@@ -51,8 +51,6 @@ import 'package:my_bismuth_wallet/network/model/response/simple_price_response_u
 import 'package:my_bismuth_wallet/network/model/response/simple_price_response_zar.dart';
 
 
-import 'package:bs58check/bs58check.dart' as bs58check;
-
 class AppService {
   var logger = Logger();
 
@@ -74,7 +72,7 @@ class AppService {
       HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {
         String reply = await response.transform(utf8.decoder).join();
-        print("serverWalletLegacyResponseList=" + reply);
+        //print("serverWalletLegacyResponseList=" + reply);
         serverWalletLegacyResponseList =
             serverWalletLegacyResponseFromJson(reply);
 
@@ -94,10 +92,10 @@ class AppService {
     } catch (e) {} finally {
       httpClient.close();
     }
-    print("Server Wallet : " +
-        serverWalletLegacyResponse.ip +
-        ":" +
-        serverWalletLegacyResponse.port.toString());
+    //print("Server Wallet : " +
+    //    serverWalletLegacyResponse.ip +
+    //    ":" +
+    //    serverWalletLegacyResponse.port.toString());
     return serverWalletLegacyResponse;
   }
 
@@ -108,15 +106,15 @@ class AppService {
     try {
       ServerWalletLegacyResponse serverWalletLegacyResponse =
           await getBestServerWalletLegacyResponse();
-      print("serverWalletLegacyResponse.ip : " + serverWalletLegacyResponse.ip);
-      print("serverWalletLegacyResponse.port : " +
-          serverWalletLegacyResponse.port.toString());
+      //print("serverWalletLegacyResponse.ip : " + serverWalletLegacyResponse.ip);
+      //print("serverWalletLegacyResponse.port : " +
+      //    serverWalletLegacyResponse.port.toString());
 
       Socket _socket = await Socket.connect(
           serverWalletLegacyResponse.ip, serverWalletLegacyResponse.port);
 
-      print('Connected to: '
-          '${_socket.remoteAddress.address}:${_socket.remotePort}');
+      //print('Connected to: '
+      //   '${_socket.remoteAddress.address}:${_socket.remotePort}');
       //Establish the onData, and onDone callbacks
 
       _socket.listen((data) {
@@ -126,16 +124,16 @@ class AppService {
               10, 10 + int.tryParse(message.substring(0, 10)));
           balanceGetResponse = balanceGetResponseFromJson(message);
           balanceGetResponse.address = address;
-          print(message);
+          //print(message);
           EventTaxiImpl.singleton()
               .fire(SubscribeEvent(response: balanceGetResponse));
           _completer.complete(balanceGetResponse);
         }
       }, onError: ((error, StackTrace trace) {
-        print("Error");
+        //print("Error");
         _completer.complete(balanceGetResponse);
       }), onDone: () {
-        print("Done");
+        //print("Done");
         _socket.destroy();
       }, cancelOnError: false);
 
@@ -146,7 +144,7 @@ class AppService {
       _socket.write(
           getLengthBuffer(method) + method + getLengthBuffer(param) + param);
     } catch (e) {
-      print("pb socket" + e.toString());
+      //print("pb socket" + e.toString());
     } finally {}
     return _completer.future;
   }
@@ -161,22 +159,22 @@ class AppService {
     try {
       ServerWalletLegacyResponse serverWalletLegacyResponse =
           await getBestServerWalletLegacyResponse();
-      print("serverWalletLegacyResponse.ip : " + serverWalletLegacyResponse.ip);
-      print("serverWalletLegacyResponse.port : " +
-          serverWalletLegacyResponse.port.toString());
+      //print("serverWalletLegacyResponse.ip : " + serverWalletLegacyResponse.ip);
+      //print("serverWalletLegacyResponse.port : " +
+      //    serverWalletLegacyResponse.port.toString());
 
       Socket _socket = await Socket.connect(
           serverWalletLegacyResponse.ip, serverWalletLegacyResponse.port);
 
-      print('Connected to: '
-          '${_socket.remoteAddress.address}:${_socket.remotePort}');
+      //print('Connected to: '
+      //   '${_socket.remoteAddress.address}:${_socket.remotePort}');
       //Establish the onData, and onDone callbacks
       _socket.listen((data) {
         if (data != null) {
           String message = new String.fromCharCodes(data).trim();
           message = message.substring(
               10, 10 + int.tryParse(message.substring(0, 10)));
-          print(message);
+          //print(message);
           List txs = addlistlimResponseFromJson(message);
           for (int i = 0; i < txs.length; i++) {
             AddressTxsResponseResult addressTxResponse =
@@ -187,10 +185,10 @@ class AppService {
           _completer.complete(addressTxsResponse);
         }
       }, onError: ((error, StackTrace trace) {
-        print("Error");
+        //print("Error");
         _completer.complete(addressTxsResponse);
       }), onDone: () {
-        print("Done");
+        //print("Done");
         _socket.destroy();
       }, cancelOnError: false);
 
@@ -493,7 +491,7 @@ class AppService {
 
           message = message.substring(
               10, 10 + int.tryParse(message.substring(0, 10)));
-          print(message);
+          print("Response sendTx : " + message);
 
           _completer.complete("Sucess");
         }
@@ -518,8 +516,8 @@ class AppService {
               .toString()
               .substring(10, 12);
       //tx.timestamp = "1559472321.00";
-      //tx.address = address;
-      tx.address = "Bis1SAk19HCWpDAThwFiaP9xA6zWjzsga7Hog";
+      tx.address = address;
+      //tx.address = "Bis1SAk19HCWpDAThwFiaP9xA6zWjzsga7Hog";
       tx.recipient = destination;
       //tx.recipient = "f6c0363ca1c5aa28cc584252e65a63998493ff0a5ec1bb16beda9bac";
       tx.amount = double.tryParse(amount).toStringAsFixed(8);
@@ -531,16 +529,15 @@ class AppService {
       sendTxRequest.tx = tx;
       sendTxRequest.buffer = tx.buildBufferValue();
       
-      //sendTxRequest.publicKey = publicKey;
-      sendTxRequest.publicKey = "0349746ba011ce72adea758e092159622baaa5009faca72ad4316792d828b7796a";
-      sendTxRequest.buildSignature(bs58check.encode(utf8.encode("e5b42f3c3fe02e161d42ff4707a174a5715b2badc7d4d3aebbea9081bd9123d5")));
+      sendTxRequest.publicKey = publicKey;
+      sendTxRequest.buildSignature(privateKey);
       sendTxRequest.websocketCommand = "";
 
       String method = '"mpinsert"';
       String param = sendTxRequest.buildCommand();
       String message =
           getLengthBuffer(method) + method + getLengthBuffer(param) + param;
-      print(message);
+      print("message: "+ message);
       _socket.write(message);
     } catch (e) {
       print("pb socket" + e.toString());
