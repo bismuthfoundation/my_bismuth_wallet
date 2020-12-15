@@ -324,6 +324,9 @@ class AppLocalization {
     return Intl.message("Send From", desc: 'send_title', name: 'sendFrom');
   }
 
+  String get fees {
+    return Intl.message("Fees", desc: 'fees', name: 'fees');
+  }
   /// -- END SEND ITEMS
 
   /// -- PIN SCREEN

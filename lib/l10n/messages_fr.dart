@@ -78,6 +78,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "exampleCardLot" : MessageLookupByLibrary.simpleMessage("Beaucoup de"),
     "exampleCardTo" : MessageLookupByLibrary.simpleMessage("à quelqu\'un"),
     "exit" : MessageLookupByLibrary.simpleMessage("Sortie"),
+    "fees" : MessageLookupByLibrary.simpleMessage("Frais"),
     "fingerprintSeedBackup" : MessageLookupByLibrary.simpleMessage("Confirmer l’empreinte digitale pour sauvegarder la clé privée."),
     "goBackButton" : MessageLookupByLibrary.simpleMessage("Retour"),
     "gotItButton" : MessageLookupByLibrary.simpleMessage("J\'ai compris!"),

@@ -12,6 +12,7 @@ import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:my_bismuth_wallet/dimens.dart';
 import 'package:my_bismuth_wallet/localization.dart';
 import 'package:my_bismuth_wallet/model/available_currency.dart';
+import 'package:my_bismuth_wallet/service/app_service.dart';
 import 'package:my_bismuth_wallet/service_locator.dart';
 import 'package:my_bismuth_wallet/app_icons.dart';
 import 'package:my_bismuth_wallet/model/address.dart';
@@ -377,6 +378,7 @@ class _SendSheetState extends State<SendSheet> {
                                     );
                                   },
                                 ),
+
                                 // ******* Enter Amount Container ******* //
                                 getEnterAmountContainer(),
                                 // ******* Enter Amount Container End ******* //
@@ -478,6 +480,26 @@ class _SendSheetState extends State<SendSheet> {
                                       )),
                                 ),
                                 // ******* Enter Address Error Container End ******* //
+                                Container(
+                                  margin: EdgeInsets.symmetric(horizontal: 30),
+                                  child: Text(
+                                    AppLocalization.of(context).fees +
+                                        ": " +
+                                        new AppService()
+                                            .getFeesEstimation(
+                                                "", "")
+                                            .toString() +
+                                        " BIS",
+                                    style: TextStyle(
+                                      color: StateContainer.of(context)
+                                          .curTheme
+                                          .primary60,
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w100,
+                                      fontFamily: 'NunitoSans',
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           ],
@@ -853,27 +875,29 @@ class _SendSheetState extends State<SendSheet> {
         _amountValidationText = AppLocalization.of(context).amountMissing;
       });
     } else {
-      // TODO: Envoyer BIS
-      /*String bananoAmount = _localCurrencyMode
+      // Estimation of fees
+      AppService appService = new AppService();
+      double estimationFees = appService.getFeesEstimation("", "");
+
+      String amount = _localCurrencyMode
           ? _convertLocalCurrencyToCrypto()
           : _rawAmount == null
               ? _sendAmountController.text
               : NumberUtil.getRawAsUsableString(_rawAmount);
       double balanceRaw = StateContainer.of(context).wallet.accountBalance;
-      BigInt sendAmount =
-          BigInt.tryParse(NumberUtil.getAmountAsRaw(bananoAmount));
-      if (sendAmount == null || sendAmount == BigInt.zero) {
+      double sendAmount = double.tryParse(amount);
+      if (sendAmount == null || sendAmount == 0) {
         isValid = false;
         setState(() {
           _amountValidationText = AppLocalization.of(context).amountMissing;
         });
-      } else if (sendAmount > balanceRaw) {
+      } else if (sendAmount + estimationFees > balanceRaw) {
         isValid = false;
         setState(() {
           _amountValidationText =
               AppLocalization.of(context).insufficientBalance;
         });
-      }*/
+      }
     }
     // Validate address
     bool isContact = _sendAddressController.text.startsWith("@");
@@ -939,7 +963,7 @@ class _SendSheetState extends State<SendSheet> {
       },
       textInputAction: TextInputAction.next,
       maxLines: null,
-      autocorrect: false, 
+      autocorrect: false,
       hintText:
           _amountHint == null ? "" : AppLocalization.of(context).enterAmount,
       prefixButton: _rawAmount == null

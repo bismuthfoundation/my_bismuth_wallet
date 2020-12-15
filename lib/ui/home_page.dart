@@ -7,6 +7,7 @@ import 'package:flare_flutter/flare_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:event_taxi/event_taxi.dart';
+import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:my_bismuth_wallet/network/model/response/address_txs_response.dart';
 import 'package:my_bismuth_wallet/ui/popup_button.dart';
@@ -193,8 +194,9 @@ class _AppHomePageState extends State<AppHomePage>
   Future<void> _addSampleContact() async {
     bool contactAdded = await sl.get<SharedPrefsUtil>().getFirstContactAdded();
     if (!contactAdded) {
-      bool addressExists = await sl.get<DBHelper>().contactExistsWithAddress(
-          "Bis1bfvr9pQe2L8WccDcHetZdeENBuFDMCxbg");
+      bool addressExists = await sl
+          .get<DBHelper>()
+          .contactExistsWithAddress("Bis1bfvr9pQe2L8WccDcHetZdeENBuFDMCxbg");
       if (addressExists) {
         return;
       }
@@ -363,10 +365,20 @@ class _AppHomePageState extends State<AppHomePage>
         : _historyListMap[StateContainer.of(context).wallet.address][index]
             .getShortString();
     _contacts.forEach((contact) {
-      if (contact.address ==
-          _historyListMap[StateContainer.of(context).wallet.address][index]
-              .from) {
-        displayName = contact.name;
+      if (_historyListMap[StateContainer.of(context).wallet.address][index]
+              .type ==
+          BlockTypes.RECEIVE) {
+        if (contact.address ==
+            _historyListMap[StateContainer.of(context).wallet.address][index]
+                .from) {
+          displayName = contact.name;
+        }
+      } else {
+        if (contact.address ==
+            _historyListMap[StateContainer.of(context).wallet.address][index]
+                .recipient) {
+          displayName = contact.name;
+        }
       }
     });
     return _buildTransactionCard(
@@ -419,15 +431,17 @@ class _AppHomePageState extends State<AppHomePage>
           children: <Widget>[
             _buildWelcomeTransactionCard(context),
             _buildDummyTransactionCard(
-                AppLocalization.of(context).sent,
-                AppLocalization.of(context).exampleCardLittle,
-                AppLocalization.of(context).exampleCardTo,
-                context),
+              AppLocalization.of(context).sent,
+              AppLocalization.of(context).exampleCardLittle,
+              AppLocalization.of(context).exampleCardTo,
+              context,
+            ),
             _buildDummyTransactionCard(
-                AppLocalization.of(context).received,
-                AppLocalization.of(context).exampleCardLot,
-                AppLocalization.of(context).exampleCardFrom,
-                context),
+              AppLocalization.of(context).received,
+              AppLocalization.of(context).exampleCardLot,
+              AppLocalization.of(context).exampleCardFrom,
+              context,
+            ),
           ],
         ),
         onRefresh: _refresh,
@@ -881,18 +895,32 @@ class _AppHomePageState extends State<AppHomePage>
                                   ],
                                 ),
                               ),
+                              Text(
+                                DateFormat.yMEd(Localizations.localeOf(context)
+                                        .languageCode)
+                                    .add_Hms()
+                                    .format(item.timestamp)
+                                    .toString(),
+                                style:
+                                    AppStyles.textStyleTransactionUnit(context),
+                              ),
                             ],
                           ),
                         ),
                       ],
                     ),
-                    Container(
-                      width: MediaQuery.of(context).size.width / 2.4,
-                      child: Text(
-                        displayName,
-                        textAlign: TextAlign.end,
-                        style: AppStyles.textStyleTransactionAddress(context),
-                      ),
+                    Column(
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width / 2.4,
+                          child: Text(
+                            displayName,
+                            textAlign: TextAlign.end,
+                            style:
+                                AppStyles.textStyleTransactionAddress(context),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -1338,7 +1366,8 @@ class _AppHomePageState extends State<AppHomePage>
                     child: Hero(
                       tag: "avatar",
                       child: CircleAvatar(
-                        backgroundColor: StateContainer.of(context).curTheme.text05,
+                        backgroundColor:
+                            StateContainer.of(context).curTheme.text05,
                         backgroundImage: NetworkImage(UIUtil.getRobohashURL(
                             StateContainer.of(context)
                                 .selectedAccount
@@ -1348,7 +1377,6 @@ class _AppHomePageState extends State<AppHomePage>
                     ),
                   ),
                 ),
-                
               ],
             ),
           )

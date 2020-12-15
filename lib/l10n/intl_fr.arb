@@ -53,6 +53,7 @@
   "amountMissing": "Veuillez entrer un montant",
   "insufficientBalance": "Solde insuffisant",
   "sendFrom": "Envoyer depuis",
+  "fees": "Frais",
   "pinCreateTitle": "Créer un code pin à 6 chiffres",
   "pinConfirmTitle": "Confirmer votre pin",
   "pinEnterTitle": "Saisir le pin",

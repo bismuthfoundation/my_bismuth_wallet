@@ -63,6 +63,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "exampleCardLittle" : MessageLookupByLibrary.simpleMessage("A little"),
     "exampleCardLot" : MessageLookupByLibrary.simpleMessage("A lot of"),
     "exampleCardTo" : MessageLookupByLibrary.simpleMessage("to someone"),
+    "fees" : MessageLookupByLibrary.simpleMessage("Fees"),
     "fingerprintSeedBackup" : MessageLookupByLibrary.simpleMessage("Authenticate to backup seed."),
     "gotItButton" : MessageLookupByLibrary.simpleMessage("Got It!"),
     "hideAccountHeader" : MessageLookupByLibrary.simpleMessage("Hide Account?"),

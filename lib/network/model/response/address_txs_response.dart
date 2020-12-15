@@ -15,22 +15,21 @@ class AddressTxsResponse {
 }
 
 class AddressTxsResponseResult {
-  AddressTxsResponseResult({
-    this.blockHeight,
-    this.timestamp,
-    this.from,
-    this.recipient,
-    this.amount,
-    this.signature,
-    this.publicKey,
-    this.blockHash,
-    this.fee,
-    this.reward,
-    this.operation,
-    this.openfield,
-    this.type,
-    this.hash
-  });
+  AddressTxsResponseResult(
+      {this.blockHeight,
+      this.timestamp,
+      this.from,
+      this.recipient,
+      this.amount,
+      this.signature,
+      this.publicKey,
+      this.blockHash,
+      this.fee,
+      this.reward,
+      this.operation,
+      this.openfield,
+      this.type,
+      this.hash});
 
   int blockHeight;
   DateTime timestamp;
@@ -48,11 +47,19 @@ class AddressTxsResponseResult {
   String hash;
 
   String getShortString() {
-    return new Address(this.from).getShortString();
+    if (type == BlockTypes.RECEIVE) {
+      return new Address(this.from).getShortString();
+    } else {
+      return new Address(this.recipient).getShortString();
+    }
   }
 
   String getShorterString() {
-    return new Address(this.from).getShorterString();
+    if (type == BlockTypes.RECEIVE) {
+      return new Address(this.from).getShorterString();
+    } else {
+      return new Address(this.recipient).getShorterString();
+    }
   }
 
   /*
@@ -64,10 +71,7 @@ class AddressTxsResponseResult {
 
   void populate(List txs, String address) {
     blockHeight = txs[0];
-    // TODO: pourquoi double ?
-    
-   // timestamp = DateTime.fromMillisecondsSinceEpoch(int.parse(txs[1]) * 1000);
-    timestamp = DateTime.now();
+    timestamp = DateTime.fromMillisecondsSinceEpoch((txs[1] * 1000).toInt());
     from = txs[2];
     recipient = txs[3];
     amount = txs[4].toString();
@@ -79,7 +83,6 @@ class AddressTxsResponseResult {
     reward = txs[9];
     operation = txs[10];
     openfield = txs[11];
-    // TODO: a améliorer
     if (recipient == address) {
       type = BlockTypes.RECEIVE;
     } else {

@@ -1,4 +1,5 @@
 
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:bip32/bip32.dart' as bip32;
@@ -16,12 +17,12 @@ class AppUtil {
 
   Future<String> seedToAddress(String seed, int index) async {
     String mnemonic = bip39.entropyToMnemonic(seed);
-    print("Mnemonic : " + mnemonic);
+    //print("Mnemonic : " + mnemonic);
     final bip39Seed = bip39.mnemonicToSeed(mnemonic);
-    print("BIP 39 Seed : " + HEX.encode(bip39Seed));
+    //print("BIP 39 Seed : " + HEX.encode(bip39Seed));
 
     final rootKey = bip32.BIP32.fromSeed(bip39Seed);
-    print("BIP 32 Root Key : " + rootKey.toBase58());
+    //print("BIP 32 Root Key : " + rootKey.toBase58());
     bip32.BIP32 node = bip32.BIP32.fromBase58(rootKey.toBase58());
     //print("BIP 32 node (private Key) : " + HEX.encode(node.privateKey));
     //print("BIP 32 node (public Key) : " + HEX.encode(node.publicKey));
@@ -34,10 +35,10 @@ class AppUtil {
     //print("BIP 32 child (public Key) : " + HEX.encode(child.publicKey));
 
     bip32.BIP32 addressDerived0 = child.derive(0);
-    String publicKey = HEX.encode(addressDerived0.publicKey);
-    String privateKey = HEX.encode(addressDerived0.privateKey);
-    print("Public Key Derived Address (account 0) : " + publicKey);
-    print("Private Key Derived Address (account 0) : " + privateKey);
+    //String publicKey = HEX.encode(addressDerived0.publicKey);
+    //String privateKey = HEX.encode(addressDerived0.privateKey);
+    //print("Public Key Derived Address (account 0) : " + publicKey);
+    //print("Private Key Derived Address (account 0) : " + privateKey);
     //print("Private Key Wif : " + addressDerived0.toWIF());
 
     //var bytesPublicKey = utf8.encode(publicKey);
@@ -59,13 +60,13 @@ class AppUtil {
         3, addressDerived0.identifier.length + 3, addressDerived0.identifier);
     String address = bs58check.encode(buffer);
 
-    print("Address bs58check : " + address);
+    //print("Address bs58check : " + address);
 
     return address;
   }
 
-  Future<String> seedToPublicKey(String seed) async {
-    return HEX.encode(bip32.BIP32
+  Future<String> seedToPublicKeyBase64(String seed) async {
+    return base64.encode(bip32.BIP32
         .fromBase58(bip32.BIP32
             .fromSeed(bip39.mnemonicToSeed(bip39.entropyToMnemonic(seed)))
             .toBase58())

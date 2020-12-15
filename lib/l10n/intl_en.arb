@@ -330,6 +330,12 @@
     "type": "text",
     "placeholders": {}
   },
+  "fees": "Fees",
+  "@fees": {
+    "description": "fees",
+    "type": "text",
+    "placeholders": {}
+  },
   "pinCreateTitle": "Create a 6-digit pin",
   "@pinCreateTitle": {
     "description": "pin_create_title",

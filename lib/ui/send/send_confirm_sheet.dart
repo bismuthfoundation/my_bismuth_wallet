@@ -296,7 +296,7 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
       // Send tx
       AppService appService = new AppService();
       
-      appService.sendTx(StateContainer.of(context).wallet.address, widget.amountRaw, destinationAltered, await AppUtil().seedToPublicKey(await StateContainer.of(context).getSeed()), await AppUtil().seedToPrivateKey(await StateContainer.of(context).getSeed()));
+      appService.sendTx(StateContainer.of(context).wallet.address, widget.amountRaw, destinationAltered, await AppUtil().seedToPublicKeyBase64(await StateContainer.of(context).getSeed()), await AppUtil().seedToPrivateKey(await StateContainer.of(context).getSeed()));
       // TODO: pq + ?
       //StateContainer.of(context).wallet.accountBalance += double.parse(widget.amountRaw);
       StateContainer.of(context).wallet.accountBalance -= double.parse(widget.amountRaw);

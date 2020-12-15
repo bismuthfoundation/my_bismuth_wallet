@@ -342,9 +342,6 @@ class StateContainerState extends State<StateContainer> {
         Address(wallet.address).isValid()) {
       // Request account history
       int count = 30;
-      if (wallet.history != null && wallet.history.length > 1) {
-        count = 30;
-      }
       try {
         AddressTxsResponse addressTxsResponse =
             await AppService().getAddressTxsResponse(wallet.address, count);
@@ -358,8 +355,8 @@ class StateContainerState extends State<StateContainer> {
             bool newItem = true;
             if (wallet.history.length > 0) {
               for (int i = 0; i < wallet.history.length; i++) {
-                if (wallet.history[i].timestamp != item.timestamp ||
-                    wallet.history[i].hash != item.hash) {
+                if (wallet.history[i].timestamp == item.timestamp &&
+                    wallet.history[i].hash == item.hash) {
                   newItem = false;
                   break;
                 }

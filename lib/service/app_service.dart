@@ -9,6 +9,7 @@ import 'package:my_bismuth_wallet/network/model/request/send_tx_request.dart';
 import 'package:my_bismuth_wallet/network/model/response/addlistlim_response.dart';
 import 'package:my_bismuth_wallet/network/model/response/address_txs_response.dart';
 import 'package:my_bismuth_wallet/network/model/response/balance_get_response.dart';
+import 'package:my_bismuth_wallet/network/model/response/mpinsert_response.dart';
 import 'package:my_bismuth_wallet/network/model/response/servers_wallet_legacy.dart';
 import 'package:my_bismuth_wallet/network/model/response/simple_price_response.dart';
 
@@ -174,7 +175,7 @@ class AppService {
           String message = new String.fromCharCodes(data).trim();
           message = message.substring(
               10, 10 + int.tryParse(message.substring(0, 10)));
-          //print(message);
+          //print("getAddressTxsResponse : " + message);
           List txs = addlistlimResponseFromJson(message);
           for (int i = 0; i < txs.length; i++) {
             AddressTxsResponseResult addressTxResponse =
@@ -462,28 +463,27 @@ class AppService {
 
   Future<String> sendTx(String address, String amount, String destination,
       String publicKey, String privateKey) async {
-    List<SendTxRequest> sendTxRequestList = new List<SendTxRequest>();
     SendTxRequest sendTxRequest = new SendTxRequest();
     Tx tx = new Tx();
-    print("address : " + address);
+    /*print("address : " + address);
     print("amount : " + amount);
     print("destination : " + destination);
     print("publicKey : " + publicKey);
     print("privateKey : " + privateKey);
-
+    */
     Completer<String> _completer = new Completer<String>();
     try {
       ServerWalletLegacyResponse serverWalletLegacyResponse =
           await getBestServerWalletLegacyResponse();
-      print("serverWalletLegacyResponse.ip : " + serverWalletLegacyResponse.ip);
-      print("serverWalletLegacyResponse.port : " +
-          serverWalletLegacyResponse.port.toString());
+      //print("serverWalletLegacyResponse.ip : " + serverWalletLegacyResponse.ip);
+      //print("serverWalletLegacyResponse.port : " +
+      //    serverWalletLegacyResponse.port.toString());
 
       Socket _socket = await Socket.connect(
           serverWalletLegacyResponse.ip, serverWalletLegacyResponse.port);
 
-      print('Connected to: '
-          '${_socket.remoteAddress.address}:${_socket.remotePort}');
+      //print('Connected to: '
+      //    '${_socket.remoteAddress.address}:${_socket.remotePort}');
       //Establish the onData, and onDone callbacks
       _socket.listen((data) {
         if (data != null) {
@@ -492,8 +492,15 @@ class AppService {
           message = message.substring(
               10, 10 + int.tryParse(message.substring(0, 10)));
           print("Response sendTx : " + message);
+          List<String> sendTxResponse = mpinsertResponseFromJson(message);
+          if(sendTxResponse.length < 4 || sendTxResponse[3].contains("Success") == false)
+          {
+              _completer.complete("Error");
+              throw Exception(message);
+          }
+        
 
-          _completer.complete("Sucess");
+          _completer.complete("Success");
         }
       }, onError: ((error, StackTrace trace) {
         print("Error");
@@ -515,21 +522,17 @@ class AppService {
               .microsecondsSinceEpoch
               .toString()
               .substring(10, 12);
-      //tx.timestamp = "1559472321.00";
       tx.address = address;
-      //tx.address = "Bis1SAk19HCWpDAThwFiaP9xA6zWjzsga7Hog";
       tx.recipient = destination;
-      //tx.recipient = "f6c0363ca1c5aa28cc584252e65a63998493ff0a5ec1bb16beda9bac";
       tx.amount = double.tryParse(amount).toStringAsFixed(8);
-      //tx.amount = "0.63000000";
       tx.operation = "";
-      tx.openfield = "fake_tx_info";
+      tx.openfield = "";
 
       sendTxRequest.id = 0;
       sendTxRequest.tx = tx;
       sendTxRequest.buffer = tx.buildBufferValue();
       
-      sendTxRequest.publicKey = publicKey;
+      sendTxRequest.publicKey = publicKey + "eee";
       sendTxRequest.buildSignature(privateKey);
       sendTxRequest.websocketCommand = "";
 
@@ -545,20 +548,20 @@ class AppService {
     return _completer.future;
   }
 
-  double getFeesEstimation(Tx tx) {
+  double getFeesEstimation(String openfield, String operation) {
     const double FEE_BASE = 0.01;
     double fees = FEE_BASE;
-    fees += tx.openfield.length * 100000;
-    if (tx.operation == "token:issue") {
+    fees += openfield.length / 100000;
+    if (operation == "token:issue") {
       fees += 10;
     }
-    if (tx.operation == "alias:register") {
+    if (operation == "alias:register") {
       fees += 1;
     }
-    if (tx.openfield.startsWith("alias=")) {
+    if (openfield.startsWith("alias=")) {
       fees += 1;
     }
-    print("getFeesEstimation: " + fees.toString());
+    //print("getFeesEstimation: " + fees.toString());
     return fees;
   }
 }

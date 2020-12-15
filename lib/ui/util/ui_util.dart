@@ -30,21 +30,21 @@ class UIUtil {
     if (address.length >= 22) {
       stringPartTwo = address.substring(12, 22);
     } else {
-      if (address.length > 22) {
+      if (address.length > 12 && address.length < 22) {
         stringPartTwo = address.substring(12, address.length);
       }
     }
     if (address.length >= 44) {
       stringPartThree = address.substring(22, 44);
     } else {
-      if (address.length > 22) {
+      if (address.length > 22 && address.length < 44) {
         stringPartThree = address.substring(22, address.length);
       }
     }
     if (address.length >= 59) {
       stringPartFour = address.substring(44, 59);
     } else {
-      if (address.length > 44) {
+      if (address.length > 44 && address.length < 59) {
         stringPartFour = address.substring(44, address.length);
       } else {}
     }

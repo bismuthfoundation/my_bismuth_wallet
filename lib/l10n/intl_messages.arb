@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-11-29T14:06:46.354354",
+  "@@last_modified": "2020-12-15T20:37:56.546008",
   "cancel": "Cancel",
   "@cancel": {
     "description": "dialog_cancel",
@@ -345,6 +345,12 @@
   "sendFrom": "Send From",
   "@sendFrom": {
     "description": "send_title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "fees": "Fees",
+  "@fees": {
+    "description": "fees",
     "type": "text",
     "placeholders": {}
   },
