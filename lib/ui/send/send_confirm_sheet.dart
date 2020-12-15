@@ -34,12 +34,16 @@ class SendConfirmSheet extends StatefulWidget {
   final String contactName;
   final String localCurrency;
   final bool maxSend;
+  final String openfield;
+  final String operation;
 
   SendConfirmSheet(
       {this.amountRaw,
       this.destination,
       this.contactName,
       this.localCurrency,
+      this.openfield,
+      this.operation,
       this.maxSend = false})
       : super();
 
@@ -151,56 +155,87 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
                       borderRadius: BorderRadius.circular(50),
                     ),
                     // Amount text
-                    child: RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                        text: '',
-                        children: [
-                          TextSpan(
-                            text: "$amount",
-                            style: TextStyle(
-                              color:
-                                  StateContainer.of(context).curTheme.primary,
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.w700,
-                              fontFamily: 'NunitoSans',
-                            ),
+                    child: Column(
+                      children: [
+                        RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                            text: '',
+                            children: [
+                              TextSpan(
+                                text: "$amount",
+                                style: TextStyle(
+                                  color: StateContainer.of(context)
+                                      .curTheme
+                                      .primary,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: 'NunitoSans',
+                                ),
+                              ),
+                              TextSpan(
+                                text: " BIS",
+                                style: TextStyle(
+                                  color: StateContainer.of(context)
+                                      .curTheme
+                                      .primary,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w100,
+                                  fontFamily: 'NunitoSans',
+                                ),
+                              ),
+                              TextSpan(
+                                text: widget.localCurrency != null
+                                    ? " (${widget.localCurrency})"
+                                    : "",
+                                style: TextStyle(
+                                  color: StateContainer.of(context)
+                                      .curTheme
+                                      .primary,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: 'NunitoSans',
+                                ),
+                              ),
+                            ],
                           ),
-                          TextSpan(
-                            text: " BIS",
+                        ),
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 30),
+                          child: Text(
+                            "+ " +
+                                AppLocalization.of(context).fees +
+                                ": " +
+                                new AppService()
+                                    .getFeesEstimation("", "")
+                                    .toString() +
+                                " BIS",
                             style: TextStyle(
                               color:
-                                  StateContainer.of(context).curTheme.primary,
-                              fontSize: 16.0,
+                                  StateContainer.of(context).curTheme.primary60,
+                              fontSize: 14.0,
                               fontWeight: FontWeight.w100,
                               fontFamily: 'NunitoSans',
                             ),
                           ),
-                          TextSpan(
-                            text: widget.localCurrency != null
-                                ? " (${widget.localCurrency})"
-                                : "",
-                            style: TextStyle(
-                              color:
-                                  StateContainer.of(context).curTheme.primary,
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.w700,
-                              fontFamily: 'NunitoSans',
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                   // "TO" text
                   Container(
-                    margin: EdgeInsets.only(top: 30.0, bottom: 10),
+                    margin: EdgeInsets.only(top: 10.0, bottom: 0),
                     child: Column(
                       children: <Widget>[
                         Text(
                           CaseChange.toUpperCase(
                               AppLocalization.of(context).to, context),
-                          style: AppStyles.textStyleHeader(context),
+                          style: TextStyle(
+                            color: StateContainer.of(context).curTheme.text60,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'NunitoSans',
+                          ),
                         ),
                       ],
                     ),
@@ -208,8 +243,12 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
                   // Address text
                   Container(
                       padding: EdgeInsets.symmetric(
-                          horizontal: 25.0, vertical: 15.0),
+                        horizontal: 25.0,
+                        vertical: 15.0,
+                      ),
                       margin: EdgeInsets.only(
+                          top: 10.0,
+                          bottom: 10,
                           left: MediaQuery.of(context).size.width * 0.105,
                           right: MediaQuery.of(context).size.width * 0.105),
                       width: double.infinity,
@@ -220,14 +259,199 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
                         borderRadius: BorderRadius.circular(25),
                       ),
                       child: UIUtil.threeLineAddressText(
-                              context, destinationAltered,
-                              contactName: widget.contactName)),
+                          context, destinationAltered,
+                          contactName: widget.contactName)),
+
+                  Expanded(
+                    child: Stack(children: [
+                      SingleChildScrollView(
+                          padding: EdgeInsets.only(top: 30.0, bottom: 30),
+                          child: Column(children: <Widget>[
+                            Stack(children: <Widget>[
+                              Column(
+                                children: [
+                                  // "optional parameters" text
+                                  Container(
+                                    margin:
+                                        EdgeInsets.only(top: 0.0, bottom: 10),
+                                    child: Column(
+                                      children: <Widget>[
+                                        Text(
+                                          CaseChange.toUpperCase(
+                                              AppLocalization.of(context)
+                                                  .optionalParameters,
+                                              context),
+                                          style: TextStyle(
+                                            color: StateContainer.of(context)
+                                                .curTheme
+                                                .text60,
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.w700,
+                                            fontFamily: 'NunitoSans',
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    margin:
+                                        EdgeInsets.only(top: 10.0, bottom: 0),
+                                    child: Column(
+                                      children: <Widget>[
+                                        Text(
+                                          CaseChange.toUpperCase(
+                                              AppLocalization.of(context)
+                                                  .operation,
+                                              context),
+                                          style: TextStyle(
+                                            color: StateContainer.of(context)
+                                                .curTheme
+                                                .primary60,
+                                            fontSize: 12.0,
+                                            fontWeight: FontWeight.w100,
+                                            fontFamily: 'NunitoSans',
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 25.0, vertical: 15.0),
+                                      margin: EdgeInsets.only(
+                                          left: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.105,
+                                          right: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.105),
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        color: StateContainer.of(context)
+                                            .curTheme
+                                            .backgroundDarkest,
+                                        borderRadius: BorderRadius.circular(25),
+                                      ),
+                                      child: Text(
+                                        widget.operation,
+                                        style: TextStyle(
+                                          color: StateContainer.of(context)
+                                              .curTheme
+                                              .primary60,
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w100,
+                                          fontFamily: 'NunitoSans',
+                                        ),
+                                      )),
+                                  Container(
+                                    margin:
+                                        EdgeInsets.only(top: 10.0, bottom: 0),
+                                    child: Column(
+                                      children: <Widget>[
+                                        Text(
+                                          CaseChange.toUpperCase(
+                                              AppLocalization.of(context)
+                                                  .openfield,
+                                              context),
+                                          style: TextStyle(
+                                            color: StateContainer.of(context)
+                                                .curTheme
+                                                .primary60,
+                                            fontSize: 12.0,
+                                            fontWeight: FontWeight.w100,
+                                            fontFamily: 'NunitoSans',
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 25.0, vertical: 15.0),
+                                      margin: EdgeInsets.only(
+                                      
+                                          left: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.105,
+                                          right: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.105),
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        color: StateContainer.of(context)
+                                            .curTheme
+                                            .backgroundDarkest,
+                                        borderRadius: BorderRadius.circular(25),
+                                      ),
+                                      child: Text(
+                                        widget.openfield,
+                                        style: TextStyle(
+                                          color: StateContainer.of(context)
+                                              .curTheme
+                                              .primary60,
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w100,
+                                          fontFamily: 'NunitoSans',
+                                        ),
+                                      )),
+                                ],
+                              )
+                            ])
+                          ])),
+                      //List Top Gradient End
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: Container(
+                          height: 30.0,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                StateContainer.of(context)
+                                    .curTheme
+                                    .background00,
+                                StateContainer.of(context).curTheme.background
+                              ],
+                              begin: AlignmentDirectional(0.5, 1.0),
+                              end: AlignmentDirectional(0.5, -1.0),
+                            ),
+                          ),
+                        ),
+                      ), // List Top Gradient End
+
+                      //List Bottom Gradient
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          height: 30.0,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                StateContainer.of(context)
+                                    .curTheme
+                                    .background00,
+                                StateContainer.of(context).curTheme.background
+                              ],
+                              begin: AlignmentDirectional(0.5, -1),
+                              end: AlignmentDirectional(0.5, 0.5),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ]),
+                  )
                 ],
               ),
             ),
 
             //A container for CONFIRM and CANCEL buttons
             Container(
+              margin: EdgeInsets.only(top: 10.0, bottom: 0),
               child: Column(
                 children: <Widget>[
                   // A row for CONFIRM Button
@@ -241,31 +465,32 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
                               AppLocalization.of(context).confirm, context),
                           Dimens.BUTTON_TOP_DIMENS, onPressed: () async {
                         // Authenticate
-                        AuthenticationMethod authMethod = await sl.get<SharedPrefsUtil>().getAuthMethod();
-                        bool hasBiometrics = await sl.get<BiometricUtil>().hasBiometrics();
+                        AuthenticationMethod authMethod =
+                            await sl.get<SharedPrefsUtil>().getAuthMethod();
+                        bool hasBiometrics =
+                            await sl.get<BiometricUtil>().hasBiometrics();
                         if (authMethod.method == AuthMethod.BIOMETRICS &&
                             hasBiometrics) {
-                              try {
-                                bool authenticated = await sl
-                                                  .get<BiometricUtil>()
-                                                  .authenticateWithBiometrics(
-                                                      context,
-                                                      AppLocalization.of(context)
-                                                          .sendAmountConfirm
-                                                          .replaceAll("%1", amount));
-                                if (authenticated) {
-                                  sl.get<HapticUtil>().fingerprintSucess();
-                                  EventTaxiImpl.singleton()
-                                            .fire(AuthenticatedEvent(AUTH_EVENT_TYPE.SEND));   
-                                }
-                              } catch (e) {
-                                await authenticateWithPin();
-                              }
-                            } else {
-                              await authenticateWithPin();
+                          try {
+                            bool authenticated = await sl
+                                .get<BiometricUtil>()
+                                .authenticateWithBiometrics(
+                                    context,
+                                    AppLocalization.of(context)
+                                        .sendAmountConfirm
+                                        .replaceAll("%1", amount));
+                            if (authenticated) {
+                              sl.get<HapticUtil>().fingerprintSucess();
+                              EventTaxiImpl.singleton().fire(
+                                  AuthenticatedEvent(AUTH_EVENT_TYPE.SEND));
                             }
+                          } catch (e) {
+                            await authenticateWithPin();
                           }
-                      )
+                        } else {
+                          await authenticateWithPin();
+                        }
+                      })
                     ],
                   ),
                   // A row for CANCEL Button
@@ -288,21 +513,32 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
           ],
         ));
   }
-  
+
   Future<void> _doSend() async {
-   try {
+    try {
       _showSendingAnimation(context);
 
       // Send tx
       AppService appService = new AppService();
-      
-      appService.sendTx(StateContainer.of(context).wallet.address, widget.amountRaw, destinationAltered, await AppUtil().seedToPublicKeyBase64(await StateContainer.of(context).getSeed()), await AppUtil().seedToPrivateKey(await StateContainer.of(context).getSeed()));
+
+      appService.sendTx(
+          StateContainer.of(context).wallet.address,
+          widget.amountRaw,
+          destinationAltered,
+          widget.openfield,
+          widget.operation,
+          await AppUtil().seedToPublicKeyBase64(
+              await StateContainer.of(context).getSeed()),
+          await AppUtil()
+              .seedToPrivateKey(await StateContainer.of(context).getSeed()));
       // TODO: pq + ?
       //StateContainer.of(context).wallet.accountBalance += double.parse(widget.amountRaw);
-      StateContainer.of(context).wallet.accountBalance -= double.parse(widget.amountRaw);
+      StateContainer.of(context).wallet.accountBalance -=
+          double.parse(widget.amountRaw);
 
       // Show complete
-      Contact contact = await sl.get<DBHelper>().getContactWithAddress(widget.destination);
+      Contact contact =
+          await sl.get<DBHelper>().getContactWithAddress(widget.destination);
       String contactName = contact == null ? null : contact.name;
       Navigator.of(context).popUntil(RouteUtils.withNameLike('/home'));
       StateContainer.of(context).requestUpdate();
@@ -328,20 +564,19 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
   Future<void> authenticateWithPin() async {
     // PIN Authentication
     String expectedPin = await sl.get<Vault>().getPin();
-    bool auth = await Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) {
-        return new PinScreen(
-          PinOverlayType.ENTER_PIN,
-          expectedPin: expectedPin,
-          description: AppLocalization.of(context)
-              .sendAmountConfirmPin
-              .replaceAll("%1", amount),
-        );
-      }));
+    bool auth = await Navigator.of(context)
+        .push(MaterialPageRoute(builder: (BuildContext context) {
+      return new PinScreen(
+        PinOverlayType.ENTER_PIN,
+        expectedPin: expectedPin,
+        description: AppLocalization.of(context)
+            .sendAmountConfirmPin
+            .replaceAll("%1", amount),
+      );
+    }));
     if (auth != null && auth) {
       await Future.delayed(Duration(milliseconds: 200));
-       EventTaxiImpl.singleton()
-          .fire(AuthenticatedEvent(AUTH_EVENT_TYPE.SEND));    
+      EventTaxiImpl.singleton().fire(AuthenticatedEvent(AUTH_EVENT_TYPE.SEND));
     }
   }
 }

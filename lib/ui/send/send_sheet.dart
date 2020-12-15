@@ -56,13 +56,21 @@ class _SendSheetState extends State<SendSheet> {
   TextEditingController _sendAddressController;
   FocusNode _sendAmountFocusNode;
   TextEditingController _sendAmountController;
+  FocusNode _sendOpenfieldFocusNode;
+  TextEditingController _sendOpenfieldController;
+  FocusNode _sendOperationFocusNode;
+  TextEditingController _sendOperationController;
 
   // States
   AddressStyle _sendAddressStyle;
   String _amountHint = "";
   String _addressHint = "";
+  String _openfieldHint = "";
+  String _operationHint = "";
   String _amountValidationText = "";
   String _addressValidationText = "";
+  String _openfieldValidationText = "";
+  String _operationValidationText = "";
   String quickSendAmount;
   List<Contact> _contacts;
   bool animationOpen;
@@ -86,8 +94,12 @@ class _SendSheetState extends State<SendSheet> {
     super.initState();
     _sendAmountFocusNode = FocusNode();
     _sendAddressFocusNode = FocusNode();
+    _sendOpenfieldFocusNode = FocusNode();
+    _sendOperationFocusNode = FocusNode();
     _sendAmountController = TextEditingController();
     _sendAddressController = TextEditingController();
+    _sendOpenfieldController = TextEditingController();
+    _sendOperationController = TextEditingController();
     _sendAddressStyle = AddressStyle.TEXT60;
     _contacts = List();
     quickSendAmount = widget.quickSendAmount;
@@ -167,6 +179,30 @@ class _SendSheetState extends State<SendSheet> {
         }
       }
     });
+    // On openfield focus change
+    _sendOpenfieldFocusNode.addListener(() {
+      if (_sendOpenfieldFocusNode.hasFocus) {
+        setState(() {
+          _openfieldHint = null;
+        });
+      } else {
+        setState(() {
+          _openfieldHint = "";
+        });
+      }
+    });
+    // On operation focus change
+    _sendOperationFocusNode.addListener(() {
+      if (_sendOperationFocusNode.hasFocus) {
+        setState(() {
+          _operationHint = null;
+        });
+      } else {
+        setState(() {
+          _operationHint = "";
+        });
+      }
+    });
     // Set initial currency format
     _localCurrencyFormat = NumberFormat.currency(
         locale: widget.localCurrency.getLocale().toString(),
@@ -239,7 +275,7 @@ class _SendSheetState extends State<SendSheet> {
             ),
 
             Container(
-              margin: EdgeInsets.only(top: 10.0, left: 30, right: 30),
+              margin: EdgeInsets.only(top: 0.0, left: 30, right: 30),
               child: Container(
                 child: RichText(
                   textAlign: TextAlign.start,
@@ -267,10 +303,11 @@ class _SendSheetState extends State<SendSheet> {
                   address: StateContainer.of(context).wallet.address,
                   type: AddressTextType.PRIMARY60),
             ),
+
             // A main container that holds everything
             Expanded(
               child: Container(
-                margin: EdgeInsets.only(top: 5, bottom: 5),
+                margin: EdgeInsets.only(top: 0, bottom: 10),
                 child: Stack(
                   children: <Widget>[
                     GestureDetector(
@@ -278,6 +315,8 @@ class _SendSheetState extends State<SendSheet> {
                         // Clear focus of our fields when tapped in this empty space
                         _sendAddressFocusNode.unfocus();
                         _sendAmountFocusNode.unfocus();
+                        _sendOpenfieldFocusNode.unfocus();
+                        _sendOperationFocusNode.unfocus();
                       },
                       child: Container(
                         color: Colors.transparent,
@@ -286,225 +325,297 @@ class _SendSheetState extends State<SendSheet> {
                       ),
                     ),
                     // A column for Enter Amount, Enter Address, Error containers and the pop up list
-                    Column(
-                      children: <Widget>[
-                        Stack(
-                          children: <Widget>[
-                            // Column for Balance Text, Enter Amount container + Enter Amount Error container
-                            Column(
-                              children: <Widget>[
-                                // Balance Text
-                                FutureBuilder(
-                                  future: sl
-                                      .get<SharedPrefsUtil>()
-                                      .getPriceConversion(),
-                                  builder: (BuildContext context,
-                                      AsyncSnapshot snapshot) {
-                                    if (snapshot.hasData &&
-                                        snapshot.data != null &&
-                                        snapshot.data !=
-                                            PriceConversion.HIDDEN) {
+                    SingleChildScrollView(
+                      padding: EdgeInsets.only(top: 30.0, bottom: 30),
+                      child: Column(
+                        children: <Widget>[
+                          Stack(
+                            children: <Widget>[
+                              // Column for Balance Text, Enter Amount container + Enter Amount Error container
+                              Column(
+                                children: <Widget>[
+                                  // Balance Text
+                                  FutureBuilder(
+                                    future: sl
+                                        .get<SharedPrefsUtil>()
+                                        .getPriceConversion(),
+                                    builder: (BuildContext context,
+                                        AsyncSnapshot snapshot) {
+                                      if (snapshot.hasData &&
+                                          snapshot.data != null &&
+                                          snapshot.data !=
+                                              PriceConversion.HIDDEN) {
+                                        return Container(
+                                          child: RichText(
+                                            textAlign: TextAlign.start,
+                                            text: TextSpan(
+                                              text: '',
+                                              children: [
+                                                TextSpan(
+                                                  text: "(",
+                                                  style: TextStyle(
+                                                    color: StateContainer.of(
+                                                            context)
+                                                        .curTheme
+                                                        .primary60,
+                                                    fontSize: 14.0,
+                                                    fontWeight: FontWeight.w100,
+                                                    fontFamily: 'NunitoSans',
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text: _localCurrencyMode
+                                                      ? StateContainer.of(
+                                                              context)
+                                                          .wallet
+                                                          .getLocalCurrencyPrice(
+                                                              StateContainer.of(
+                                                                      context)
+                                                                  .curCurrency,
+                                                              locale: StateContainer
+                                                                      .of(
+                                                                          context)
+                                                                  .currencyLocale)
+                                                      : StateContainer.of(
+                                                              context)
+                                                          .wallet
+                                                          .getAccountBalanceDisplay(),
+                                                  style: TextStyle(
+                                                    color: StateContainer.of(
+                                                            context)
+                                                        .curTheme
+                                                        .primary60,
+                                                    fontSize: 14.0,
+                                                    fontWeight: FontWeight.w700,
+                                                    fontFamily: 'NunitoSans',
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text: _localCurrencyMode
+                                                      ? ")"
+                                                      : " BIS)",
+                                                  style: TextStyle(
+                                                    color: StateContainer.of(
+                                                            context)
+                                                        .curTheme
+                                                        .primary60,
+                                                    fontSize: 14.0,
+                                                    fontWeight: FontWeight.w100,
+                                                    fontFamily: 'NunitoSans',
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      }
                                       return Container(
-                                        child: RichText(
-                                          textAlign: TextAlign.start,
-                                          text: TextSpan(
-                                            text: '',
-                                            children: [
-                                              TextSpan(
-                                                text: "(",
-                                                style: TextStyle(
-                                                  color:
-                                                      StateContainer.of(context)
-                                                          .curTheme
-                                                          .primary60,
-                                                  fontSize: 14.0,
-                                                  fontWeight: FontWeight.w100,
-                                                  fontFamily: 'NunitoSans',
-                                                ),
-                                              ),
-                                              TextSpan(
-                                                text: _localCurrencyMode
-                                                    ? StateContainer.of(context)
-                                                        .wallet
-                                                        .getLocalCurrencyPrice(
-                                                            StateContainer.of(
-                                                                    context)
-                                                                .curCurrency,
-                                                            locale: StateContainer
-                                                                    .of(context)
-                                                                .currencyLocale)
-                                                    : StateContainer.of(context)
-                                                        .wallet
-                                                        .getAccountBalanceDisplay(),
-                                                style: TextStyle(
-                                                  color:
-                                                      StateContainer.of(context)
-                                                          .curTheme
-                                                          .primary60,
-                                                  fontSize: 14.0,
-                                                  fontWeight: FontWeight.w700,
-                                                  fontFamily: 'NunitoSans',
-                                                ),
-                                              ),
-                                              TextSpan(
-                                                text: _localCurrencyMode
-                                                    ? ")"
-                                                    : " BIS)",
-                                                style: TextStyle(
-                                                  color:
-                                                      StateContainer.of(context)
-                                                          .curTheme
-                                                          .primary60,
-                                                  fontSize: 14.0,
-                                                  fontWeight: FontWeight.w100,
-                                                  fontFamily: 'NunitoSans',
-                                                ),
-                                              ),
-                                            ],
+                                        child: Text(
+                                          "*******",
+                                          style: TextStyle(
+                                            color: Colors.transparent,
+                                            fontSize: 14.0,
+                                            fontWeight: FontWeight.w100,
+                                            fontFamily: 'NunitoSans',
                                           ),
                                         ),
                                       );
-                                    }
-                                    return Container(
-                                      child: Text(
-                                        "*******",
+                                    },
+                                  ),
+
+                                  // ******* Enter Amount Container ******* //
+                                  getEnterAmountContainer(),
+                                  // ******* Enter Amount Container End ******* //
+
+                                  // ******* Enter Amount Error Container ******* //
+                                  Container(
+                                    alignment: AlignmentDirectional(0, 0),
+                                    margin: EdgeInsets.only(top: 3),
+                                    child: Text(_amountValidationText,
                                         style: TextStyle(
-                                          color: Colors.transparent,
                                           fontSize: 14.0,
-                                          fontWeight: FontWeight.w100,
+                                          color: StateContainer.of(context)
+                                              .curTheme
+                                              .primary,
                                           fontFamily: 'NunitoSans',
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
+                                          fontWeight: FontWeight.w600,
+                                        )),
+                                  ),
+                                  // ******* Enter Amount Error Container End ******* //
+                                ],
+                              ),
 
-                                // ******* Enter Amount Container ******* //
-                                getEnterAmountContainer(),
-                                // ******* Enter Amount Container End ******* //
-
-                                // ******* Enter Amount Error Container ******* //
-                                Container(
-                                  alignment: AlignmentDirectional(0, 0),
-                                  margin: EdgeInsets.only(top: 3),
-                                  child: Text(_amountValidationText,
-                                      style: TextStyle(
-                                        fontSize: 14.0,
-                                        color: StateContainer.of(context)
-                                            .curTheme
-                                            .primary,
-                                        fontFamily: 'NunitoSans',
-                                        fontWeight: FontWeight.w600,
-                                      )),
-                                ),
-                                // ******* Enter Amount Error Container End ******* //
-                              ],
-                            ),
-
-                            // Column for Enter Address container + Enter Address Error container
-                            Column(
-                              children: <Widget>[
-                                Container(
-                                  alignment: Alignment.topCenter,
-                                  child: Stack(
+                              // Column for Enter Address container + Enter Address Error container
+                              Column(
+                                children: <Widget>[
+                                  Container(
                                     alignment: Alignment.topCenter,
-                                    children: <Widget>[
-                                      Container(
-                                        margin: EdgeInsets.only(
-                                            left: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.105,
-                                            right: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.105),
-                                        alignment: Alignment.bottomCenter,
-                                        constraints: BoxConstraints(
-                                            maxHeight: 174, minHeight: 0),
-                                        // ********************************************* //
-                                        // ********* The pop-up Contacts List ********* //
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(25),
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(25),
-                                              color: StateContainer.of(context)
-                                                  .curTheme
-                                                  .backgroundDarkest,
-                                            ),
+                                    child: Stack(
+                                      alignment: Alignment.topCenter,
+                                      children: <Widget>[
+                                        Container(
+                                          margin: EdgeInsets.only(
+                                              left: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.105,
+                                              right: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.105),
+                                          alignment: Alignment.bottomCenter,
+                                          constraints: BoxConstraints(
+                                              maxHeight: 174, minHeight: 0),
+                                          // ********************************************* //
+                                          // ********* The pop-up Contacts List ********* //
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(25),
                                             child: Container(
                                               decoration: BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.circular(25),
+                                                color:
+                                                    StateContainer.of(context)
+                                                        .curTheme
+                                                        .backgroundDarkest,
                                               ),
-                                              margin:
-                                                  EdgeInsets.only(bottom: 50),
-                                              child: ListView.builder(
-                                                shrinkWrap: true,
-                                                padding: EdgeInsets.only(
-                                                    bottom: 0, top: 0),
-                                                itemCount: _contacts.length,
-                                                itemBuilder: (context, index) {
-                                                  return _buildContactItem(
-                                                      _contacts[index]);
-                                                },
-                                              ), // ********* The pop-up Contacts List End ********* //
-                                              // ************************************************** //
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(25),
+                                                ),
+                                                margin:
+                                                    EdgeInsets.only(bottom: 50),
+                                                child: ListView.builder(
+                                                  shrinkWrap: true,
+                                                  padding: EdgeInsets.only(
+                                                      bottom: 0, top: 0),
+                                                  itemCount: _contacts.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return _buildContactItem(
+                                                        _contacts[index]);
+                                                  },
+                                                ), // ********* The pop-up Contacts List End ********* //
+                                                // ************************************************** //
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
 
-                                      // ******* Enter Address Container ******* //
-                                      getEnterAddressContainer(),
-                                      // ******* Enter Address Container End ******* //
-                                    ],
-                                  ),
-                                ),
-
-                                // ******* Enter Address Error Container ******* //
-                                Container(
-                                  alignment: AlignmentDirectional(0, 0),
-                                  margin: EdgeInsets.only(top: 3),
-                                  child: Text(_addressValidationText,
-                                      style: TextStyle(
-                                        fontSize: 14.0,
-                                        color: StateContainer.of(context)
-                                            .curTheme
-                                            .primary,
-                                        fontFamily: 'NunitoSans',
-                                        fontWeight: FontWeight.w600,
-                                      )),
-                                ),
-                                // ******* Enter Address Error Container End ******* //
-                                Container(
-                                  margin: EdgeInsets.symmetric(horizontal: 30),
-                                  child: Text(
-                                    AppLocalization.of(context).fees +
-                                        ": " +
-                                        new AppService()
-                                            .getFeesEstimation(
-                                                "", "")
-                                            .toString() +
-                                        " BIS",
-                                    style: TextStyle(
-                                      color: StateContainer.of(context)
-                                          .curTheme
-                                          .primary60,
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.w100,
-                                      fontFamily: 'NunitoSans',
+                                        // ******* Enter Address Container ******* //
+                                        getEnterAddressContainer(),
+                                        // ******* Enter Address Container End ******* //
+                                      ],
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
+
+                                  // ******* Enter Address Error Container ******* //
+                                  Container(
+                                    alignment: AlignmentDirectional(0, 0),
+                                    margin: EdgeInsets.only(top: 3),
+                                    child: Text(_addressValidationText,
+                                        style: TextStyle(
+                                          fontSize: 14.0,
+                                          color: StateContainer.of(context)
+                                              .curTheme
+                                              .primary,
+                                          fontFamily: 'NunitoSans',
+                                          fontWeight: FontWeight.w600,
+                                        )),
+                                  ),
+                                  // ******* Enter Address Error Container End ******* //
+
+                                  Container(
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 30),
+                                    child: Text(
+                                      "+ " +
+                                          AppLocalization.of(context).fees +
+                                          ": " +
+                                          new AppService()
+                                              .getFeesEstimation("", "")
+                                              .toString() +
+                                          " BIS",
+                                      style: TextStyle(
+                                        color: StateContainer.of(context)
+                                            .curTheme
+                                            .primary60,
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.w100,
+                                        fontFamily: 'NunitoSans',
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 20),
+                                  Container(
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 30),
+                                    child: Text(
+                                      CaseChange.toUpperCase(
+                                          AppLocalization.of(context)
+                                              .optionalParameters,
+                                          context),
+                                      style: TextStyle(
+                                        color: StateContainer.of(context)
+                                            .curTheme
+                                            .text60,
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w700,
+                                        fontFamily: 'NunitoSans',
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    child: getEnterOperationContainer(),
+                                  ),
+                                  Container(
+                                    child: getEnterOpenfieldContainer(),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    //List Top Gradient End
+                    Align(
+                      alignment: Alignment.topCenter,
+                      child: Container(
+                        height: 30.0,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              StateContainer.of(context).curTheme.background00,
+                              StateContainer.of(context).curTheme.background
+                            ],
+                            begin: AlignmentDirectional(0.5, 1.0),
+                            end: AlignmentDirectional(0.5, -1.0),
+                          ),
                         ),
-                      ],
+                      ),
+                    ), // List Top Gradient End
+
+                    //List Bottom Gradient
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        height: 30.0,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              StateContainer.of(context).curTheme.background00,
+                              StateContainer.of(context).curTheme.background
+                            ],
+                            begin: AlignmentDirectional(0.5, -1),
+                            end: AlignmentDirectional(0.5, 0.5),
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -549,6 +660,8 @@ class _SendSheetState extends State<SendSheet> {
                                               : _rawAmount,
                                       destination: contact.address,
                                       contactName: contact.name,
+                                      operation: _sendOperationController.text,
+                                      openfield: _sendOpenfieldController.text,
                                       maxSend: _isMaxSend(),
                                       localCurrency: _localCurrencyMode
                                           ? _sendAmountController.text
@@ -567,6 +680,8 @@ class _SendSheetState extends State<SendSheet> {
                                               _sendAmountController.text)
                                           : _rawAmount,
                                   destination: _sendAddressController.text,
+                                  operation: _sendOperationController.text,
+                                  openfield: _sendOpenfieldController.text,
                                   maxSend: _isMaxSend(),
                                   localCurrency: _localCurrencyMode
                                       ? _sendAmountController.text
@@ -867,6 +982,7 @@ class _SendSheetState extends State<SendSheet> {
   bool _validateRequest() {
     bool isValid = true;
     _sendAmountFocusNode.unfocus();
+    _sendAddressFocusNode.unfocus();
     _sendAddressFocusNode.unfocus();
     // Validate amount
     if (_sendAmountController.text.trim().isEmpty) {
@@ -1190,5 +1306,75 @@ class _SendSheetState extends State<SendSheet> {
                     context, _sendAddressController.text))
             : null);
   } //************ Enter Address Container Method End ************//
+  //*************************************************************//
+
+  //************ Enter Openfield Container Method ************//
+  //*******************************************************//
+  getEnterOpenfieldContainer() {
+    return AppTextField(
+      focusNode: _sendOpenfieldFocusNode,
+      controller: _sendOpenfieldController,
+      topMargin: 30,
+      cursorColor: StateContainer.of(context).curTheme.primary,
+      style: TextStyle(
+        fontWeight: FontWeight.w700,
+        fontSize: 16.0,
+        color: StateContainer.of(context).curTheme.primary,
+        fontFamily: 'NunitoSans',
+      ),
+      inputFormatters: [LengthLimitingTextInputFormatter(100000)],
+      onChanged: (text) {
+        // Always reset the error message to be less annoying
+        setState(() {
+          _openfieldValidationText = "";
+        });
+      },
+      textInputAction: TextInputAction.next,
+      maxLines: null,
+      autocorrect: false,
+      hintText:
+          _amountHint == null ? "" : AppLocalization.of(context).enterOpenfield,
+      keyboardType: TextInputType.multiline,
+      textAlign: TextAlign.left,
+      onSubmitted: (text) {
+        FocusScope.of(context).unfocus();
+      },
+    );
+  } //************ Enter Openfield Container Method End ************//
+  //*************************************************************//
+
+  //************ Enter Operation Container Method ************//
+  //*******************************************************//
+  getEnterOperationContainer() {
+    return AppTextField(
+      focusNode: _sendOperationFocusNode,
+      controller: _sendOperationController,
+      topMargin: 30,
+      cursorColor: StateContainer.of(context).curTheme.primary,
+      style: TextStyle(
+        fontWeight: FontWeight.w700,
+        fontSize: 16.0,
+        color: StateContainer.of(context).curTheme.primary,
+        fontFamily: 'NunitoSans',
+      ),
+      inputFormatters: [LengthLimitingTextInputFormatter(32)],
+      onChanged: (text) {
+        // Always reset the error message to be less annoying
+        setState(() {
+          _operationValidationText = "";
+        });
+      },
+      textInputAction: TextInputAction.next,
+      maxLines: null,
+      autocorrect: false,
+      hintText:
+          _amountHint == null ? "" : AppLocalization.of(context).enterOperation,
+      keyboardType: TextInputType.text,
+      textAlign: TextAlign.left,
+      onSubmitted: (text) {
+        FocusScope.of(context).unfocus();
+      },
+    );
+  } //************ Enter Operation Container Method End ************//
   //*************************************************************//
 }

@@ -300,6 +300,36 @@
     "type": "text",
     "placeholders": {}
   },
+  "enterOpenfield": "Enter Openfield",
+  "@enterOpenfield": {
+    "description": "send_openfield_hint",
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterOperation": "Enter Operation",
+  "@enterOperation": {
+    "description": "send_operation_hint",
+    "type": "text",
+    "placeholders": {}
+  },
+   "openfield": "Openfield",
+  "@openfield": {
+    "description": "openfield",
+    "type": "text",
+    "placeholders": {}
+  },
+  "operation": "Operation",
+  "@Operation": {
+    "description": "operation",
+    "type": "text",
+    "placeholders": {}
+  },
+  "optionalParameters": "Optional Parameters",
+  "@optionalParameters": {
+    "description": "optionalParameters",
+    "type": "text",
+    "placeholders": {}
+  },
   "invalidAddress": "Address entered was invalid",
   "@invalidAddress": {
     "description": "send_invalid_address",

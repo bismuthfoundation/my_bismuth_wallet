@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-12-15T20:37:56.546008",
+  "@@last_modified": "2020-12-16T00:26:06.056258",
   "cancel": "Cancel",
   "@cancel": {
     "description": "dialog_cancel",
@@ -309,6 +309,36 @@
   "enterAddress": "Enter Address",
   "@enterAddress": {
     "description": "enter_address",
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterOpenfield": "Enter Openfield",
+  "@enterOpenfield": {
+    "description": "send_openfield_hint",
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterOperation": "Enter Operation",
+  "@enterOperation": {
+    "description": "send_operation_hint",
+    "type": "text",
+    "placeholders": {}
+  },
+  "openfield": "Openfield",
+  "@openfield": {
+    "description": "openfield",
+    "type": "text",
+    "placeholders": {}
+  },
+  "operation": "Operation",
+  "@operation": {
+    "description": "operation",
+    "type": "text",
+    "placeholders": {}
+  },
+  "optionalParameters": "Optional Parameters",
+  "@optionalParameters": {
+    "description": "optionalParameters",
     "type": "text",
     "placeholders": {}
   },

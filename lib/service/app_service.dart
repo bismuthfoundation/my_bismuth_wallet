@@ -51,7 +51,6 @@ import 'package:my_bismuth_wallet/network/model/response/simple_price_response_t
 import 'package:my_bismuth_wallet/network/model/response/simple_price_response_usd.dart';
 import 'package:my_bismuth_wallet/network/model/response/simple_price_response_zar.dart';
 
-
 class AppService {
   var logger = Logger();
 
@@ -461,8 +460,14 @@ class AppService {
     return simplePriceResponse;
   }
 
-  Future<String> sendTx(String address, String amount, String destination,
-      String publicKey, String privateKey) async {
+  Future<String> sendTx(
+      String address,
+      String amount,
+      String destination,
+      String openfield,
+      String operation,
+      String publicKey,
+      String privateKey) async {
     SendTxRequest sendTxRequest = new SendTxRequest();
     Tx tx = new Tx();
     /*print("address : " + address);
@@ -475,15 +480,15 @@ class AppService {
     try {
       ServerWalletLegacyResponse serverWalletLegacyResponse =
           await getBestServerWalletLegacyResponse();
-      //print("serverWalletLegacyResponse.ip : " + serverWalletLegacyResponse.ip);
-      //print("serverWalletLegacyResponse.port : " +
-      //    serverWalletLegacyResponse.port.toString());
+      print("serverWalletLegacyResponse.ip : " + serverWalletLegacyResponse.ip);
+      print("serverWalletLegacyResponse.port : " +
+          serverWalletLegacyResponse.port.toString());
 
       Socket _socket = await Socket.connect(
           serverWalletLegacyResponse.ip, serverWalletLegacyResponse.port);
 
-      //print('Connected to: '
-      //    '${_socket.remoteAddress.address}:${_socket.remotePort}');
+      print('Connected to: '
+          '${_socket.remoteAddress.address}:${_socket.remotePort}');
       //Establish the onData, and onDone callbacks
       _socket.listen((data) {
         if (data != null) {
@@ -493,12 +498,11 @@ class AppService {
               10, 10 + int.tryParse(message.substring(0, 10)));
           print("Response sendTx : " + message);
           List<String> sendTxResponse = mpinsertResponseFromJson(message);
-          if(sendTxResponse.length < 4 || sendTxResponse[3].contains("Success") == false)
-          {
-              _completer.complete("Error");
-              throw Exception(message);
+          if (sendTxResponse.length < 4 ||
+              sendTxResponse[3].contains("Success") == false) {
+            _completer.complete("Error");
+            throw Exception(message);
           }
-        
 
           _completer.complete("Success");
         }
@@ -525,14 +529,14 @@ class AppService {
       tx.address = address;
       tx.recipient = destination;
       tx.amount = double.tryParse(amount).toStringAsFixed(8);
-      tx.operation = "";
-      tx.openfield = "";
+      tx.operation = operation;
+      tx.openfield = openfield;
 
       sendTxRequest.id = 0;
       sendTxRequest.tx = tx;
       sendTxRequest.buffer = tx.buildBufferValue();
-      
-      sendTxRequest.publicKey = publicKey + "eee";
+
+      sendTxRequest.publicKey = publicKey;
       sendTxRequest.buildSignature(privateKey);
       sendTxRequest.websocketCommand = "";
 
@@ -540,7 +544,7 @@ class AppService {
       String param = sendTxRequest.buildCommand();
       String message =
           getLengthBuffer(method) + method + getLengthBuffer(param) + param;
-      print("message: "+ message);
+      print("message: " + message);
       _socket.write(message);
     } catch (e) {
       print("pb socket" + e.toString());

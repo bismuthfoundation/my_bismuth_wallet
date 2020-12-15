@@ -295,6 +295,31 @@ class AppLocalization {
         desc: 'enter_address', name: 'enterAddress');
   }
 
+  String get enterOpenfield {
+    return Intl.message("Enter Openfield",
+        desc: 'send_openfield_hint', name: 'enterOpenfield');
+  }
+
+  String get enterOperation {
+    return Intl.message("Enter Operation",
+        desc: 'send_operation_hint', name: 'enterOperation');
+  }
+
+  String get openfield {
+    return Intl.message("Openfield",
+        desc: 'openfield', name: 'openfield');
+  }
+
+  String get operation {
+    return Intl.message("Operation",
+        desc: 'operation', name: 'operation');
+  }
+
+  String get optionalParameters {
+    return Intl.message("Optional Parameters",
+        desc: 'optionalParameters', name: 'optionalParameters');
+  }
+
   String get invalidAddress {
     return Intl.message("Address entered was invalid",
         desc: 'send_invalid_address', name: 'invalidAddress');

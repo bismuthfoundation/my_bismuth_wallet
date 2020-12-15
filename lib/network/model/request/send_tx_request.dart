@@ -98,7 +98,7 @@ class SendTxRequest {
 
     var sig64 = base64.encode(topLevel.encodedBytes);
 
-    print("return sig64 : " + sig64);
+    //print("return sig64 : " + sig64);
     return sig64;
   
   }
