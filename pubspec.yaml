@@ -81,7 +81,10 @@ dependencies:
   flutter_svg: ^0.19.1
   
   # Implementation of Bitcoin BIP39: Mnemonic code for generating deterministic keys
-  bip39: ^1.0.3
+  bip39: 
+    git:
+      url: https://github.com/redDwarf03/bip39.git
+      ref: master
 
   ffi: ^0.1.3
 
@@ -107,7 +110,7 @@ dependencies:
   # Easy hexadecimal encoding and decoding
   hex: ^0.1.2
 
-  pointycastle: ^1.0.2
+  pointycastle: ^2.0.0
   
   # Vibrate
   vibrate:
