@@ -14,24 +14,28 @@ class Address {
   String get amount => _amount;
 
   String getShortString() {
-    if (_address == null || _address.length < 42) return "";
-    return _address.substring(0, 11) +
-        "..." +
-        _address.substring(_address.length - 6);
+    if (_address == null) return "";
+    if (_address.length < 21) {
+      return _address;
+    } else {
+      return _address.substring(0, 11) +
+          "..." +
+          _address.substring(_address.length - 6);
+    }
   }
 
   String getShorterString() {
-    if (_address == null || _address.length < 42) return "";
-    return _address.substring(0, 9) +
-        "..." +
-        _address.substring(_address.length - 4);
+    if (_address == null) return "";
+    if (_address.length < 21) {
+      return _address;
+    } else {
+      return _address.substring(0, 9) +
+          "..." +
+          _address.substring(_address.length - 4);
+    }
   }
 
   bool isValid() {
-    return _address == null
-        ? false
-        : true;
-
+    return _address == null ? false : true;
   }
-
 }

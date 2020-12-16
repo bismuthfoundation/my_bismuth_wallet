@@ -501,10 +501,9 @@ class AppService {
           if (sendTxResponse.length < 4 ||
               sendTxResponse[3].contains("Success") == false) {
             _completer.complete("Error");
-            throw Exception(message);
+          } else {
+            _completer.complete("Success");
           }
-
-          _completer.complete("Success");
         }
       }, onError: ((error, StackTrace trace) {
         print("Error");

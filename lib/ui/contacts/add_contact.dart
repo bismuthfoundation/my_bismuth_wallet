@@ -274,7 +274,7 @@ class _AddContactSheetState extends State<AddContactSheet> {
                                 _addressController.text = data;
                                 _addressValidAndUnfocused = true;
                               });
-                              _addressFocusNode.unfocus();
+                              //_addressFocusNode.unfocus();
                             } else {
                               setState(() {
                                 _showPasteButton = true;
@@ -290,11 +290,11 @@ class _AddContactSheetState extends State<AddContactSheet> {
                           if (address.isValid()) {
                             setState(() {
                               _addressValid = true;
-                              _showPasteButton = false;
+                              _showPasteButton = true;
                               _addressController.text =
                                   address.address;
                             });
-                            _addressFocusNode.unfocus();
+                            //_addressFocusNode.unfocus();
                           } else {
                             setState(() {
                               _showPasteButton = true;

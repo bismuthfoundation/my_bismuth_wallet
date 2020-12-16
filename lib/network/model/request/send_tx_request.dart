@@ -3,21 +3,11 @@
 //     final sendTxRequest = sendTxRequestFromJson(jsonString);
 
 import 'dart:convert';
-import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:pointycastle/export.dart';
 import 'package:pointycastle/pointycastle.dart';
-import 'package:pointycastle/random/fortuna_random.dart';
 import 'package:asn1lib/asn1lib.dart' as asn1lib;
-
-
-List<SendTxRequest> sendTxRequestFromJson(String str) =>
-    List<SendTxRequest>.from(
-        json.decode(str).map((x) => SendTxRequest.fromJson(x)));
-
-String sendTxRequestToJson(List<SendTxRequest> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class SendTxRequest {
   SendTxRequest({
@@ -36,43 +26,7 @@ class SendTxRequest {
   String publicKey;
   String websocketCommand;
 
-  BigInt uint8ListToBigInt(Uint8List bytes) {
-    BigInt read(int start, int end) {
-      if (end - start <= 4) {
-        int result = 0;
-        for (int i = end - 1; i >= start; i--) {
-          result = result * 256 + bytes[i];
-        }
-
-        return BigInt.from(result);
-      }
-      int mid = start + ((end - start) >> 1);
-      final result = read(start, mid) +
-          read(mid, end) * (BigInt.one << ((mid - start) * 8));
-
-      return result;
-    }
-
-    return read(0, bytes.length);
-  }
-
-  Uint8List bigIntToUint8List(BigInt number) {
-    int bytes = (number.bitLength + 7) >> 3;
-    final b256 = BigInt.from(256);
-    final result = Uint8List(bytes);
-
-    for (int i = 0; i < bytes; i++) {
-      result[i] = number.remainder(b256).toInt();
-      number = number >> 8;
-    }
-
-    return result;
-  }
-
   String signString(String privateKey, String msgToSign) {
-
-
-
 
     final Signer signer = Signer('SHA-256/ECDSA');
 
@@ -103,29 +57,9 @@ class SendTxRequest {
   
   }
 
-  Uint8List stringToUint8List(String s) => Uint8List.fromList(s.codeUnits);
-
-  FortunaRandom genSecure() {
-    final secureRandom = FortunaRandom();
-    final random = Random.secure();
-
-    const int seedLength = 32;
-    const int randomMax = 255;
-    final Uint8List uint8list = Uint8List(seedLength);
-
-    for (int i = 0; i < seedLength; i++) {
-      uint8list[i] = random.nextInt(randomMax);
-    }
-
-    final KeyParameter keyParameter = KeyParameter(uint8list);
-    secureRandom.seed(keyParameter);
-
-    return secureRandom;
-  }
-
   void buildSignature(String privateKey) async {
     signature = signString(privateKey, buffer);
-    print("signature: " + signature);
+    //print("signature: " + signature);
   }
 
   factory SendTxRequest.fromJson(Map<String, dynamic> json) => SendTxRequest(
@@ -155,7 +89,7 @@ class SendTxRequest {
     command += '"' + publicKey + '", ';
     command += '"' + tx.operation + '", ';
     command += '"' + tx.openfield + '"]';
-    print("command : " + command);
+    //print("command : " + command);
     return command;
   }
 }

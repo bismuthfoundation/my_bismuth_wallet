@@ -216,6 +216,7 @@ class _SendSheetState extends State<SendSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final bottom = MediaQuery.of(context).viewInsets.bottom;
     // The main column that holds everything
     return SafeArea(
         minimum:
@@ -326,258 +327,264 @@ class _SendSheetState extends State<SendSheet> {
                     ),
                     // A column for Enter Amount, Enter Address, Error containers and the pop up list
                     SingleChildScrollView(
-                      padding: EdgeInsets.only(top: 30.0, bottom: 30),
-                      child: Column(
-                        children: <Widget>[
-                          Stack(
-                            children: <Widget>[
-                              // Column for Balance Text, Enter Amount container + Enter Amount Error container
-                              Column(
-                                children: <Widget>[
-                                  // Balance Text
-                                  FutureBuilder(
-                                    future: sl
-                                        .get<SharedPrefsUtil>()
-                                        .getPriceConversion(),
-                                    builder: (BuildContext context,
-                                        AsyncSnapshot snapshot) {
-                                      if (snapshot.hasData &&
-                                          snapshot.data != null &&
-                                          snapshot.data !=
-                                              PriceConversion.HIDDEN) {
+               
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 30, bottom: bottom + 80),
+                        child: Column(
+                          children: <Widget>[
+                            Stack(
+                              children: <Widget>[
+                                // Column for Balance Text, Enter Amount container + Enter Amount Error container
+                                Column(
+                                  children: <Widget>[
+                                    // Balance Text
+                                    FutureBuilder(
+                                      future: sl
+                                          .get<SharedPrefsUtil>()
+                                          .getPriceConversion(),
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot snapshot) {
+                                        if (snapshot.hasData &&
+                                            snapshot.data != null &&
+                                            snapshot.data !=
+                                                PriceConversion.HIDDEN) {
+                                          return Container(
+                                            child: RichText(
+                                              textAlign: TextAlign.start,
+                                              text: TextSpan(
+                                                text: '',
+                                                children: [
+                                                  TextSpan(
+                                                    text: "(",
+                                                    style: TextStyle(
+                                                      color: StateContainer.of(
+                                                              context)
+                                                          .curTheme
+                                                          .primary60,
+                                                      fontSize: 14.0,
+                                                      fontWeight:
+                                                          FontWeight.w100,
+                                                      fontFamily: 'NunitoSans',
+                                                    ),
+                                                  ),
+                                                  TextSpan(
+                                                    text: _localCurrencyMode
+                                                        ? StateContainer.of(
+                                                                context)
+                                                            .wallet
+                                                            .getLocalCurrencyPrice(
+                                                                StateContainer.of(
+                                                                        context)
+                                                                    .curCurrency,
+                                                                locale: StateContainer.of(
+                                                                        context)
+                                                                    .currencyLocale)
+                                                        : StateContainer.of(
+                                                                context)
+                                                            .wallet
+                                                            .getAccountBalanceDisplay(),
+                                                    style: TextStyle(
+                                                      color: StateContainer.of(
+                                                              context)
+                                                          .curTheme
+                                                          .primary60,
+                                                      fontSize: 14.0,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      fontFamily: 'NunitoSans',
+                                                    ),
+                                                  ),
+                                                  TextSpan(
+                                                    text: _localCurrencyMode
+                                                        ? ")"
+                                                        : " BIS)",
+                                                    style: TextStyle(
+                                                      color: StateContainer.of(
+                                                              context)
+                                                          .curTheme
+                                                          .primary60,
+                                                      fontSize: 14.0,
+                                                      fontWeight:
+                                                          FontWeight.w100,
+                                                      fontFamily: 'NunitoSans',
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        }
                                         return Container(
-                                          child: RichText(
-                                            textAlign: TextAlign.start,
-                                            text: TextSpan(
-                                              text: '',
-                                              children: [
-                                                TextSpan(
-                                                  text: "(",
-                                                  style: TextStyle(
-                                                    color: StateContainer.of(
-                                                            context)
-                                                        .curTheme
-                                                        .primary60,
-                                                    fontSize: 14.0,
-                                                    fontWeight: FontWeight.w100,
-                                                    fontFamily: 'NunitoSans',
-                                                  ),
-                                                ),
-                                                TextSpan(
-                                                  text: _localCurrencyMode
-                                                      ? StateContainer.of(
-                                                              context)
-                                                          .wallet
-                                                          .getLocalCurrencyPrice(
-                                                              StateContainer.of(
-                                                                      context)
-                                                                  .curCurrency,
-                                                              locale: StateContainer
-                                                                      .of(
-                                                                          context)
-                                                                  .currencyLocale)
-                                                      : StateContainer.of(
-                                                              context)
-                                                          .wallet
-                                                          .getAccountBalanceDisplay(),
-                                                  style: TextStyle(
-                                                    color: StateContainer.of(
-                                                            context)
-                                                        .curTheme
-                                                        .primary60,
-                                                    fontSize: 14.0,
-                                                    fontWeight: FontWeight.w700,
-                                                    fontFamily: 'NunitoSans',
-                                                  ),
-                                                ),
-                                                TextSpan(
-                                                  text: _localCurrencyMode
-                                                      ? ")"
-                                                      : " BIS)",
-                                                  style: TextStyle(
-                                                    color: StateContainer.of(
-                                                            context)
-                                                        .curTheme
-                                                        .primary60,
-                                                    fontSize: 14.0,
-                                                    fontWeight: FontWeight.w100,
-                                                    fontFamily: 'NunitoSans',
-                                                  ),
-                                                ),
-                                              ],
+                                          child: Text(
+                                            "*******",
+                                            style: TextStyle(
+                                              color: Colors.transparent,
+                                              fontSize: 14.0,
+                                              fontWeight: FontWeight.w100,
+                                              fontFamily: 'NunitoSans',
                                             ),
                                           ),
                                         );
-                                      }
-                                      return Container(
-                                        child: Text(
-                                          "*******",
+                                      },
+                                    ),
+
+                                    // ******* Enter Amount Container ******* //
+                                    getEnterAmountContainer(),
+                                    // ******* Enter Amount Container End ******* //
+
+                                    // ******* Enter Amount Error Container ******* //
+                                    Container(
+                                      alignment: AlignmentDirectional(0, 0),
+                                      margin: EdgeInsets.only(top: 3),
+                                      child: Text(_amountValidationText,
                                           style: TextStyle(
-                                            color: Colors.transparent,
                                             fontSize: 14.0,
-                                            fontWeight: FontWeight.w100,
+                                            color: StateContainer.of(context)
+                                                .curTheme
+                                                .primary,
                                             fontFamily: 'NunitoSans',
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
+                                            fontWeight: FontWeight.w600,
+                                          )),
+                                    ),
+                                    // ******* Enter Amount Error Container End ******* //
+                                  ],
+                                ),
 
-                                  // ******* Enter Amount Container ******* //
-                                  getEnterAmountContainer(),
-                                  // ******* Enter Amount Container End ******* //
-
-                                  // ******* Enter Amount Error Container ******* //
-                                  Container(
-                                    alignment: AlignmentDirectional(0, 0),
-                                    margin: EdgeInsets.only(top: 3),
-                                    child: Text(_amountValidationText,
-                                        style: TextStyle(
-                                          fontSize: 14.0,
-                                          color: StateContainer.of(context)
-                                              .curTheme
-                                              .primary,
-                                          fontFamily: 'NunitoSans',
-                                          fontWeight: FontWeight.w600,
-                                        )),
-                                  ),
-                                  // ******* Enter Amount Error Container End ******* //
-                                ],
-                              ),
-
-                              // Column for Enter Address container + Enter Address Error container
-                              Column(
-                                children: <Widget>[
-                                  Container(
-                                    alignment: Alignment.topCenter,
-                                    child: Stack(
+                                // Column for Enter Address container + Enter Address Error container
+                                Column(
+                                  children: <Widget>[
+                                    Container(
                                       alignment: Alignment.topCenter,
-                                      children: <Widget>[
-                                        Container(
-                                          margin: EdgeInsets.only(
-                                              left: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.105,
-                                              right: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.105),
-                                          alignment: Alignment.bottomCenter,
-                                          constraints: BoxConstraints(
-                                              maxHeight: 174, minHeight: 0),
-                                          // ********************************************* //
-                                          // ********* The pop-up Contacts List ********* //
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(25),
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(25),
-                                                color:
-                                                    StateContainer.of(context)
-                                                        .curTheme
-                                                        .backgroundDarkest,
-                                              ),
+                                      child: Stack(
+                                        alignment: Alignment.topCenter,
+                                        children: <Widget>[
+                                          Container(
+                                            margin: EdgeInsets.only(
+                                                left: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.105,
+                                                right: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.105),
+                                            alignment: Alignment.bottomCenter,
+                                            constraints: BoxConstraints(
+                                                maxHeight: 174, minHeight: 0),
+                                            // ********************************************* //
+                                            // ********* The pop-up Contacts List ********* //
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(25),
                                               child: Container(
                                                 decoration: BoxDecoration(
                                                   borderRadius:
                                                       BorderRadius.circular(25),
+                                                  color:
+                                                      StateContainer.of(context)
+                                                          .curTheme
+                                                          .backgroundDarkest,
                                                 ),
-                                                margin:
-                                                    EdgeInsets.only(bottom: 50),
-                                                child: ListView.builder(
-                                                  shrinkWrap: true,
-                                                  padding: EdgeInsets.only(
-                                                      bottom: 0, top: 0),
-                                                  itemCount: _contacts.length,
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    return _buildContactItem(
-                                                        _contacts[index]);
-                                                  },
-                                                ), // ********* The pop-up Contacts List End ********* //
-                                                // ************************************************** //
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25),
+                                                  ),
+                                                  margin: EdgeInsets.only(
+                                                      bottom: 50),
+                                                  child: ListView.builder(
+                                                    shrinkWrap: true,
+                                                    padding: EdgeInsets.only(
+                                                        bottom: 0, top: 0),
+                                                    itemCount: _contacts.length,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      return _buildContactItem(
+                                                          _contacts[index]);
+                                                    },
+                                                  ), // ********* The pop-up Contacts List End ********* //
+                                                  // ************************************************** //
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
 
-                                        // ******* Enter Address Container ******* //
-                                        getEnterAddressContainer(),
-                                        // ******* Enter Address Container End ******* //
-                                      ],
+                                          // ******* Enter Address Container ******* //
+                                          getEnterAddressContainer(),
+                                          // ******* Enter Address Container End ******* //
+                                        ],
+                                      ),
                                     ),
-                                  ),
 
-                                  // ******* Enter Address Error Container ******* //
-                                  Container(
-                                    alignment: AlignmentDirectional(0, 0),
-                                    margin: EdgeInsets.only(top: 3),
-                                    child: Text(_addressValidationText,
+                                    // ******* Enter Address Error Container ******* //
+                                    Container(
+                                      alignment: AlignmentDirectional(0, 0),
+                                      margin: EdgeInsets.only(top: 3),
+                                      child: Text(_addressValidationText,
+                                          style: TextStyle(
+                                            fontSize: 14.0,
+                                            color: StateContainer.of(context)
+                                                .curTheme
+                                                .primary,
+                                            fontFamily: 'NunitoSans',
+                                            fontWeight: FontWeight.w600,
+                                          )),
+                                    ),
+                                    // ******* Enter Address Error Container End ******* //
+
+                                    Container(
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 30),
+                                      child: Text(
+                                        "+ " +
+                                            AppLocalization.of(context).fees +
+                                            ": " +
+                                            new AppService()
+                                                .getFeesEstimation("", "")
+                                                .toString() +
+                                            " BIS",
                                         style: TextStyle(
-                                          fontSize: 14.0,
                                           color: StateContainer.of(context)
                                               .curTheme
-                                              .primary,
+                                              .primary60,
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w100,
                                           fontFamily: 'NunitoSans',
-                                          fontWeight: FontWeight.w600,
-                                        )),
-                                  ),
-                                  // ******* Enter Address Error Container End ******* //
-
-                                  Container(
-                                    margin:
-                                        EdgeInsets.symmetric(horizontal: 30),
-                                    child: Text(
-                                      "+ " +
-                                          AppLocalization.of(context).fees +
-                                          ": " +
-                                          new AppService()
-                                              .getFeesEstimation("", "")
-                                              .toString() +
-                                          " BIS",
-                                      style: TextStyle(
-                                        color: StateContainer.of(context)
-                                            .curTheme
-                                            .primary60,
-                                        fontSize: 14.0,
-                                        fontWeight: FontWeight.w100,
-                                        fontFamily: 'NunitoSans',
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  SizedBox(height: 20),
-                                  Container(
-                                    margin:
-                                        EdgeInsets.symmetric(horizontal: 30),
-                                    child: Text(
-                                      CaseChange.toUpperCase(
-                                          AppLocalization.of(context)
-                                              .optionalParameters,
-                                          context),
-                                      style: TextStyle(
-                                        color: StateContainer.of(context)
-                                            .curTheme
-                                            .text60,
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.w700,
-                                        fontFamily: 'NunitoSans',
+                                    SizedBox(height: 20),
+                                    Container(
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 30),
+                                      child: Text(
+                                        CaseChange.toUpperCase(
+                                            AppLocalization.of(context)
+                                                .optionalParameters,
+                                            context),
+                                        style: TextStyle(
+                                          color: StateContainer.of(context)
+                                              .curTheme
+                                              .text60,
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.w700,
+                                          fontFamily: 'NunitoSans',
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  Container(
-                                    child: getEnterOperationContainer(),
-                                  ),
-                                  Container(
-                                    child: getEnterOpenfieldContainer(),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
+                                    Container(
+                                      child: getEnterOperationContainer(),
+                                    ),
+                                    Container(
+                                      child: getEnterOpenfieldContainer(),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     //List Top Gradient End
@@ -1132,7 +1139,7 @@ class _SendSheetState extends State<SendSheet> {
         }
       },
     );
-  } //************ Enter Address Container Method End ************//
+  } //************ Enter Amount Container Method End ************//
   //*************************************************************//
 
   //************ Enter Address Container Method ************//
@@ -1204,9 +1211,9 @@ class _SendSheetState extends State<SendSheet> {
                       _showContactButton = false;
                     });
                     _sendAddressController.text = address.address;
-                    _sendAddressFocusNode.unfocus();
+                    //_sendAddressFocusNode.unfocus();
                     setState(() {
-                      _addressValidAndUnfocused = true;
+                      //_addressValidAndUnfocused = true;
                     });
                   } else {
                     // Is a contact
@@ -1266,11 +1273,11 @@ class _SendSheetState extends State<SendSheet> {
             _addressValidationText = "";
           });
           if (!isContact && Address(text).isValid()) {
-            _sendAddressFocusNode.unfocus();
+            //_sendAddressFocusNode.unfocus();
             setState(() {
               _sendAddressStyle = AddressStyle.TEXT90;
               _addressValidationText = "";
-              _pasteButtonVisible = false;
+              _pasteButtonVisible = true;
             });
           } else if (!isContact) {
             setState(() {

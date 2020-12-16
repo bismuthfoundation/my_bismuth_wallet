@@ -371,7 +371,6 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
                                       padding: EdgeInsets.symmetric(
                                           horizontal: 25.0, vertical: 15.0),
                                       margin: EdgeInsets.only(
-                                      
                                           left: MediaQuery.of(context)
                                                   .size
                                                   .width *
@@ -521,44 +520,50 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
       // Send tx
       AppService appService = new AppService();
 
-      appService.sendTx(
-          StateContainer.of(context).wallet.address,
-          widget.amountRaw,
-          destinationAltered,
-          widget.openfield,
-          widget.operation,
-          await AppUtil().seedToPublicKeyBase64(
-              await StateContainer.of(context).getSeed()),
-          await AppUtil()
-              .seedToPrivateKey(await StateContainer.of(context).getSeed()));
-      // TODO: pq + ?
-      //StateContainer.of(context).wallet.accountBalance += double.parse(widget.amountRaw);
-      StateContainer.of(context).wallet.accountBalance -=
-          double.parse(widget.amountRaw);
-
-      // Show complete
-      Contact contact =
-          await sl.get<DBHelper>().getContactWithAddress(widget.destination);
-      String contactName = contact == null ? null : contact.name;
-      Navigator.of(context).popUntil(RouteUtils.withNameLike('/home'));
-      StateContainer.of(context).requestUpdate();
-      Sheets.showAppHeightNineSheet(
-          context: context,
-          closeOnTap: true,
-          removeUntilHome: true,
-          widget: SendCompleteSheet(
-              amountRaw: widget.amountRaw,
-              destination: destinationAltered,
-              contactName: contactName,
-              localAmount: widget.localCurrency));
-    } catch (e) {
-      // Send failed
-      if (animationOpen) {
+      String result = "";
+      await appService
+          .sendTx(
+              StateContainer.of(context).wallet.address,
+              widget.amountRaw,
+              destinationAltered,
+              widget.openfield,
+              widget.operation,
+              await AppUtil().seedToPublicKeyBase64(
+                  await StateContainer.of(context).getSeed()),
+              await AppUtil()
+                  .seedToPrivateKey(await StateContainer.of(context).getSeed()))
+          .then((value) => result = value);
+      print("result : " + result);
+      if (result == "Error") {
+        // Send failed
+        if (animationOpen) {
+          Navigator.of(context).pop();
+        }
+        UIUtil.showSnackbar(AppLocalization.of(context).sendError, context);
         Navigator.of(context).pop();
+      } else {
+        // TODO: pq + ?
+        //StateContainer.of(context).wallet.accountBalance += double.parse(widget.amountRaw);
+        StateContainer.of(context).wallet.accountBalance -=
+            double.parse(widget.amountRaw);
+
+        // Show complete
+        Contact contact =
+            await sl.get<DBHelper>().getContactWithAddress(widget.destination);
+        String contactName = contact == null ? null : contact.name;
+        Navigator.of(context).popUntil(RouteUtils.withNameLike('/home'));
+        StateContainer.of(context).requestUpdate();
+        Sheets.showAppHeightNineSheet(
+            context: context,
+            closeOnTap: true,
+            removeUntilHome: true,
+            widget: SendCompleteSheet(
+                amountRaw: widget.amountRaw,
+                destination: destinationAltered,
+                contactName: contactName,
+                localAmount: widget.localCurrency));
       }
-      UIUtil.showSnackbar(AppLocalization.of(context).sendError, context);
-      Navigator.of(context).pop();
-    }
+    } catch (e) {}
   }
 
   Future<void> authenticateWithPin() async {

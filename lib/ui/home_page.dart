@@ -592,6 +592,7 @@ class _AppHomePageState extends State<AppHomePage>
     return Scaffold(
       drawerEdgeDragWidth: 200,
       resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
       backgroundColor: StateContainer.of(context).curTheme.background,
       drawer: SizedBox(
@@ -849,7 +850,7 @@ class _AppHomePageState extends State<AppHomePage>
                   context: context,
                   widget: TransactionDetailsSheet(
                       hash: item.hash,
-                      address: item.from,
+                      address: item.type == BlockTypes.SEND ? item.recipient : item.from,
                       displayName: displayName),
                   animationDurationMs: 175);
             },
