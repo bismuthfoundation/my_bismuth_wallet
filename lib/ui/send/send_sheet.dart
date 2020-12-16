@@ -1009,7 +1009,7 @@ class _SendSheetState extends State<SendSheet> {
               : NumberUtil.getRawAsUsableString(_rawAmount);
       double balanceRaw = StateContainer.of(context).wallet.accountBalance;
       double sendAmount = double.tryParse(amount);
-      if (sendAmount == null || sendAmount == 0) {
+      if (sendAmount == null) {
         isValid = false;
         setState(() {
           _amountValidationText = AppLocalization.of(context).amountMissing;
