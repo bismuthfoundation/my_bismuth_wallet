@@ -533,13 +533,13 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
               await AppUtil()
                   .seedToPrivateKey(await StateContainer.of(context).getSeed()))
           .then((value) => result = value);
-      print("result : " + result);
-      if (result == "Error") {
+      //print("result : " + result);
+      if (result != "Success") {
         // Send failed
         if (animationOpen) {
           Navigator.of(context).pop();
         }
-        UIUtil.showSnackbar(AppLocalization.of(context).sendError, context);
+        UIUtil.showSnackbar(AppLocalization.of(context).sendError + " (" + result + ")", context);
         Navigator.of(context).pop();
       } else {
         // TODO: pq + ?
