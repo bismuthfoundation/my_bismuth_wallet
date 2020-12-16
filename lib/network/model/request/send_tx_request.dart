@@ -5,9 +5,8 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:pointycastle/export.dart';
-import 'package:pointycastle/pointycastle.dart';
 import 'package:asn1lib/asn1lib.dart' as asn1lib;
+import 'package:pointycastle/pointycastle.dart';
 
 class SendTxRequest {
   SendTxRequest({
@@ -44,8 +43,9 @@ class SendTxRequest {
 
     signer.reset();
     signer.init(true, new ParametersWithRandom(privParams, rnd));
-    final ECSignature sig = signer.generateSignature(utf8.encode(msgToSign));
-
+    ECSignature sig = signer.generateSignature(utf8.encode(msgToSign));
+    sig = sig.normalize(ECDomainParameters('secp256k1'));
+  
     var topLevel = new asn1lib.ASN1Sequence();
     topLevel.add(asn1lib.ASN1Integer(sig.r));
     topLevel.add(asn1lib.ASN1Integer(sig.s));
