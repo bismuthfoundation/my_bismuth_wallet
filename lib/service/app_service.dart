@@ -172,6 +172,7 @@ class AppService {
       _socket.listen((data) {
         if (data != null) {
           String message = new String.fromCharCodes(data).trim();
+          //print("response : " + message);
           message = message.substring(
               10, 10 + int.tryParse(message.substring(0, 10)));
           //print("getAddressTxsResponse : " + message);
@@ -500,7 +501,7 @@ class AppService {
           List<String> sendTxResponse = mpinsertResponseFromJson(message);
           if (sendTxResponse.length < 4 ||
               sendTxResponse[3].contains("Success") == false) {
-            _completer.complete("Error");
+            _completer.complete(sendTxResponse[1]);
           } else {
             _completer.complete("Success");
           }
