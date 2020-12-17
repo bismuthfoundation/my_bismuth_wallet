@@ -220,7 +220,7 @@ class StateContainerState extends State<StateContainer> {
   // Update the global wallet instance with a new address
   Future<void> updateWallet({Account account}) async {
     String address;
-    address = await AppUtil().seedToAddress(await getSeed(), account.index);
+    address = AppUtil().seedToAddress(await getSeed(), account.index);
     AppService().getBalanceGetResponse(address.toString());
     AppService().getSimplePrice(curCurrency.getIso4217Code());
     account.address = address;
@@ -300,11 +300,7 @@ class StateContainerState extends State<StateContainer> {
       } else {
         wallet.accountBalance = double.tryParse(response.balance);
       }
-      // TODO : à renseigner
-      wallet.localCurrencyPrice = "0";
-      wallet.btcPrice = "0";
-      //wallet.localCurrencyPrice = response.price.toString();
-      //wallet.btcPrice = response.btcPrice.toString();
+
     });
   }
 
@@ -321,10 +317,12 @@ class StateContainerState extends State<StateContainer> {
             .add(await AppService().getBalanceGetResponse(account.address));
       }
     });
-
+ 
     sl.get<DBHelper>().getAccounts(await getSeed()).then((accounts) {
-      accounts.forEach((account) {
-        balanceGetResponseList.forEach((balanceGetResponse) {
+        for(int i=0; i<accounts.length; i++)
+        {
+          Account account = accounts.elementAt(i);
+            balanceGetResponseList.forEach((balanceGetResponse) {
           String combinedBalance =
               (BigInt.tryParse(balanceGetResponse.balance)).toString();
           if (account.address == balanceGetResponse.address &&
@@ -332,7 +330,7 @@ class StateContainerState extends State<StateContainer> {
             sl.get<DBHelper>().updateAccountBalance(account, combinedBalance);
           }
         });
-      });
+        }
     });
   }
 
@@ -345,6 +343,7 @@ class StateContainerState extends State<StateContainer> {
       try {
         AddressTxsResponse addressTxsResponse =
             await AppService().getAddressTxsResponse(wallet.address, count);
+        AppService().getSimplePrice(curCurrency.getIso4217Code()); 
 
         _requestBalances();
         bool postedToHome = false;
