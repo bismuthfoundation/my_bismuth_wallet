@@ -338,7 +338,7 @@ class _AppShareCardState extends State<AppShareCard> {
                     width: 97,
                     margin: EdgeInsets.only(bottom: 12.5),
                     child: AutoSizeText(
-                      "\$IDENA      IDENA.IO",
+                      "\$BISMUTH      BISMUTH.CZ",
                       minFontSize: 0.1,
                       stepGranularity: 0.1,
                       maxLines: 1,
