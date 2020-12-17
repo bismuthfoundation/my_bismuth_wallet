@@ -974,7 +974,7 @@ class AppLocalization {
   }
 
   String getAccountExplorerUrl(String account) {
-    return 'https://scan.idena.io/identity/$account';
+    return 'https://bismuth.online/search?quicksearch=$account';
   }
 
   String get privacyUrl {

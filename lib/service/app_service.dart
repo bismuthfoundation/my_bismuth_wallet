@@ -172,7 +172,7 @@ class AppService {
       _socket.listen((data) {
         if (data != null) {
           String message = new String.fromCharCodes(data).trim();
-          //print("response : " + message);
+          print("response : " + message);
           message = message.substring(
               10, 10 + int.tryParse(message.substring(0, 10)));
           //print("getAddressTxsResponse : " + message);

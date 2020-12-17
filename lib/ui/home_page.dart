@@ -10,6 +10,7 @@ import 'package:event_taxi/event_taxi.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:my_bismuth_wallet/network/model/response/address_txs_response.dart';
+import 'package:my_bismuth_wallet/service/app_service.dart';
 import 'package:my_bismuth_wallet/ui/popup_button.dart';
 import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:my_bismuth_wallet/dimens.dart';
