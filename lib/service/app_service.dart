@@ -124,7 +124,7 @@ class AppService {
               10, 10 + int.tryParse(message.substring(0, 10)));
           balanceGetResponse = balanceGetResponseFromJson(message);
           balanceGetResponse.address = address;
-          //print(message);
+          print(message);
           EventTaxiImpl.singleton()
               .fire(SubscribeEvent(response: balanceGetResponse));
           _completer.complete(balanceGetResponse);
