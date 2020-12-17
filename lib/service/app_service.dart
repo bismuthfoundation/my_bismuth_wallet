@@ -177,7 +177,7 @@ class AppService {
               10, 10 + int.tryParse(message.substring(0, 10)));
           //print("getAddressTxsResponse : " + message);
           List txs = addlistlimResponseFromJson(message);
-          for (int i = 0; i < txs.length; i++) {
+          for (int i = txs.length - 1; i >= 0; i--) {
             AddressTxsResponseResult addressTxResponse =
                 new AddressTxsResponseResult();
             addressTxResponse.populate(txs[i], address);

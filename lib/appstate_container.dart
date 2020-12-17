@@ -300,7 +300,6 @@ class StateContainerState extends State<StateContainer> {
       } else {
         wallet.accountBalance = double.tryParse(response.balance);
       }
-
     });
   }
 
@@ -317,12 +316,11 @@ class StateContainerState extends State<StateContainer> {
             .add(await AppService().getBalanceGetResponse(account.address));
       }
     });
- 
+
     sl.get<DBHelper>().getAccounts(await getSeed()).then((accounts) {
-        for(int i=0; i<accounts.length; i++)
-        {
-          Account account = accounts.elementAt(i);
-            balanceGetResponseList.forEach((balanceGetResponse) {
+      for (int i = 0; i < accounts.length; i++) {
+        Account account = accounts.elementAt(i);
+        balanceGetResponseList.forEach((balanceGetResponse) {
           String combinedBalance =
               (BigInt.tryParse(balanceGetResponse.balance)).toString();
           if (account.address == balanceGetResponse.address &&
@@ -330,7 +328,7 @@ class StateContainerState extends State<StateContainer> {
             sl.get<DBHelper>().updateAccountBalance(account, combinedBalance);
           }
         });
-        }
+      }
     });
   }
 
@@ -343,10 +341,10 @@ class StateContainerState extends State<StateContainer> {
       try {
         AddressTxsResponse addressTxsResponse =
             await AppService().getAddressTxsResponse(wallet.address, count);
-        AppService().getSimplePrice(curCurrency.getIso4217Code()); 
+        AppService().getSimplePrice(curCurrency.getIso4217Code());
 
         _requestBalances();
-        bool postedToHome = false;
+
         // Iterate list in reverse (oldest to newest block)
         if (addressTxsResponse != null && addressTxsResponse.result != null) {
           for (AddressTxsResponseResult item in addressTxsResponse.result) {
@@ -363,21 +361,9 @@ class StateContainerState extends State<StateContainer> {
             }
 
             if (newItem) {
-              int startIndex = 0; // Index to start inserting into the list
-              int lastIndex = addressTxsResponse.result.indexWhere((item) =>
-                  wallet.history.contains(
-                      item)); // Last index of historyResponse to insert to (first index where item exists in wallet history)
-              lastIndex =
-                  lastIndex <= 0 ? addressTxsResponse.result.length : lastIndex;
               setState(() {
-                wallet.history.insertAll(0,
-                    addressTxsResponse.result.getRange(startIndex, lastIndex));
-                // Send list to home screen
-                EventTaxiImpl.singleton()
-                    .fire(HistoryHomeEvent(items: wallet.history));
+                wallet.history.insert(0, item);
               });
-              postedToHome = true;
-              break;
             }
           }
         }
@@ -385,10 +371,8 @@ class StateContainerState extends State<StateContainer> {
         setState(() {
           wallet.historyLoading = false;
         });
-        if (!postedToHome) {
-          EventTaxiImpl.singleton()
-              .fire(HistoryHomeEvent(items: wallet.history));
-        }
+
+        EventTaxiImpl.singleton().fire(HistoryHomeEvent(items: wallet.history));
       } catch (e) {
         // TODO handle account history error
         sl.get<Logger>().e("account_history e", e);

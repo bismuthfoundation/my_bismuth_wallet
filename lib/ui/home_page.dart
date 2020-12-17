@@ -851,7 +851,9 @@ class _AppHomePageState extends State<AppHomePage>
                   context: context,
                   widget: TransactionDetailsSheet(
                       hash: item.hash,
-                      address: item.type == BlockTypes.SEND ? item.recipient : item.from,
+                      address: item.type == BlockTypes.SEND
+                          ? item.recipient
+                          : item.from,
                       displayName: displayName),
                   animationDurationMs: 175);
             },
@@ -914,14 +916,34 @@ class _AppHomePageState extends State<AppHomePage>
                     Column(
                       children: [
                         Container(
-                          width: MediaQuery.of(context).size.width / 2.4,
-                          child: Text(
-                            displayName,
-                            textAlign: TextAlign.end,
-                            style:
-                                AppStyles.textStyleTransactionAddress(context),
-                          ),
-                        ),
+                            width: MediaQuery.of(context).size.width / 2.4,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Container(
+                                  width: 26.0,
+                                  height: 26.0,
+                                  child: CircleAvatar(
+                                    backgroundColor: StateContainer.of(context)
+                                        .curTheme
+                                        .text05,
+                                    backgroundImage: NetworkImage(
+                                      UIUtil.getRobohashURL(
+                                          item.type == BlockTypes.SEND
+                                              ? item.recipient
+                                              : item.from),
+                                    ),
+                                    radius: 30.0,
+                                  ),
+                                ),
+                                Text(
+                                  displayName,
+                                  textAlign: TextAlign.end,
+                                  style: AppStyles.textStyleTransactionAddress(
+                                      context),
+                                ),
+                              ],
+                            )),
                       ],
                     ),
                   ],
