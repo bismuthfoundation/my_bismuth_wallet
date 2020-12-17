@@ -1,0 +1,5 @@
+- Fix balance update
+- Fix link to bismuth.online explorer
+- Fix GUI issue on new contact entry 
+- Fix QR code issue in send tx GUI
+- Add new languages (GERMAN, INDONESIAN, DUTCH, SPANISH, ITALIAN)
