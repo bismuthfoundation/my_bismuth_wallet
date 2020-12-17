@@ -159,8 +159,8 @@ class DBHelper {
           selected: list[i]["selected"] == 1 ? true : false,
           balance: list[i]["balance"]));
     }
-    accounts.forEach((a) async {
-      a.address = await AppUtil().seedToAddress(seed, a.index);
+    accounts.forEach((a) {
+      a.address = AppUtil().seedToAddress(seed, a.index);
     });
     return accounts;
   }
@@ -182,7 +182,7 @@ class DBHelper {
           balance: list[i]["balance"]));
     }
     accounts.forEach((a) async {
-      a.address = await AppUtil().seedToAddress(seed, a.index);
+      a.address = AppUtil().seedToAddress(seed, a.index);
     });
     return accounts;
   }
@@ -209,7 +209,7 @@ class DBHelper {
           name: nextName,
           lastAccess: 0,
           selected: false,
-          address: await AppUtil().seedToAddress(seed, nextIndex));
+          address: AppUtil().seedToAddress(seed, nextIndex));
       await txn.rawInsert(
           'INSERT INTO Accounts (name, acct_index, last_accessed, selected, address) values(?, ?, ?, ?, ?)',
           [
@@ -282,8 +282,7 @@ class DBHelper {
         selected: true,
         lastAccess: list[0]["last_accessed"],
         balance: list[0]["balance"],
-        address: await AppUtil()
-        .seedToAddress(seed, list[0]["acct_index"]));
+        address: AppUtil().seedToAddress(seed, list[0]["acct_index"]));
     return account;
   }
 
@@ -294,11 +293,8 @@ class DBHelper {
     if (list.length == 0) {
       return null;
     }
-    String address;
+    String address = AppUtil().seedToAddress(seed, list[0]["acct_index"]);
 
-    AppUtil()
-        .seedToAddress(seed, list[0]["acct_index"])
-        .then((value) => address = value);
     Account account = Account(
         id: list[0]["id"],
         name: list[0]["name"],
