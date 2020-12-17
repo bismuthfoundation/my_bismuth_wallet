@@ -15,7 +15,7 @@ import 'package:bs58check/bs58check.dart' as bs58check;
 
 class AppUtil {
 
-  Future<String> seedToAddress(String seed, int index) async {
+  String seedToAddress(String seed, int index) {
     String mnemonic = bip39.entropyToMnemonic(seed);
     //print("Mnemonic : " + mnemonic);
     final bip39Seed = bip39.mnemonicToSeed(mnemonic);
