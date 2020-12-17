@@ -274,7 +274,7 @@ class _AddContactSheetState extends State<AddContactSheet> {
                                 _addressController.text = data;
                                 _addressValidAndUnfocused = true;
                               });
-                              //_addressFocusNode.unfocus();
+                              _addressFocusNode.unfocus();
                             } else {
                               setState(() {
                                 _showPasteButton = true;
@@ -287,20 +287,24 @@ class _AddContactSheetState extends State<AddContactSheet> {
                         suffixShowFirstCondition: _showPasteButton,
                         onChanged: (text) {
                           Address address = Address(text);
-                          if (address.isValid()) {
+                          /*if (address.isValid()) {
                             setState(() {
                               _addressValid = true;
                               _showPasteButton = true;
                               _addressController.text =
                                   address.address;
                             });
-                            //_addressFocusNode.unfocus();
+                            _addressFocusNode.unfocus();
                           } else {
                             setState(() {
                               _showPasteButton = true;
                               _addressValid = false;
                             });
-                          }
+                          }*/
+                           setState(() {
+                              _showPasteButton = true;
+                              _addressValid = false;
+                            });
                         },
                         overrideTextFieldWidget: 
                           !_shouldShowTextField()
