@@ -34,6 +34,7 @@ import 'package:my_bismuth_wallet/ui/widgets/list_slidable.dart';
 import 'package:my_bismuth_wallet/ui/util/routes.dart';
 import 'package:my_bismuth_wallet/ui/widgets/reactive_refresh.dart';
 import 'package:my_bismuth_wallet/ui/util/ui_util.dart';
+import 'package:my_bismuth_wallet/ui/widgets/sync_info_view.dart';
 import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
 import 'package:my_bismuth_wallet/util/hapticutil.dart';
 import 'package:my_bismuth_wallet/util/caseconverter.dart';
@@ -625,6 +626,7 @@ class _AppHomePageState extends State<AppHomePage>
                         margin: EdgeInsetsDirectional.fromSTEB(
                             30.0, 20.0, 26.0, 0.0),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text(
                               CaseChange.toUpperCase(
@@ -637,6 +639,7 @@ class _AppHomePageState extends State<AppHomePage>
                                 color: StateContainer.of(context).curTheme.text,
                               ),
                             ),
+                            SyncInfoView(),
                           ],
                         ),
                       ), //Transactions Text End
@@ -1389,14 +1392,26 @@ class _AppHomePageState extends State<AppHomePage>
                   child: Container(
                     child: Hero(
                       tag: "avatar",
-                      child: CircleAvatar(
-                        backgroundColor:
-                            StateContainer.of(context).curTheme.text05,
-                        backgroundImage: NetworkImage(UIUtil.getRobohashURL(
-                            StateContainer.of(context)
-                                .selectedAccount
-                                .address)),
-                        radius: 50.0,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext context) {
+                            return UIUtil.showAccountWebview(
+                                context,
+                                StateContainer.of(context)
+                                    .selectedAccount
+                                    .address);
+                          }));
+                        },
+                        child: CircleAvatar(
+                          backgroundColor:
+                              StateContainer.of(context).curTheme.text05,
+                          backgroundImage: NetworkImage(UIUtil.getRobohashURL(
+                              StateContainer.of(context)
+                                  .selectedAccount
+                                  .address)),
+                          radius: 50.0,
+                        ),
                       ),
                     ),
                   ),
