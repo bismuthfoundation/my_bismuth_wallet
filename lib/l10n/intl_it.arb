@@ -165,5 +165,6 @@
   "goBackButton": "Indietro",
   "currency": "Valuta",
   "liveSupportButton": "Supporto",
-  "connectingHeader": "In connessione"
+  "connectingHeader": "In connessione",
+  "diacritic": "Accenti comuni e segni diacritici verranno sostituiti con un carattere equivalente"
 }

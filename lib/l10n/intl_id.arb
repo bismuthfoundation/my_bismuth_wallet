@@ -165,5 +165,6 @@
   "goBackButton": "Kembali",
   "currency": "Mata Uang",
   "liveSupportButton": "Bantuan",
-  "connectingHeader": "Menghubungkan"
+  "connectingHeader": "Menghubungkan",
+  "diacritic": "Aksen umum dan tanda diakritik akan diganti dengan karakter yang setara"
 }

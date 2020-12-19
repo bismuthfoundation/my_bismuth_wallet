@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:event_taxi/event_taxi.dart';
 import 'package:flutter/material.dart';
-
+import 'package:diacritic/diacritic.dart';
 import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:my_bismuth_wallet/bus/events.dart';
 import 'package:my_bismuth_wallet/dimens.dart';
@@ -335,7 +335,7 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
                                         borderRadius: BorderRadius.circular(25),
                                       ),
                                       child: Text(
-                                        widget.operation,
+                                        removeDiacritics(widget.operation),
                                         style: TextStyle(
                                           color: StateContainer.of(context)
                                               .curTheme
@@ -387,7 +387,7 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
                                         borderRadius: BorderRadius.circular(25),
                                       ),
                                       child: Text(
-                                        widget.openfield,
+                                        removeDiacritics(widget.openfield),
                                         style: TextStyle(
                                           color: StateContainer.of(context)
                                               .curTheme
@@ -539,7 +539,9 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
         if (animationOpen) {
           Navigator.of(context).pop();
         }
-        UIUtil.showSnackbar(AppLocalization.of(context).sendError + " (" + result + ")", context);
+        UIUtil.showSnackbar(
+            AppLocalization.of(context).sendError + " (" + result + ")",
+            context);
         Navigator.of(context).pop();
       } else {
         // TODO: pq + ?

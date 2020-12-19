@@ -65,6 +65,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "currency" : MessageLookupByLibrary.simpleMessage("Currency"),
     "defaultAccountName" : MessageLookupByLibrary.simpleMessage("Main Account"),
     "defaultNewAccountName" : MessageLookupByLibrary.simpleMessage("Account %1"),
+    "diacritic" : MessageLookupByLibrary.simpleMessage("Common accents and diacritical signs will be replacing with an equivalent character"),
     "disablePasswordSheetHeader" : MessageLookupByLibrary.simpleMessage("Disable"),
     "disablePasswordSuccess" : MessageLookupByLibrary.simpleMessage("Password has been disabled"),
     "disableWalletPassword" : MessageLookupByLibrary.simpleMessage("Disable Wallet Password"),

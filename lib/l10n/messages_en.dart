@@ -56,6 +56,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "copySeed" : MessageLookupByLibrary.simpleMessage("Copy Seed"),
     "defaultAccountName" : MessageLookupByLibrary.simpleMessage("Main Account"),
     "defaultNewAccountName" : MessageLookupByLibrary.simpleMessage("Account %1"),
+    "diacritic" : MessageLookupByLibrary.simpleMessage("Diacritic"),
     "enterAddress" : MessageLookupByLibrary.simpleMessage("Enter Address"),
     "enterAmount" : MessageLookupByLibrary.simpleMessage("Enter Amount"),
     "enterOpenfield" : MessageLookupByLibrary.simpleMessage("Enter Openfield"),

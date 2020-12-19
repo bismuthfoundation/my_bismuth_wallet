@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-12-17T15:11:02.578602",
+  "@@last_modified": "2020-12-19T19:50:10.765624",
   "cancel": "Cancel",
   "@cancel": {
     "description": "dialog_cancel",
@@ -333,6 +333,12 @@
   "operation": "Operation",
   "@operation": {
     "description": "operation",
+    "type": "text",
+    "placeholders": {}
+  },
+  "diacritic": "Common accents and diacritical signs will be replacing with an equivalent character",
+  "@diacritic": {
+    "description": "diacritic",
     "type": "text",
     "placeholders": {}
   },

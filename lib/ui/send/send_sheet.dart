@@ -327,7 +327,6 @@ class _SendSheetState extends State<SendSheet> {
                     ),
                     // A column for Enter Amount, Enter Address, Error containers and the pop up list
                     SingleChildScrollView(
-               
                       child: Padding(
                         padding: EdgeInsets.only(top: 30, bottom: bottom + 80),
                         child: Column(
@@ -569,6 +568,21 @@ class _SendSheetState extends State<SendSheet> {
                                               .text60,
                                           fontSize: 16.0,
                                           fontWeight: FontWeight.w700,
+                                          fontFamily: 'NunitoSans',
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 30),
+                                      child: Text(
+                                        AppLocalization.of(context).diacritic,
+                                        style: TextStyle(
+                                          color: StateContainer.of(context)
+                                              .curTheme
+                                              .primary60,
+                                          fontSize: 12.0,
+                                          fontWeight: FontWeight.w100,
                                           fontFamily: 'NunitoSans',
                                         ),
                                       ),

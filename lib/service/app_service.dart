@@ -12,7 +12,7 @@ import 'package:my_bismuth_wallet/network/model/response/balance_get_response.da
 import 'package:my_bismuth_wallet/network/model/response/mpinsert_response.dart';
 import 'package:my_bismuth_wallet/network/model/response/servers_wallet_legacy.dart';
 import 'package:my_bismuth_wallet/network/model/response/simple_price_response.dart';
-
+import 'package:diacritic/diacritic.dart';
 import 'package:my_bismuth_wallet/network/model/response/simple_price_response_aed.dart';
 import 'package:my_bismuth_wallet/network/model/response/simple_price_response_ars.dart';
 import 'package:my_bismuth_wallet/network/model/response/simple_price_response_aud.dart';
@@ -50,6 +50,7 @@ import 'package:my_bismuth_wallet/network/model/response/simple_price_response_t
 import 'package:my_bismuth_wallet/network/model/response/simple_price_response_twd.dart';
 import 'package:my_bismuth_wallet/network/model/response/simple_price_response_usd.dart';
 import 'package:my_bismuth_wallet/network/model/response/simple_price_response_zar.dart';
+import 'package:my_bismuth_wallet/network/model/response/wstatusget_response.dart';
 
 class AppService {
   var logger = Logger();
@@ -124,7 +125,7 @@ class AppService {
               10, 10 + int.tryParse(message.substring(0, 10)));
           balanceGetResponse = balanceGetResponseFromJson(message);
           balanceGetResponse.address = address;
-          print(message);
+          //print(message);
           EventTaxiImpl.singleton()
               .fire(SubscribeEvent(response: balanceGetResponse));
           _completer.complete(balanceGetResponse);
@@ -172,7 +173,7 @@ class AppService {
       _socket.listen((data) {
         if (data != null) {
           String message = new String.fromCharCodes(data).trim();
-          print("response : " + message);
+          //print("response : " + message);
           message = message.substring(
               10, 10 + int.tryParse(message.substring(0, 10)));
           //print("getAddressTxsResponse : " + message);
@@ -529,8 +530,8 @@ class AppService {
       tx.address = address;
       tx.recipient = destination;
       tx.amount = double.tryParse(amount).toStringAsFixed(8);
-      tx.operation = operation;
-      tx.openfield = openfield;
+      tx.operation = removeDiacritics(operation);
+      tx.openfield = removeDiacritics(openfield);
 
       sendTxRequest.id = 0;
       sendTxRequest.tx = tx;
@@ -567,5 +568,52 @@ class AppService {
     }
     //print("getFeesEstimation: " + fees.toString());
     return fees;
+  }
+
+ Future<WStatusGetResponse> getWStatusGetResponse() async {
+    WStatusGetResponse wStatusGetResponse = new WStatusGetResponse();
+    Completer<WStatusGetResponse> _completer =
+        new Completer<WStatusGetResponse>();
+    try {
+      ServerWalletLegacyResponse serverWalletLegacyResponse =
+          await getBestServerWalletLegacyResponse();
+      //print("serverWalletLegacyResponse.ip : " + serverWalletLegacyResponse.ip);
+      //print("serverWalletLegacyResponse.port : " +
+      //    serverWalletLegacyResponse.port.toString());
+
+      Socket _socket = await Socket.connect(
+          serverWalletLegacyResponse.ip, serverWalletLegacyResponse.port).timeout(const Duration(seconds: 3));
+
+      //print('Connected to: '
+      //   '${_socket.remoteAddress.address}:${_socket.remotePort}');
+      //Establish the onData, and onDone callbacks
+
+      _socket.listen((data) {
+        if (data != null) {
+          String message = new String.fromCharCodes(data).trim();
+          message = message.substring(
+              10, 10 + int.tryParse(message.substring(0, 10)));
+          wStatusGetResponse = wStatusGetResponseFromJson(message);
+          //print(message);
+          _completer.complete(wStatusGetResponse);
+        }
+      }, onError: ((error, StackTrace trace) {
+        //print("Error");
+        _completer.complete(wStatusGetResponse);
+      }), onDone: () {
+        //print("Done");
+        _socket.destroy();
+      }, cancelOnError: false);
+
+      //Send the request
+      String method = '"wstatusget"';
+
+      _socket.write(
+          getLengthBuffer(method) + method);
+    } catch (e) {
+      print("pb socket" + e.toString());
+      _completer.complete(null);
+    } finally {}
+    return _completer.future;
   }
 }

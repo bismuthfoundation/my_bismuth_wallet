@@ -315,6 +315,11 @@ class AppLocalization {
         desc: 'operation', name: 'operation');
   }
 
+  String get diacritic {
+    return Intl.message("Common accents and diacritical signs will be replacing with an equivalent character",
+        desc: 'diacritic', name: 'diacritic');
+  }
+
   String get optionalParameters {
     return Intl.message("Optional Parameters",
         desc: 'optionalParameters', name: 'optionalParameters');

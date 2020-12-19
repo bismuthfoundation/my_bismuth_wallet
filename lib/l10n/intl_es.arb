@@ -165,5 +165,6 @@
   "goBackButton": "Regresar\n",
   "currency": "Moneda",
   "liveSupportButton": "Soporte",
-  "connectingHeader": "Conectando"
+  "connectingHeader": "Conectando",
+  "diacritic": "Los acentos comunes y los signos diacríticos se reemplazarán por un carácter equivalente."
 }

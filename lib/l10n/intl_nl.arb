@@ -165,5 +165,6 @@
   "goBackButton": "Ga terug",
   "currency": "Valuta",
   "liveSupportButton": "Ondersteuning",
-  "connectingHeader": "Verbinden"
+  "connectingHeader": "Verbinden",
+  "diacritic": "Veel voorkomende accenten en diakritische tekens worden vervangen door een gelijkwaardig teken"
 }

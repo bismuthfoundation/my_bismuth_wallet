@@ -65,6 +65,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "currency" : MessageLookupByLibrary.simpleMessage("Mata Uang"),
     "defaultAccountName" : MessageLookupByLibrary.simpleMessage("Akun Utama"),
     "defaultNewAccountName" : MessageLookupByLibrary.simpleMessage("Akun %1"),
+    "diacritic" : MessageLookupByLibrary.simpleMessage("Aksen umum dan tanda diakritik akan diganti dengan karakter yang setara"),
     "disablePasswordSheetHeader" : MessageLookupByLibrary.simpleMessage("Nonaktifkan"),
     "disablePasswordSuccess" : MessageLookupByLibrary.simpleMessage("Kata sandi telah dinonaktifkan"),
     "disableWalletPassword" : MessageLookupByLibrary.simpleMessage("Nonaktifkan Kata Sandi Dompet"),

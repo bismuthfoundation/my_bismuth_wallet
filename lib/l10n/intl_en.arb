@@ -693,5 +693,11 @@
   "secretPhraseCopied": "Secret Phrase Copied",
   "import": "Import",
   "importSeedInstead": "Import Seed Instead",
-  "switchToSeed": "Switch to Seed"
+  "switchToSeed": "Switch to Seed",
+   "diacritic": "Diacritic",
+  "@diacritic": {
+    "description": "Common accents and diacritical signs will be replacing with an equivalent character",
+    "type": "text",
+    "placeholders": {}
+  }
 }

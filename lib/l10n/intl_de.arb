@@ -165,5 +165,6 @@
   "goBackButton": "Zurück",
   "currency": "Währung",
   "liveSupportButton": "Support",
-  "connectingHeader": "Verbindet"
+  "connectingHeader": "Verbindet",
+  "diacritic": "Gemeinsame Akzente und diakritische Zeichen werden durch ein gleichwertiges Zeichen ersetzt"
 }

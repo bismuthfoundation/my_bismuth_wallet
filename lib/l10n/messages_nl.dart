@@ -65,6 +65,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "currency" : MessageLookupByLibrary.simpleMessage("Valuta"),
     "defaultAccountName" : MessageLookupByLibrary.simpleMessage("Hoofd Account"),
     "defaultNewAccountName" : MessageLookupByLibrary.simpleMessage("Account %1"),
+    "diacritic" : MessageLookupByLibrary.simpleMessage("Veel voorkomende accenten en diakritische tekens worden vervangen door een gelijkwaardig teken"),
     "disablePasswordSheetHeader" : MessageLookupByLibrary.simpleMessage("Uitschakelen"),
     "disablePasswordSuccess" : MessageLookupByLibrary.simpleMessage("Wachtwoord is uitgeschakeld"),
     "disableWalletPassword" : MessageLookupByLibrary.simpleMessage("Wachtwoord uitschakelen"),
