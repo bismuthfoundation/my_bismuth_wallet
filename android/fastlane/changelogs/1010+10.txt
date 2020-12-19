@@ -1,0 +1,3 @@
+- Send tx: Diacritic management for operation and openfield fields
+- Home page: Add link to Bismuth.online when you click on your avatar
+- Home page: Connection status
