@@ -16,17 +16,19 @@ class AppWallet {
   String _localCurrencyPrice;
   String _btcPrice;
   List<AddressTxsResponseResult> _history;
+  List<BisToken> _tokens;
 
 
   AppWallet({String address, double accountBalance, 
                 String representative, String localCurrencyPrice,String btcPrice, 
-                List<AddressTxsResponseResult> history, bool loading, bool historyLoading}) {
+                List<AddressTxsResponseResult> history, bool loading, bool historyLoading, List<BisToken> tokens}) {
     this._address = address;
     this._accountBalance = accountBalance ?? 0;
     this._representative = representative;
     this._localCurrencyPrice = localCurrencyPrice ?? "0";
     this._btcPrice = btcPrice ?? "0";
     this._history = history ?? new List<AddressTxsResponseResult>();
+    this._tokens = tokens ?? new List<BisToken>();
     this._loading = loading ?? true;
     this._historyLoading = historyLoading  ?? true;
   }
@@ -91,6 +93,12 @@ class AppWallet {
 
   set history(List<AddressTxsResponseResult> value) {
     _history = value;
+  }
+
+  List<BisToken> get tokens => _tokens;
+
+  set tokens(List<BisToken> value) {
+    _tokens = value;
   }
 
   bool get loading => _loading;

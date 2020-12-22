@@ -50,6 +50,7 @@ import 'package:my_bismuth_wallet/network/model/response/simple_price_response_t
 import 'package:my_bismuth_wallet/network/model/response/simple_price_response_twd.dart';
 import 'package:my_bismuth_wallet/network/model/response/simple_price_response_usd.dart';
 import 'package:my_bismuth_wallet/network/model/response/simple_price_response_zar.dart';
+import 'package:my_bismuth_wallet/network/model/response/tokens_balance_get_response.dart';
 import 'package:my_bismuth_wallet/network/model/response/wstatusget_response.dart';
 
 class AppService {
@@ -154,6 +155,8 @@ class AppService {
       String address, int limit) async {
     AddressTxsResponse addressTxsResponse = new AddressTxsResponse();
 
+    addressTxsResponse.tokens = await getTokensBalance(address);
+
     addressTxsResponse.result = new List<AddressTxsResponseResult>();
     Completer<AddressTxsResponse> _completer =
         new Completer<AddressTxsResponse>();
@@ -182,6 +185,7 @@ class AppService {
             AddressTxsResponseResult addressTxResponse =
                 new AddressTxsResponseResult();
             addressTxResponse.populate(txs[i], address);
+            addressTxResponse.getBisToken();
             addressTxsResponse.result.add(addressTxResponse);
           }
           _completer.complete(addressTxsResponse);
@@ -472,12 +476,12 @@ class AppService {
       String privateKey) async {
     SendTxRequest sendTxRequest = new SendTxRequest();
     Tx tx = new Tx();
-    /*print("address : " + address);
+    print("address : " + address);
     print("amount : " + amount);
     print("destination : " + destination);
     print("publicKey : " + publicKey);
     print("privateKey : " + privateKey);
-    */
+
     Completer<String> _completer = new Completer<String>();
     try {
       ServerWalletLegacyResponse serverWalletLegacyResponse =
@@ -556,7 +560,7 @@ class AppService {
   double getFeesEstimation(String openfield, String operation) {
     const double FEE_BASE = 0.01;
     double fees = FEE_BASE;
-    fees += openfield.length / 100000;
+    fees += (openfield.length / 100000);
     if (operation == "token:issue") {
       fees += 10;
     }
@@ -570,7 +574,7 @@ class AppService {
     return fees;
   }
 
- Future<WStatusGetResponse> getWStatusGetResponse() async {
+  Future<WStatusGetResponse> getWStatusGetResponse() async {
     WStatusGetResponse wStatusGetResponse = new WStatusGetResponse();
     Completer<WStatusGetResponse> _completer =
         new Completer<WStatusGetResponse>();
@@ -582,7 +586,8 @@ class AppService {
       //    serverWalletLegacyResponse.port.toString());
 
       Socket _socket = await Socket.connect(
-          serverWalletLegacyResponse.ip, serverWalletLegacyResponse.port).timeout(const Duration(seconds: 3));
+              serverWalletLegacyResponse.ip, serverWalletLegacyResponse.port)
+          .timeout(const Duration(seconds: 3));
 
       //print('Connected to: '
       //   '${_socket.remoteAddress.address}:${_socket.remotePort}');
@@ -608,12 +613,33 @@ class AppService {
       //Send the request
       String method = '"wstatusget"';
 
-      _socket.write(
-          getLengthBuffer(method) + method);
+      _socket.write(getLengthBuffer(method) + method);
     } catch (e) {
       print("pb socket" + e.toString());
       _completer.complete(null);
     } finally {}
     return _completer.future;
+  }
+
+  Future<List<BisToken>> getTokensBalance(String address) async {
+    List<BisToken> bisTokenList = new List<BisToken>();
+
+    HttpClient httpClient = new HttpClient();
+    try {
+      HttpClientRequest request = await httpClient
+          .getUrl(Uri.parse("https://bismuth.today/api/balances/" + address));
+      request.headers.set('content-type', 'application/json');
+      HttpClientResponse response = await request.close();
+      if (response.statusCode == 200) {
+        String reply = await response.transform(utf8.decoder).join();
+        var tokensBalanceGetResponse = tokensBalanceGetResponseFromJson(reply);
+
+        for (int i = 0; i < tokensBalanceGetResponse.length; i++) {
+          BisToken bisToken = new BisToken(tokenName: tokensBalanceGetResponse[i][0], tokensQuantity: tokensBalanceGetResponse[i][1]);
+          bisTokenList.add(bisToken);
+        }
+      }
+    } catch (e) {}
+    return bisTokenList;
   }
 }

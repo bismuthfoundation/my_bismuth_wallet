@@ -207,8 +207,8 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
                                 AppLocalization.of(context).fees +
                                 ": " +
                                 new AppService()
-                                    .getFeesEstimation("", "")
-                                    .toString() +
+                                    .getFeesEstimation(widget.openfield, widget.operation)
+                                    .toStringAsFixed(5) +
                                 " BIS",
                             style: TextStyle(
                               color:
@@ -529,9 +529,9 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
               widget.openfield,
               widget.operation,
               await AppUtil().seedToPublicKeyBase64(
-                  await StateContainer.of(context).getSeed()),
+                  await StateContainer.of(context).getSeed(), StateContainer.of(context).selectedAccount.index),
               await AppUtil()
-                  .seedToPrivateKey(await StateContainer.of(context).getSeed()))
+                  .seedToPrivateKey(await StateContainer.of(context).getSeed(), StateContainer.of(context).selectedAccount.index))
           .then((value) => result = value);
       //print("result : " + result);
       if (result != "Success") {

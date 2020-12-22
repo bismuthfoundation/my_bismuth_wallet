@@ -12,6 +12,7 @@ import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:my_bismuth_wallet/dimens.dart';
 import 'package:my_bismuth_wallet/localization.dart';
 import 'package:my_bismuth_wallet/model/available_currency.dart';
+import 'package:my_bismuth_wallet/network/model/response/address_txs_response.dart';
 import 'package:my_bismuth_wallet/service/app_service.dart';
 import 'package:my_bismuth_wallet/service_locator.dart';
 import 'package:my_bismuth_wallet/app_icons.dart';
@@ -60,6 +61,8 @@ class _SendSheetState extends State<SendSheet> {
   TextEditingController _sendOpenfieldController;
   FocusNode _sendOperationFocusNode;
   TextEditingController _sendOperationController;
+  FocusNode _sendTokenQuantityFocusNode;
+  TextEditingController _sendTokenQuantityController;
 
   // States
   AddressStyle _sendAddressStyle;
@@ -67,10 +70,14 @@ class _SendSheetState extends State<SendSheet> {
   String _addressHint = "";
   String _openfieldHint = "";
   String _operationHint = "";
+  String _tokenQuantityHint = "";
   String _amountValidationText = "";
+  String _tokenQuantityValidationText = "";
+  String _tokenValidationText = "";
   String _addressValidationText = "";
   String _openfieldValidationText = "";
   String _operationValidationText = "";
+  String _selectedTokenName = "";
   String quickSendAmount;
   List<Contact> _contacts;
   bool animationOpen;
@@ -86,8 +93,9 @@ class _SendSheetState extends State<SendSheet> {
   String _lastLocalCurrencyAmount = "";
   String _lastCryptoAmount = "";
   NumberFormat _localCurrencyFormat;
-
+  bool isTokenToSendSwitched = false;
   String _rawAmount;
+  String _rawTokenQuantity;
 
   @override
   void initState() {
@@ -96,10 +104,12 @@ class _SendSheetState extends State<SendSheet> {
     _sendAddressFocusNode = FocusNode();
     _sendOpenfieldFocusNode = FocusNode();
     _sendOperationFocusNode = FocusNode();
+    _sendTokenQuantityFocusNode = FocusNode();
     _sendAmountController = TextEditingController();
     _sendAddressController = TextEditingController();
     _sendOpenfieldController = TextEditingController();
     _sendOperationController = TextEditingController();
+    _sendTokenQuantityController = TextEditingController();
     _sendAddressStyle = AddressStyle.TEXT60;
     _contacts = List();
     quickSendAmount = widget.quickSendAmount;
@@ -149,7 +159,7 @@ class _SendSheetState extends State<SendSheet> {
       if (_sendAddressFocusNode.hasFocus) {
         setState(() {
           _addressHint = null;
-          _addressValidAndUnfocused = false;
+          //_addressValidAndUnfocused = false;
         });
         _sendAddressController.selection = TextSelection.fromPosition(
             TextPosition(offset: _sendAddressController.text.length));
@@ -168,7 +178,7 @@ class _SendSheetState extends State<SendSheet> {
           _addressHint = "";
           _contacts = [];
           if (Address(_sendAddressController.text).isValid()) {
-            _addressValidAndUnfocused = true;
+            //_addressValidAndUnfocused = true;
           }
         });
         if (_sendAddressController.text.trim() == "@") {
@@ -200,6 +210,27 @@ class _SendSheetState extends State<SendSheet> {
       } else {
         setState(() {
           _operationHint = "";
+        });
+      }
+    });
+
+    // On openfield focus change
+    _sendTokenQuantityFocusNode.addListener(() {
+      if (_sendTokenQuantityFocusNode.hasFocus) {
+        if (_rawTokenQuantity != null) {
+          setState(() {
+            _sendTokenQuantityController.text =
+                NumberUtil.getRawAsUsableString(_rawTokenQuantity)
+                    .replaceAll(",", "");
+            _rawTokenQuantity = null;
+          });
+        }
+        setState(() {
+          _tokenQuantityHint = null;
+        });
+      } else {
+        setState(() {
+          _tokenQuantityHint = "";
         });
       }
     });
@@ -540,8 +571,12 @@ class _SendSheetState extends State<SendSheet> {
                                             AppLocalization.of(context).fees +
                                             ": " +
                                             new AppService()
-                                                .getFeesEstimation("", "")
-                                                .toString() +
+                                                .getFeesEstimation(
+                                                    _sendOpenfieldController
+                                                        .text,
+                                                    _sendOpenfieldController
+                                                        .text)
+                                                .toStringAsFixed(5) +
                                             " BIS",
                                         style: TextStyle(
                                           color: StateContainer.of(context)
@@ -554,6 +589,7 @@ class _SendSheetState extends State<SendSheet> {
                                       ),
                                     ),
                                     SizedBox(height: 20),
+
                                     Container(
                                       margin:
                                           EdgeInsets.symmetric(horizontal: 30),
@@ -588,11 +624,102 @@ class _SendSheetState extends State<SendSheet> {
                                       ),
                                     ),
                                     Container(
-                                      child: getEnterOperationContainer(),
-                                    ),
-                                    Container(
-                                      child: getEnterOpenfieldContainer(),
-                                    ),
+                                        child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          AppLocalization.of(context)
+                                              .sendATokenQuestion,
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.w100,
+                                            fontFamily: 'NunitoSans',
+                                            color: StateContainer.of(context)
+                                                .curTheme
+                                                .text60,
+                                          ),
+                                        ),
+                                        Switch(
+                                          value: isTokenToSendSwitched,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              isTokenToSendSwitched = value;
+                                              _sendOpenfieldController =
+                                                  TextEditingController();
+                                              _sendOperationController =
+                                                  TextEditingController();
+                                              _sendTokenQuantityController =
+                                                  TextEditingController();
+                                            });
+                                          },
+                                          activeTrackColor:
+                                              StateContainer.of(context)
+                                                  .curTheme
+                                                  .backgroundDarkest,
+                                          activeColor:
+                                              StateContainer.of(context)
+                                                  .curTheme
+                                                  .background40,
+                                        ),
+                                      ],
+                                    )),
+                                    isTokenToSendSwitched == false
+                                        ? Column(
+                                            children: [
+                                              Container(
+                                                child:
+                                                    getEnterOperationContainer(),
+                                              ),
+                                              Container(
+                                                child:
+                                                    getEnterOpenfieldContainer(),
+                                              ),
+                                            ],
+                                          )
+                                        : Column(children: [
+                                            Container(
+                                                child:
+                                                    getEnterTokenContainer()),
+                                            // ******* Enter Address Error Container ******* //
+                                            Container(
+                                              alignment:
+                                                  AlignmentDirectional(0, 0),
+                                              margin: EdgeInsets.only(top: 3),
+                                              child: Text(_tokenValidationText,
+                                                  style: TextStyle(
+                                                    fontSize: 14.0,
+                                                    color: StateContainer.of(
+                                                            context)
+                                                        .curTheme
+                                                        .primary,
+                                                    fontFamily: 'NunitoSans',
+                                                    fontWeight: FontWeight.w600,
+                                                  )),
+                                            ),
+                                            // ******* Enter Address Error Container End ******* //
+                                            Container(
+                                                child:
+                                                    getEnterTokensQuantityContainer()),
+                                            // ******* Enter Address Error Container ******* //
+                                            Container(
+                                              alignment:
+                                                  AlignmentDirectional(0, 0),
+                                              margin: EdgeInsets.only(top: 3),
+                                              child: Text(
+                                                  _tokenQuantityValidationText,
+                                                  style: TextStyle(
+                                                    fontSize: 14.0,
+                                                    color: StateContainer.of(
+                                                            context)
+                                                        .curTheme
+                                                        .primary,
+                                                    fontFamily: 'NunitoSans',
+                                                    fontWeight: FontWeight.w600,
+                                                  )),
+                                            ),
+                                            // ******* Enter Address Error Container End ******* //
+                                          ]),
                                   ],
                                 ),
                               ],
@@ -1015,7 +1142,8 @@ class _SendSheetState extends State<SendSheet> {
     } else {
       // Estimation of fees
       AppService appService = new AppService();
-      double estimationFees = appService.getFeesEstimation("", "");
+      double estimationFees = appService.getFeesEstimation(
+          _sendOpenfieldController.text, _sendOpenfieldController.text);
 
       String amount = _localCurrencyMode
           ? _convertLocalCurrencyToCrypto()
@@ -1058,6 +1186,43 @@ class _SendSheetState extends State<SendSheet> {
       });
       _sendAddressFocusNode.unfocus();
     }
+
+    // Validate token
+    if (isTokenToSendSwitched) {
+      if (_selectedTokenName.isEmpty) {
+        isValid = false;
+        setState(() {
+          _tokenValidationText = AppLocalization.of(context).tokenMissing;
+        });
+      }
+      if (_sendTokenQuantityController.text.trim().isEmpty || int.tryParse(_sendTokenQuantityController.text.trim()) == 0) {
+        isValid = false;
+        setState(() {
+          _tokenQuantityValidationText =
+              AppLocalization.of(context).tokenQuantityMissing;
+        });
+      } else {
+        if (_selectedTokenName.isEmpty == false) {
+          for (int i = 0;
+              i < StateContainer.of(context).wallet.tokens.length;
+              i++) {
+            if (StateContainer.of(context).wallet.tokens[i].tokenName ==
+                _selectedTokenName) {
+              if (int.tryParse(_sendTokenQuantityController.text).compareTo(
+                  StateContainer.of(context).wallet.tokens[i].tokensQuantity) > 0) {
+                isValid = false;
+
+                setState(() {
+                  _tokenQuantityValidationText =
+                      AppLocalization.of(context).insufficientTokenQuantity;
+                });
+              }
+            }
+          }
+        }
+      }
+    }
+
     return isValid;
   }
 
@@ -1145,7 +1310,8 @@ class _SendSheetState extends State<SendSheet> {
       ),
       fadeSuffixOnCondition: true,
       suffixShowFirstCondition: !_isMaxSend(),
-      keyboardType: TextInputType.numberWithOptions(decimal: true),
+      keyboardType:
+          TextInputType.numberWithOptions(signed: true, decimal: true),
       textAlign: TextAlign.center,
       onSubmitted: (text) {
         FocusScope.of(context).unfocus();
@@ -1308,6 +1474,7 @@ class _SendSheetState extends State<SendSheet> {
               } else {
                 setState(() {
                   _pasteButtonVisible = false;
+                  _addressValidationText = "";
                   _sendAddressStyle = AddressStyle.PRIMARY;
                 });
               }
@@ -1319,6 +1486,7 @@ class _SendSheetState extends State<SendSheet> {
                 onTap: () {
                   setState(() {
                     _addressValidAndUnfocused = false;
+                    _addressValidationText = "";
                   });
                   Future.delayed(Duration(milliseconds: 50), () {
                     FocusScope.of(context).requestFocus(_sendAddressFocusNode);
@@ -1354,8 +1522,9 @@ class _SendSheetState extends State<SendSheet> {
       textInputAction: TextInputAction.next,
       maxLines: null,
       autocorrect: false,
-      hintText:
-          _amountHint == null ? "" : AppLocalization.of(context).enterOpenfield,
+      hintText: _openfieldHint == null
+          ? ""
+          : AppLocalization.of(context).enterOpenfield,
       keyboardType: TextInputType.multiline,
       textAlign: TextAlign.left,
       onSubmitted: (text) {
@@ -1363,6 +1532,57 @@ class _SendSheetState extends State<SendSheet> {
       },
     );
   } //************ Enter Openfield Container Method End ************//
+  //*************************************************************//
+
+  //************ Enter Nb of tokens Container Method ************//
+  //*******************************************************//
+  getEnterTokensQuantityContainer() {
+    return AppTextField(
+      focusNode: _sendTokenQuantityFocusNode,
+      controller: _sendTokenQuantityController,
+      topMargin: 30,
+      cursorColor: StateContainer.of(context).curTheme.primary,
+      style: TextStyle(
+        fontWeight: FontWeight.w700,
+        fontSize: 16.0,
+        color: StateContainer.of(context).curTheme.primary,
+        fontFamily: 'NunitoSans',
+      ),
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(16),
+        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+      ],
+      onChanged: (text) {
+        // Always reset the error message to be less annoying
+        setState(() {
+          _tokenQuantityValidationText = "";
+          // Reset the raw amount
+          _rawTokenQuantity = null;
+          _sendOperationController = TextEditingController(
+              text: AddressTxsResponseResult.TOKEN_TRANSFER);
+          _sendOpenfieldController = TextEditingController(
+              text:
+                  _selectedTokenName + ":" + _sendTokenQuantityController.text);
+        });
+      },
+      textInputAction: TextInputAction.next,
+      maxLines: null,
+      autocorrect: false,
+      hintText: _tokenQuantityHint == null
+          ? ""
+          : AppLocalization.of(context).enterTokenQuantity,
+      fadeSuffixOnCondition: true,
+      keyboardType:
+          TextInputType.numberWithOptions(signed: true, decimal: false),
+      textAlign: TextAlign.center,
+      onSubmitted: (text) {
+        FocusScope.of(context).unfocus();
+        if (!Address(_sendAddressController.text).isValid()) {
+          FocusScope.of(context).requestFocus(_sendAddressFocusNode);
+        }
+      },
+    );
+  } //************ Enter Nb of tokens Container Method End ************//
   //*************************************************************//
 
   //************ Enter Operation Container Method ************//
@@ -1389,8 +1609,9 @@ class _SendSheetState extends State<SendSheet> {
       textInputAction: TextInputAction.next,
       maxLines: null,
       autocorrect: false,
-      hintText:
-          _amountHint == null ? "" : AppLocalization.of(context).enterOperation,
+      hintText: _operationHint == null
+          ? ""
+          : AppLocalization.of(context).enterOperation,
       keyboardType: TextInputType.text,
       textAlign: TextAlign.left,
       onSubmitted: (text) {
@@ -1399,4 +1620,67 @@ class _SendSheetState extends State<SendSheet> {
     );
   } //************ Enter Operation Container Method End ************//
   //*************************************************************//
+
+  //************ Enter Token Container Method ************//
+  //*******************************************************//
+  getEnterTokenContainer() {
+    return SizedBox(
+      width: 250,
+      child: Theme(
+        data: Theme.of(context).copyWith(
+          canvasColor: StateContainer.of(context).curTheme.backgroundDarkest,
+        ),
+        child: DropdownButtonFormField(
+          decoration: InputDecoration(
+              contentPadding: const EdgeInsets.all(0.0),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                    color:
+                        StateContainer.of(context).curTheme.backgroundDarkest),
+              ),
+              isDense: true),
+          style: TextStyle(
+            fontSize: 16.0,
+            fontWeight: FontWeight.w100,
+            fontFamily: 'NunitoSans',
+            color: StateContainer.of(context).curTheme.text60,
+          ),
+          items:
+              StateContainer.of(context).wallet.tokens.map((BisToken bisToken) {
+            return DropdownMenuItem<String>(
+                value: bisToken.tokenName,
+                child: Container(
+                    child: Text(
+                  bisToken.tokenName +
+                      " (" +
+                      bisToken.tokensQuantity.toString() +
+                      " " +
+                      AppLocalization.of(context).available +
+                      ")",
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w100,
+                    fontFamily: 'NunitoSans',
+                    color: StateContainer.of(context).curTheme.text60,
+                  ),
+                )));
+          }).toList(),
+          onChanged: (value) {
+            setState(() {
+              _selectedTokenName = value;
+              _tokenValidationText = "";
+              _sendOperationController = TextEditingController(
+                  text: AddressTxsResponseResult.TOKEN_TRANSFER);
+              _sendOpenfieldController = TextEditingController(
+                  text: _selectedTokenName +
+                      ":" +
+                      _sendTokenQuantityController.text);
+            });
+          },
+        ),
+      ),
+    );
+  } //************ Enter Token Container Method End ************//
+  //*************************************************************//
+
 }

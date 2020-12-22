@@ -305,6 +305,21 @@ class AppLocalization {
         desc: 'send_operation_hint', name: 'enterOperation');
   }
 
+  String get enterTokenQuantity {
+    return Intl.message("Enter Quantity",
+        desc: 'send_enterTokenQuantity_hint', name: 'enterTokenQuantity');
+  }
+
+  String get sendATokenQuestion {
+    return Intl.message("Send a token ?",
+        desc: 'sendATokenQuestion_hint', name: 'sendATokenQuestion');
+  }
+
+  String get available {
+    return Intl.message("available",
+        desc: 'available', name: 'available');
+  }
+
   String get openfield {
     return Intl.message("Openfield",
         desc: 'openfield', name: 'openfield');
@@ -338,6 +353,21 @@ class AppLocalization {
   String get amountMissing {
     return Intl.message("Please Enter an Amount",
         desc: 'send_enter_amount', name: 'amountMissing');
+  }
+
+ String get tokenQuantityMissing {
+    return Intl.message("Please Enter a Quantity",
+        desc: 'send_enter_token_quantity', name: 'tokenQuantityMissing');
+  }
+
+ String get tokenMissing {
+    return Intl.message("Please choose a Token",
+        desc: 'send_enter_token', name: 'tokenMissing');
+  }
+
+  String get insufficientTokenQuantity {
+    return Intl.message("Insufficient Quantity in your wallet",
+        desc: 'send_insufficient_token_quantity', name: 'insufficientTokenQuantity');
   }
 
   String get minimumSend {

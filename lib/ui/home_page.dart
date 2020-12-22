@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:badges/badges.dart';
 import 'package:flare_flutter/flare.dart';
 import 'package:flare_dart/math/mat2d.dart';
 import 'package:flare_flutter/flare_actor.dart';
@@ -10,7 +11,6 @@ import 'package:event_taxi/event_taxi.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:my_bismuth_wallet/network/model/response/address_txs_response.dart';
-import 'package:my_bismuth_wallet/service/app_service.dart';
 import 'package:my_bismuth_wallet/ui/popup_button.dart';
 import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:my_bismuth_wallet/dimens.dart';
@@ -133,7 +133,11 @@ class _AppHomePageState extends State<AppHomePage>
     } else if (_priceConversion == PriceConversion.HIDDEN) {
       mainCardHeight = 64;
       settingsIconMarginTop = 5;
+    } else if (_priceConversion == PriceConversion.TOKEN) {
+      mainCardHeight = 120;
+      settingsIconMarginTop = 7;
     }
+
     _addSampleContact();
     _updateContacts();
     // Setup placeholder animation and start
@@ -198,19 +202,18 @@ class _AppHomePageState extends State<AppHomePage>
     if (!contactAdded) {
       bool addressExists = await sl
           .get<DBHelper>()
-          .contactExistsWithAddress("Bis1bfvr9pQe2L8WccDcHetZdeENBuFDMCxbg");
+          .contactExistsWithAddress("Bis1KZ88di4Xb9P4h4sSgzUwSVdXk9ZGBH5i4");
       if (addressExists) {
         return;
       }
       bool nameExists =
-          await sl.get<DBHelper>().contactExistsWithName("@RedDwarfDonations");
+          await sl.get<DBHelper>().contactExistsWithName("@Donations");
       if (nameExists) {
         return;
       }
       await sl.get<SharedPrefsUtil>().setFirstContactAdded(true);
       Contact c = Contact(
-          name: "@RedDwarfDonations",
-          address: "Bis1bfvr9pQe2L8WccDcHetZdeENBuFDMCxbg");
+          name: "@Donations", address: "Bis1KZ88di4Xb9P4h4sSgzUwSVdXk9ZGBH5i4");
       await sl.get<DBHelper>().saveContact(c);
     }
   }
@@ -870,8 +873,8 @@ class _AppHomePageState extends State<AppHomePage>
                     Row(
                       children: <Widget>[
                         Container(
-                            margin: EdgeInsetsDirectional.only(end: 16.0),
-                            child: Icon(icon, color: iconColor, size: 20)),
+                            margin: EdgeInsetsDirectional.only(end: 10.0),
+                            child: Icon(icon, color: iconColor, size: 15)),
                         Container(
                           width: MediaQuery.of(context).size.width / 4,
                           child: Column(
@@ -883,6 +886,35 @@ class _AppHomePageState extends State<AppHomePage>
                                 style:
                                     AppStyles.textStyleTransactionType(context),
                               ),
+                              item.isTokenTransfer() == true
+                                  ? Row(
+                                      children: [
+                                        Text(
+                                          item.getBisToken().tokenName,
+                                          textAlign: TextAlign.start,
+                                          style: AppStyles
+                                              .textStyleTransactionUnit(
+                                                  context),
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Badge(
+                                          badgeColor: StateContainer.of(context)
+                                              .curTheme
+                                              .background,
+                                          badgeContent: Text(
+                                              item
+                                                  .getBisToken()
+                                                  .tokensQuantity
+                                                  .toString(),
+                                              style: AppStyles
+                                                  .textStyleTransactionUnit(
+                                                      context)),
+                                        )
+                                      ],
+                                    )
+                                  : SizedBox(),
                               RichText(
                                 textAlign: TextAlign.start,
                                 text: TextSpan(
@@ -903,7 +935,7 @@ class _AppHomePageState extends State<AppHomePage>
                                 ),
                               ),
                               Text(
-                                DateFormat.yMEd(Localizations.localeOf(context)
+                                DateFormat.yMd(Localizations.localeOf(context)
                                         .languageCode)
                                     .add_Hms()
                                     .format(item.timestamp)
@@ -1001,8 +1033,9 @@ class _AppHomePageState extends State<AppHomePage>
                 Row(
                   children: <Widget>[
                     Container(
-                        margin: EdgeInsetsDirectional.only(end: 16.0),
-                        child: Icon(icon, color: iconColor, size: 20)),
+                      margin: EdgeInsetsDirectional.only(end: 16.0),
+                      child: Icon(icon, color: iconColor, size: 15),
+                    ),
                     Container(
                       width: MediaQuery.of(context).size.width / 4,
                       child: Column(
@@ -1554,7 +1587,15 @@ class _AppHomePageState extends State<AppHomePage>
     // Balance texts
     return GestureDetector(
       onTap: () {
-        if (_priceConversion == PriceConversion.BTC) {
+        if (_priceConversion == PriceConversion.TOKEN) {
+          // Hide prices
+          setState(() {
+            _priceConversion = PriceConversion.BTC;
+            mainCardHeight = 120;
+            settingsIconMarginTop = 7;
+          });
+          sl.get<SharedPrefsUtil>().setPriceConversion(PriceConversion.BTC);
+        } else if (_priceConversion == PriceConversion.BTC) {
           // Hide prices
           setState(() {
             _priceConversion = PriceConversion.NONE;
@@ -1578,10 +1619,10 @@ class _AppHomePageState extends State<AppHomePage>
           });
           Future.delayed(Duration(milliseconds: 150), () {
             setState(() {
-              _priceConversion = PriceConversion.BTC;
+              _priceConversion = PriceConversion.TOKEN;
             });
           });
-          sl.get<SharedPrefsUtil>().setPriceConversion(PriceConversion.BTC);
+          sl.get<SharedPrefsUtil>().setPriceConversion(PriceConversion.TOKEN);
         }
       },
       child: Container(
@@ -1604,61 +1645,132 @@ class _AppHomePageState extends State<AppHomePage>
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    _priceConversion == PriceConversion.BTC
-                        ? Text(
-                            StateContainer.of(context)
-                                .wallet
-                                .getLocalCurrencyPrice(
-                                    StateContainer.of(context).curCurrency,
-                                    locale: StateContainer.of(context)
-                                        .currencyLocale),
-                            textAlign: TextAlign.center,
-                            style: AppStyles.textStyleCurrencyAlt(context))
-                        : SizedBox(height: 0),
-                    Container(
-                      margin: EdgeInsetsDirectional.only(end: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                            constraints: BoxConstraints(
-                                maxWidth:
-                                    MediaQuery.of(context).size.width - 205),
-                            child: AutoSizeText.rich(
-                              TextSpan(
-                                children: [
-                                  // Main balance text
-                                  TextSpan(
-                                    text: StateContainer.of(context)
-                                            .wallet
-                                            .getAccountBalanceDisplay() +
-                                        " BIS",
-                                    style: _priceConversion ==
-                                            PriceConversion.BTC
-                                        ? AppStyles.textStyleCurrency(context)
-                                        : AppStyles.textStyleCurrencySmaller(
-                                            context),
+                    _priceConversion == PriceConversion.TOKEN
+                        ? Container(
+                            child: Text("My tokens",
+                                style: AppStyles.textStyleCurrencyAlt(
+                                    context)))
+                        : _priceConversion == PriceConversion.BTC
+                            ? Text(
+                                StateContainer.of(context)
+                                    .wallet
+                                    .getLocalCurrencyPrice(
+                                        StateContainer.of(context).curCurrency,
+                                        locale: StateContainer.of(context)
+                                            .currencyLocale),
+                                textAlign: TextAlign.center,
+                                style: AppStyles.textStyleCurrencyAlt(context))
+                            : SizedBox(height: 0),
+                    _priceConversion == PriceConversion.TOKEN
+                        ? Container(
+                            height: 90,
+                            child: Stack(
+                                alignment: AlignmentDirectional(0, 0),
+                                children: <Widget>[
+                                  StateContainer.of(context).wallet.tokens ==
+                                              null ||
+                                          StateContainer.of(context)
+                                                  .wallet
+                                                  .tokens
+                                                  .length <=
+                                              0
+                                      ? Text("No token",
+                                          style: AppStyles
+                                              .textStyleTransactionUnit(
+                                                  context))
+                                      : GridView.count(
+                                          crossAxisCount: 1,
+                                          padding: EdgeInsets.only(
+                                              top: 10.0, bottom: 10.0),
+                                          childAspectRatio: 10.0 / 2,
+                                          children: List.generate(
+                                              StateContainer.of(context)
+                                                  .wallet
+                                                  .tokens
+                                                  .length, (index) {
+                                            return Row(
+                                              children: [
+                                                Text(
+                                                    StateContainer.of(context)
+                                                            .wallet
+                                                            .tokens
+                                                            .elementAt(index)
+                                                            .tokenName +
+                                                        " : ",
+                                                    style: AppStyles
+                                                        .textStyleTransactionUnit(
+                                                            context)),
+                                                Badge(
+                                                  shape: BadgeShape.square,
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  badgeColor:
+                                                      StateContainer.of(context)
+                                                          .curTheme
+                                                          .background,
+                                                  badgeContent: Text(
+                                                      StateContainer.of(context)
+                                                          .wallet
+                                                          .tokens
+                                                          .elementAt(index)
+                                                          .tokensQuantity
+                                                          .toString(),
+                                                      style: AppStyles
+                                                          .textStyleTransactionUnit(
+                                                              context)),
+                                                )
+                                              ],
+                                            );
+                                          }),
+                                        ),
+                                 ]))
+                        : Container(
+                            margin: EdgeInsetsDirectional.only(end: 15),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Container(
+                                  constraints: BoxConstraints(
+                                      maxWidth:
+                                          MediaQuery.of(context).size.width -
+                                              205),
+                                  child: AutoSizeText.rich(
+                                    TextSpan(
+                                      children: [
+                                        // Main balance text
+                                        TextSpan(
+                                          text: StateContainer.of(context)
+                                                  .wallet
+                                                  .getAccountBalanceDisplay() +
+                                              " BIS",
+                                          style: _priceConversion ==
+                                                  PriceConversion.BTC
+                                              ? AppStyles.textStyleCurrency(
+                                                  context)
+                                              : AppStyles
+                                                  .textStyleCurrencySmaller(
+                                                      context),
+                                        ),
+                                      ],
+                                    ),
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                        fontSize: _priceConversion ==
+                                                PriceConversion.BTC
+                                            ? 28
+                                            : 22),
+                                    stepGranularity: 0.1,
+                                    minFontSize: 1,
+                                    maxFontSize:
+                                        _priceConversion == PriceConversion.BTC
+                                            ? 28
+                                            : 22,
                                   ),
-                                ],
-                              ),
-                              maxLines: 1,
-                              style: TextStyle(
-                                  fontSize:
-                                      _priceConversion == PriceConversion.BTC
-                                          ? 28
-                                          : 22),
-                              stepGranularity: 0.1,
-                              minFontSize: 1,
-                              maxFontSize:
-                                  _priceConversion == PriceConversion.BTC
-                                      ? 28
-                                      : 22,
+                                ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
-                    ),
                     _priceConversion == PriceConversion.BTC
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.center,

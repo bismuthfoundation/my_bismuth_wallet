@@ -9,9 +9,18 @@ import 'package:my_bismuth_wallet/util/numberutil.dart';
 class AddressTxsResponse {
   AddressTxsResponse({
     this.result,
+    this.tokens
   });
 
   List<AddressTxsResponseResult> result;
+  List<BisToken> tokens;
+}
+
+class BisToken {
+  BisToken({this.tokenName, this.tokensQuantity, this.tokenMessage});
+  String tokenName;
+  int tokensQuantity;
+  String tokenMessage;
 }
 
 class AddressTxsResponseResult {
@@ -46,6 +55,8 @@ class AddressTxsResponseResult {
   String type;
   String hash;
 
+  static const String TOKEN_TRANSFER = "token:transfer";
+
   String getShortString() {
     if (type == BlockTypes.RECEIVE) {
       return new Address(this.from).getShortString();
@@ -67,6 +78,30 @@ class AddressTxsResponseResult {
    */
   String getFormattedAmount() {
     return NumberUtil.getRawAsUsableString(amount.toString());
+  }
+
+  bool isTokenTransfer() {
+    bool isTokenTransfer;
+    operation == TOKEN_TRANSFER
+        ? isTokenTransfer = true
+        : isTokenTransfer = false;
+    return isTokenTransfer;
+  }
+
+  BisToken getBisToken() {
+    BisToken bisToken;
+    if (isTokenTransfer()) {
+      bisToken = new BisToken(
+          tokenName: openfield.split(":")[0],
+          tokensQuantity: int.tryParse(openfield.split(":")[1]),
+          tokenMessage: openfield.split(":").length < 3
+              ? ""
+              : openfield
+                  .split(":")[3]
+                  .replaceAll(RegExp('"'), '')
+                  .replaceAll(RegExp('}'), ''));
+    }
+    return bisToken;
   }
 
   void populate(List txs, String address) {

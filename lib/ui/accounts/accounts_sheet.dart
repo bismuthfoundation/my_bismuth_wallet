@@ -3,6 +3,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:event_taxi/event_taxi.dart';
+import 'package:logger/logger.dart';
 import 'package:my_bismuth_wallet/bus/events.dart';
 import 'package:my_bismuth_wallet/localization.dart';
 import 'package:my_bismuth_wallet/appstate_container.dart';
@@ -44,8 +45,10 @@ class AppAccountsWidget extends StatefulWidget {
 }
 
 class _AppAccountsWidgetState extends State<AppAccountsWidget> {
-
+  static const int MAX_ACCOUNTS = 50;
   final GlobalKey expandedKey = GlobalKey();
+
+  bool _addingAccount;
 
   ScrollController _scrollController = new ScrollController();
 
@@ -56,6 +59,7 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
   void initState() {
     super.initState();
     _registerBus();
+    this._addingAccount = false;
     this._accountIsChanging = false;
   }
 
@@ -102,7 +106,24 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
       _accountModifiedSub.cancel();
     }
   }
-
+ Future<void> _requestBalances(
+      BuildContext context, List<Account> accounts) async {
+    List<String> addresses = List();
+    accounts.forEach((account) {
+      if (account.address != null) {
+        addresses.add(account.address);
+      }
+    });
+    try {
+      // TODO: A changer
+     // AccountsBalancesResponse resp =
+     //     await sl.get<AccountService>().requestAccountsBalances(addresses);
+     // await _handleAccountsBalancesResponse(resp);
+    } catch (e) {
+      sl.get<Logger>().e("Error", e);
+    }
+  }
+  
   Future<void> _changeAccount(Account account, StateSetter setState) async {
     // Change account
     widget.accounts.forEach((a) {
@@ -214,7 +235,7 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
                 height: 15,
               ),
               //A row with Add Account button
-              /*Row(
+              Row(
                 children: <Widget>[
                   widget.accounts == null ||
                           widget.accounts.length >= MAX_ACCOUNTS
@@ -272,7 +293,7 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
                           },
                         ),
                 ],
-              ),*/
+              ),
               //A row with Close button
               Row(
                 children: <Widget>[
@@ -412,27 +433,16 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
                               child: AutoSizeText.rich(
                                 TextSpan(
                                   children: [
-                                    // Currency Icon
-                                    TextSpan(
-                                      text: account.balance != null ? "" : "",
-                                      style: TextStyle(
-                                        fontFamily: 'AppIcons',
-                                        color: StateContainer.of(context)
-                                            .curTheme
-                                            .text,
-                                        fontSize: 15.0,
-                                      ),
-                                    ),
                                     // Main balance text
                                     TextSpan(
                                       text: account.balance != null &&
                                               !account.selected
                                           ? NumberUtil.getRawAsUsableString(
-                                              account.balance)
+                                              account.balance) + " BIS"
                                           : account.selected
                                               ? StateContainer.of(context)
                                                   .wallet
-                                                  .getAccountBalanceDisplay()
+                                                  .getAccountBalanceDisplay() + " BIS"
                                               : "",
                                       style: TextStyle(
                                           fontSize: 16.0,
