@@ -26,7 +26,8 @@ class AppUtil {
     bip32.BIP32 node = bip32.BIP32.fromBase58(rootKey.toBase58());
     //print("BIP 32 node (private Key) : " + HEX.encode(node.privateKey));
     //print("BIP 32 node (public Key) : " + HEX.encode(node.publicKey));
-    bip32.BIP32 child = node.derivePath("m/44'/209'/0'/0");
+    print("index : " + index.toString());
+    bip32.BIP32 child = node.derivePath("m/44'/209'/0'/0/" + index.toString());
     //print("BIP 32 Extended private Key : " + child.toBase58());
     //bip32.BIP32 childNeutered = child.neutered();
     //print("BIP 32 Extended public Key : " + childNeutered.toBase58());
