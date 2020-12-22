@@ -221,8 +221,8 @@ class StateContainerState extends State<StateContainer> {
   Future<void> updateWallet({Account account}) async {
     String address;
     address = AppUtil().seedToAddress(await getSeed(), account.index);
-    AppService().getBalanceGetResponse(address.toString());
-    AppService().getSimplePrice(curCurrency.getIso4217Code());
+    await AppService().getBalanceGetResponse(address.toString());
+    await AppService().getSimplePrice(curCurrency.getIso4217Code());
     account.address = address;
     selectedAccount = account;
     updateRecentlyUsedAccounts();
@@ -263,9 +263,9 @@ class StateContainerState extends State<StateContainer> {
   }
 
   // Change curency
-  void updateCurrency(AvailableCurrency currency) {
+  void updateCurrency(AvailableCurrency currency) async {
+    await AppService().getSimplePrice(currency.getIso4217Code());
     setState(() {
-      AppService().getSimplePrice(currency.getIso4217Code());
       curCurrency = currency;
     });
   }
@@ -294,42 +294,22 @@ class StateContainerState extends State<StateContainer> {
       });
     });
     setState(() {
-      wallet.loading = false;
-      if (response == null) {
-        wallet.accountBalance = 0;
-      } else {
-        wallet.accountBalance = double.tryParse(response.balance);
+      if (wallet != null) {
+        wallet.loading = false;
+        if (response == null) {
+          wallet.accountBalance = 0;
+        } else {
+          wallet.accountBalance = double.tryParse(response.balance);
+        }
       }
     });
   }
 
   /// Request balances for accounts in our database
-  Future<void> _requestBalances() async {
-    List<Account> accounts =
-        await sl.get<DBHelper>().getAccounts(await getSeed());
-    List<String> addressToRequest = List();
-    List<BalanceGetResponse> balanceGetResponseList = new List();
-    accounts.forEach((account) async {
-      if (account.address != null) {
-        addressToRequest.add(account.address);
-        balanceGetResponseList
-            .add(await AppService().getBalanceGetResponse(account.address));
-      }
-    });
-
-    sl.get<DBHelper>().getAccounts(await getSeed()).then((accounts) {
-      for (int i = 0; i < accounts.length; i++) {
-        Account account = accounts.elementAt(i);
-        balanceGetResponseList.forEach((balanceGetResponse) {
-          String combinedBalance =
-              (BigInt.tryParse(balanceGetResponse.balance)).toString();
-          if (account.address == balanceGetResponse.address &&
-              combinedBalance != account.balance) {
-            sl.get<DBHelper>().updateAccountBalance(account, combinedBalance);
-          }
-        });
-      }
-    });
+  Future<void> _requestBalances(String address) async {
+    if (address != null) {
+      await AppService().getBalanceGetResponse(address);
+    }
   }
 
   Future<void> requestUpdate({bool pending = true}) async {
@@ -341,9 +321,9 @@ class StateContainerState extends State<StateContainer> {
       try {
         AddressTxsResponse addressTxsResponse =
             await AppService().getAddressTxsResponse(wallet.address, count);
-        AppService().getSimplePrice(curCurrency.getIso4217Code());
+        await AppService().getSimplePrice(curCurrency.getIso4217Code());
 
-        _requestBalances();
+        _requestBalances(wallet.address);
 
         // Iterate list in reverse (oldest to newest block)
         if (addressTxsResponse != null && addressTxsResponse.result != null) {
@@ -370,6 +350,7 @@ class StateContainerState extends State<StateContainer> {
 
         setState(() {
           wallet.historyLoading = false;
+          wallet.tokens = addressTxsResponse.tokens;  
         });
 
         EventTaxiImpl.singleton().fire(HistoryHomeEvent(items: wallet.history));
