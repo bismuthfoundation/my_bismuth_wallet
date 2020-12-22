@@ -316,23 +316,22 @@ class AppLocalization {
   }
 
   String get available {
-    return Intl.message("available",
-        desc: 'available', name: 'available');
+    return Intl.message("available", desc: 'available', name: 'available');
   }
 
   String get openfield {
-    return Intl.message("Openfield",
-        desc: 'openfield', name: 'openfield');
+    return Intl.message("Openfield", desc: 'openfield', name: 'openfield');
   }
 
   String get operation {
-    return Intl.message("Operation",
-        desc: 'operation', name: 'operation');
+    return Intl.message("Operation", desc: 'operation', name: 'operation');
   }
 
   String get diacritic {
-    return Intl.message("Common accents and diacritical signs will be replacing with an equivalent character",
-        desc: 'diacritic', name: 'diacritic');
+    return Intl.message(
+        "Common accents and diacritical signs will be replacing with an equivalent character",
+        desc: 'diacritic',
+        name: 'diacritic');
   }
 
   String get optionalParameters {
@@ -355,19 +354,20 @@ class AppLocalization {
         desc: 'send_enter_amount', name: 'amountMissing');
   }
 
- String get tokenQuantityMissing {
+  String get tokenQuantityMissing {
     return Intl.message("Please Enter a Quantity",
         desc: 'send_enter_token_quantity', name: 'tokenQuantityMissing');
   }
 
- String get tokenMissing {
+  String get tokenMissing {
     return Intl.message("Please choose a Token",
         desc: 'send_enter_token', name: 'tokenMissing');
   }
 
   String get insufficientTokenQuantity {
     return Intl.message("Insufficient Quantity in your wallet",
-        desc: 'send_insufficient_token_quantity', name: 'insufficientTokenQuantity');
+        desc: 'send_insufficient_token_quantity',
+        name: 'insufficientTokenQuantity');
   }
 
   String get minimumSend {
@@ -387,6 +387,7 @@ class AppLocalization {
   String get fees {
     return Intl.message("Fees", desc: 'fees', name: 'fees');
   }
+
   /// -- END SEND ITEMS
 
   /// -- PIN SCREEN
@@ -523,6 +524,32 @@ class AppLocalization {
   String get preferences {
     return Intl.message("Preferences",
         desc: 'settings_preferences_header', name: 'preferences');
+  }
+
+  String get informations {
+    return Intl.message("Informations",
+        desc: 'settings_informations_header', name: 'informations');
+  }
+
+  String get tokensListHeader {
+    return Intl.message("Token List",
+        desc: 'settings_tokens_list_header', name: 'tokensListHeader');
+  }
+
+  String get tokensListTotalSupply {
+    return Intl.message("Total supply : ",
+        desc: 'settings_tokens_list_total_supply',
+        name: 'tokensListTotalSupply');
+  }
+
+  String get tokensListCreatedThe {
+    return Intl.message("Created the ",
+        desc: 'settings_tokens_list_created_the', name: 'tokensListCreatedThe');
+  }
+
+  String get tokensListCreatedBy {
+    return Intl.message("By ",
+        desc: 'settings_tokens_list_created_by', name: 'tokensListCreatedBy');
   }
 
   String get manage {
@@ -903,14 +930,16 @@ class AppLocalization {
 
   /// PARAGRAPS
   String get passwordWillBeRequiredToOpenParagraph {
-    return Intl.message("This password will be required to open my Bismuth Wallet.",
+    return Intl.message(
+        "This password will be required to open my Bismuth Wallet.",
         desc:
             'A paragraph that tells the users that the created password will be required to open my Bismuth Wallet.',
         name: 'passwordWillBeRequiredToOpenParagraph');
   }
 
   String get passwordNoLongerRequiredToOpenParagraph {
-    return Intl.message("You will not need a password to open my Bismuth Wallet anymore.",
+    return Intl.message(
+        "You will not need a password to open my Bismuth Wallet anymore.",
         desc:
             'An info paragraph that tells the user a password will no longer be needed to open my Bismuth Wallet',
         name: 'passwordNoLongerRequiredToOpenParagraph');

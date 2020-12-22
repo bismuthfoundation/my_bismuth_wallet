@@ -8,6 +8,7 @@ import 'package:my_bismuth_wallet/bus/events.dart';
 import 'package:my_bismuth_wallet/dimens.dart';
 import 'package:my_bismuth_wallet/model/db/appdb.dart';
 import 'package:my_bismuth_wallet/model/db/contact.dart';
+import 'package:my_bismuth_wallet/network/model/response/address_txs_response.dart';
 import 'package:my_bismuth_wallet/service/app_service.dart';
 import 'package:my_bismuth_wallet/styles.dart';
 import 'package:my_bismuth_wallet/localization.dart';
@@ -36,6 +37,7 @@ class SendConfirmSheet extends StatefulWidget {
   final bool maxSend;
   final String openfield;
   final String operation;
+  final String comment;
 
   SendConfirmSheet(
       {this.amountRaw,
@@ -44,6 +46,7 @@ class SendConfirmSheet extends StatefulWidget {
       this.localCurrency,
       this.openfield,
       this.operation,
+      this.comment,
       this.maxSend = false})
       : super();
 
@@ -155,51 +158,88 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
                       borderRadius: BorderRadius.circular(50),
                     ),
                     // Amount text
+
                     child: Column(
                       children: [
-                        RichText(
-                          textAlign: TextAlign.center,
-                          text: TextSpan(
-                            text: '',
-                            children: [
-                              TextSpan(
-                                text: "$amount",
-                                style: TextStyle(
-                                  color: StateContainer.of(context)
-                                      .curTheme
-                                      .primary,
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w700,
-                                  fontFamily: 'NunitoSans',
+                        double.tryParse(amount) > 0
+                            ? RichText(
+                                textAlign: TextAlign.center,
+                                text: TextSpan(
+                                  text: '',
+                                  children: [
+                                    TextSpan(
+                                      text: "$amount",
+                                      style: TextStyle(
+                                        color: StateContainer.of(context)
+                                            .curTheme
+                                            .primary,
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w700,
+                                        fontFamily: 'NunitoSans',
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: " BIS",
+                                      style: TextStyle(
+                                        color: StateContainer.of(context)
+                                            .curTheme
+                                            .primary,
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w100,
+                                        fontFamily: 'NunitoSans',
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: widget.localCurrency != null
+                                          ? " (${widget.localCurrency})"
+                                          : "",
+                                      style: TextStyle(
+                                        color: StateContainer.of(context)
+                                            .curTheme
+                                            .primary,
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w700,
+                                        fontFamily: 'NunitoSans',
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              TextSpan(
-                                text: " BIS",
-                                style: TextStyle(
-                                  color: StateContainer.of(context)
-                                      .curTheme
-                                      .primary,
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w100,
-                                  fontFamily: 'NunitoSans',
+                              )
+                            : SizedBox(),
+                        widget.operation ==
+                                AddressTxsResponseResult.TOKEN_TRANSFER
+                            ? RichText(
+                                textAlign: TextAlign.center,
+                                text: TextSpan(
+                                  text: '',
+                                  children: [
+                                    TextSpan(
+                                      text:
+                                          widget.openfield.split(":")[1] + " ",
+                                      style: TextStyle(
+                                        color: StateContainer.of(context)
+                                            .curTheme
+                                            .primary,
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w700,
+                                        fontFamily: 'NunitoSans',
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: widget.openfield.split(":")[0],
+                                      style: TextStyle(
+                                        color: StateContainer.of(context)
+                                            .curTheme
+                                            .primary,
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w700,
+                                        fontFamily: 'NunitoSans',
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              TextSpan(
-                                text: widget.localCurrency != null
-                                    ? " (${widget.localCurrency})"
-                                    : "",
-                                style: TextStyle(
-                                  color: StateContainer.of(context)
-                                      .curTheme
-                                      .primary,
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w700,
-                                  fontFamily: 'NunitoSans',
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                              )
+                            : SizedBox(),
                         Container(
                           margin: EdgeInsets.symmetric(horizontal: 30),
                           child: Text(
@@ -207,7 +247,8 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
                                 AppLocalization.of(context).fees +
                                 ": " +
                                 new AppService()
-                                    .getFeesEstimation(widget.openfield, widget.operation)
+                                    .getFeesEstimation(
+                                        widget.openfield, widget.operation)
                                     .toStringAsFixed(5) +
                                 " BIS",
                             style: TextStyle(
@@ -293,58 +334,68 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
                                       ],
                                     ),
                                   ),
-                                  Container(
-                                    margin:
-                                        EdgeInsets.only(top: 10.0, bottom: 0),
-                                    child: Column(
-                                      children: <Widget>[
-                                        Text(
-                                          CaseChange.toUpperCase(
-                                              AppLocalization.of(context)
-                                                  .operation,
-                                              context),
-                                          style: TextStyle(
-                                            color: StateContainer.of(context)
-                                                .curTheme
-                                                .primary60,
-                                            fontSize: 12.0,
-                                            fontWeight: FontWeight.w100,
-                                            fontFamily: 'NunitoSans',
+                                  widget.operation ==
+                                          AddressTxsResponseResult
+                                              .TOKEN_TRANSFER
+                                      ? SizedBox()
+                                      : Container(
+                                          margin: EdgeInsets.only(
+                                              top: 10.0, bottom: 0),
+                                          child: Column(
+                                            children: <Widget>[
+                                              Text(
+                                                CaseChange.toUpperCase(
+                                                    AppLocalization.of(context)
+                                                        .operation,
+                                                    context),
+                                                style: TextStyle(
+                                                  color:
+                                                      StateContainer.of(context)
+                                                          .curTheme
+                                                          .primary60,
+                                                  fontSize: 12.0,
+                                                  fontWeight: FontWeight.w100,
+                                                  fontFamily: 'NunitoSans',
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 25.0, vertical: 15.0),
-                                      margin: EdgeInsets.only(
-                                          left: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.105,
-                                          right: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.105),
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                        color: StateContainer.of(context)
-                                            .curTheme
-                                            .backgroundDarkest,
-                                        borderRadius: BorderRadius.circular(25),
-                                      ),
-                                      child: Text(
-                                        removeDiacritics(widget.operation),
-                                        style: TextStyle(
-                                          color: StateContainer.of(context)
-                                              .curTheme
-                                              .primary60,
-                                          fontSize: 14.0,
-                                          fontWeight: FontWeight.w100,
-                                          fontFamily: 'NunitoSans',
-                                        ),
-                                      )),
+                                  widget.operation ==
+                                          AddressTxsResponseResult
+                                              .TOKEN_TRANSFER
+                                      ? SizedBox()
+                                      : Container(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 25.0, vertical: 15.0),
+                                          margin: EdgeInsets.only(
+                                              left: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.105,
+                                              right: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.105),
+                                          width: double.infinity,
+                                          decoration: BoxDecoration(
+                                            color: StateContainer.of(context)
+                                                .curTheme
+                                                .backgroundDarkest,
+                                            borderRadius:
+                                                BorderRadius.circular(25),
+                                          ),
+                                          child: Text(
+                                            removeDiacritics(widget.operation),
+                                            style: TextStyle(
+                                              color: StateContainer.of(context)
+                                                  .curTheme
+                                                  .primary60,
+                                              fontSize: 14.0,
+                                              fontWeight: FontWeight.w100,
+                                              fontFamily: 'NunitoSans',
+                                            ),
+                                          )),
                                   Container(
                                     margin:
                                         EdgeInsets.only(top: 10.0, bottom: 0),
@@ -387,7 +438,11 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
                                         borderRadius: BorderRadius.circular(25),
                                       ),
                                       child: Text(
-                                        removeDiacritics(widget.openfield),
+                                        removeDiacritics(widget.operation ==
+                                                AddressTxsResponseResult
+                                                    .TOKEN_TRANSFER
+                                            ? widget.comment
+                                            : widget.openfield),
                                         style: TextStyle(
                                           color: StateContainer.of(context)
                                               .curTheme
@@ -521,17 +576,28 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
       AppService appService = new AppService();
 
       String result = "";
+      String openfield = "";
+      if(widget.openfield.length > 0)
+      {
+        openfield = widget.openfield;
+      }
+      if(widget.comment.length > 0)
+      {
+        openfield += ':{"Message":"' + widget.comment + '"}';
+      }
       await appService
           .sendTx(
               StateContainer.of(context).wallet.address,
               widget.amountRaw,
               destinationAltered,
-              widget.openfield,
+              openfield,
               widget.operation,
               await AppUtil().seedToPublicKeyBase64(
-                  await StateContainer.of(context).getSeed(), StateContainer.of(context).selectedAccount.index),
-              await AppUtil()
-                  .seedToPrivateKey(await StateContainer.of(context).getSeed(), StateContainer.of(context).selectedAccount.index))
+                  await StateContainer.of(context).getSeed(),
+                  StateContainer.of(context).selectedAccount.index),
+              await AppUtil().seedToPrivateKey(
+                  await StateContainer.of(context).getSeed(),
+                  StateContainer.of(context).selectedAccount.index))
           .then((value) => result = value);
       //print("result : " + result);
       if (result != "Success") {

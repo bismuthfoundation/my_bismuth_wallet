@@ -63,6 +63,8 @@ class _SendSheetState extends State<SendSheet> {
   TextEditingController _sendOperationController;
   FocusNode _sendTokenQuantityFocusNode;
   TextEditingController _sendTokenQuantityController;
+  FocusNode _sendCommentFocusNode;
+  TextEditingController _sendCommentController;
 
   // States
   AddressStyle _sendAddressStyle;
@@ -70,6 +72,7 @@ class _SendSheetState extends State<SendSheet> {
   String _addressHint = "";
   String _openfieldHint = "";
   String _operationHint = "";
+  String _commentHint = "";
   String _tokenQuantityHint = "";
   String _amountValidationText = "";
   String _tokenQuantityValidationText = "";
@@ -104,11 +107,13 @@ class _SendSheetState extends State<SendSheet> {
     _sendAddressFocusNode = FocusNode();
     _sendOpenfieldFocusNode = FocusNode();
     _sendOperationFocusNode = FocusNode();
+    _sendCommentFocusNode = FocusNode();
     _sendTokenQuantityFocusNode = FocusNode();
     _sendAmountController = TextEditingController();
     _sendAddressController = TextEditingController();
     _sendOpenfieldController = TextEditingController();
     _sendOperationController = TextEditingController();
+    _sendCommentController = TextEditingController();
     _sendTokenQuantityController = TextEditingController();
     _sendAddressStyle = AddressStyle.TEXT60;
     _contacts = List();
@@ -214,7 +219,20 @@ class _SendSheetState extends State<SendSheet> {
       }
     });
 
-    // On openfield focus change
+    // On comment focus change
+    _sendCommentFocusNode.addListener(() {
+      if (_sendCommentFocusNode.hasFocus) {
+        setState(() {
+          _commentHint = null;
+        });
+      } else {
+        setState(() {
+          _commentHint = "";
+        });
+      }
+    });
+
+    // On token quantity focus change
     _sendTokenQuantityFocusNode.addListener(() {
       if (_sendTokenQuantityFocusNode.hasFocus) {
         if (_rawTokenQuantity != null) {
@@ -573,8 +591,10 @@ class _SendSheetState extends State<SendSheet> {
                                             new AppService()
                                                 .getFeesEstimation(
                                                     _sendOpenfieldController
-                                                        .text,
-                                                    _sendOpenfieldController
+                                                            .text +
+                                                        _sendCommentController
+                                                            .text,
+                                                    _sendOperationController
                                                         .text)
                                                 .toStringAsFixed(5) +
                                             " BIS",
@@ -651,6 +671,8 @@ class _SendSheetState extends State<SendSheet> {
                                                   TextEditingController();
                                               _sendTokenQuantityController =
                                                   TextEditingController();
+                                              _sendCommentController =
+                                                  TextEditingController();
                                             });
                                           },
                                           activeTrackColor:
@@ -719,6 +741,9 @@ class _SendSheetState extends State<SendSheet> {
                                                   )),
                                             ),
                                             // ******* Enter Address Error Container End ******* //
+                                            Container(
+                                              child: getEnterCommentContainer(),
+                                            ),
                                           ]),
                                   ],
                                 ),
@@ -811,6 +836,7 @@ class _SendSheetState extends State<SendSheet> {
                                       operation: _sendOperationController.text,
                                       openfield: _sendOpenfieldController.text,
                                       maxSend: _isMaxSend(),
+                                      comment: _sendCommentController.text,
                                       localCurrency: _localCurrencyMode
                                           ? _sendAmountController.text
                                           : null));
@@ -830,6 +856,7 @@ class _SendSheetState extends State<SendSheet> {
                                   destination: _sendAddressController.text,
                                   operation: _sendOperationController.text,
                                   openfield: _sendOpenfieldController.text,
+                                  comment: _sendCommentController.text,
                                   maxSend: _isMaxSend(),
                                   localCurrency: _localCurrencyMode
                                       ? _sendAmountController.text
@@ -1143,7 +1170,8 @@ class _SendSheetState extends State<SendSheet> {
       // Estimation of fees
       AppService appService = new AppService();
       double estimationFees = appService.getFeesEstimation(
-          _sendOpenfieldController.text, _sendOpenfieldController.text);
+          _sendOpenfieldController.text + _sendCommentController.text,
+          _sendOperationController.text);
 
       String amount = _localCurrencyMode
           ? _convertLocalCurrencyToCrypto()
@@ -1195,7 +1223,8 @@ class _SendSheetState extends State<SendSheet> {
           _tokenValidationText = AppLocalization.of(context).tokenMissing;
         });
       }
-      if (_sendTokenQuantityController.text.trim().isEmpty || int.tryParse(_sendTokenQuantityController.text.trim()) == 0) {
+      if (_sendTokenQuantityController.text.trim().isEmpty ||
+          int.tryParse(_sendTokenQuantityController.text.trim()) == 0) {
         isValid = false;
         setState(() {
           _tokenQuantityValidationText =
@@ -1209,7 +1238,11 @@ class _SendSheetState extends State<SendSheet> {
             if (StateContainer.of(context).wallet.tokens[i].tokenName ==
                 _selectedTokenName) {
               if (int.tryParse(_sendTokenQuantityController.text).compareTo(
-                  StateContainer.of(context).wallet.tokens[i].tokensQuantity) > 0) {
+                      StateContainer.of(context)
+                          .wallet
+                          .tokens[i]
+                          .tokensQuantity) >
+                  0) {
                 isValid = false;
 
                 setState(() {
@@ -1523,6 +1556,42 @@ class _SendSheetState extends State<SendSheet> {
       maxLines: null,
       autocorrect: false,
       hintText: _openfieldHint == null
+          ? ""
+          : AppLocalization.of(context).enterOpenfield,
+      keyboardType: TextInputType.multiline,
+      textAlign: TextAlign.left,
+      onSubmitted: (text) {
+        FocusScope.of(context).unfocus();
+      },
+    );
+  } //************ Enter Openfield Container Method End ************//
+  //*************************************************************//
+
+//************ Enter Openfield Container Method ************//
+  //*******************************************************//
+  getEnterCommentContainer() {
+    return AppTextField(
+      focusNode: _sendCommentFocusNode,
+      controller: _sendCommentController,
+      topMargin: 30,
+      cursorColor: StateContainer.of(context).curTheme.primary,
+      style: TextStyle(
+        fontWeight: FontWeight.w700,
+        fontSize: 16.0,
+        color: StateContainer.of(context).curTheme.primary,
+        fontFamily: 'NunitoSans',
+      ),
+      onChanged: (text) {
+        // Always reset the error message to be less annoying
+        setState(() {
+        
+        });
+      },
+      inputFormatters: [LengthLimitingTextInputFormatter(100000)],
+      textInputAction: TextInputAction.next,
+      maxLines: null,
+      autocorrect: false,
+      hintText: _commentHint == null
           ? ""
           : AppLocalization.of(context).enterOpenfield,
       keyboardType: TextInputType.multiline,

@@ -6,6 +6,7 @@ import 'package:my_bismuth_wallet/ui/accounts/accountdetails_sheet.dart';
 import 'package:my_bismuth_wallet/ui/accounts/accounts_sheet.dart';
 import 'package:my_bismuth_wallet/ui/settings/disable_password_sheet.dart';
 import 'package:my_bismuth_wallet/ui/settings/set_password_sheet.dart';
+import 'package:my_bismuth_wallet/ui/settings/tokens_widget.dart';
 import 'package:my_bismuth_wallet/ui/widgets/app_simpledialog.dart';
 import 'package:my_bismuth_wallet/ui/widgets/sheet_util.dart';
 import 'package:package_info/package_info.dart';
@@ -47,6 +48,8 @@ class _SettingsSheetState extends State<SettingsSheet>
   Animation<Offset> _offsetFloat;
   AnimationController _securityController;
   Animation<Offset> _securityOffsetFloat;
+  AnimationController _tokensListController;
+  Animation<Offset> _tokensListOffsetFloat;
 
   String versionString = "";
 
@@ -63,12 +66,15 @@ class _SettingsSheetState extends State<SettingsSheet>
 
   bool _contactsOpen;
 
+  bool _tokensListOpen;
+
   bool notNull(Object o) => o != null;
 
   @override
   void initState() {
     super.initState();
     _contactsOpen = false;
+    _tokensListOpen = false;
     _securityOpen = false;
     _loadingAccounts = false;
     // Determine if they have face or fingerprint enrolled, if not hide the setting
@@ -106,12 +112,20 @@ class _SettingsSheetState extends State<SettingsSheet>
       vsync: this,
       duration: const Duration(milliseconds: 220),
     );
+    // For token list menu
+    _tokensListController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 220),
+    );
 
     _offsetFloat = Tween<Offset>(begin: Offset(1.1, 0), end: Offset(0, 0))
         .animate(_controller);
     _securityOffsetFloat =
         Tween<Offset>(begin: Offset(1.1, 0), end: Offset(0, 0))
             .animate(_securityController);
+    _tokensListOffsetFloat =
+        Tween<Offset>(begin: Offset(1.1, 0), end: Offset(0, 0))
+            .animate(_tokensListController);
     // Version string
     PackageInfo.fromPlatform().then((packageInfo) {
       setState(() {
@@ -124,6 +138,7 @@ class _SettingsSheetState extends State<SettingsSheet>
   void dispose() {
     _controller.dispose();
     _securityController.dispose();
+    _tokensListController.dispose();
     super.dispose();
   }
 
@@ -421,6 +436,12 @@ class _SettingsSheetState extends State<SettingsSheet>
       });
       _securityController.reverse();
       return false;
+    } else if (_tokensListOpen) {
+      setState(() {
+        _tokensListOpen = false;
+      });
+      _tokensListController.reverse();
+      return false;
     }
     return true;
   }
@@ -446,6 +467,9 @@ class _SettingsSheetState extends State<SettingsSheet>
             SlideTransition(
                 position: _securityOffsetFloat,
                 child: buildSecurityMenu(context)),
+            SlideTransition(
+                position: _tokensListOffsetFloat,
+                child: TokensList(_tokensListController, _tokensListOpen)),
           ],
         ),
       ),
@@ -840,6 +864,33 @@ class _SettingsSheetState extends State<SettingsSheet>
                         _securityOpen = true;
                       });
                       _securityController.forward();
+                    }),
+                    Divider(
+                      height: 2,
+                      color: StateContainer.of(context).curTheme.text15,
+                    ),
+                    Container(
+                      margin: EdgeInsetsDirectional.only(
+                          start: 30.0, top: 20.0, bottom: 10.0),
+                      child: Text(AppLocalization.of(context).informations,
+                          style: TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w100,
+                              color:
+                                  StateContainer.of(context).curTheme.text60)),
+                    ),
+                    Divider(
+                      height: 2,
+                      color: StateContainer.of(context).curTheme.text15,
+                    ),
+                    AppSettings.buildSettingsListItemSingleLine(
+                        context,
+                        AppLocalization.of(context).tokensListHeader,
+                        AppIcons.importwallet, onPressed: () {
+                      setState(() {
+                        _tokensListOpen = true;
+                      });
+                      _tokensListController.forward();
                     }),
                     Divider(
                       height: 2,

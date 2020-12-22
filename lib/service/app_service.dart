@@ -5,6 +5,7 @@ import 'package:event_taxi/event_taxi.dart';
 import 'package:logger/logger.dart';
 import 'package:my_bismuth_wallet/bus/events.dart';
 import 'package:my_bismuth_wallet/bus/subscribe_event.dart';
+import 'package:my_bismuth_wallet/model/tokenRef.dart';
 import 'package:my_bismuth_wallet/network/model/request/send_tx_request.dart';
 import 'package:my_bismuth_wallet/network/model/response/addlistlim_response.dart';
 import 'package:my_bismuth_wallet/network/model/response/address_txs_response.dart';
@@ -51,6 +52,7 @@ import 'package:my_bismuth_wallet/network/model/response/simple_price_response_t
 import 'package:my_bismuth_wallet/network/model/response/simple_price_response_usd.dart';
 import 'package:my_bismuth_wallet/network/model/response/simple_price_response_zar.dart';
 import 'package:my_bismuth_wallet/network/model/response/tokens_balance_get_response.dart';
+import 'package:my_bismuth_wallet/network/model/response/tokens_list_get_response.dart';
 import 'package:my_bismuth_wallet/network/model/response/wstatusget_response.dart';
 
 class AppService {
@@ -641,5 +643,31 @@ class AppService {
       }
     } catch (e) {}
     return bisTokenList;
+  }
+
+Future<List<TokenRef>> getTokensReflist() async {
+    List<TokenRef> tokensRefList = new List<TokenRef>();
+
+    HttpClient httpClient = new HttpClient();
+    try {
+      HttpClientRequest request = await httpClient
+          .getUrl(Uri.parse("https://bismuth.today/api/tokens/"));
+      request.headers.set('content-type', 'application/json');
+      HttpClientResponse response = await request.close();
+      if (response.statusCode == 200) {
+        String reply = await response.transform(utf8.decoder).join();
+        var tokensRefListGetResponse = tokensListGetResponseFromJson(reply);
+
+        for (int i = 0; i < tokensRefListGetResponse.length; i++) {
+          TokenRef tokenRef = new TokenRef();
+          tokenRef.token = tokensRefListGetResponse.keys.elementAt(i);
+          tokenRef.creator = tokensRefListGetResponse.values.elementAt(i)[0];
+          tokenRef.totalSupply = tokensRefListGetResponse.values.elementAt(i)[1];         
+          tokenRef.creationDate = DateTime.fromMillisecondsSinceEpoch((tokensRefListGetResponse.values.elementAt(i)[2] * 1000).toInt());
+          tokensRefList.add(tokenRef);
+        }
+      }
+    } catch (e) {}
+    return tokensRefList;
   }
 }
