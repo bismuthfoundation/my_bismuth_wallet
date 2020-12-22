@@ -1,0 +1,15 @@
+- Multi-accounts
+    - with derivation path management
+- Tokens management
+    - You can send tokens you have in your wallet
+    - You can see tokens received or sent in the tx list
+    - You can view the status of your token portfolio by clicking on the banner at the top of the screen
+- Send tx: Fix workflow bug when trying to send a transaction using the qr code scanner
+
+Warning ! the addresses created with the application will no longer be valid following changes on the derivation path! 
+Please transfer to another address your funds/tokens before the update !
+
+(The last page of send tx is not finished)
+(GUI not definitive)
+
+I share this version.. but i know (again) i have some tests to do...
