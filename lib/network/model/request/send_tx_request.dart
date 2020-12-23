@@ -88,7 +88,7 @@ class SendTxRequest {
     command += '"' + signature + '", ';
     command += '"' + publicKey + '", ';
     command += '"' + tx.operation + '", ';
-    command += '"' + tx.openfield + '"]';
+    command += '"' + tx.openfield.replaceAll('"', '\\"') + '"]';
     //print("command : " + command);
     return command;
   }
