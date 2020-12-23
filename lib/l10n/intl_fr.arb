@@ -166,5 +166,18 @@
   "currency": "Devise",
   "liveSupportButton": "Support",
   "connectingHeader": "Connexion",
-  "diacritic": "Les accents communs et les signes diacritiques seront remplacés par un caractère équivalent"
+  "diacritic": "Les accents communs et les signes diacritiques seront remplacés par un caractère équivalent",
+  "available": "disponible", 
+  "openfield": "Commentaire",
+  "operation": "Opération",
+  "insufficientTokenQuantity": "Quantité insuffisante dans votre portefeuille",
+  "informations": "Informations", 
+  "tokensListHeader": "Liste des tokens",
+  "tokensListTotalSupply": "Offre totale : ",
+  "tokensListCreatedThe": "Créé le ",
+  "tokensListCreatedBy": "Par ",
+  "enterTokenQuantity": "Saisir la quantité",
+  "sendATokenQuestion": "Envoyer un token ?",
+  "tokenQuantityMissing": "La quantité est obligatoire",
+  "tokenMissing": "Svp, choisissez un token"
 }

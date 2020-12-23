@@ -699,5 +699,83 @@
     "description": "Common accents and diacritical signs will be replacing with an equivalent character",
     "type": "text",
     "placeholders": {}
+  },
+"available": "available",
+  "@available": {
+    "description": "available",
+    "type": "text",
+    "placeholders": {}
+  },
+  "openfield": "Openfield",
+  "@openfield": {
+    "description": "openfield",
+    "type": "text",
+    "placeholders": {}
+  }, 
+  "operation": "Operation",
+  "@operation": {
+    "description": "operation",
+    "type": "text",
+    "placeholders": {}
+  }, 
+  "insufficientTokenQuantity": "Insufficient Quantity in your wallet",
+  "@insufficientTokenQuantity": {
+    "description": "send_insufficient_token_quantity",
+    "type": "text",
+    "placeholders": {}
+  }, 
+  "informations": "Informations",
+  "@informations": {
+    "description": "settings_informations_header",
+    "type": "text",
+    "placeholders": {}
+  }, 
+  "tokensListHeader": "Token List",
+  "@tokensListHeader": {
+    "description": "settings_tokens_list_header",
+    "type": "text",
+    "placeholders": {}
+  }, 
+  "tokensListTotalSupply": "Total supply : ",
+  "@tokensListTotalSupply": {
+    "description": "settings_tokens_list_total_supply",
+    "type": "text",
+    "placeholders": {}
+  }, 
+  "tokensListCreatedThe": "Created the ",
+  "@tokensListCreatedThe": {
+    "description": "settings_tokens_list_created_the",
+    "type": "text",
+    "placeholders": {}
+  }, 
+  "tokensListCreatedBy": "By ",
+  "@tokensListCreatedBy": {
+    "description": "settings_tokens_list_created_by",
+    "type": "text",
+    "placeholders": {}
+  }, 
+  "enterTokenQuantity": "Enter Quantity",
+  "@enterTokenQuantity": {
+    "description": "send_enterTokenQuantity_hint",
+    "type": "text",
+    "placeholders": {}
+  }, 
+  "sendATokenQuestion": "Send a token ?",
+  "@sendATokenQuestion": {
+    "description": "sendATokenQuestion_hint",
+    "type": "text",
+    "placeholders": {}
+  }, 
+  "tokenQuantityMissing": "Please Enter a Quantity",
+  "@tokenQuantityMissing": {
+    "description": "send_enter_token_quantity",
+    "type": "text",
+    "placeholders": {}
+  }, 
+  "tokenMissing": "Please choose a Token",
+  "@tokenMissing": {
+    "description": "send_enter_token",
+    "type": "text",
+    "placeholders": {}
   }
 }

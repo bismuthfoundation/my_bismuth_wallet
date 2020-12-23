@@ -1,0 +1,8 @@
+Version 1.0.14+14 available
+- Tokens management
+    - Improve UX
+    - Comments management
+- Fix bugs
+- Token list
+https://we.tl/t-bdj3YXxIQN
+

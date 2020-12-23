@@ -166,5 +166,18 @@
   "currency": "Währung",
   "liveSupportButton": "Support",
   "connectingHeader": "Verbindet",
-  "diacritic": "Gemeinsame Akzente und diakritische Zeichen werden durch ein gleichwertiges Zeichen ersetzt"
+  "diacritic": "Gemeinsame Akzente und diakritische Zeichen werden durch ein gleichwertiges Zeichen ersetzt",
+  "available": "available", 
+  "openfield": "Openfield",
+  "operation": "Operation",
+  "insufficientTokenQuantity": "Insufficient Quantity in your wallet",
+  "informations": "Informations", 
+  "tokensListHeader": "Token List",
+  "tokensListTotalSupply": "Total supply : ",
+  "tokensListCreatedThe": "Created the ",
+  "tokensListCreatedBy": "By ",
+  "enterTokenQuantity": "Enter Quantity",
+  "sendATokenQuestion": "Send a token ?",
+  "tokenQuantityMissing": "Please Enter a Quantity",
+  "tokenMissing": "Please choose a Token"
 }

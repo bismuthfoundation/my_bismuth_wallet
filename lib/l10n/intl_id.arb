@@ -166,5 +166,18 @@
   "currency": "Mata Uang",
   "liveSupportButton": "Bantuan",
   "connectingHeader": "Menghubungkan",
-  "diacritic": "Aksen umum dan tanda diakritik akan diganti dengan karakter yang setara"
+  "diacritic": "Aksen umum dan tanda diakritik akan diganti dengan karakter yang setara",
+  "available": "available", 
+  "openfield": "Openfield",
+  "operation": "Operation",
+  "insufficientTokenQuantity": "Insufficient Quantity in your wallet",
+  "informations": "Informations", 
+  "tokensListHeader": "Token List",
+  "tokensListTotalSupply": "Total supply : ",
+  "tokensListCreatedThe": "Created the ",
+  "tokensListCreatedBy": "By ",
+  "enterTokenQuantity": "Enter Quantity",
+  "sendATokenQuestion": "Send a token ?",
+  "tokenQuantityMissing": "Please Enter a Quantity",
+  "tokenMissing": "Please choose a Token"
 }
