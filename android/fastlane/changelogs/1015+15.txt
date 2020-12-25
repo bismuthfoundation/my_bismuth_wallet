@@ -1,0 +1,10 @@
+Version 1.0.15+15 available
+- Fix logout issue
+- deep link management 
+    - old url: bis://pay/recipient/amount/b85_operation/b85_openfield/b85_checksum
+    - new url: bis://recipient/amount/b64_operation/b64_openfield/b64_checksum
+    - paste url in send ui
+- Tokens list 
+    - add search field
+
+
