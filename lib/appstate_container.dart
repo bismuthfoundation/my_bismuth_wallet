@@ -221,8 +221,6 @@ class StateContainerState extends State<StateContainer> {
   Future<void> updateWallet({Account account}) async {
     String address;
     address = AppUtil().seedToAddress(await getSeed(), account.index);
-    await AppService().getBalanceGetResponse(address.toString());
-    await AppService().getSimplePrice(curCurrency.getIso4217Code());
     account.address = address;
     selectedAccount = account;
     updateRecentlyUsedAccounts();
@@ -295,7 +293,6 @@ class StateContainerState extends State<StateContainer> {
     });
     setState(() {
       if (wallet != null) {
-        wallet.loading = false;
         if (response == null) {
           wallet.accountBalance = 0;
         } else {
@@ -305,13 +302,6 @@ class StateContainerState extends State<StateContainer> {
     });
   }
 
-  /// Request balances for accounts in our database
-  Future<void> _requestBalances(String address) async {
-    if (address != null) {
-      await AppService().getBalanceGetResponse(address);
-    }
-  }
-
   Future<void> requestUpdate({bool pending = true}) async {
     if (wallet != null &&
         wallet.address != null &&
@@ -319,11 +309,11 @@ class StateContainerState extends State<StateContainer> {
       // Request account history
       int count = 30;
       try {
-        AddressTxsResponse addressTxsResponse =
-            await AppService().getAddressTxsResponse(wallet.address, count);
+        await AppService().getBalanceGetResponse(wallet.address.toString());
         await AppService().getSimplePrice(curCurrency.getIso4217Code());
 
-        _requestBalances(wallet.address);
+        AddressTxsResponse addressTxsResponse =
+            await AppService().getAddressTxsResponse(wallet.address, count);
 
         // Iterate list in reverse (oldest to newest block)
         if (addressTxsResponse != null && addressTxsResponse.result != null) {
@@ -350,7 +340,8 @@ class StateContainerState extends State<StateContainer> {
 
         setState(() {
           wallet.historyLoading = false;
-          wallet.tokens = addressTxsResponse.tokens;  
+          wallet.loading = false;
+          wallet.tokens = addressTxsResponse.tokens;
         });
 
         EventTaxiImpl.singleton().fire(HistoryHomeEvent(items: wallet.history));

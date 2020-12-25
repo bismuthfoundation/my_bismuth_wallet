@@ -5,7 +5,7 @@ import 'package:event_taxi/event_taxi.dart';
 import 'package:logger/logger.dart';
 import 'package:my_bismuth_wallet/bus/events.dart';
 import 'package:my_bismuth_wallet/bus/subscribe_event.dart';
-import 'package:my_bismuth_wallet/model/tokenRef.dart';
+import 'package:my_bismuth_wallet/model/token_ref.dart';
 import 'package:my_bismuth_wallet/network/model/request/send_tx_request.dart';
 import 'package:my_bismuth_wallet/network/model/response/addlistlim_response.dart';
 import 'package:my_bismuth_wallet/network/model/response/address_txs_response.dart';
@@ -128,7 +128,7 @@ class AppService {
               10, 10 + int.tryParse(message.substring(0, 10)));
           balanceGetResponse = balanceGetResponseFromJson(message);
           balanceGetResponse.address = address;
-          //print(message);
+          print(message);
           EventTaxiImpl.singleton()
               .fire(SubscribeEvent(response: balanceGetResponse));
           _completer.complete(balanceGetResponse);
@@ -179,18 +179,22 @@ class AppService {
         if (data != null) {
           String message = new String.fromCharCodes(data).trim();
           //print("response : " + message);
-          message = message.substring(
-              10, 10 + int.tryParse(message.substring(0, 10)));
-          //print("getAddressTxsResponse : " + message);
-          List txs = addlistlimResponseFromJson(message);
-          for (int i = txs.length - 1; i >= 0; i--) {
-            AddressTxsResponseResult addressTxResponse =
-                new AddressTxsResponseResult();
-            addressTxResponse.populate(txs[i], address);
-            addressTxResponse.getBisToken();
-            addressTxsResponse.result.add(addressTxResponse);
+          if (message != null && message.length >= 10) {
+            message = message.substring(
+                10, 10 + int.tryParse(message.substring(0, 10)));
+            //print("getAddressTxsResponse : " + message);
+            List txs = addlistlimResponseFromJson(message);
+            for (int i = txs.length - 1; i >= 0; i--) {
+              AddressTxsResponseResult addressTxResponse =
+                  new AddressTxsResponseResult();
+              addressTxResponse.populate(txs[i], address);
+              addressTxResponse.getBisToken();
+              addressTxsResponse.result.add(addressTxResponse);
+            }
+            _completer.complete(addressTxsResponse);
+          } else {
+            _completer.complete(addressTxsResponse);
           }
-          _completer.complete(addressTxsResponse);
         }
       }, onError: ((error, StackTrace trace) {
         //print("Error");
@@ -562,16 +566,21 @@ class AppService {
   double getFeesEstimation(String openfield, String operation) {
     const double FEE_BASE = 0.01;
     double fees = FEE_BASE;
-    fees += (openfield.length / 100000);
-    if (operation == "token:issue") {
-      fees += 10;
+    if (openfield != null) {
+      fees += (openfield.length / 100000);
+      if (openfield.startsWith("alias=")) {
+        fees += 1;
+      }
     }
-    if (operation == "alias:register") {
-      fees += 1;
+    if (operation != null) {
+      if (operation == "token:issue") {
+        fees += 10;
+      }
+      if (operation == "alias:register") {
+        fees += 1;
+      }
     }
-    if (openfield.startsWith("alias=")) {
-      fees += 1;
-    }
+
     //print("getFeesEstimation: " + fees.toString());
     return fees;
   }
@@ -637,7 +646,9 @@ class AppService {
         var tokensBalanceGetResponse = tokensBalanceGetResponseFromJson(reply);
 
         for (int i = 0; i < tokensBalanceGetResponse.length; i++) {
-          BisToken bisToken = new BisToken(tokenName: tokensBalanceGetResponse[i][0], tokensQuantity: tokensBalanceGetResponse[i][1]);
+          BisToken bisToken = new BisToken(
+              tokenName: tokensBalanceGetResponse[i][0],
+              tokensQuantity: tokensBalanceGetResponse[i][1]);
           bisTokenList.add(bisToken);
         }
       }
@@ -645,7 +656,7 @@ class AppService {
     return bisTokenList;
   }
 
-Future<List<TokenRef>> getTokensReflist() async {
+  Future<List<TokenRef>> getTokensReflist() async {
     List<TokenRef> tokensRefList = new List<TokenRef>();
 
     HttpClient httpClient = new HttpClient();
@@ -662,8 +673,10 @@ Future<List<TokenRef>> getTokensReflist() async {
           TokenRef tokenRef = new TokenRef();
           tokenRef.token = tokensRefListGetResponse.keys.elementAt(i);
           tokenRef.creator = tokensRefListGetResponse.values.elementAt(i)[0];
-          tokenRef.totalSupply = tokensRefListGetResponse.values.elementAt(i)[1];         
-          tokenRef.creationDate = DateTime.fromMillisecondsSinceEpoch((tokensRefListGetResponse.values.elementAt(i)[2] * 1000).toInt());
+          tokenRef.totalSupply =
+              tokensRefListGetResponse.values.elementAt(i)[1];
+          tokenRef.creationDate = DateTime.fromMillisecondsSinceEpoch(
+              (tokensRefListGetResponse.values.elementAt(i)[2] * 1000).toInt());
           tokensRefList.add(tokenRef);
         }
       }

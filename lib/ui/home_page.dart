@@ -1,6 +1,8 @@
 import 'dart:async';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:badges/badges.dart';
+
 import 'package:flare_flutter/flare.dart';
 import 'package:flare_dart/math/mat2d.dart';
 import 'package:flare_flutter/flare_actor.dart';
@@ -8,15 +10,17 @@ import 'package:flare_flutter/flare_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:event_taxi/event_taxi.dart';
+
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
+import 'package:my_bismuth_wallet/model/bis_url.dart';
 import 'package:my_bismuth_wallet/network/model/response/address_txs_response.dart';
 import 'package:my_bismuth_wallet/ui/popup_button.dart';
 import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:my_bismuth_wallet/dimens.dart';
 import 'package:my_bismuth_wallet/localization.dart';
 import 'package:my_bismuth_wallet/service_locator.dart';
-import 'package:my_bismuth_wallet/model/address.dart';
+
 import 'package:my_bismuth_wallet/model/list_model.dart';
 import 'package:my_bismuth_wallet/model/db/contact.dart';
 import 'package:my_bismuth_wallet/model/db/appdb.dart';
@@ -28,6 +32,7 @@ import 'package:my_bismuth_wallet/ui/send/send_sheet.dart';
 import 'package:my_bismuth_wallet/ui/send/send_confirm_sheet.dart';
 import 'package:my_bismuth_wallet/ui/receive/receive_sheet.dart';
 import 'package:my_bismuth_wallet/ui/settings/settings_drawer.dart';
+import 'package:my_bismuth_wallet/ui/tokens/my_tokens_list.dart';
 import 'package:my_bismuth_wallet/ui/widgets/buttons.dart';
 import 'package:my_bismuth_wallet/ui/widgets/sheet_util.dart';
 import 'package:my_bismuth_wallet/ui/widgets/list_slidable.dart';
@@ -35,6 +40,7 @@ import 'package:my_bismuth_wallet/ui/util/routes.dart';
 import 'package:my_bismuth_wallet/ui/widgets/reactive_refresh.dart';
 import 'package:my_bismuth_wallet/ui/util/ui_util.dart';
 import 'package:my_bismuth_wallet/ui/widgets/sync_info_view.dart';
+
 import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
 import 'package:my_bismuth_wallet/util/hapticutil.dart';
 import 'package:my_bismuth_wallet/util/caseconverter.dart';
@@ -133,10 +139,7 @@ class _AppHomePageState extends State<AppHomePage>
     } else if (_priceConversion == PriceConversion.HIDDEN) {
       mainCardHeight = 64;
       settingsIconMarginTop = 5;
-    } else if (_priceConversion == PriceConversion.TOKEN) {
-      mainCardHeight = 120;
-      settingsIconMarginTop = 7;
-    }
+    } 
 
     _addSampleContact();
     _updateContacts();
@@ -235,7 +238,6 @@ class _AppHomePageState extends State<AppHomePage>
     _historySub = EventTaxiImpl.singleton()
         .registerTo<HistoryHomeEvent>()
         .listen((event) {
-      diffAndUpdateHistoryList(event.items);
       setState(() {
         _isRefreshing = false;
       });
@@ -498,74 +500,22 @@ class _AppHomePageState extends State<AppHomePage>
     });
   }
 
-  ///
-  /// Because there's nothing convenient like DiffUtil, some manual logic
-  /// to determine the differences between two lists and to add new items.
-  ///
-  /// Depends on == being overriden in the AccountHistoryResponseItem class
-  ///
-  /// Required to do it this way for the animation
-  ///
-  void diffAndUpdateHistoryList(List<AddressTxsResponseResult> newList) {
-    if (newList == null ||
-        newList.length == 0 ||
-        _historyListMap[StateContainer.of(context).wallet.address] == null)
-      return;
-    // Get items not in current list, and add them from top-down
-    newList.reversed
-        .where((item) =>
-            !_historyListMap[StateContainer.of(context).wallet.address]
-                .items
-                .contains(item))
-        .forEach((historyItem) {
-      setState(() {
-        _historyListMap[StateContainer.of(context).wallet.address]
-            .insertAtTop(historyItem);
-      });
-    });
-  }
+  Future<void> handleDeepLink(String link) async {
+    BisUrl bisUrl = await new BisUrl().getInfo(Uri.decodeFull(link));
 
-  Future<void> handleDeepLink(link) async {
-    Address address = Address(link);
-    if (address.isValid()) {
-      String amount;
-      String contactName;
-      if (address.amount != null) {
-        double amountDouble = double.tryParse(address.amount);
-        // TODO: Vérifier
-        // Require minimum XXX cryptocurrency to send, and make sure sufficient balance
-        if (amountDouble != null &&
-            StateContainer.of(context).wallet.accountBalance > amountDouble &&
-            amountDouble >= 0.001) {
-          amount = address.amount;
-        }
-      }
-      // See if a contact
-      Contact contact =
-          await sl.get<DBHelper>().getContactWithAddress(address.address);
-      if (contact != null) {
-        contactName = contact.name;
-      }
-      // Remove any other screens from stack
-      Navigator.of(context).popUntil(RouteUtils.withNameLike('/home'));
-      if (amount != null) {
-        // Go to send confirm with amount
-        Sheets.showAppHeightNineSheet(
-            context: context,
-            widget: SendConfirmSheet(
-                amountRaw: amount,
-                destination: address.address,
-                contactName: contactName));
-      } else {
-        // Go to send with address
-        Sheets.showAppHeightNineSheet(
-            context: context,
-            widget: SendSheet(
-                localCurrency: StateContainer.of(context).curCurrency,
-                contact: contact,
-                address: address.address));
-      }
-    }
+    // Remove any other screens from stack
+    Navigator.of(context).popUntil(RouteUtils.withNameLike('/home'));
+
+    // Go to send confirm with amount
+    Sheets.showAppHeightNineSheet(
+        context: context,
+        widget: SendConfirmSheet(
+            amountRaw: bisUrl.amount,
+            operation: bisUrl.operation,
+            openfield: bisUrl.openfield,
+            comment: bisUrl.comment,
+            destination: bisUrl.address,
+            contactName: bisUrl.contactName));
   }
 
   void paintQrCode({String address}) {
@@ -719,7 +669,7 @@ class _AppHomePageState extends State<AppHomePage>
                           ],
                         ),
                         height: 55,
-                        width: (MediaQuery.of(context).size.width - 42) / 2,
+                        width: (MediaQuery.of(context).size.width - 18) / 3,
                         margin: EdgeInsetsDirectional.only(
                             start: 14, top: 0.0, end: 7.0),
                         child: FlatButton(
@@ -746,6 +696,47 @@ class _AppHomePageState extends State<AppHomePage>
                               ? StateContainer.of(context).curTheme.background40
                               : Colors.transparent,
                           splashColor: receive != null
+                              ? StateContainer.of(context).curTheme.background40
+                              : Colors.transparent,
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          boxShadow: [
+                            StateContainer.of(context).curTheme.boxShadowButton
+                          ],
+                        ),
+                        height: 55,
+                        width: (MediaQuery.of(context).size.width - 158) / 3,
+                        margin: EdgeInsetsDirectional.only(
+                            start: 7, top: 0.0, end: 7.0),
+                        child: FlatButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(100.0)),
+                          color: receive != null
+                              ? StateContainer.of(context).curTheme.primary
+                              : StateContainer.of(context).curTheme.primary60,
+                          child: 
+                          Icon(Icons.scatter_plot_rounded, color: StateContainer.of(context).curTheme.background, size: 40),
+                          onPressed: () {
+                            Sheets.showAppHeightEightSheet(
+                                context: context,
+                                widget: MyTokensList(
+                                    StateContainer.of(context).wallet.tokens));
+                          },
+                          highlightColor: StateContainer.of(context)
+                                      .wallet
+                                      .tokens
+                                      .length >
+                                  0
+                              ? StateContainer.of(context).curTheme.background40
+                              : Colors.transparent,
+                          splashColor: StateContainer.of(context)
+                                      .wallet
+                                      .tokens
+                                      .length >
+                                  0
                               ? StateContainer.of(context).curTheme.background40
                               : Colors.transparent,
                         ),
@@ -868,6 +859,7 @@ class _AppHomePageState extends State<AppHomePage>
                 padding: const EdgeInsets.symmetric(
                     vertical: 14.0, horizontal: 20.0),
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Row(
@@ -885,54 +877,6 @@ class _AppHomePageState extends State<AppHomePage>
                                 textAlign: TextAlign.start,
                                 style:
                                     AppStyles.textStyleTransactionType(context),
-                              ),
-                              item.isTokenTransfer() == true
-                                  ? Row(
-                                      children: [
-                                        Text(
-                                          item.getBisToken().tokenName,
-                                          textAlign: TextAlign.start,
-                                          style: AppStyles
-                                              .textStyleTransactionUnit(
-                                                  context),
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Badge(
-                                          badgeColor: StateContainer.of(context)
-                                              .curTheme
-                                              .background,
-                                          badgeContent: Text(
-                                              item
-                                                  .getBisToken()
-                                                  .tokensQuantity
-                                                  .toString(),
-                                              style: AppStyles
-                                                  .textStyleTransactionUnit(
-                                                      context)),
-                                        )
-                                      ],
-                                    )
-                                  : SizedBox(),
-                              RichText(
-                                textAlign: TextAlign.start,
-                                text: TextSpan(
-                                  text: '',
-                                  children: [
-                                    TextSpan(
-                                      text: item.getFormattedAmount(),
-                                      style:
-                                          AppStyles.textStyleTransactionAmount(
-                                              context),
-                                    ),
-                                    TextSpan(
-                                      text: " BIS",
-                                      style: AppStyles.textStyleTransactionUnit(
-                                          context),
-                                    ),
-                                  ],
-                                ),
                               ),
                               Text(
                                 DateFormat.yMd(Localizations.localeOf(context)
@@ -955,7 +899,80 @@ class _AppHomePageState extends State<AppHomePage>
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                Container(
+                                double.tryParse(item.getFormattedAmount()) > 0
+                                    ? Container(
+                                        child: RichText(
+                                          textAlign: TextAlign.start,
+                                          text: TextSpan(
+                                            text: '',
+                                            children: [
+                                              TextSpan(
+                                                text: item.type ==
+                                                        BlockTypes.SEND
+                                                    ? "- " +
+                                                        item
+                                                            .getFormattedAmount() +
+                                                        " BIS"
+                                                    : "+ " +
+                                                        item.getFormattedAmount() +
+                                                        " BIS",
+                                                style: item.type ==
+                                                        BlockTypes.SEND
+                                                    ? AppStyles
+                                                        .textStyleTransactionTypeRed(
+                                                            context)
+                                                    : AppStyles
+                                                        .textStyleTransactionTypeGreen(
+                                                            context),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    : SizedBox(),
+                                item.isTokenTransfer() == true
+                                    ? Container(
+                                        child: RichText(
+                                          textAlign: TextAlign.start,
+                                          text: TextSpan(
+                                            text: '',
+                                            children: [
+                                              TextSpan(
+                                                text:
+                                                    item.type == BlockTypes.SEND
+                                                        ? "- " +
+                                                            item
+                                                                .getBisToken()
+                                                                .tokensQuantity
+                                                                .toString() +
+                                                            " " +
+                                                            item
+                                                                .getBisToken()
+                                                                .tokenName
+                                                        : "+ " +
+                                                            item
+                                                                .getBisToken()
+                                                                .tokensQuantity
+                                                                .toString() +
+                                                            " " +
+                                                            item
+                                                                .getBisToken()
+                                                                .tokenName,
+                                                style: item.type ==
+                                                        BlockTypes.SEND
+                                                    ? AppStyles
+                                                        .textStyleTransactionTypeRed(
+                                                            context)
+                                                    : AppStyles
+                                                        .textStyleTransactionTypeGreen(
+                                                            context),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    : SizedBox(),
+                                /*Container(
                                   width: 26.0,
                                   height: 26.0,
                                   child: CircleAvatar(
@@ -970,7 +987,7 @@ class _AppHomePageState extends State<AppHomePage>
                                     ),
                                     radius: 30.0,
                                   ),
-                                ),
+                                ),*/
                                 Text(
                                   displayName,
                                   textAlign: TextAlign.end,
@@ -1587,15 +1604,7 @@ class _AppHomePageState extends State<AppHomePage>
     // Balance texts
     return GestureDetector(
       onTap: () {
-        if (_priceConversion == PriceConversion.TOKEN) {
-          // Hide prices
-          setState(() {
-            _priceConversion = PriceConversion.BTC;
-            mainCardHeight = 120;
-            settingsIconMarginTop = 7;
-          });
-          sl.get<SharedPrefsUtil>().setPriceConversion(PriceConversion.BTC);
-        } else if (_priceConversion == PriceConversion.BTC) {
+        if (_priceConversion == PriceConversion.BTC) {
           // Hide prices
           setState(() {
             _priceConversion = PriceConversion.NONE;
@@ -1619,10 +1628,10 @@ class _AppHomePageState extends State<AppHomePage>
           });
           Future.delayed(Duration(milliseconds: 150), () {
             setState(() {
-              _priceConversion = PriceConversion.TOKEN;
+              _priceConversion = PriceConversion.BTC;
             });
           });
-          sl.get<SharedPrefsUtil>().setPriceConversion(PriceConversion.TOKEN);
+          sl.get<SharedPrefsUtil>().setPriceConversion(PriceConversion.BTC);
         }
       },
       child: Container(
@@ -1645,132 +1654,61 @@ class _AppHomePageState extends State<AppHomePage>
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    _priceConversion == PriceConversion.TOKEN
-                        ? Container(
-                            child: Text("My tokens",
-                                style: AppStyles.textStyleCurrencyAlt(
-                                    context)))
-                        : _priceConversion == PriceConversion.BTC
-                            ? Text(
-                                StateContainer.of(context)
-                                    .wallet
-                                    .getLocalCurrencyPrice(
-                                        StateContainer.of(context).curCurrency,
-                                        locale: StateContainer.of(context)
-                                            .currencyLocale),
-                                textAlign: TextAlign.center,
-                                style: AppStyles.textStyleCurrencyAlt(context))
-                            : SizedBox(height: 0),
-                    _priceConversion == PriceConversion.TOKEN
-                        ? Container(
-                            height: 90,
-                            child: Stack(
-                                alignment: AlignmentDirectional(0, 0),
-                                children: <Widget>[
-                                  StateContainer.of(context).wallet.tokens ==
-                                              null ||
-                                          StateContainer.of(context)
-                                                  .wallet
-                                                  .tokens
-                                                  .length <=
-                                              0
-                                      ? Text("No token",
-                                          style: AppStyles
-                                              .textStyleTransactionUnit(
-                                                  context))
-                                      : GridView.count(
-                                          crossAxisCount: 1,
-                                          padding: EdgeInsets.only(
-                                              top: 10.0, bottom: 10.0),
-                                          childAspectRatio: 10.0 / 2,
-                                          children: List.generate(
-                                              StateContainer.of(context)
-                                                  .wallet
-                                                  .tokens
-                                                  .length, (index) {
-                                            return Row(
-                                              children: [
-                                                Text(
-                                                    StateContainer.of(context)
-                                                            .wallet
-                                                            .tokens
-                                                            .elementAt(index)
-                                                            .tokenName +
-                                                        " : ",
-                                                    style: AppStyles
-                                                        .textStyleTransactionUnit(
-                                                            context)),
-                                                Badge(
-                                                  shape: BadgeShape.square,
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                  badgeColor:
-                                                      StateContainer.of(context)
-                                                          .curTheme
-                                                          .background,
-                                                  badgeContent: Text(
-                                                      StateContainer.of(context)
-                                                          .wallet
-                                                          .tokens
-                                                          .elementAt(index)
-                                                          .tokensQuantity
-                                                          .toString(),
-                                                      style: AppStyles
-                                                          .textStyleTransactionUnit(
-                                                              context)),
-                                                )
-                                              ],
-                                            );
-                                          }),
-                                        ),
-                                 ]))
-                        : Container(
-                            margin: EdgeInsetsDirectional.only(end: 15),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Container(
-                                  constraints: BoxConstraints(
-                                      maxWidth:
-                                          MediaQuery.of(context).size.width -
-                                              205),
-                                  child: AutoSizeText.rich(
-                                    TextSpan(
-                                      children: [
-                                        // Main balance text
-                                        TextSpan(
-                                          text: StateContainer.of(context)
-                                                  .wallet
-                                                  .getAccountBalanceDisplay() +
-                                              " BIS",
-                                          style: _priceConversion ==
-                                                  PriceConversion.BTC
-                                              ? AppStyles.textStyleCurrency(
-                                                  context)
-                                              : AppStyles
-                                                  .textStyleCurrencySmaller(
-                                                      context),
-                                        ),
-                                      ],
-                                    ),
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                        fontSize: _priceConversion ==
-                                                PriceConversion.BTC
-                                            ? 28
-                                            : 22),
-                                    stepGranularity: 0.1,
-                                    minFontSize: 1,
-                                    maxFontSize:
-                                        _priceConversion == PriceConversion.BTC
-                                            ? 28
-                                            : 22,
+                    _priceConversion == PriceConversion.BTC
+                        ? Text(
+                            StateContainer.of(context)
+                                .wallet
+                                .getLocalCurrencyPrice(
+                                    StateContainer.of(context).curCurrency,
+                                    locale: StateContainer.of(context)
+                                        .currencyLocale),
+                            textAlign: TextAlign.center,
+                            style: AppStyles.textStyleCurrencyAlt(context))
+                        : SizedBox(height: 0),
+                    Container(
+                      margin: EdgeInsetsDirectional.only(end: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                            constraints: BoxConstraints(
+                                maxWidth:
+                                    MediaQuery.of(context).size.width - 205),
+                            child: AutoSizeText.rich(
+                              TextSpan(
+                                children: [
+                                  // Main balance text
+                                  TextSpan(
+                                    text: StateContainer.of(context)
+                                            .wallet
+                                            .getAccountBalanceDisplay() +
+                                        " BIS",
+                                    style: _priceConversion ==
+                                            PriceConversion.BTC
+                                        ? AppStyles.textStyleCurrency(context)
+                                        : AppStyles.textStyleCurrencySmaller(
+                                            context),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
+                              maxLines: 1,
+                              style: TextStyle(
+                                  fontSize:
+                                      _priceConversion == PriceConversion.BTC
+                                          ? 28
+                                          : 22),
+                              stepGranularity: 0.1,
+                              minFontSize: 1,
+                              maxFontSize:
+                                  _priceConversion == PriceConversion.BTC
+                                      ? 28
+                                      : 22,
                             ),
                           ),
+                        ],
+                      ),
+                    ),
                     _priceConversion == PriceConversion.BTC
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.center,

@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.14+14
+version: 1.0.16+16
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -100,7 +100,6 @@ dependencies:
       ref: master
   
   # Deep link support
-  #uni_links: ^0.2.0
   uni_links:
     git:
       url: https://github.com/CathalT/uni_links.git
@@ -160,6 +159,8 @@ dependencies:
   fast_base58: ^0.1.9
  
   diacritic: ^0.1.1
+  
+  blake2b: ^0.1.2
   
 dev_dependencies:
   flutter_test:

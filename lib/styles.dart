@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_bismuth_wallet/appstate_container.dart';
+import 'dart:ui' as ui;
 
 class AppStyles {
   // Text style for paragraph text.
@@ -191,6 +192,26 @@ class AppStyles {
         fontSize: AppFontSizes.small,
         fontWeight: FontWeight.w600,
         color: StateContainer.of(context).curTheme.text);
+  }
+
+  static TextStyle textStyleTransactionTypeGreen(BuildContext context) {
+    return TextStyle(
+        fontFamily: "Roboto",
+        fontSize: AppFontSizes.small,
+        fontWeight: FontWeight.w600,
+        foreground: Paint()
+          ..shader = ui.Gradient.linear(Offset.zero, Offset(0, 60),
+              [Colors.green[200], Colors.green[800]]));
+  }
+
+  static TextStyle textStyleTransactionTypeRed(BuildContext context) {
+    return TextStyle(
+        fontFamily: "Roboto",
+        fontSize: AppFontSizes.small,
+        fontWeight: FontWeight.w600,
+        foreground: Paint()
+          ..shader = ui.Gradient.linear(
+              Offset.zero, Offset(0, 60), [Colors.red[200], Colors.red[800]]));
   }
 
   // Amount
@@ -491,6 +512,7 @@ class AppStyles {
       fontWeight: FontWeight.w100,
     );
   }
+
   // Text style for numbers of mnemonic
   static TextStyle headerPrimary(BuildContext context) {
     return TextStyle(
@@ -500,6 +522,7 @@ class AppStyles {
       fontWeight: FontWeight.w700,
     );
   }
+
   static TextStyle headerSuccess(BuildContext context) {
     return TextStyle(
       fontSize: 16,
@@ -508,6 +531,7 @@ class AppStyles {
       fontWeight: FontWeight.w700,
     );
   }
+
   static TextStyle addressText(BuildContext context) {
     return TextStyle(
       fontSize: 12,

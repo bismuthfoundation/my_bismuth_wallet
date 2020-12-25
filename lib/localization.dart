@@ -315,6 +315,21 @@ class AppLocalization {
         desc: 'sendATokenQuestion_hint', name: 'sendATokenQuestion');
   }
 
+  String get pasteBisUrl {
+    return Intl.message("You can paste a BIS url",
+        desc: 'pasteBisUrl_hint', name: 'pasteBisUrl');
+  }
+
+  String get pasteBisUrlPrefix {
+    return Intl.message("('bis://' or 'bis://pay)'",
+        desc: 'pasteBisUrlPrefix_hint', name: 'pasteBisUrlPrefix');
+  }
+
+ String get pasteBisUrlError {
+    return Intl.message("Your clipboard doesn't contain a BIS url",
+        desc: 'pasteBisUrlError_hint', name: 'pasteBisUrlError');
+  }
+
   String get available {
     return Intl.message("available", desc: 'available', name: 'available');
   }
@@ -529,6 +544,26 @@ class AppLocalization {
   String get informations {
     return Intl.message("Informations",
         desc: 'settings_informations_header', name: 'informations');
+  }
+
+  String get searchField {
+    return Intl.message("Search...",
+        desc: 'search_field_hint', name: 'searchField');
+  }
+
+  String get myTokens {
+    return Intl.message("Tokens",
+        desc: 'my_tokens_button', name: 'myTokens');
+  }
+
+  String get myTokensListHeader {
+    return Intl.message("My Token List",
+        desc: 'my_tokens_list_header', name: 'myTokensListHeader');
+  }
+
+  String get noTokenOwner {
+    return Intl.message("You don't have any token",
+        desc: 'no_token_owner_error', name: 'noTokenOwner');
   }
 
   String get tokensListHeader {

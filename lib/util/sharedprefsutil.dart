@@ -13,7 +13,7 @@ import 'package:my_bismuth_wallet/model/vault.dart';
 import 'package:my_bismuth_wallet/model/wallet.dart';
 
 /// Price conversion preference values
-enum PriceConversion { BTC, NONE, HIDDEN, TOKEN }
+enum PriceConversion { BTC, NONE, HIDDEN }
 
 /// Singleton wrapper for shared preferences
 class SharedPrefsUtil {

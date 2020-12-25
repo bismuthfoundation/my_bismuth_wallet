@@ -179,5 +179,12 @@
   "enterTokenQuantity": "Enter Quantity",
   "sendATokenQuestion": "Send a token ?",
   "tokenQuantityMissing": "Please Enter a Quantity",
-  "tokenMissing": "Please choose a Token"
+  "tokenMissing": "Please choose a Token",
+  "searchField": "Search...",
+  "myTokens": "Tokens",
+  "myTokensListHeader": "My Token List",
+  "pasteBisUrl": "You can paste a BIS url",
+  "pasteBisUrlPrefix": "('bis://' or 'bis://pay)'",
+  "pasteBisUrlError": "Your clipboard doesn't contain a BIS url",
+  "noTokenOwner": "You don't have any token"
 }

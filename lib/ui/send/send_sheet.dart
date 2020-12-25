@@ -12,6 +12,7 @@ import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:my_bismuth_wallet/dimens.dart';
 import 'package:my_bismuth_wallet/localization.dart';
 import 'package:my_bismuth_wallet/model/available_currency.dart';
+import 'package:my_bismuth_wallet/model/bis_url.dart';
 import 'package:my_bismuth_wallet/network/model/response/address_txs_response.dart';
 import 'package:my_bismuth_wallet/service/app_service.dart';
 import 'package:my_bismuth_wallet/service_locator.dart';
@@ -36,12 +37,16 @@ class SendSheet extends StatefulWidget {
   final AvailableCurrency localCurrency;
   final Contact contact;
   final String address;
+  final String operation;
+  final String openfield;
   final String quickSendAmount;
 
   SendSheet(
       {@required this.localCurrency,
       this.contact,
       this.address,
+      this.operation,
+      this.openfield,
       this.quickSendAmount})
       : super();
 
@@ -99,6 +104,7 @@ class _SendSheetState extends State<SendSheet> {
   bool isTokenToSendSwitched = false;
   String _rawAmount;
   String _rawTokenQuantity;
+  bool validRequest = true;
 
   @override
   void initState() {
@@ -133,6 +139,16 @@ class _SendSheetState extends State<SendSheet> {
       _pasteButtonVisible = false;
       _sendAddressStyle = AddressStyle.TEXT90;
       _addressValidAndUnfocused = true;
+    }
+
+    if (widget.operation != null) {
+      _sendOperationController.text = widget.operation;
+      if (widget.operation == AddressTxsResponseResult.TOKEN_TRANSFER) {
+        isTokenToSendSwitched = true;
+      }
+    }
+    if (widget.openfield != null) {
+      _sendOperationController.text = widget.openfield;
     }
     // On amount focus change
     _sendAmountFocusNode.addListener(() {
@@ -608,8 +624,115 @@ class _SendSheetState extends State<SendSheet> {
                                         ),
                                       ),
                                     ),
-                                    SizedBox(height: 20),
+                                    SizedBox(height: 10),
+                                    Container(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Column(
+                                            children: [
+                                              Text(
+                                                AppLocalization.of(context)
+                                                    .pasteBisUrl,
+                                                style: TextStyle(
+                                                  fontSize: 16.0,
+                                                  fontWeight: FontWeight.w100,
+                                                  fontFamily: 'NunitoSans',
+                                                  color:
+                                                      StateContainer.of(context)
+                                                          .curTheme
+                                                          .text60,
+                                                ),
+                                              ),
+                                              Text(
+                                                AppLocalization.of(context)
+                                                    .pasteBisUrlPrefix,
+                                                style: TextStyle(
+                                                  fontSize: 12.0,
+                                                  fontWeight: FontWeight.w100,
+                                                  fontFamily: 'NunitoSans',
+                                                  color:
+                                                      StateContainer.of(context)
+                                                          .curTheme
+                                                          .text60,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          FlatButton(
+                                            padding: EdgeInsets.all(14.0),
+                                            highlightColor:
+                                                StateContainer.of(context)
+                                                    .curTheme
+                                                    .primary15,
+                                            splashColor:
+                                                StateContainer.of(context)
+                                                    .curTheme
+                                                    .primary30,
+                                            onPressed: () {
+                                              if (!_pasteButtonVisible) {
+                                                return;
+                                              }
+                                              Clipboard.getData("text/plain")
+                                                  .then((ClipboardData
+                                                      data) async {
+                                                if (data == null ||
+                                                    data.text == null ||
+                                                    data.text.contains(
+                                                            "bis://") ==
+                                                        false) {
+                                                  UIUtil.showSnackbar(
+                                                      AppLocalization.of(
+                                                              context)
+                                                          .pasteBisUrlError,
+                                                      context);
 
+                                                  return;
+                                                }
+                                                BisUrl bisUrl =
+                                                    await new BisUrl()
+                                                        .getInfo(data.text);
+                                                setState(() {
+                                                  _sendAddressController.text =
+                                                      bisUrl.address;
+                                                  _sendAmountController.text =
+                                                      bisUrl.amount;
+                                                  _sendCommentController.text =
+                                                      bisUrl.comment;
+                                                  _sendOpenfieldController
+                                                      .text = bisUrl.openfield;
+                                                  _sendOperationController
+                                                      .text = bisUrl.operation;
+                                                  isTokenToSendSwitched =
+                                                      bisUrl.isTokenToSend;
+                                                  _sendTokenQuantityController
+                                                          .text =
+                                                      bisUrl.tokenToSendQty
+                                                          .toString();
+                                                  _selectedTokenName =
+                                                      bisUrl.tokenName;
+
+                                                  validRequest =
+                                                      _validateRequest();
+                                                });
+                                              });
+                                            },
+                                            child: Icon(AppIcons.paste,
+                                                size: 20,
+                                                color:
+                                                    StateContainer.of(context)
+                                                        .curTheme
+                                                        .primary),
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        200.0)),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: 10),
                                     Container(
                                       margin:
                                           EdgeInsets.symmetric(horizontal: 30),
@@ -703,7 +826,6 @@ class _SendSheetState extends State<SendSheet> {
                                             Container(
                                                 child:
                                                     getEnterTokenContainer()),
-                                            // ******* Enter Address Error Container ******* //
                                             Container(
                                               alignment:
                                                   AlignmentDirectional(0, 0),
@@ -719,11 +841,9 @@ class _SendSheetState extends State<SendSheet> {
                                                     fontWeight: FontWeight.w600,
                                                   )),
                                             ),
-                                            // ******* Enter Address Error Container End ******* //
                                             Container(
                                                 child:
                                                     getEnterTokensQuantityContainer()),
-                                            // ******* Enter Address Error Container ******* //
                                             Container(
                                               alignment:
                                                   AlignmentDirectional(0, 0),
@@ -740,7 +860,6 @@ class _SendSheetState extends State<SendSheet> {
                                                     fontWeight: FontWeight.w600,
                                                   )),
                                             ),
-                                            // ******* Enter Address Error Container End ******* //
                                             Container(
                                               child: getEnterCommentContainer(),
                                             ),
@@ -807,7 +926,7 @@ class _SendSheetState extends State<SendSheet> {
                           AppButtonType.PRIMARY,
                           AppLocalization.of(context).send,
                           Dimens.BUTTON_TOP_DIMENS, onPressed: () {
-                        bool validRequest = _validateRequest();
+                        validRequest = _validateRequest();
                         if (_sendAddressController.text.startsWith("@") &&
                             validRequest) {
                           // Need to make sure its a valid contact
@@ -1222,6 +1341,24 @@ class _SendSheetState extends State<SendSheet> {
         setState(() {
           _tokenValidationText = AppLocalization.of(context).tokenMissing;
         });
+      } else {
+        bool tokenInList = false;
+        for (int i = 0;
+            i < StateContainer.of(context).wallet.tokens.length;
+            i++) {
+          if (StateContainer.of(context).wallet.tokens[i].tokenName ==
+              _selectedTokenName) {
+            tokenInList = true;
+            break;
+          }
+        }
+
+        if (tokenInList == false) {
+          isValid = false;
+          setState(() {
+            _tokenValidationText = AppLocalization.of(context).noTokenOwner + " '" + _selectedTokenName + "'";
+          });
+        }
       }
       if (_sendTokenQuantityController.text.trim().isEmpty ||
           int.tryParse(_sendTokenQuantityController.text.trim()) == 0) {
@@ -1583,9 +1720,7 @@ class _SendSheetState extends State<SendSheet> {
       ),
       onChanged: (text) {
         // Always reset the error message to be less annoying
-        setState(() {
-        
-        });
+        setState(() {});
       },
       inputFormatters: [LengthLimitingTextInputFormatter(100000)],
       textInputAction: TextInputAction.next,

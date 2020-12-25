@@ -179,5 +179,12 @@
   "enterTokenQuantity": "Saisir la quantité",
   "sendATokenQuestion": "Envoyer un token ?",
   "tokenQuantityMissing": "La quantité est obligatoire",
-  "tokenMissing": "Svp, choisissez un token"
+  "tokenMissing": "Svp, sélectionnez un Token",
+  "searchField": "Recherche...",
+  "myTokens": "Tokens",
+  "myTokensListHeader": "Ma liste de Tokens",
+  "pasteBisUrl": "Vous pouvez coller une url BIS",
+  "pasteBisUrlPrefix": "('bis://' or 'bis://pay)'",
+  "pasteBisUrlError": "Votre presse papier ne contient pas d'url BIS",
+  "noTokenOwner": "Vous n'avez pas de token"
 }

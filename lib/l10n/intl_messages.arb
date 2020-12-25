@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-12-23T11:00:17.476419",
+  "@@last_modified": "2020-12-25T15:36:00.470677",
   "cancel": "Cancel",
   "@cancel": {
     "description": "dialog_cancel",
@@ -336,6 +336,24 @@
     "type": "text",
     "placeholders": {}
   },
+  "pasteBisUrl": "You can paste a BIS url",
+  "@pasteBisUrl": {
+    "description": "pasteBisUrl_hint",
+    "type": "text",
+    "placeholders": {}
+  },
+  "pasteBisUrlPrefix": "('bis://' or 'bis://pay)'",
+  "@pasteBisUrlPrefix": {
+    "description": "pasteBisUrlPrefix_hint",
+    "type": "text",
+    "placeholders": {}
+  },
+  "pasteBisUrlError": "Your clipboard doesn't contain a BIS url",
+  "@pasteBisUrlError": {
+    "description": "pasteBisUrlError_hint",
+    "type": "text",
+    "placeholders": {}
+  },
   "available": "available",
   "@available": {
     "description": "available",
@@ -579,6 +597,30 @@
   "informations": "Informations",
   "@informations": {
     "description": "settings_informations_header",
+    "type": "text",
+    "placeholders": {}
+  },
+  "searchField": "Search...",
+  "@searchField": {
+    "description": "search_field_hint",
+    "type": "text",
+    "placeholders": {}
+  },
+  "myTokens": "Tokens",
+  "@myTokens": {
+    "description": "my_tokens_button",
+    "type": "text",
+    "placeholders": {}
+  },
+  "myTokensListHeader": "My Token List",
+  "@myTokensListHeader": {
+    "description": "my_tokens_list_header",
+    "type": "text",
+    "placeholders": {}
+  },
+  "noTokenOwner": "You don't have any token",
+  "@noTokenOwner": {
+    "description": "no_token_owner_error",
     "type": "text",
     "placeholders": {}
   },

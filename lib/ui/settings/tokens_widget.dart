@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
-import 'package:my_bismuth_wallet/model/tokenRef.dart';
+import 'package:my_bismuth_wallet/model/token_ref.dart';
 import 'package:my_bismuth_wallet/service/app_service.dart';
 import 'package:my_bismuth_wallet/service_locator.dart';
 import 'package:my_bismuth_wallet/styles.dart';
@@ -22,19 +22,24 @@ class TokensList extends StatefulWidget {
 class _TokensListState extends State<TokensList> {
   final Logger log = sl.get<Logger>();
 
-  List<TokenRef> _tokenRefs;
+  List<TokenRef> _tokenRefs = new List<TokenRef>();
+  List<TokenRef> _tokenRefsForDisplay = new List<TokenRef>();
 
   @override
   void initState() {
-    super.initState();
-
     //
-    loadTokenRefList();
+    loadTokenRefList().then((value) {
+      setState(() {
+        _tokenRefs.addAll(value);
+        _tokenRefsForDisplay = _tokenRefs;
+      });
+    });
+    super.initState();
   }
 
-  void loadTokenRefList() async {
+  Future<List<TokenRef>> loadTokenRefList() async {
     AppService appService = new AppService();
-    _tokenRefs = await appService.getTokensReflist();
+    return await appService.getTokensReflist();
   }
 
   @override
@@ -56,7 +61,6 @@ class _TokensListState extends State<TokensList> {
           ),
           child: Column(
             children: <Widget>[
-              // Back button and Contacts Text
               Container(
                 margin: EdgeInsets.only(bottom: 10.0, top: 5),
                 child: Row(
@@ -88,7 +92,7 @@ class _TokensListState extends State<TokensList> {
                                       StateContainer.of(context).curTheme.text,
                                   size: 24)),
                         ),
-                        //Contacts Header Text
+                        // Header Text
                         Text(
                           AppLocalization.of(context).tokensListHeader,
                           style: AppStyles.textStyleSettingsHeader(context),
@@ -98,18 +102,37 @@ class _TokensListState extends State<TokensList> {
                   ],
                 ),
               ),
-              // Contacts list + top and bottom gradients
+              Container(
+                padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                child: TextField(
+                  decoration: InputDecoration(
+                      hintText: AppLocalization.of(context).searchField),
+                  onChanged: (text) {
+                    text = text.toLowerCase();
+                    setState(() {
+                      _tokenRefsForDisplay = _tokenRefs.where((token) {
+                        var tokenId = token.token.toLowerCase();
+                        return tokenId.contains(text);
+                      }).toList();
+                    });
+                  },
+                ),
+              ),
+              // list + top and bottom gradients
               Expanded(
                 child: Stack(
                   children: <Widget>[
-                    // Contacts list
+                    //  list
                     ListView.builder(
                       physics: const AlwaysScrollableScrollPhysics(),
                       padding: EdgeInsets.only(top: 15.0, bottom: 15),
-                      itemCount: _tokenRefs == null ? 0 : _tokenRefs.length,
+                      itemCount: _tokenRefsForDisplay == null
+                          ? 0
+                          : _tokenRefsForDisplay.length,
                       itemBuilder: (context, index) {
-                        // Build contact
-                        return buildSingleToken(context, _tokenRefs[index]);
+                        // Build
+                        return buildSingleToken(
+                            context, _tokenRefsForDisplay[index]);
                       },
                     ),
                     //List Top Gradient End
@@ -189,9 +212,12 @@ class _TokensListState extends State<TokensList> {
                     children: <Widget>[
                       Text(tokenRef.token,
                           style: AppStyles.textStyleSettingItemHeader(context)),
-                           Text(
-                        AppLocalization.of(context).tokensListTotalSupply + NumberFormat.compact(locale: Localizations.localeOf(context)
-                                    .languageCode).format(tokenRef.totalSupply),
+                      Text(
+                        AppLocalization.of(context).tokensListTotalSupply +
+                            NumberFormat.compact(
+                                    locale: Localizations.localeOf(context)
+                                        .languageCode)
+                                .format(tokenRef.totalSupply),
                         style: TextStyle(
                           color: StateContainer.of(context).curTheme.primary60,
                           fontSize: 14.0,
@@ -214,7 +240,8 @@ class _TokensListState extends State<TokensList> {
                         ),
                       ),
                       Text(
-                        AppLocalization.of(context).tokensListCreatedBy + Address(tokenRef.creator).getShorterString(),
+                        AppLocalization.of(context).tokensListCreatedBy +
+                            Address(tokenRef.creator).getShorterString(),
                         style: TextStyle(
                           color: StateContainer.of(context).curTheme.primary60,
                           fontSize: 14.0,
