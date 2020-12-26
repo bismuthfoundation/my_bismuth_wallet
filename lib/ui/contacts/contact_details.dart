@@ -48,6 +48,8 @@ class ContactDetailsSheet {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
+                        contact.address == AppLocalization.of(context).donationsUrl ?
+                        SizedBox() :
                         // Trashcan Button
                         Container(
                           width: 50,

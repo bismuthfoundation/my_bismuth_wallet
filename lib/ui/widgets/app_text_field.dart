@@ -24,7 +24,7 @@ class TextFieldButton extends StatelessWidget {
         },
         child: Icon(icon,
             size: 20,
-            color: StateContainer.of(context).curTheme.primary),
+            color: StateContainer.of(context).curTheme.icon),
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(200.0)),
       )
@@ -146,8 +146,8 @@ class _AppTextFieldState extends State<AppTextField> {
               hintStyle: TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.w100,
-                fontFamily: 'NunitoSans',
-                color: StateContainer.of(context).curTheme.text60,
+                fontFamily: 'Roboto',
+                color: StateContainer.of(context).curTheme.text20,
               ),
               // First button
               prefixIcon: widget.prefixButton == null ?

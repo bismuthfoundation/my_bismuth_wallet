@@ -35,8 +35,8 @@ class AppSettings {
                 child: Container(
                   child: Icon(icon,
                       color: disabled
-                          ? StateContainer.of(context).curTheme.primary45
-                          : StateContainer.of(context).curTheme.primary,
+                          ? StateContainer.of(context).curTheme.icon45
+                          : StateContainer.of(context).curTheme.icon,
                       size: 24),
                   margin: EdgeInsets.only(top: 3, left: 3, bottom: 3, right: 3),
                 ),
@@ -103,7 +103,7 @@ class AppSettings {
               child: Container(
                 child: Icon(
                   settingIcon,
-                  color: StateContainer.of(context).curTheme.primary,
+                  color: StateContainer.of(context).curTheme.icon,
                   size: 24,
                 ),
                 margin: EdgeInsetsDirectional.only(

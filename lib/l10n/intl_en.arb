@@ -694,9 +694,9 @@
   "import": "Import",
   "importSeedInstead": "Import Seed Instead",
   "switchToSeed": "Switch to Seed",
-   "diacritic": "Diacritic",
+   "diacritic": "Common accents and diacritical signs will be replacing with an equivalent character",
   "@diacritic": {
-    "description": "Common accents and diacritical signs will be replacing with an equivalent character",
+    "description": "diacritic",
     "type": "text",
     "placeholders": {}
   },

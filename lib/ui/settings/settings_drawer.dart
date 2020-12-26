@@ -749,10 +749,10 @@ class _SettingsSheetState extends State<SettingsSheet>
                                   color: _loadingAccounts
                                       ? StateContainer.of(context)
                                           .curTheme
-                                          .primary60
+                                          .icon60
                                       : StateContainer.of(context)
                                           .curTheme
-                                          .primary),
+                                          .icon),
                             ),
                           ),
                         ],

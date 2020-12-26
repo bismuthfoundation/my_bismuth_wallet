@@ -309,7 +309,7 @@ class StateContainerState extends State<StateContainer> {
       // Request account history
       int count = 30;
       try {
-        await AppService().getBalanceGetResponse(wallet.address.toString());
+        await AppService().getBalanceGetResponse(wallet.address.toString(), true);
         await AppService().getSimplePrice(curCurrency.getIso4217Code());
 
         AddressTxsResponse addressTxsResponse =
@@ -341,7 +341,10 @@ class StateContainerState extends State<StateContainer> {
         setState(() {
           wallet.historyLoading = false;
           wallet.loading = false;
-          wallet.tokens = addressTxsResponse.tokens;
+          wallet.tokens.clear();
+          wallet.tokens.add(new BisToken(tokenName: "", tokensQuantity: 0, tokenMessage: ""));
+          wallet.tokens.addAll(addressTxsResponse.tokens);
+          
         });
 
         EventTaxiImpl.singleton().fire(HistoryHomeEvent(items: wallet.history));

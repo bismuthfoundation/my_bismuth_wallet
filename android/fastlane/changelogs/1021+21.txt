@@ -1,0 +1,8 @@
+Version 1.0.21+21 available
+- Contact details: deactivation of the possibility of removing Donations profile
+- Theme like bismuth.online
+- Fix bugs
+- Send Tx : BISURL management with QR Code Reading
+
+android: https://we.tl/t-SYpAqQCQpP and avalaible in few hours on google play store
+ios: available on test flight

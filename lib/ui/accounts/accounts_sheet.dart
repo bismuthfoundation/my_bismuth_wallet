@@ -3,11 +3,12 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:event_taxi/event_taxi.dart';
-import 'package:logger/logger.dart';
 import 'package:my_bismuth_wallet/bus/events.dart';
 import 'package:my_bismuth_wallet/localization.dart';
 import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:my_bismuth_wallet/dimens.dart';
+import 'package:my_bismuth_wallet/network/model/response/balance_get_response.dart';
+import 'package:my_bismuth_wallet/service/app_service.dart';
 import 'package:my_bismuth_wallet/service_locator.dart';
 import 'package:my_bismuth_wallet/model/db/appdb.dart';
 import 'package:my_bismuth_wallet/model/db/account.dart';
@@ -19,7 +20,6 @@ import 'package:my_bismuth_wallet/ui/widgets/dialog.dart';
 import 'package:my_bismuth_wallet/styles.dart';
 import 'package:my_bismuth_wallet/util/caseconverter.dart';
 import 'package:my_bismuth_wallet/util/numberutil.dart';
-
 
 class AppAccountsSheet {
   List<Account> accounts;
@@ -61,6 +61,19 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
     _registerBus();
     this._addingAccount = false;
     this._accountIsChanging = false;
+
+    widget.accounts.forEach((account) async {
+      if (account.address != null) {
+        BalanceGetResponse balanceGetResponse =
+            await AppService().getBalanceGetResponse(account.address, false);
+        setState(() {
+          account.balance = balanceGetResponse.balance;
+        });
+        sl
+            .get<DBHelper>()
+            .updateAccountBalance(account, balanceGetResponse.balance);
+      }
+    });
   }
 
   @override
@@ -106,24 +119,26 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
       _accountModifiedSub.cancel();
     }
   }
- Future<void> _requestBalances(
+
+  Future<void> _requestBalances(
       BuildContext context, List<Account> accounts) async {
-    List<String> addresses = List();
-    accounts.forEach((account) {
+    accounts.forEach((account) async {
       if (account.address != null) {
-        addresses.add(account.address);
+        BalanceGetResponse balanceGetResponse =
+            await AppService().getBalanceGetResponse(account.address, false);
+        sl
+            .get<DBHelper>()
+            .updateAccountBalance(account, balanceGetResponse.balance);
+        setState(() {
+          account.balance =
+              balanceGetResponse == null || balanceGetResponse.balance == null
+                  ? 0
+                  : balanceGetResponse.balance;
+        });
       }
     });
-    try {
-      // TODO: A changer
-     // AccountsBalancesResponse resp =
-     //     await sl.get<AccountService>().requestAccountsBalances(addresses);
-     // await _handleAccountsBalancesResponse(resp);
-    } catch (e) {
-      sl.get<Logger>().e("Error", e);
-    }
   }
-  
+
   Future<void> _changeAccount(Account account, StateSetter setState) async {
     // Change account
     widget.accounts.forEach((a) {
@@ -370,7 +385,9 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
                                   width: 64.0,
                                   height: 64.0,
                                   child: CircleAvatar(
-                                    backgroundColor: StateContainer.of(context).curTheme.text05,
+                                    backgroundColor: StateContainer.of(context)
+                                        .curTheme
+                                        .text05,
                                     backgroundImage: NetworkImage(
                                       UIUtil.getRobohashURL(account.address),
                                     ),
@@ -435,15 +452,9 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
                                   children: [
                                     // Main balance text
                                     TextSpan(
-                                      text: account.balance != null &&
-                                              !account.selected
-                                          ? NumberUtil.getRawAsUsableString(
-                                              account.balance) + " BIS"
-                                          : account.selected
-                                              ? StateContainer.of(context)
-                                                  .wallet
-                                                  .getAccountBalanceDisplay() + " BIS"
-                                              : "",
+                                      text: account.balance == null ? "" : NumberUtil.getRawAsUsableString(
+                                              account.balance) +
+                                          " BIS",
                                       style: TextStyle(
                                           fontSize: 16.0,
                                           fontFamily: "NunitoSans",

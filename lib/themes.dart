@@ -12,6 +12,10 @@ abstract class BaseTheme {
   Color primary15;
   Color primary10;
 
+  Color icon;
+  Color icon45;
+  Color icon60;
+
   Color success;
   Color success60;
   Color success30;
@@ -62,21 +66,23 @@ abstract class BaseTheme {
 }
 
 class BismuthTheme extends BaseTheme {
-static const teal = Color(0xFF873999);
+  static const teal = Color(0xFF8C379F);
 
   static const orange = Color(0xFF873999);
 
-  static const orangeDark = Color(0xFF7E2280);
+  static const orangeDark = Color(0xFF873998);
 
-  static const purpleDark = Color(0xFF270D2D);
+  static const purpleDark = Color(0xFF242945);
 
-  static const purpleLight = Color(0xFF4B224D);
+  static const purpleLight = Color(0xFF202940);
 
-  static const purpleDarkest = Color(0xFF331436);
+  static const purpleDarkest = Color(0xFF242945);
 
   static const white = Color(0xFFFFFFFF);
 
   static const black = Color(0xFF000000);
+
+  static const blue = Color(0xFF2196F3);
 
   Color primary = teal;
   Color primary60 = white.withOpacity(0.6);
@@ -85,6 +91,10 @@ static const teal = Color(0xFF873999);
   Color primary20 = teal.withOpacity(0.2);
   Color primary15 = teal.withOpacity(0.15);
   Color primary10 = teal.withOpacity(0.1);
+
+  Color icon = blue;
+  Color icon45 = blue.withOpacity(0.45);
+  Color icon60 = blue.withOpacity(0.60);
 
   Color success = orange;
   Color success60 = orange.withOpacity(0.6);

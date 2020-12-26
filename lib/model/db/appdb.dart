@@ -208,16 +208,18 @@ class DBHelper {
           index: nextIndex,
           name: nextName,
           lastAccess: 0,
+          balance: "0",
           selected: false,
           address: AppUtil().seedToAddress(seed, nextIndex));
       await txn.rawInsert(
-          'INSERT INTO Accounts (name, acct_index, last_accessed, selected, address) values(?, ?, ?, ?, ?)',
+          'INSERT INTO Accounts (name, acct_index, last_accessed, selected, address, balance) values(?, ?, ?, ?, ?, ?)',
           [
             account.name,
             account.index,
             account.lastAccess,
             account.selected ? 1 : 0,
-            account.address
+            account.address,
+            account.balance
           ]);
     });
     return account;
@@ -232,12 +234,13 @@ class DBHelper {
   Future<int> saveAccount(Account account) async {
     var dbClient = await db;
     return await dbClient.rawInsert(
-        'INSERT INTO Accounts (name, acct_index, last_accessed, selected) values(?, ?, ?, ?)',
+        'INSERT INTO Accounts (name, acct_index, last_accessed, selected, balance) values(?, ?, ?, ?, ?)',
         [
           account.name,
           account.index,
           account.lastAccess,
-          account.selected ? 1 : 0
+          account.selected ? 1 : 0,
+          account.balance
         ]);
   }
 

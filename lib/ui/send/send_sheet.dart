@@ -354,7 +354,7 @@ class _SendSheetState extends State<SendSheet> {
                           color: StateContainer.of(context).curTheme.text60,
                           fontSize: 16.0,
                           fontWeight: FontWeight.w700,
-                          fontFamily: 'NunitoSans',
+                          fontFamily: 'Roboto',
                         ),
                       ),
                     ],
@@ -428,7 +428,7 @@ class _SendSheetState extends State<SendSheet> {
                                                       fontSize: 14.0,
                                                       fontWeight:
                                                           FontWeight.w100,
-                                                      fontFamily: 'NunitoSans',
+                                                      fontFamily: 'Roboto',
                                                     ),
                                                   ),
                                                   TextSpan(
@@ -455,7 +455,7 @@ class _SendSheetState extends State<SendSheet> {
                                                       fontSize: 14.0,
                                                       fontWeight:
                                                           FontWeight.w700,
-                                                      fontFamily: 'NunitoSans',
+                                                      fontFamily: 'Roboto',
                                                     ),
                                                   ),
                                                   TextSpan(
@@ -470,7 +470,7 @@ class _SendSheetState extends State<SendSheet> {
                                                       fontSize: 14.0,
                                                       fontWeight:
                                                           FontWeight.w100,
-                                                      fontFamily: 'NunitoSans',
+                                                      fontFamily: 'Roboto',
                                                     ),
                                                   ),
                                                 ],
@@ -485,7 +485,7 @@ class _SendSheetState extends State<SendSheet> {
                                               color: Colors.transparent,
                                               fontSize: 14.0,
                                               fontWeight: FontWeight.w100,
-                                              fontFamily: 'NunitoSans',
+                                              fontFamily: 'Roboto',
                                             ),
                                           ),
                                         );
@@ -506,7 +506,7 @@ class _SendSheetState extends State<SendSheet> {
                                             color: StateContainer.of(context)
                                                 .curTheme
                                                 .primary,
-                                            fontFamily: 'NunitoSans',
+                                            fontFamily: 'Roboto',
                                             fontWeight: FontWeight.w600,
                                           )),
                                     ),
@@ -591,7 +591,7 @@ class _SendSheetState extends State<SendSheet> {
                                             color: StateContainer.of(context)
                                                 .curTheme
                                                 .primary,
-                                            fontFamily: 'NunitoSans',
+                                            fontFamily: 'Roboto',
                                             fontWeight: FontWeight.w600,
                                           )),
                                     ),
@@ -620,7 +620,7 @@ class _SendSheetState extends State<SendSheet> {
                                               .primary60,
                                           fontSize: 14.0,
                                           fontWeight: FontWeight.w100,
-                                          fontFamily: 'NunitoSans',
+                                          fontFamily: 'Roboto',
                                         ),
                                       ),
                                     ),
@@ -638,7 +638,7 @@ class _SendSheetState extends State<SendSheet> {
                                                 style: TextStyle(
                                                   fontSize: 16.0,
                                                   fontWeight: FontWeight.w100,
-                                                  fontFamily: 'NunitoSans',
+                                                  fontFamily: 'Roboto',
                                                   color:
                                                       StateContainer.of(context)
                                                           .curTheme
@@ -651,7 +651,7 @@ class _SendSheetState extends State<SendSheet> {
                                                 style: TextStyle(
                                                   fontSize: 12.0,
                                                   fontWeight: FontWeight.w100,
-                                                  fontFamily: 'NunitoSans',
+                                                  fontFamily: 'Roboto',
                                                   color:
                                                       StateContainer.of(context)
                                                           .curTheme
@@ -694,6 +694,13 @@ class _SendSheetState extends State<SendSheet> {
                                                     await new BisUrl()
                                                         .getInfo(data.text);
                                                 setState(() {
+                                                  _addressValidationText = "";
+                                                  _amountValidationText = "";
+                                                  _tokenValidationText = "";
+                                                  _tokenQuantityValidationText =
+                                                      "";
+                                                  _openfieldValidationText = "";
+                                                  _operationValidationText = "";
                                                   _sendAddressController.text =
                                                       bisUrl.address;
                                                   _sendAmountController.text =
@@ -723,7 +730,7 @@ class _SendSheetState extends State<SendSheet> {
                                                 color:
                                                     StateContainer.of(context)
                                                         .curTheme
-                                                        .primary),
+                                                        .icon),
                                             shape: RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(
@@ -747,7 +754,7 @@ class _SendSheetState extends State<SendSheet> {
                                               .text60,
                                           fontSize: 16.0,
                                           fontWeight: FontWeight.w700,
-                                          fontFamily: 'NunitoSans',
+                                          fontFamily: 'Roboto',
                                         ),
                                       ),
                                     ),
@@ -762,7 +769,7 @@ class _SendSheetState extends State<SendSheet> {
                                               .primary60,
                                           fontSize: 12.0,
                                           fontWeight: FontWeight.w100,
-                                          fontFamily: 'NunitoSans',
+                                          fontFamily: 'Roboto',
                                         ),
                                       ),
                                     ),
@@ -777,7 +784,7 @@ class _SendSheetState extends State<SendSheet> {
                                           style: TextStyle(
                                             fontSize: 16.0,
                                             fontWeight: FontWeight.w100,
-                                            fontFamily: 'NunitoSans',
+                                            fontFamily: 'Roboto',
                                             color: StateContainer.of(context)
                                                 .curTheme
                                                 .text60,
@@ -796,6 +803,7 @@ class _SendSheetState extends State<SendSheet> {
                                                   TextEditingController();
                                               _sendCommentController =
                                                   TextEditingController();
+                                              _selectedTokenName = "";
                                             });
                                           },
                                           activeTrackColor:
@@ -837,7 +845,7 @@ class _SendSheetState extends State<SendSheet> {
                                                             context)
                                                         .curTheme
                                                         .primary,
-                                                    fontFamily: 'NunitoSans',
+                                                    fontFamily: 'Roboto',
                                                     fontWeight: FontWeight.w600,
                                                   )),
                                             ),
@@ -856,7 +864,7 @@ class _SendSheetState extends State<SendSheet> {
                                                             context)
                                                         .curTheme
                                                         .primary,
-                                                    fontFamily: 'NunitoSans',
+                                                    fontFamily: 'Roboto',
                                                     fontWeight: FontWeight.w600,
                                                   )),
                                             ),
@@ -1002,6 +1010,31 @@ class _SendSheetState extends State<SendSheet> {
                         } else if (QRScanErrs.ERROR_LIST.contains(scanResult)) {
                           return;
                         } else {
+                          if (scanResult.contains("bis://")) {
+                            BisUrl bisUrl =
+                                await new BisUrl().getInfo(scanResult);
+                            setState(() {
+                              _addressValidationText = "";
+                              _amountValidationText = "";
+                              _tokenValidationText = "";
+                              _tokenQuantityValidationText = "";
+                              _openfieldValidationText = "";
+                              _operationValidationText = "";
+                              _sendAddressController.text = bisUrl.address;
+                              _sendAmountController.text = bisUrl.amount;
+                              _sendCommentController.text = bisUrl.comment;
+                              _sendOpenfieldController.text = bisUrl.openfield;
+                              _sendOperationController.text = bisUrl.operation;
+                              isTokenToSendSwitched = bisUrl.isTokenToSend;
+                              _sendTokenQuantityController.text =
+                                  bisUrl.tokenToSendQty.toString();
+                              _selectedTokenName = bisUrl.tokenName;
+
+                              validRequest = _validateRequest();
+                            });
+                            return;
+                          }
+
                           // Is a URI
                           Address address = Address(scanResult);
                           // See if this address belongs to a contact
@@ -1356,7 +1389,10 @@ class _SendSheetState extends State<SendSheet> {
         if (tokenInList == false) {
           isValid = false;
           setState(() {
-            _tokenValidationText = AppLocalization.of(context).noTokenOwner + " '" + _selectedTokenName + "'";
+            _tokenValidationText = AppLocalization.of(context).noTokenOwner +
+                " '" +
+                _selectedTokenName +
+                "'";
           });
         }
       }
@@ -1408,7 +1444,7 @@ class _SendSheetState extends State<SendSheet> {
         fontWeight: FontWeight.w700,
         fontSize: 16.0,
         color: StateContainer.of(context).curTheme.primary,
-        fontFamily: 'NunitoSans',
+        fontFamily: 'Roboto',
       ),
       inputFormatters: _rawAmount == null
           ? [
@@ -1680,7 +1716,7 @@ class _SendSheetState extends State<SendSheet> {
         fontWeight: FontWeight.w700,
         fontSize: 16.0,
         color: StateContainer.of(context).curTheme.primary,
-        fontFamily: 'NunitoSans',
+        fontFamily: 'Roboto',
       ),
       inputFormatters: [LengthLimitingTextInputFormatter(100000)],
       onChanged: (text) {
@@ -1716,7 +1752,7 @@ class _SendSheetState extends State<SendSheet> {
         fontWeight: FontWeight.w700,
         fontSize: 16.0,
         color: StateContainer.of(context).curTheme.primary,
-        fontFamily: 'NunitoSans',
+        fontFamily: 'Roboto',
       ),
       onChanged: (text) {
         // Always reset the error message to be less annoying
@@ -1750,7 +1786,7 @@ class _SendSheetState extends State<SendSheet> {
         fontWeight: FontWeight.w700,
         fontSize: 16.0,
         color: StateContainer.of(context).curTheme.primary,
-        fontFamily: 'NunitoSans',
+        fontFamily: 'Roboto',
       ),
       inputFormatters: [
         LengthLimitingTextInputFormatter(16),
@@ -1801,7 +1837,7 @@ class _SendSheetState extends State<SendSheet> {
         fontWeight: FontWeight.w700,
         fontSize: 16.0,
         color: StateContainer.of(context).curTheme.primary,
-        fontFamily: 'NunitoSans',
+        fontFamily: 'Roboto',
       ),
       inputFormatters: [LengthLimitingTextInputFormatter(32)],
       onChanged: (text) {
@@ -1835,6 +1871,7 @@ class _SendSheetState extends State<SendSheet> {
           canvasColor: StateContainer.of(context).curTheme.backgroundDarkest,
         ),
         child: DropdownButtonFormField(
+          value: _selectedTokenName,
           decoration: InputDecoration(
               contentPadding: const EdgeInsets.all(0.0),
               enabledBorder: UnderlineInputBorder(
@@ -1846,7 +1883,7 @@ class _SendSheetState extends State<SendSheet> {
           style: TextStyle(
             fontSize: 16.0,
             fontWeight: FontWeight.w100,
-            fontFamily: 'NunitoSans',
+            fontFamily: 'Roboto',
             color: StateContainer.of(context).curTheme.text60,
           ),
           items:
@@ -1854,20 +1891,22 @@ class _SendSheetState extends State<SendSheet> {
             return DropdownMenuItem<String>(
                 value: bisToken.tokenName,
                 child: Container(
-                    child: Text(
-                  bisToken.tokenName +
-                      " (" +
-                      bisToken.tokensQuantity.toString() +
-                      " " +
-                      AppLocalization.of(context).available +
-                      ")",
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w100,
-                    fontFamily: 'NunitoSans',
-                    color: StateContainer.of(context).curTheme.text60,
-                  ),
-                )));
+                    child: bisToken.tokenName == ""
+                        ? Text("")
+                        : Text(
+                            bisToken.tokenName +
+                                " (" +
+                                bisToken.tokensQuantity.toString() +
+                                " " +
+                                AppLocalization.of(context).available +
+                                ")",
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w100,
+                              fontFamily: 'Roboto',
+                              color: StateContainer.of(context).curTheme.text60,
+                            ),
+                          )));
           }).toList(),
           onChanged: (value) {
             setState(() {

@@ -54,6 +54,7 @@ import 'package:my_bismuth_wallet/network/model/response/simple_price_response_z
 import 'package:my_bismuth_wallet/network/model/response/tokens_balance_get_response.dart';
 import 'package:my_bismuth_wallet/network/model/response/tokens_list_get_response.dart';
 import 'package:my_bismuth_wallet/network/model/response/wstatusget_response.dart';
+import 'package:my_bismuth_wallet/ui/util/int_converter.dart';
 
 class AppService {
   var logger = Logger();
@@ -103,7 +104,8 @@ class AppService {
     return serverWalletLegacyResponse;
   }
 
-  Future<BalanceGetResponse> getBalanceGetResponse(String address) async {
+  Future<BalanceGetResponse> getBalanceGetResponse(
+      String address, bool activeBus) async {
     BalanceGetResponse balanceGetResponse = new BalanceGetResponse();
     Completer<BalanceGetResponse> _completer =
         new Completer<BalanceGetResponse>();
@@ -120,18 +122,26 @@ class AppService {
       //print('Connected to: '
       //   '${_socket.remoteAddress.address}:${_socket.remotePort}');
       //Establish the onData, and onDone callbacks
-
+      String message = "";
       _socket.listen((data) {
         if (data != null) {
-          String message = new String.fromCharCodes(data).trim();
-          message = message.substring(
-              10, 10 + int.tryParse(message.substring(0, 10)));
-          balanceGetResponse = balanceGetResponseFromJson(message);
-          balanceGetResponse.address = address;
-          print(message);
-          EventTaxiImpl.singleton()
-              .fire(SubscribeEvent(response: balanceGetResponse));
-          _completer.complete(balanceGetResponse);
+          message += new String.fromCharCodes(data).trim();
+          if (message != null &&
+              message.length >= 10 &&
+              int.tryParse(message.substring(0, 10)) != null &&
+              message.length == 10 + int.tryParse(message.substring(0, 10))) {
+            message = message.substring(
+                10, 10 + int.tryParse(message.substring(0, 10)));
+            balanceGetResponse = balanceGetResponseFromJson(message);
+            balanceGetResponse.address = address;
+            //print(message);
+            if (activeBus) {
+              EventTaxiImpl.singleton()
+                  .fire(SubscribeEvent(response: balanceGetResponse));
+            }
+
+            _completer.complete(balanceGetResponse);
+          }
         }
       }, onError: ((error, StackTrace trace) {
         //print("Error");
@@ -175,11 +185,16 @@ class AppService {
       //print('Connected to: '
       //   '${_socket.remoteAddress.address}:${_socket.remotePort}');
       //Establish the onData, and onDone callbacks
+      String message = "";
       _socket.listen((data) {
         if (data != null) {
-          String message = new String.fromCharCodes(data).trim();
+          message += new String.fromCharCodes(data).trim();
           //print("response : " + message);
-          if (message != null && message.length >= 10) {
+          //print("response length : " + message.length.toString());
+          if (message != null &&
+              message.length >= 10 &&
+              int.tryParse(message.substring(0, 10)) != null &&
+              message.length == 10 + int.tryParse(message.substring(0, 10))) {
             message = message.substring(
                 10, 10 + int.tryParse(message.substring(0, 10)));
             //print("getAddressTxsResponse : " + message);
@@ -193,7 +208,8 @@ class AppService {
             }
             _completer.complete(addressTxsResponse);
           } else {
-            _completer.complete(addressTxsResponse);
+            //print("response length ko : " + message.length.toString());
+            //_completer.complete(addressTxsResponse);
           }
         }
       }, onError: ((error, StackTrace trace) {
@@ -215,7 +231,7 @@ class AppService {
           getLengthBuffer(param2) +
           param2);
     } catch (e) {
-      print("pb socket" + e.toString());
+      //print("pb socket" + e.toString());
     } finally {}
     return _completer.future;
   }
@@ -482,46 +498,50 @@ class AppService {
       String privateKey) async {
     SendTxRequest sendTxRequest = new SendTxRequest();
     Tx tx = new Tx();
-    print("address : " + address);
-    print("amount : " + amount);
-    print("destination : " + destination);
-    print("publicKey : " + publicKey);
-    print("privateKey : " + privateKey);
+    //print("address : " + address);
+    //print("amount : " + amount);
+    //print("destination : " + destination);
+    //print("publicKey : " + publicKey);
+    //print("privateKey : " + privateKey);
 
     Completer<String> _completer = new Completer<String>();
     try {
       ServerWalletLegacyResponse serverWalletLegacyResponse =
           await getBestServerWalletLegacyResponse();
-      print("serverWalletLegacyResponse.ip : " + serverWalletLegacyResponse.ip);
-      print("serverWalletLegacyResponse.port : " +
-          serverWalletLegacyResponse.port.toString());
+      //print("serverWalletLegacyResponse.ip : " + serverWalletLegacyResponse.ip);
+      //print("serverWalletLegacyResponse.port : " +
+      //    serverWalletLegacyResponse.port.toString());
 
       Socket _socket = await Socket.connect(
           serverWalletLegacyResponse.ip, serverWalletLegacyResponse.port);
 
-      print('Connected to: '
-          '${_socket.remoteAddress.address}:${_socket.remotePort}');
+      //print('Connected to: '
+      //    '${_socket.remoteAddress.address}:${_socket.remotePort}');
       //Establish the onData, and onDone callbacks
       _socket.listen((data) {
         if (data != null) {
           String message = new String.fromCharCodes(data).trim();
-
-          message = message.substring(
-              10, 10 + int.tryParse(message.substring(0, 10)));
-          print("Response sendTx : " + message);
-          List<String> sendTxResponse = mpinsertResponseFromJson(message);
-          if (sendTxResponse.length < 4 ||
-              sendTxResponse[3].contains("Success") == false) {
-            _completer.complete(sendTxResponse[1]);
-          } else {
-            _completer.complete("Success");
+          if (message != null &&
+              message.length >= 10 &&
+              int.tryParse(message.substring(0, 10)) != null &&
+              message.length == 10 + int.tryParse(message.substring(0, 10))) {
+            message = message.substring(
+                10, 10 + int.tryParse(message.substring(0, 10)));
+            //print("Response sendTx : " + message);
+            List<String> sendTxResponse = mpinsertResponseFromJson(message);
+            if (sendTxResponse.length < 4 ||
+                sendTxResponse[3].contains("Success") == false) {
+              _completer.complete(sendTxResponse[1]);
+            } else {
+              _completer.complete("Success");
+            }
           }
         }
       }, onError: ((error, StackTrace trace) {
-        print("Error");
+        //print("Error");
         _completer.complete("Error");
       }), onDone: () {
-        print("Done");
+        //print("Done");
         _socket.destroy();
       }, cancelOnError: false);
 
@@ -555,10 +575,10 @@ class AppService {
       String param = sendTxRequest.buildCommand();
       String message =
           getLengthBuffer(method) + method + getLengthBuffer(param) + param;
-      print("message: " + message);
+      //print("message: " + message);
       _socket.write(message);
     } catch (e) {
-      print("pb socket" + e.toString());
+      //print("pb socket" + e.toString());
     } finally {}
     return _completer.future;
   }
@@ -603,15 +623,20 @@ class AppService {
       //print('Connected to: '
       //   '${_socket.remoteAddress.address}:${_socket.remotePort}');
       //Establish the onData, and onDone callbacks
-
+      String message = "";
       _socket.listen((data) {
         if (data != null) {
-          String message = new String.fromCharCodes(data).trim();
-          message = message.substring(
-              10, 10 + int.tryParse(message.substring(0, 10)));
-          wStatusGetResponse = wStatusGetResponseFromJson(message);
-          //print(message);
-          _completer.complete(wStatusGetResponse);
+          message += new String.fromCharCodes(data).trim();
+          if (message != null &&
+              message.length >= 10 &&
+              int.tryParse(message.substring(0, 10)) != null &&
+              message.length == 10 + int.tryParse(message.substring(0, 10))) {
+            message = message.substring(
+                10, 10 + int.tryParse(message.substring(0, 10)));
+            wStatusGetResponse = wStatusGetResponseFromJson(message);
+            //print(message);
+            _completer.complete(wStatusGetResponse);
+          }
         }
       }, onError: ((error, StackTrace trace) {
         //print("Error");
@@ -626,7 +651,7 @@ class AppService {
 
       _socket.write(getLengthBuffer(method) + method);
     } catch (e) {
-      print("pb socket" + e.toString());
+      //print("pb socket" + e.toString());
       _completer.complete(null);
     } finally {}
     return _completer.future;

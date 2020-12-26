@@ -1080,6 +1080,13 @@ class AppLocalization {
     return 'https://github.com/redDwarf03/my_bismuth_wallet/blob/master/Privacy%20Policy.md';
   }
 
+  String get donationsUrl {
+    return 'Bis1KZ88di4Xb9P4h4sSgzUwSVdXk9ZGBH5i4';
+  }
+
+  String get donationsName {
+    return '@Donations';
+  }
   /// -- END NON-TRANSLATABLE ITEMS
 }
 

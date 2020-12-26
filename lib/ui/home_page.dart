@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:badges/badges.dart';
 
 import 'package:flare_flutter/flare.dart';
 import 'package:flare_dart/math/mat2d.dart';
@@ -75,8 +74,6 @@ class _AppHomePageState extends State<AppHomePage>
   // A separate unfortunate instance of this list, is a little unfortunate
   // but seems the only way to handle the animations
   final Map<String, GlobalKey<AnimatedListState>> _listKeyMap = Map();
-  final Map<String, ListModel<AddressTxsResponseResult>> _historyListMap =
-      Map();
 
   // List of contacts (Store it so we only have to query the DB once for transaction cards)
   List<Contact> _contacts = List();
@@ -139,7 +136,7 @@ class _AppHomePageState extends State<AppHomePage>
     } else if (_priceConversion == PriceConversion.HIDDEN) {
       mainCardHeight = 64;
       settingsIconMarginTop = 5;
-    } 
+    }
 
     _addSampleContact();
     _updateContacts();
@@ -205,18 +202,20 @@ class _AppHomePageState extends State<AppHomePage>
     if (!contactAdded) {
       bool addressExists = await sl
           .get<DBHelper>()
-          .contactExistsWithAddress("Bis1KZ88di4Xb9P4h4sSgzUwSVdXk9ZGBH5i4");
+          .contactExistsWithAddress(AppLocalization.of(context).donationsUrl);
       if (addressExists) {
         return;
       }
-      bool nameExists =
-          await sl.get<DBHelper>().contactExistsWithName("@Donations");
+      bool nameExists = await sl
+          .get<DBHelper>()
+          .contactExistsWithName(AppLocalization.of(context).donationsName);
       if (nameExists) {
         return;
       }
       await sl.get<SharedPrefsUtil>().setFirstContactAdded(true);
       Contact c = Contact(
-          name: "@Donations", address: "Bis1KZ88di4Xb9P4h4sSgzUwSVdXk9ZGBH5i4");
+          name: AppLocalization.of(context).donationsName,
+          address: AppLocalization.of(context).donationsUrl);
       await sl.get<DBHelper>().saveContact(c);
     }
   }
@@ -267,6 +266,7 @@ class _AppHomePageState extends State<AppHomePage>
       setState(() {
         StateContainer.of(context).wallet.loading = true;
         StateContainer.of(context).wallet.historyLoading = true;
+
         _startAnimation();
         StateContainer.of(context).updateWallet(account: event.account);
       });
@@ -367,29 +367,29 @@ class _AppHomePageState extends State<AppHomePage>
   Widget _buildItem(
       BuildContext context, int index, Animation<double> animation) {
     String displayName = smallScreen(context)
-        ? _historyListMap[StateContainer.of(context).wallet.address][index]
+        ? StateContainer.of(context).wallet.history[index]
             .getShorterString()
-        : _historyListMap[StateContainer.of(context).wallet.address][index]
+        : StateContainer.of(context).wallet.history[index]
             .getShortString();
     _contacts.forEach((contact) {
-      if (_historyListMap[StateContainer.of(context).wallet.address][index]
+      if (StateContainer.of(context).wallet.history[index]
               .type ==
           BlockTypes.RECEIVE) {
         if (contact.address ==
-            _historyListMap[StateContainer.of(context).wallet.address][index]
+            StateContainer.of(context).wallet.history[index]
                 .from) {
           displayName = contact.name;
         }
       } else {
         if (contact.address ==
-            _historyListMap[StateContainer.of(context).wallet.address][index]
+            StateContainer.of(context).wallet.history[index]
                 .recipient) {
           displayName = contact.name;
         }
       }
     });
     return _buildTransactionCard(
-        _historyListMap[StateContainer.of(context).wallet.address][index],
+        StateContainer.of(context).wallet.history[index],
         animation,
         displayName,
         context);
@@ -457,27 +457,13 @@ class _AppHomePageState extends State<AppHomePage>
     } else {
       _disposeAnimation();
     }
-    // Setup history list
-    if (!_listKeyMap.containsKey(StateContainer.of(context).wallet.address)) {
-      _listKeyMap.putIfAbsent(StateContainer.of(context).wallet.address,
-          () => GlobalKey<AnimatedListState>());
-      setState(() {
-        _historyListMap.putIfAbsent(
-            StateContainer.of(context).wallet.address,
-            () => ListModel<AddressTxsResponseResult>(
-                  listKey:
-                      _listKeyMap[StateContainer.of(context).wallet.address],
-                  initialItems: StateContainer.of(context).wallet.history,
-                ));
-      });
-    }
     return ReactiveRefreshIndicator(
       backgroundColor: StateContainer.of(context).curTheme.backgroundDark,
       child: AnimatedList(
         key: _listKeyMap[StateContainer.of(context).wallet.address],
         padding: EdgeInsetsDirectional.fromSTEB(0, 5.0, 0, 15.0),
         initialItemCount:
-            _historyListMap[StateContainer.of(context).wallet.address].length,
+            StateContainer.of(context).wallet.history.length,
         itemBuilder: _buildItem,
       ),
       onRefresh: _refresh,
@@ -492,6 +478,7 @@ class _AppHomePageState extends State<AppHomePage>
     });
     sl.get<HapticUtil>().success();
     StateContainer.of(context).requestUpdate();
+
     // Hide refresh indicator after 3 seconds if no server response
     Future.delayed(new Duration(seconds: 3), () {
       setState(() {
@@ -700,47 +687,60 @@ class _AppHomePageState extends State<AppHomePage>
                               : Colors.transparent,
                         ),
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          boxShadow: [
-                            StateContainer.of(context).curTheme.boxShadowButton
-                          ],
-                        ),
-                        height: 55,
-                        width: (MediaQuery.of(context).size.width - 158) / 3,
-                        margin: EdgeInsetsDirectional.only(
-                            start: 7, top: 0.0, end: 7.0),
-                        child: FlatButton(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100.0)),
-                          color: receive != null
-                              ? StateContainer.of(context).curTheme.primary
-                              : StateContainer.of(context).curTheme.primary60,
-                          child: 
-                          Icon(Icons.scatter_plot_rounded, color: StateContainer.of(context).curTheme.background, size: 40),
-                          onPressed: () {
-                            Sheets.showAppHeightEightSheet(
-                                context: context,
-                                widget: MyTokensList(
-                                    StateContainer.of(context).wallet.tokens));
-                          },
-                          highlightColor: StateContainer.of(context)
-                                      .wallet
-                                      .tokens
-                                      .length >
-                                  0
-                              ? StateContainer.of(context).curTheme.background40
-                              : Colors.transparent,
-                          splashColor: StateContainer.of(context)
-                                      .wallet
-                                      .tokens
-                                      .length >
-                                  0
-                              ? StateContainer.of(context).curTheme.background40
-                              : Colors.transparent,
-                        ),
-                      ),
+                      StateContainer.of(context).wallet.tokens == null
+                          ? SizedBox
+                          : Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(100),
+                                boxShadow: [
+                                  StateContainer.of(context)
+                                      .curTheme
+                                      .boxShadowButton
+                                ],
+                              ),
+                              height: 55,
+                              width:
+                                  (MediaQuery.of(context).size.width - 158) / 3,
+                              margin: EdgeInsetsDirectional.only(
+                                  start: 7, top: 0.0, end: 7.0),
+                              child: FlatButton(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(100.0)),
+                                color:
+                                    StateContainer.of(context).curTheme.primary,
+                                child: Icon(Icons.scatter_plot_rounded,
+                                    color: StateContainer.of(context)
+                                        .curTheme
+                                        .background,
+                                    size: 40),
+                                onPressed: () {
+                                  Sheets.showAppHeightEightSheet(
+                                      context: context,
+                                      widget: MyTokensList(
+                                          StateContainer.of(context)
+                                              .wallet
+                                              .tokens));
+                                },
+                                highlightColor: StateContainer.of(context)
+                                            .wallet
+                                            .tokens
+                                            .length >
+                                        0
+                                    ? StateContainer.of(context)
+                                        .curTheme
+                                        .background40
+                                    : Colors.transparent,
+                                splashColor: StateContainer.of(context)
+                                            .wallet
+                                            .tokens
+                                            .length >
+                                        0
+                                    ? StateContainer.of(context)
+                                        .curTheme
+                                        .background40
+                                    : Colors.transparent,
+                              ),
+                            ),
                       AppPopupButton(),
                     ],
                   ),
@@ -1419,7 +1419,7 @@ class _AppHomePageState extends State<AppHomePage>
                       borderRadius: BorderRadius.circular(50.0)),
                   padding: EdgeInsets.all(0.0),
                   child: Icon(AppIcons.settings,
-                      color: StateContainer.of(context).curTheme.text,
+                      color: StateContainer.of(context).curTheme.icon,
                       size: 24)),
             ),
           ),

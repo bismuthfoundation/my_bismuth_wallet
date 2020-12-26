@@ -143,7 +143,7 @@ class Tx {
         "', '" +
         openfield +
         "')";
-    print("_buffer : " + _buffer);
+    //print("_buffer : " + _buffer);
     return _buffer;
   }
 }

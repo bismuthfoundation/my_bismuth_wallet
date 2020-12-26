@@ -1,20 +1,11 @@
-import 'dart:async';
-import 'package:badges/badges.dart';
 import 'package:intl/intl.dart';
 import 'package:my_bismuth_wallet/localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/rendering.dart';
-import 'package:my_bismuth_wallet/dimens.dart';
-import 'package:my_bismuth_wallet/model/address.dart';
-import 'package:my_bismuth_wallet/model/token_ref.dart';
 import 'package:my_bismuth_wallet/network/model/response/address_txs_response.dart';
 import 'package:my_bismuth_wallet/styles.dart';
-import 'package:my_bismuth_wallet/ui/widgets/buttons.dart';
-import 'package:my_bismuth_wallet/ui/util/ui_util.dart';
-import 'package:my_bismuth_wallet/ui/receive/share_card.dart';
 import 'package:my_bismuth_wallet/appstate_container.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
 
 class MyTokensList extends StatefulWidget {
   final List<BisToken> listBisToken;
@@ -34,6 +25,7 @@ class _MyTokensListStateState extends State<MyTokensList> {
 
     setState(() {
       _myBisTokenList.addAll(widget.listBisToken);
+      _myBisTokenList.removeWhere((element) => element.tokenName == "");
       _myBisTokenListForDisplay = _myBisTokenList;
     });
     super.initState();

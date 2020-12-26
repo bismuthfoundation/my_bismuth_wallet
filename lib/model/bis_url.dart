@@ -1,8 +1,5 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
-import 'package:blake2b/blake2b_hash.dart';
-import 'package:blake2b/utils.dart';
 import 'package:hash/hash.dart';
 import 'package:hex/hex.dart';
 import 'package:my_bismuth_wallet/model/address.dart';
@@ -11,7 +8,7 @@ import 'package:my_bismuth_wallet/model/db/contact.dart';
 import 'package:my_bismuth_wallet/network/model/response/address_txs_response.dart';
 import 'package:my_bismuth_wallet/service_locator.dart';
 import 'package:my_bismuth_wallet/util/base_85_decode.dart';
-import 'package:blake2b/blake2b.dart';
+
 
 class BisUrl {
   String contactName;
@@ -39,7 +36,7 @@ class BisUrl {
     BisUrl _bisUrl = new BisUrl();
     bool bisUrlLegacy = true;
     String checksum;
-    print("link: " + link);
+    //print("link: " + link);
     if (link.contains("bis://pay/") == true) {
       link = link.replaceAll("bis://pay/", "");
     } else {
@@ -95,8 +92,8 @@ class BisUrl {
       if (paramBisUrl.length > 4) {
         var md5 = MD5();
         var hashMD5 = md5.update(utf8.encode(paramBisUrl[4])).digest();
-        print("hashMD5 : " + Base85Decode().decode(HEX.encode(hashMD5)));
-        print("checksumMD5 : " +
+        //print("hashMD5 : " + Base85Decode().decode(HEX.encode(hashMD5)));
+        /*print("checksumMD5 : " +
             Base85Decode().encode("bis://pay/" +
                 address.address +
                 "/" +
@@ -104,7 +101,7 @@ class BisUrl {
                 "/" +
                 operation +
                 "/" +
-                openfield));
+                openfield));*/
       }
     }
     if (address != null &&
@@ -117,9 +114,9 @@ class BisUrl {
       }
     }
 
-    print("amount : " + amount);
-    print("operation : " + operation);
-    print("openfield : " + openfield);
+    //print("amount : " + amount);
+    //print("operation : " + operation);
+    //print("openfield : " + openfield);
     isTokenToSend = false;
     if (operation == AddressTxsResponseResult.TOKEN_TRANSFER) {
       isTokenToSend = true;
