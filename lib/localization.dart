@@ -77,6 +77,66 @@ class AppLocalization {
         desc: 'transaction_header', name: 'transactions');
   }
 
+  String get transactionDetailBlock {
+    return Intl.message('Block',
+        desc: 'transaction_detail', name: 'transactionDetailBlock');
+  }
+
+  String get transactionDetailDate {
+    return Intl.message('Date',
+        desc: 'transaction_detail', name: 'transactionDetailDate');
+  }
+
+  String get transactionDetailFrom {
+    return Intl.message('From address',
+        desc: 'transaction_detail', name: 'transactionDetailFrom');
+  }
+
+  String get transactionDetailTo {
+    return Intl.message('To address',
+        desc: 'transaction_detail', name: 'transactionDetailTo');
+  }
+
+  String get transactionDetailTxId {
+    return Intl.message('Transaction id',
+        desc: 'transaction_detail', name: 'transactionDetailTxId');
+  }
+
+  String get transactionDetailAmount {
+    return Intl.message('Amount',
+        desc: 'transaction_detail', name: 'transactionDetailAmount');
+  }
+
+  String get transactionDetailFee {
+    return Intl.message('Fee',
+        desc: 'transaction_detail', name: 'transactionDetailFee');
+  }
+
+  String get transactionDetailReward {
+    return Intl.message('Reward',
+        desc: 'transaction_detail', name: 'transactionDetailReward');
+  }
+
+  String get transactionDetailOperation {
+    return Intl.message('Operation',
+        desc: 'transaction_detail', name: 'transactionDetailOperation');
+  }
+
+  String get transactionDetailOpenfield {
+    return Intl.message('Openfield',
+        desc: 'transaction_detail', name: 'transactionDetailOpenfield');
+  }
+
+  String get transactionDetailSignature {
+    return Intl.message('Signature',
+        desc: 'transaction_signature', name: 'transactionDetailSignature');
+  }
+
+  String get transactionDetailCopyPaste {
+    return Intl.message('Double click on text to copy to clipboard',
+        desc: 'transaction_detail', name: 'transactionDetailCopyPaste');
+  }
+
   String get addressCopied {
     return Intl.message('Address Copied',
         desc: 'receive_copied', name: 'addressCopied');

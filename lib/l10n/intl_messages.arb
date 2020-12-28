@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-12-26T10:29:41.827767",
+  "@@last_modified": "2020-12-28T13:32:51.895119",
   "cancel": "Cancel",
   "@cancel": {
     "description": "dialog_cancel",
@@ -69,6 +69,78 @@
   "transactions": "Transactions",
   "@transactions": {
     "description": "transaction_header",
+    "type": "text",
+    "placeholders": {}
+  },
+  "transactionDetailBlock": "Block",
+  "@transactionDetailBlock": {
+    "description": "transaction_detail",
+    "type": "text",
+    "placeholders": {}
+  },
+  "transactionDetailDate": "Date",
+  "@transactionDetailDate": {
+    "description": "transaction_detail",
+    "type": "text",
+    "placeholders": {}
+  },
+  "transactionDetailFrom": "From address",
+  "@transactionDetailFrom": {
+    "description": "transaction_detail",
+    "type": "text",
+    "placeholders": {}
+  },
+  "transactionDetailTo": "To address",
+  "@transactionDetailTo": {
+    "description": "transaction_detail",
+    "type": "text",
+    "placeholders": {}
+  },
+  "transactionDetailTxId": "Transaction id",
+  "@transactionDetailTxId": {
+    "description": "transaction_detail",
+    "type": "text",
+    "placeholders": {}
+  },
+  "transactionDetailAmount": "Amount",
+  "@transactionDetailAmount": {
+    "description": "transaction_detail",
+    "type": "text",
+    "placeholders": {}
+  },
+  "transactionDetailFee": "Fee",
+  "@transactionDetailFee": {
+    "description": "transaction_detail",
+    "type": "text",
+    "placeholders": {}
+  },
+  "transactionDetailReward": "Reward",
+  "@transactionDetailReward": {
+    "description": "transaction_detail",
+    "type": "text",
+    "placeholders": {}
+  },
+  "transactionDetailOperation": "Operation",
+  "@transactionDetailOperation": {
+    "description": "transaction_detail",
+    "type": "text",
+    "placeholders": {}
+  },
+  "transactionDetailOpenfield": "Openfield",
+  "@transactionDetailOpenfield": {
+    "description": "transaction_detail",
+    "type": "text",
+    "placeholders": {}
+  },
+  "transactionDetailSignature": "Signature",
+  "@transactionDetailSignature": {
+    "description": "transaction_signature",
+    "type": "text",
+    "placeholders": {}
+  },
+  "transactionDetailCopyPaste": "Double click on text to copy to clipboard",
+  "@transactionDetailCopyPaste": {
+    "description": "transaction_detail",
     "type": "text",
     "placeholders": {}
   },

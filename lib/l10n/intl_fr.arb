@@ -186,5 +186,17 @@
   "pasteBisUrl": "Vous pouvez coller une url BIS",
   "pasteBisUrlPrefix": "('bis://' or 'bis://pay)'",
   "pasteBisUrlError": "Votre presse papier ne contient pas d'url BIS",
-  "noTokenOwner": "Vous n'avez pas de token"
+  "noTokenOwner": "Vous n'avez pas de token",
+  "transactionDetailBlock": "Bloc",
+  "transactionDetailDate": "Date",
+  "transactionDetailFrom": "De l'addresse",
+  "transactionDetailTo": "Vers l'addresse",
+  "transactionDetailTxId": "Id de la transaction id",
+  "transactionDetailAmount": "Montant",
+  "transactionDetailFee": "Frais",
+  "transactionDetailReward": "Récompense",
+  "transactionDetailOperation": "Opération",
+  "transactionDetailOpenfield": "Commentaire",
+  "transactionDetailSignature": "Signature",
+  "transactionDetailCopyPaste": "Double cliquez sur les textes pour les copier vers le presse papier"
 }

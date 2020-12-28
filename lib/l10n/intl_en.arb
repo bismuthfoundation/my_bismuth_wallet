@@ -819,5 +819,77 @@
     "description": "no_token_owner_error",
     "type": "text",
     "placeholders": {}
+  },
+   "transactionDetailBlock": "Block",
+  "@transactionDetailBlock": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "transactionDetailDate": "Date",
+  "@transactionDetailDate": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "transactionDetailFrom": "From address",
+  "@transactionDetailFrom": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "transactionDetailTo": "To address",
+  "@transactionDetailTo": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "transactionDetailTxId": "Transaction id",
+  "@transactionDetailTxId": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "transactionDetailAmount": "Amount",
+  "@transactionDetailAmount": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "transactionDetailFee": "Fee",
+  "@transactionDetailFee": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "transactionDetailReward": "Reward",
+  "@transactionDetailReward": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "transactionDetailOperation": "Operation",
+  "@transactionDetailOperation": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "transactionDetailOpenfield": "Openfield",
+  "@transactionDetailOpenfield": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "transactionDetailSignature": "Signature",
+  "@transactionDetailSignature": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "transactionDetailCopyPaste": "Double click on text to copy to clipboard",
+  "@transactionDetailCopyPaste": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
   }
 }
