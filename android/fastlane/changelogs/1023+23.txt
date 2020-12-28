@@ -1,0 +1,5 @@
+Version 1.0.23+23 available
+- Display transaction detail when you click on a transaction in the history
+
+android: https://we.tl/t-unDrn7IYsQ and available in few hours on google play store
+ios: available on test flight
