@@ -52,7 +52,7 @@ class _TokensListState extends State<TokensList> {
                 color: StateContainer.of(context).curTheme.overlay30,
                 offset: Offset(-5, 0),
                 blurRadius: 20),
-          ],
+          ], 
         ),
         child: SafeArea(
           minimum: EdgeInsets.only(

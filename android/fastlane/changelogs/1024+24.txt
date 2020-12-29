@@ -1,0 +1,6 @@
+Version 1.0.24+24 available
+- Fix issue: Substract 2 sec to limit the issue with future tx
+- Improve UX to close the transaction details information
+
+android: available in few hours on google play store
+ios: available on test flight

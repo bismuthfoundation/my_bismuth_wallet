@@ -546,13 +546,15 @@ class AppService {
       }, cancelOnError: false);
 
       //Send the request
-      tx.timestamp = DateTime.now()
+      // Substract 2 sec to limit the issue with future tx
+      DateTime timeBefore2sec = DateTime.now().subtract(new Duration(seconds: 2));
+      tx.timestamp = timeBefore2sec
               .toUtc()
               .microsecondsSinceEpoch
               .toString()
               .substring(0, 10) +
           "." +
-          DateTime.now()
+          timeBefore2sec
               .toUtc()
               .microsecondsSinceEpoch
               .toString()

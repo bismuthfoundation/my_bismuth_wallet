@@ -1754,10 +1754,12 @@ class _TransactionDetailsSheetState extends State<TransactionDetailsSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return 
+    SafeArea(
       minimum: EdgeInsets.only(
-        left: 20,
-        right: 20,
+        left: 30,
+        right: 30,
+        top: 50,
         bottom: MediaQuery.of(context).size.height * 0.035,
       ),
       child: SingleChildScrollView(
