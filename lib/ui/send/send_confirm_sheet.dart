@@ -161,7 +161,7 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
 
                     child: Column(
                       children: [
-                        double.tryParse(amount) > 0
+                        double.tryParse(amount.replaceAll(",", "")) > 0
                             ? RichText(
                                 textAlign: TextAlign.center,
                                 text: TextSpan(

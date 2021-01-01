@@ -1,0 +1,6 @@
+Version 1.0.25+25 available
+- Update deutsch language
+- Fix issue when tx > 999 BIS
+
+android: available in few hours on google play store
+ios: available on test flight
