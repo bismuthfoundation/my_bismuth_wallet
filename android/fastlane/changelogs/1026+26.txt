@@ -1,0 +1,9 @@
+Version 1.0.26+26 available
+
+- Fix copy secret phrase issue
+- Fix max amount feature
+- Add a notch on the transaction details page
+- Send tx : entry only in BIS
+
+android: available in few hours on google play store
+ios: available on test flight

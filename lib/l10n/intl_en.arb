@@ -72,6 +72,12 @@
     "type": "text",
     "placeholders": {}
   },
+  "transactionHeader": "Transaction",
+  "@transactionHeader": {
+    "description": "transaction_header",
+    "type": "text",
+    "placeholders": {}
+  },
   "addressCopied": "Address Copied",
   "@addressCopied": {
     "description": "receive_copied",

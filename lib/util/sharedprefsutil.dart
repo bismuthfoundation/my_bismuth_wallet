@@ -39,6 +39,8 @@ class SharedPrefsUtil {
   // For certain keystore incompatible androids
   static const String use_legacy_storage = 'fbismuth_legacy_storage';
 
+  static const String version_app = 'fbismuth_version_app';
+
   // For plain-text data
   Future<void> set(String key, value) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -167,6 +169,15 @@ class SharedPrefsUtil {
         defaultValue: AppWallet.defaultRepresentative);
   }
 
+  Future<void> setVersionApp(String v) async {
+    return await set(version_app, v);
+  }
+
+  Future<String> getVersionApp() async {
+    return await get(version_app,
+        defaultValue: "");
+  }
+
   Future<void> setLock(bool value) async {
     return await set(lock_kalium, value);
   }
@@ -269,5 +280,6 @@ class SharedPrefsUtil {
     await prefs.remove(pin_lock_until);
     await prefs.remove(kalium_lock_timeout);
     await prefs.remove(has_shown_root_warning);
+    await prefs.remove(version_app);
   }
 }

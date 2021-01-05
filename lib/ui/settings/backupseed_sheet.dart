@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:my_bismuth_wallet/app_icons.dart';
 import 'package:my_bismuth_wallet/localization.dart';
 import 'package:my_bismuth_wallet/appstate_container.dart';
@@ -169,7 +170,10 @@ class AppSeedBackupSheet {
                                         ? AppLocalization.of(context).secretPhraseCopied
                                         : AppLocalization.of(context).secretPhraseCopy,
                                     Dimens.BUTTON_BOTTOM_DIMENS, onPressed: () {
-                                  UserDataUtil.setSecureClipboardItem(_mnemonic.join(" "));
+                                      Clipboard.setData(new ClipboardData(
+                                            text: _mnemonic.join(" ")));
+                                            
+                                  //UserDataUtil.setSecureClipboardItem(_mnemonic.join(" "));
                                   setState(() {
                                     // Set copied style
                                     _mnemonicCopied = true;
@@ -198,7 +202,9 @@ class AppSeedBackupSheet {
                                         : AppButtonType.PRIMARY,
                                     _seedCopied ? AppLocalization.of(context).seedCopiedShort : AppLocalization.of(context).copySeed,
                                     Dimens.BUTTON_BOTTOM_DIMENS, onPressed: () {
-                                  UserDataUtil.setSecureClipboardItem(_seed);
+                                        Clipboard.setData(new ClipboardData(
+                                            text: _seed));
+                                  //UserDataUtil.setSecureClipboardItem(_seed);
                                   setState(() {
                                     // Set copied style
                                     _seedCopied = true;

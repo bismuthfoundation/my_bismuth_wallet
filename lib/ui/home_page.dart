@@ -20,19 +20,20 @@ import 'package:my_bismuth_wallet/dimens.dart';
 import 'package:my_bismuth_wallet/localization.dart';
 import 'package:my_bismuth_wallet/service_locator.dart';
 
-import 'package:my_bismuth_wallet/model/list_model.dart';
 import 'package:my_bismuth_wallet/model/db/contact.dart';
 import 'package:my_bismuth_wallet/model/db/appdb.dart';
 import 'package:my_bismuth_wallet/network/model/block_types.dart';
 import 'package:my_bismuth_wallet/styles.dart';
 import 'package:my_bismuth_wallet/app_icons.dart';
 import 'package:my_bismuth_wallet/ui/contacts/add_contact.dart';
+import 'package:my_bismuth_wallet/ui/release_note.dart';
 import 'package:my_bismuth_wallet/ui/send/send_sheet.dart';
 import 'package:my_bismuth_wallet/ui/send/send_confirm_sheet.dart';
 import 'package:my_bismuth_wallet/ui/receive/receive_sheet.dart';
 import 'package:my_bismuth_wallet/ui/settings/settings_drawer.dart';
 import 'package:my_bismuth_wallet/ui/tokens/my_tokens_list.dart';
 import 'package:my_bismuth_wallet/ui/widgets/buttons.dart';
+import 'package:my_bismuth_wallet/ui/widgets/dialog.dart';
 import 'package:my_bismuth_wallet/ui/widgets/sheet_util.dart';
 import 'package:my_bismuth_wallet/ui/widgets/list_slidable.dart';
 import 'package:my_bismuth_wallet/ui/util/routes.dart';
@@ -43,6 +44,7 @@ import 'package:my_bismuth_wallet/ui/widgets/sync_info_view.dart';
 import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
 import 'package:my_bismuth_wallet/util/hapticutil.dart';
 import 'package:my_bismuth_wallet/util/caseconverter.dart';
+import 'package:package_info/package_info.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:my_bismuth_wallet/bus/events.dart';
 
@@ -67,6 +69,8 @@ class _AppHomePageState extends State<AppHomePage>
   AnimationController _placeholderCardAnimationController;
   Animation<double> _opacityAnimation;
   bool _animationDisposed;
+
+  bool _displayReleaseNote;
 
   // Receive card instance
   ReceiveSheet receive;
@@ -116,9 +120,24 @@ class _AppHomePageState extends State<AppHomePage>
     return true;
   }
 
+  _checkVersionApp() async {
+    String versionAppCached = await sl.get<SharedPrefsUtil>().getVersionApp();
+    PackageInfo.fromPlatform().then((packageInfo) async {
+      if (versionAppCached != packageInfo.version) {
+        _displayReleaseNote = true;
+      } else {
+        _displayReleaseNote = false;
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+
+    _displayReleaseNote = false;
+    _checkVersionApp();
+
     _registerBus();
     WidgetsBinding.instance.addObserver(this);
     if (widget.priceConversion != null) {
@@ -520,6 +539,10 @@ class _AppHomePageState extends State<AppHomePage>
 
   @override
   Widget build(BuildContext context) {
+    _displayReleaseNote
+        ? WidgetsBinding.instance
+            .addPostFrameCallback((_) => displayReleaseNote())
+        : null;
     // Create QR ahead of time because it improves performance this way
     if (receive == null && StateContainer.of(context).wallet != null) {
       paintQrCode();
@@ -681,8 +704,9 @@ class _AppHomePageState extends State<AppHomePage>
                               : Colors.transparent,
                         ),
                       ),
-                      StateContainer.of(context).wallet.tokens == null
-                          ? SizedBox
+                      StateContainer.of(context).wallet == null ||
+                              StateContainer.of(context).wallet.tokens == null
+                          ? SizedBox()
                           : Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(100),
@@ -745,6 +769,22 @@ class _AppHomePageState extends State<AppHomePage>
         ),
       ),
     );
+  }
+
+  void displayReleaseNote() {
+    _displayReleaseNote = false;
+    PackageInfo.fromPlatform().then((packageInfo) {
+      AppDialogs.showConfirmDialog(
+          context,
+          AppLocalization.of(context).releaseNoteHeader +
+              " " +
+              packageInfo.version,
+          "- Addition of the release note",
+          CaseChange.toUpperCase(AppLocalization.of(context).ok, context),
+          () async {
+            await sl.get<SharedPrefsUtil>().setVersionApp(packageInfo.version);
+          });
+    });
   }
 
   // Transaction Card/List Item
@@ -893,7 +933,10 @@ class _AppHomePageState extends State<AppHomePage>
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                double.tryParse(item.getFormattedAmount().replaceAll(",", "")) > 0
+                                double.tryParse(item
+                                            .getFormattedAmount()
+                                            .replaceAll(",", "")) >
+                                        0
                                     ? Container(
                                         child: RichText(
                                           textAlign: TextAlign.start,
@@ -1754,177 +1797,309 @@ class _TransactionDetailsSheetState extends State<TransactionDetailsSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return 
-    SafeArea(
-      minimum: EdgeInsets.only(
-        left: 30,
-        right: 30,
-        top: 50,
-        bottom: MediaQuery.of(context).size.height * 0.035,
-      ),
-      child: SingleChildScrollView(
-        child: Container(
-          width: double.infinity,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Column(
-                children: [
-                  SizedBox(height: 20),
-                  Text(AppLocalization.of(context).transactionDetailBlock),
-                  SelectableText(widget.item.blockHash,
-                      style: AppStyles.textStyleTransactionUnit(context),
-                      textAlign: TextAlign.center),
-                  Text("(" + widget.item.blockHeight.toString() + ")",
-                      style: AppStyles.textStyleTransactionUnit(context)),
-                  SizedBox(height: 10),
-                  Text(AppLocalization.of(context).transactionDetailDate),
-                  Text(
-                      DateFormat.yMd(
-                              Localizations.localeOf(context).languageCode)
-                          .add_Hms()
-                          .format(widget.item.timestamp)
-                          .toString(),
-                      style: AppStyles.textStyleTransactionUnit(context)),
-                  SizedBox(height: 10),
-                  Text(AppLocalization.of(context).transactionDetailFrom),
-                  SelectableText(widget.item.from,
-                      style: AppStyles.textStyleTransactionUnit(context)),
-                  SizedBox(height: 10),
-                  Text(AppLocalization.of(context).transactionDetailTo),
-                  SelectableText(widget.item.recipient,
-                      style: AppStyles.textStyleTransactionUnit(context)),
-                  SizedBox(height: 10),
-                  Text(AppLocalization.of(context).transactionDetailTxId),
-                  SelectableText(widget.item.hash,
-                      style: AppStyles.textStyleTransactionUnit(context),
-                      textAlign: TextAlign.center),
-                  SizedBox(height: 10),
-                  Text(AppLocalization.of(context).transactionDetailAmount),
-                  Text(
-                      widget.item.type == BlockTypes.SEND
-                          ? "- " + widget.item.getFormattedAmount() + " BIS"
-                          : "+ " + widget.item.getFormattedAmount() + " BIS",
-                      style: AppStyles.textStyleTransactionUnit(context)),
-                  SizedBox(height: 10),
-                  Text(AppLocalization.of(context).transactionDetailFee),
-                  Text("- " + widget.item.fee.toString() + " BIS",
-                      style: AppStyles.textStyleTransactionUnit(context)),
-                  SizedBox(height: 10),
-                  Text(AppLocalization.of(context).transactionDetailReward),
-                  Text(widget.item.reward.toString() + " BIS",
-                      style: AppStyles.textStyleTransactionUnit(context)),
-                  SizedBox(height: 10),
-                  Text(AppLocalization.of(context).transactionDetailSignature),
-                  SelectableText(widget.item.signature,
-                      style: AppStyles.textStyleTransactionUnit(context)),
-                  SizedBox(height: 10),
-                  Text(AppLocalization.of(context).transactionDetailOperation),
-                  SelectableText(widget.item.operation,
-                      style: AppStyles.textStyleTransactionUnit(context)),
-                  SizedBox(height: 10),
-                  Text(AppLocalization.of(context).transactionDetailOpenfield),
-                  SelectableText(widget.item.openfield,
-                      style: AppStyles.textStyleTransactionUnit(context),
-                      textAlign: TextAlign.center),
-                  SizedBox(height: 20),
-                  Text("* " + AppLocalization.of(context).transactionDetailCopyPaste, style: AppStyles.textStyleTransactionUnit(context), textAlign: TextAlign.left),
-                ],
-              ),
-              Column(
-                children: <Widget>[
-                  // A stack for Copy Address and Add Contact buttons
-                  Stack(
-                    children: <Widget>[
-                      // A row for Copy Address Button
-                      Row(
-                        children: <Widget>[
-                          AppButton.buildAppButton(
-                              context,
-                              // Share Address Button
-                              _addressCopied
-                                  ? AppButtonType.SUCCESS
-                                  : AppButtonType.PRIMARY,
-                              _addressCopied
-                                  ? AppLocalization.of(context).addressCopied
-                                  : AppLocalization.of(context).copyAddress,
-                              Dimens.BUTTON_TOP_EXCEPTION_DIMENS,
-                              onPressed: () {
-                            Clipboard.setData(
-                                new ClipboardData(text: widget.address));
-                            if (mounted) {
-                              setState(() {
-                                // Set copied style
-                                _addressCopied = true;
-                              });
-                            }
-                            if (_addressCopiedTimer != null) {
-                              _addressCopiedTimer.cancel();
-                            }
-                            _addressCopiedTimer = new Timer(
-                                const Duration(milliseconds: 800), () {
-                              if (mounted) {
-                                setState(() {
-                                  _addressCopied = false;
-                                });
-                              }
-                            });
-                          }),
-                        ],
+    return SafeArea(
+        minimum:
+            EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.035),
+        child: Column(
+          children: <Widget>[
+            // A row for the address text and close button
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                //Empty SizedBox
+                SizedBox(
+                  width: 60,
+                  height: 60,
+                ),
+                Column(
+                  children: <Widget>[
+                    // Sheet handle
+                    Container(
+                      margin: EdgeInsets.only(top: 10),
+                      height: 5,
+                      width: MediaQuery.of(context).size.width * 0.15,
+                      decoration: BoxDecoration(
+                        color: StateContainer.of(context).curTheme.text10,
+                        borderRadius: BorderRadius.circular(100.0),
                       ),
-                      // A row for Add Contact Button
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 15.0),
+                      constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width - 140),
+                      child: Column(
                         children: <Widget>[
-                          Container(
-                            margin: EdgeInsetsDirectional.only(
-                                top: Dimens.BUTTON_TOP_EXCEPTION_DIMENS[1],
-                                end: Dimens.BUTTON_TOP_EXCEPTION_DIMENS[2]),
-                            child: Container(
-                              height: 55,
-                              width: 55,
-                              // Add Contact Button
-                              child: !widget.displayName.startsWith("@")
-                                  ? FlatButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                        Sheets.showAppHeightNineSheet(
-                                            context: context,
-                                            widget: AddContactSheet(
-                                                address: widget.address));
-                                      },
-                                      splashColor: Colors.transparent,
-                                      highlightColor: Colors.transparent,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(100.0)),
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 10.0, horizontal: 10),
-                                      child: Icon(AppIcons.addcontact,
-                                          size: 35,
-                                          color: _addressCopied
-                                              ? StateContainer.of(context)
-                                                  .curTheme
-                                                  .successDark
-                                              : StateContainer.of(context)
-                                                  .curTheme
-                                                  .backgroundDark),
-                                    )
-                                  : SizedBox(),
-                            ),
+                          // Header
+                          AutoSizeText(
+                            CaseChange.toUpperCase(
+                                AppLocalization.of(context).transactionHeader,
+                                context),
+                            style: AppStyles.textStyleHeader(context),
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            stepGranularity: 0.1,
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                ],
+                    ),
+                  ],
+                ),
+                //Empty SizedBox
+                SizedBox(
+                  width: 60,
+                  height: 60,
+                ),
+              ],
+            ),
+
+            Expanded(
+              child: Container(
+                margin: EdgeInsets.only(top: 0, bottom: 10),
+                child: Center(
+                  child: Stack(children: <Widget>[
+                    SingleChildScrollView(
+                        child: Padding(
+                      padding: EdgeInsets.only(
+                          top: 30, bottom: 80, left: 10, right: 10),
+                      child: Column(
+                        children: <Widget>[
+                          // list
+                          Stack(
+                            children: <Widget>[
+                              Column(
+                                children: [
+                                  SizedBox(height: 20),
+                                  Text(AppLocalization.of(context)
+                                      .transactionDetailBlock),
+                                  SelectableText(widget.item.blockHash,
+                                      style: AppStyles.textStyleTransactionUnit(
+                                          context),
+                                      textAlign: TextAlign.center),
+                                  Text(
+                                      "(" +
+                                          widget.item.blockHeight.toString() +
+                                          ")",
+                                      style: AppStyles.textStyleTransactionUnit(
+                                          context)),
+                                  SizedBox(height: 10),
+                                  Text(AppLocalization.of(context)
+                                      .transactionDetailDate),
+                                  Text(
+                                      DateFormat.yMd(
+                                              Localizations.localeOf(context)
+                                                  .languageCode)
+                                          .add_Hms()
+                                          .format(widget.item.timestamp)
+                                          .toString(),
+                                      style: AppStyles.textStyleTransactionUnit(
+                                          context)),
+                                  SizedBox(height: 10),
+                                  Text(AppLocalization.of(context)
+                                      .transactionDetailFrom),
+                                  SelectableText(widget.item.from,
+                                      style: AppStyles.textStyleTransactionUnit(
+                                          context)),
+                                  SizedBox(height: 10),
+                                  Text(AppLocalization.of(context)
+                                      .transactionDetailTo),
+                                  SelectableText(widget.item.recipient,
+                                      style: AppStyles.textStyleTransactionUnit(
+                                          context)),
+                                  SizedBox(height: 10),
+                                  Text(AppLocalization.of(context)
+                                      .transactionDetailTxId),
+                                  SelectableText(widget.item.hash,
+                                      style: AppStyles.textStyleTransactionUnit(
+                                          context),
+                                      textAlign: TextAlign.center),
+                                  SizedBox(height: 10),
+                                  Text(AppLocalization.of(context)
+                                      .transactionDetailAmount),
+                                  Text(
+                                      widget.item.type == BlockTypes.SEND
+                                          ? "- " +
+                                              widget.item.getFormattedAmount() +
+                                              " BIS"
+                                          : "+ " +
+                                              widget.item.getFormattedAmount() +
+                                              " BIS",
+                                      style: AppStyles.textStyleTransactionUnit(
+                                          context)),
+                                  SizedBox(height: 10),
+                                  Text(AppLocalization.of(context)
+                                      .transactionDetailFee),
+                                  Text(
+                                      "- " +
+                                          widget.item.fee.toString() +
+                                          " BIS",
+                                      style: AppStyles.textStyleTransactionUnit(
+                                          context)),
+                                  SizedBox(height: 10),
+                                  Text(AppLocalization.of(context)
+                                      .transactionDetailReward),
+                                  Text(widget.item.reward.toString() + " BIS",
+                                      style: AppStyles.textStyleTransactionUnit(
+                                          context)),
+                                  SizedBox(height: 10),
+                                  Text(AppLocalization.of(context)
+                                      .transactionDetailSignature),
+                                  SelectableText(widget.item.signature,
+                                      style: AppStyles.textStyleTransactionUnit(
+                                          context)),
+                                  SizedBox(height: 10),
+                                  Text(AppLocalization.of(context)
+                                      .transactionDetailOperation),
+                                  SelectableText(widget.item.operation,
+                                      style: AppStyles.textStyleTransactionUnit(
+                                          context)),
+                                  SizedBox(height: 10),
+                                  Text(AppLocalization.of(context)
+                                      .transactionDetailOpenfield),
+                                  SelectableText(widget.item.openfield,
+                                      style: AppStyles.textStyleTransactionUnit(
+                                          context),
+                                      textAlign: TextAlign.center),
+                                  SizedBox(height: 20),
+                                  Text(
+                                      "* " +
+                                          AppLocalization.of(context)
+                                              .transactionDetailCopyPaste,
+                                      style: AppStyles.textStyleTransactionUnit(
+                                          context),
+                                      textAlign: TextAlign.left),
+                                  Column(
+                                    children: <Widget>[
+                                      // A stack for Copy Address and Add Contact buttons
+                                      Stack(
+                                        children: <Widget>[
+                                          // A row for Copy Address Button
+                                          Row(
+                                            children: <Widget>[
+                                              AppButton.buildAppButton(
+                                                  context,
+                                                  // Share Address Button
+                                                  _addressCopied
+                                                      ? AppButtonType.SUCCESS
+                                                      : AppButtonType.PRIMARY,
+                                                  _addressCopied
+                                                      ? AppLocalization.of(
+                                                              context)
+                                                          .addressCopied
+                                                      : AppLocalization.of(
+                                                              context)
+                                                          .copyAddress,
+                                                  Dimens
+                                                      .BUTTON_TOP_EXCEPTION_DIMENS,
+                                                  onPressed: () {
+                                                Clipboard.setData(
+                                                    new ClipboardData(
+                                                        text: widget.address));
+                                                if (mounted) {
+                                                  setState(() {
+                                                    // Set copied style
+                                                    _addressCopied = true;
+                                                  });
+                                                }
+                                                if (_addressCopiedTimer !=
+                                                    null) {
+                                                  _addressCopiedTimer.cancel();
+                                                }
+                                                _addressCopiedTimer = new Timer(
+                                                    const Duration(
+                                                        milliseconds: 800), () {
+                                                  if (mounted) {
+                                                    setState(() {
+                                                      _addressCopied = false;
+                                                    });
+                                                  }
+                                                });
+                                              }),
+                                            ],
+                                          ),
+                                          // A row for Add Contact Button
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: <Widget>[
+                                              Container(
+                                                margin: EdgeInsetsDirectional.only(
+                                                    top: Dimens
+                                                            .BUTTON_TOP_EXCEPTION_DIMENS[
+                                                        1],
+                                                    end: Dimens
+                                                        .BUTTON_TOP_EXCEPTION_DIMENS[2]),
+                                                child: Container(
+                                                  height: 55,
+                                                  width: 55,
+                                                  // Add Contact Button
+                                                  child: !widget.displayName
+                                                          .startsWith("@")
+                                                      ? FlatButton(
+                                                          onPressed: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                            Sheets.showAppHeightNineSheet(
+                                                                context:
+                                                                    context,
+                                                                widget: AddContactSheet(
+                                                                    address: widget
+                                                                        .address));
+                                                          },
+                                                          splashColor: Colors
+                                                              .transparent,
+                                                          highlightColor: Colors
+                                                              .transparent,
+                                                          shape: RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          100.0)),
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  vertical:
+                                                                      10.0,
+                                                                  horizontal:
+                                                                      10),
+                                                          child: Icon(
+                                                              AppIcons
+                                                                  .addcontact,
+                                                              size: 35,
+                                                              color: _addressCopied
+                                                                  ? StateContainer.of(
+                                                                          context)
+                                                                      .curTheme
+                                                                      .successDark
+                                                                  : StateContainer.of(
+                                                                          context)
+                                                                      .curTheme
+                                                                      .backgroundDark),
+                                                        )
+                                                      : SizedBox(),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    )),
+                  ]),
+                ),
               ),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          ],
+        ));
   }
 }
 

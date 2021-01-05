@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-12-30T00:32:27.029607",
+  "@@last_modified": "2021-01-04T16:05:56.071868",
   "cancel": "Cancel",
   "@cancel": {
     "description": "dialog_cancel",
@@ -68,6 +68,12 @@
   },
   "transactions": "Transactions",
   "@transactions": {
+    "description": "transaction_header",
+    "type": "text",
+    "placeholders": {}
+  },
+  "transactionHeader": "Transaction",
+  "@transactionHeader": {
     "description": "transaction_header",
     "type": "text",
     "placeholders": {}

@@ -1177,6 +1177,29 @@ class _SendSheetState extends State<SendSheet> {
     return convertedAmt;
   }
 
+  String _convertFeesToLocalCurrency() {
+    String convertedAmt = NumberUtil.sanitizeNumber(
+        new AppService()
+            .getFeesEstimation(
+                _sendOpenfieldController.text + _sendCommentController.text,
+                _sendOperationController.text)
+            .toStringAsFixed(5),
+        maxDecimalDigits: 5);
+    if (convertedAmt.isEmpty) {
+      return "";
+    }
+    Decimal valueCrypto = Decimal.parse(convertedAmt);
+    Decimal conversion = Decimal.parse(
+        StateContainer.of(context).wallet.localCurrencyConversion);
+    convertedAmt =
+        NumberUtil.truncateDecimal(valueCrypto * conversion, digits: 5)
+            .toString();
+    convertedAmt =
+        convertedAmt.replaceAll(".", _localCurrencyFormat.symbols.DECIMAL_SEP);
+    convertedAmt = _localCurrencyFormat.currencySymbol + convertedAmt;
+    return convertedAmt;
+  }
+
   // Determine if this is a max send or not by comparing balances
   bool _isMaxSend() {
     // Sanitize commas
@@ -1185,6 +1208,7 @@ class _SendSheetState extends State<SendSheet> {
     }
     try {
       String textField = _sendAmountController.text;
+
       String balance;
       if (_localCurrencyMode) {
         balance = StateContainer.of(context).wallet.getLocalCurrencyPrice(
@@ -1222,7 +1246,15 @@ class _SendSheetState extends State<SendSheet> {
                 Decimal.fromInt(pow(10, NumberUtil.maxDecimalDigits)))
             .toInt();
       }
-      return textFieldInt == balanceInt;
+
+      AppService appService = new AppService();
+      int estimationFeesInt = (Decimal.parse(appService.getFeesEstimation(
+          _sendOpenfieldController.text + _sendCommentController.text,
+          _sendOperationController.text).toString()) *
+                Decimal.fromInt(pow(10, NumberUtil.maxDecimalDigits)))
+            .toInt();
+
+      return textFieldInt + estimationFeesInt == balanceInt;
     } catch (e) {
       return false;
     }
@@ -1475,31 +1507,43 @@ class _SendSheetState extends State<SendSheet> {
       autocorrect: false,
       hintText:
           _amountHint == null ? "" : AppLocalization.of(context).enterAmount,
-      prefixButton: _rawAmount == null
-          ? TextFieldButton(
-              icon: AppIcons.swapcurrency,
-              onPressed: () {
-                toggleLocalCurrency();
-              },
-            )
-          : null,
       suffixButton: TextFieldButton(
         icon: AppIcons.max,
         onPressed: () {
+          setState(() {
+            _amountValidationText = "";
+            // Reset the raw amount
+            _rawAmount = null;
+          });
           if (_isMaxSend()) {
             return;
           }
+
           if (!_localCurrencyMode) {
+            AppService appService = new AppService();
+            double estimationFees = appService.getFeesEstimation(
+                _sendOpenfieldController.text + _sendCommentController.text,
+                _sendOperationController.text);
             _sendAmountController.text = StateContainer.of(context)
                 .wallet
-                .getAccountBalanceDisplay()
+                .getAccountBalanceMoinsFeesDisplay(estimationFees)
                 .replaceAll(r",", "");
             _sendAddressController.selection = TextSelection.fromPosition(
                 TextPosition(offset: _sendAddressController.text.length));
           } else {
+            String feeString = _convertFeesToLocalCurrency();
+            feeString = feeString.replaceAll(
+                _localCurrencyFormat.symbols.GROUP_SEP, "");
+            feeString = feeString.replaceAll(
+                _localCurrencyFormat.symbols.DECIMAL_SEP, ".");
+            feeString = NumberUtil.sanitizeNumber(feeString)
+                .replaceAll(".", _localCurrencyFormat.symbols.DECIMAL_SEP);
+
             String localAmount = StateContainer.of(context)
                 .wallet
-                .getLocalCurrencyPrice(StateContainer.of(context).curCurrency,
+                .getLocalCurrencyPriceMoinsFees(
+                    StateContainer.of(context).curCurrency,
+                    double.tryParse(feeString),
                     locale: StateContainer.of(context).currencyLocale);
             localAmount = localAmount.replaceAll(
                 _localCurrencyFormat.symbols.GROUP_SEP, "");

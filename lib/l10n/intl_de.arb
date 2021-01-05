@@ -198,6 +198,6 @@
   "transactionDetailOperation": "Operation",
   "transactionDetailOpenfield": "Openfield",
   "transactionDetailSignature": "Signatur",
-  "transactionDetailCopyPaste": "Auf Text doppelklicken um Zwischenablage zu kopieren"
- 
+  "transactionDetailCopyPaste": "Auf Text doppelklicken um Zwischenablage zu kopieren",
+  "transactionHeader": "Transaktion"
 }

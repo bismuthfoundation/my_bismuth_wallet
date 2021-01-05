@@ -6,7 +6,6 @@ import 'package:my_bismuth_wallet/network/model/response/address_txs_response.da
 import 'package:my_bismuth_wallet/styles.dart';
 import 'package:my_bismuth_wallet/appstate_container.dart';
 
-
 class MyTokensList extends StatefulWidget {
   final List<BisToken> listBisToken;
 
@@ -72,11 +71,12 @@ class _MyTokensListStateState extends State<MyTokensList> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                               Text(
-                          AppLocalization.of(context).myTokensListHeader,
-                          style: AppStyles.textStyleSettingsHeader(context),
-                        ),
-            ],),
+                Text(
+                  AppLocalization.of(context).myTokensListHeader,
+                  style: AppStyles.textStyleSettingsHeader(context),
+                ),
+              ],
+            ),
             Expanded(
               child: Center(
                 child: Stack(children: <Widget>[
@@ -109,7 +109,7 @@ class _MyTokensListStateState extends State<MyTokensList> {
                                 },
                               ),
                             ),
-                            // list 
+                            // list
                             Expanded(
                               child: Stack(
                                 children: <Widget>[

@@ -77,6 +77,11 @@ class AppLocalization {
         desc: 'transaction_header', name: 'transactions');
   }
 
+  String get transactionHeader {
+    return Intl.message('Transaction',
+        desc: 'transaction_header', name: 'transactionHeader');
+  }
+
   String get transactionDetailBlock {
     return Intl.message('Block',
         desc: 'transaction_detail', name: 'transactionDetailBlock');
@@ -1085,6 +1090,15 @@ class AppLocalization {
   }
 
   /// HEADERS END
+
+  String get releaseNoteHeader {
+    return Intl.message("What's new", desc: "What's new", name: 'releaseNoteHeader');
+  }
+
+  String get ok {
+    return Intl.message("Ok", desc: "", name: 'ok');
+  }
+  
 
   /// BUTTONS
   String get noSkipButton {

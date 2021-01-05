@@ -198,5 +198,6 @@
   "transactionDetailOperation": "Opération",
   "transactionDetailOpenfield": "Commentaire",
   "transactionDetailSignature": "Signature",
-  "transactionDetailCopyPaste": "Double cliquez sur les textes pour les copier vers le presse papier"
+  "transactionDetailCopyPaste": "Double cliquez sur les textes pour les copier vers le presse papier",
+  "transactionHeader": "Transaction"
 }

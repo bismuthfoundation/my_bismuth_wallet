@@ -207,6 +207,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "transactionDetailSignature" : MessageLookupByLibrary.simpleMessage("Signature"),
     "transactionDetailTo" : MessageLookupByLibrary.simpleMessage("To address"),
     "transactionDetailTxId" : MessageLookupByLibrary.simpleMessage("Transaction id"),
+    "transactionHeader" : MessageLookupByLibrary.simpleMessage("Transaction"),
     "transactions" : MessageLookupByLibrary.simpleMessage("Transacciones"),
     "unlock" : MessageLookupByLibrary.simpleMessage("Desbloquear"),
     "unlockBiometrics" : MessageLookupByLibrary.simpleMessage("Autentíquese para desbloquear my Bismuth Wallet"),

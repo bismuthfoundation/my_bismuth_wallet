@@ -53,10 +53,24 @@ class AppWallet {
     return NumberUtil.getRawAsUsableString(_accountBalance.toString());
   }
 
+  // Get pretty account balance version
+  String getAccountBalanceMoinsFeesDisplay(estimationFees) {
+    if (accountBalance == null) {
+      return "0";
+    }
+    double value = _accountBalance - estimationFees;
+    return NumberUtil.getRawAsUsableString(value.toString());
+  }
 
   String getLocalCurrencyPrice(AvailableCurrency currency, {String locale = "en_US"}) {
     Decimal converted = Decimal.parse(_localCurrencyPrice) * NumberUtil.getRawAsUsableDecimal(_accountBalance.toString());
     return NumberFormat.currency(locale:locale, symbol: currency.getCurrencySymbol()).format(converted.toDouble());
+  }
+
+  String getLocalCurrencyPriceMoinsFees(AvailableCurrency currency, double estimationFees, {String locale = "en_US"}) {
+    double value = _accountBalance - estimationFees;
+    Decimal converted = Decimal.parse(_localCurrencyPrice) * NumberUtil.getRawAsUsableDecimal(value.toString());
+    return NumberFormat.currency(locale:locale, symbol: currency.getCurrencySymbol(), decimalDigits: 5).format(converted.toDouble());
   }
 
   set localCurrencyPrice(String value) {
