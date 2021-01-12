@@ -1151,7 +1151,7 @@ class AppLocalization {
   }
 
   String get privacyUrl {
-    return 'https://github.com/redDwarf03/my_bismuth_wallet/blob/master/Privacy%20Policy.md';
+    return 'https://hypernodes.bismuth.live/?page_id=2565';
   }
 
   String get donationsUrl {
