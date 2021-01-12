@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:my_bismuth_wallet/appstate_container.dart';
-import 'package:my_bismuth_wallet/ui/widgets/sheet_util.dart';
 
 
 class ReleaseNote extends StatefulWidget {

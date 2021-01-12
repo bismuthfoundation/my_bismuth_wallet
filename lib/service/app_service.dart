@@ -54,7 +54,6 @@ import 'package:my_bismuth_wallet/network/model/response/simple_price_response_z
 import 'package:my_bismuth_wallet/network/model/response/tokens_balance_get_response.dart';
 import 'package:my_bismuth_wallet/network/model/response/tokens_list_get_response.dart';
 import 'package:my_bismuth_wallet/network/model/response/wstatusget_response.dart';
-import 'package:my_bismuth_wallet/ui/util/int_converter.dart';
 
 class AppService {
   var logger = Logger();

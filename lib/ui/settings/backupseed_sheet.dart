@@ -13,7 +13,6 @@ import 'package:my_bismuth_wallet/ui/widgets/buttons.dart';
 import 'package:my_bismuth_wallet/styles.dart';
 import 'package:my_bismuth_wallet/util/caseconverter.dart';
 import 'package:my_bismuth_wallet/util/app_ffi/keys/mnemonics.dart';
-import 'package:my_bismuth_wallet/util/user_data_util.dart';
 
 class AppSeedBackupSheet {
   String _seed;

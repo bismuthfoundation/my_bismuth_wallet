@@ -8,7 +8,6 @@ import 'package:my_bismuth_wallet/ui/util/ui_util.dart';
 import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:my_bismuth_wallet/localization.dart';
 import 'package:my_bismuth_wallet/styles.dart';
-import 'package:my_bismuth_wallet/util/user_data_util.dart';
 
 /// A widget for displaying a mnemonic phrase
 class PlainSeedDisplay extends StatefulWidget {
