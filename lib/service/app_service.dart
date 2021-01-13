@@ -54,6 +54,8 @@ import 'package:my_bismuth_wallet/network/model/response/simple_price_response_z
 import 'package:my_bismuth_wallet/network/model/response/tokens_balance_get_response.dart';
 import 'package:my_bismuth_wallet/network/model/response/tokens_list_get_response.dart';
 import 'package:my_bismuth_wallet/network/model/response/wstatusget_response.dart';
+import 'package:my_bismuth_wallet/service_locator.dart';
+import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
 
 class AppService {
   var logger = Logger();
@@ -67,6 +69,14 @@ class AppService {
         new List<ServerWalletLegacyResponse>();
     ServerWalletLegacyResponse serverWalletLegacyResponse =
         new ServerWalletLegacyResponse();
+
+    String walletServer = await sl.get<SharedPrefsUtil>().getWalletServer();
+    if (walletServer != "auto") {
+      serverWalletLegacyResponse.ip = walletServer.split(":")[0];
+      serverWalletLegacyResponse.port =
+          int.tryParse(walletServer.split(":")[1]);
+      return serverWalletLegacyResponse;
+    }
 
     HttpClient httpClient = new HttpClient();
     try {
@@ -546,7 +556,8 @@ class AppService {
 
       //Send the request
       // Substract 2 sec to limit the issue with future tx
-      DateTime timeBefore2sec = DateTime.now().subtract(new Duration(seconds: 2));
+      DateTime timeBefore2sec =
+          DateTime.now().subtract(new Duration(seconds: 2));
       tx.timestamp = timeBefore2sec
               .toUtc()
               .microsecondsSinceEpoch
@@ -658,13 +669,40 @@ class AppService {
     return _completer.future;
   }
 
+  Future<bool> isTokensBalance(String address) async {
+    HttpClient httpClient = new HttpClient();
+    try {
+      String tokensApi = await sl.get<SharedPrefsUtil>().getTokensApi();
+      Uri uri;
+      try {
+        uri = Uri.parse(tokensApi + address);
+      } catch (FormatException) {
+        return false;
+      }
+
+      HttpClientRequest request = await httpClient.getUrl(uri);
+      request.headers.set('content-type', 'application/json');
+      HttpClientResponse response = await request.close();
+      if (response.statusCode == 200) {
+        String reply = await response.transform(utf8.decoder).join();
+        var tokensBalanceGetResponse = tokensBalanceGetResponseFromJson(reply);
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+  }
+
   Future<List<BisToken>> getTokensBalance(String address) async {
     List<BisToken> bisTokenList = new List<BisToken>();
 
     HttpClient httpClient = new HttpClient();
     try {
-      HttpClientRequest request = await httpClient
-          .getUrl(Uri.parse("https://bismuth.today/api/balances/" + address));
+      String tokensApi = await sl.get<SharedPrefsUtil>().getTokensApi();
+      HttpClientRequest request =
+          await httpClient.getUrl(Uri.parse(tokensApi + address));
       request.headers.set('content-type', 'application/json');
       HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {

@@ -199,5 +199,11 @@
   "transactionDetailOpenfield": "Openfield",
   "transactionDetailSignature": "Signature",
   "transactionDetailCopyPaste": "Double click on text to copy to clipboard",
-  "transactionHeader": "Transaction"
+  "transactionHeader": "Transaction",
+  "customUrlHeader": "Custom Urls",
+  "enterWalletServer": "Enter a custom wallet server",
+  "enterWalletServerSwitch": "Use a custom wallet server",
+  "enterTokenApi": "Enter url token api",
+  "enterWalletServerInfo": "ip:port (ex: 11.22.33.44:2000)",
+  "enterTokenApiInfo": "(ex: https://bismuth.today/api/balances/)"
 }

@@ -897,5 +897,41 @@
     "description": "",
     "type": "text",
     "placeholders": {}
+  },
+  "customUrlHeader": "Custom Urls",
+  "@customUrlHeader": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterWalletServer": "Enter a custom wallet server",
+  "@enterWalletServer": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterWalletServerSwitch": "Use a custom wallet server",
+  "@enterWalletServerSwitch": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterTokenApi": "Enter url token api",
+  "@enterTokenApi": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterWalletServerInfo": "ip:port (ex: 11.22.33.44:2000)",
+  "@enterWalletServerInfo": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterTokenApiInfo": "(ex: https://bismuth.today/api/balances/)",
+  "@enterTokenApiInfo": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
   }
 }

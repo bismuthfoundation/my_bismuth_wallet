@@ -1,9 +1,13 @@
 import 'dart:async';
 import 'package:event_taxi/event_taxi.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttericon/font_awesome_icons.dart';
+import 'package:fluttericon/iconic_icons.dart';
+import 'package:fluttericon/typicons_icons.dart';
 import 'package:logger/logger.dart';
 import 'package:my_bismuth_wallet/ui/accounts/accountdetails_sheet.dart';
 import 'package:my_bismuth_wallet/ui/accounts/accounts_sheet.dart';
+import 'package:my_bismuth_wallet/ui/settings/custom_url_widget.dart';
 import 'package:my_bismuth_wallet/ui/settings/disable_password_sheet.dart';
 import 'package:my_bismuth_wallet/ui/settings/set_password_sheet.dart';
 import 'package:my_bismuth_wallet/ui/settings/tokens_widget.dart';
@@ -50,6 +54,8 @@ class _SettingsSheetState extends State<SettingsSheet>
   Animation<Offset> _securityOffsetFloat;
   AnimationController _tokensListController;
   Animation<Offset> _tokensListOffsetFloat;
+  AnimationController _customUrlController;
+  Animation<Offset> _customUrlOffsetFloat;
 
   String versionString = "";
 
@@ -68,6 +74,8 @@ class _SettingsSheetState extends State<SettingsSheet>
 
   bool _tokensListOpen;
 
+  bool _customUrlOpen;
+
   bool notNull(Object o) => o != null;
 
   @override
@@ -77,6 +85,7 @@ class _SettingsSheetState extends State<SettingsSheet>
     _tokensListOpen = false;
     _securityOpen = false;
     _loadingAccounts = false;
+    _customUrlOpen = false;
     // Determine if they have face or fingerprint enrolled, if not hide the setting
     sl.get<BiometricUtil>().hasBiometrics().then((bool hasBiometrics) {
       setState(() {
@@ -117,6 +126,11 @@ class _SettingsSheetState extends State<SettingsSheet>
       vsync: this,
       duration: const Duration(milliseconds: 220),
     );
+    // For customUrl menu
+    _customUrlController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 220),
+    );
 
     _offsetFloat = Tween<Offset>(begin: Offset(1.1, 0), end: Offset(0, 0))
         .animate(_controller);
@@ -126,6 +140,9 @@ class _SettingsSheetState extends State<SettingsSheet>
     _tokensListOffsetFloat =
         Tween<Offset>(begin: Offset(1.1, 0), end: Offset(0, 0))
             .animate(_tokensListController);
+    _customUrlOffsetFloat =
+        Tween<Offset>(begin: Offset(1.1, 0), end: Offset(0, 0))
+            .animate(_customUrlController);
     // Version string
     PackageInfo.fromPlatform().then((packageInfo) {
       setState(() {
@@ -139,6 +156,7 @@ class _SettingsSheetState extends State<SettingsSheet>
     _controller.dispose();
     _securityController.dispose();
     _tokensListController.dispose();
+    _customUrlController.dispose();
     super.dispose();
   }
 
@@ -442,6 +460,12 @@ class _SettingsSheetState extends State<SettingsSheet>
       });
       _tokensListController.reverse();
       return false;
+    } else if (_customUrlOpen) {
+      setState(() {
+        _customUrlOpen = false;
+      });
+      _customUrlController.reverse();
+      return false;
     }
     return true;
   }
@@ -470,6 +494,9 @@ class _SettingsSheetState extends State<SettingsSheet>
             SlideTransition(
                 position: _tokensListOffsetFloat,
                 child: TokensList(_tokensListController, _tokensListOpen)),
+            SlideTransition(
+                position: _customUrlOffsetFloat,
+                child: CustomUrl(_customUrlController, _customUrlOpen)),
           ],
         ),
       ),
@@ -744,8 +771,8 @@ class _SettingsSheetState extends State<SettingsSheet>
                               highlightColor: _loadingAccounts
                                   ? Colors.transparent
                                   : StateContainer.of(context).curTheme.text15,
-                              child: Icon(AppIcons.accountswitcher,
-                                  size: 36,
+                              child: Icon(Typicons.users_outline,
+                                  size: 26,
                                   color: _loadingAccounts
                                       ? StateContainer.of(context)
                                           .curTheme
@@ -824,54 +851,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                   children: <Widget>[
                     Container(
                       margin:
-                          EdgeInsetsDirectional.only(start: 30.0, bottom: 10),
-                      child: Text(AppLocalization.of(context).preferences,
-                          style: TextStyle(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.w100,
-                              color:
-                                  StateContainer.of(context).curTheme.text60)),
-                    ),
-                    Divider(
-                      height: 2,
-                      color: StateContainer.of(context).curTheme.text15,
-                    ),
-                    AppSettings.buildSettingsListItemDoubleLine(
-                        context,
-                        AppLocalization.of(context).changeCurrency,
-                        StateContainer.of(context).curCurrency,
-                        AppIcons.currency,
-                        _currencyDialog),
-                    Divider(
-                      height: 2,
-                      color: StateContainer.of(context).curTheme.text15,
-                    ),
-                    AppSettings.buildSettingsListItemDoubleLine(
-                        context,
-                        AppLocalization.of(context).language,
-                        StateContainer.of(context).curLanguage,
-                        AppIcons.language,
-                        _languageDialog),
-                    Divider(
-                      height: 2,
-                      color: StateContainer.of(context).curTheme.text15,
-                    ),
-                    AppSettings.buildSettingsListItemSingleLine(
-                        context,
-                        AppLocalization.of(context).securityHeader,
-                        AppIcons.security, onPressed: () {
-                      setState(() {
-                        _securityOpen = true;
-                      });
-                      _securityController.forward();
-                    }),
-                    Divider(
-                      height: 2,
-                      color: StateContainer.of(context).curTheme.text15,
-                    ),
-                    Container(
-                      margin: EdgeInsetsDirectional.only(
-                          start: 30.0, top: 20.0, bottom: 10.0),
+                          EdgeInsetsDirectional.only(start: 30.0, bottom: 10.0),
                       child: Text(AppLocalization.of(context).informations,
                           style: TextStyle(
                               fontSize: 16.0,
@@ -886,7 +866,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                     AppSettings.buildSettingsListItemSingleLine(
                         context,
                         AppLocalization.of(context).tokensListHeader,
-                        AppIcons.importwallet, onPressed: () {
+                        Iconic.list_nested, onPressed: () {
                       setState(() {
                         _tokensListOpen = true;
                       });
@@ -913,7 +893,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                     AppSettings.buildSettingsListItemSingleLine(
                         context,
                         AppLocalization.of(context).contactsHeader,
-                        AppIcons.contact, onPressed: () {
+                        Typicons.contacts, onPressed: () {
                       setState(() {
                         _contactsOpen = true;
                       });
@@ -973,8 +953,68 @@ class _SettingsSheetState extends State<SettingsSheet>
                     ),
                     AppSettings.buildSettingsListItemSingleLine(
                         context,
+                        AppLocalization.of(context).customUrlHeader,
+                        FontAwesome.code, onPressed: () {
+                      setState(() {
+                        _customUrlOpen = true;
+                      });
+                      _customUrlController.forward();
+                    }),
+                    Divider(
+                      height: 2,
+                      color: StateContainer.of(context).curTheme.text15,
+                    ),
+                    Container(
+                      margin: EdgeInsetsDirectional.only(
+                          start: 30.0, top: 20.0, bottom: 10.0),
+                      child: Text(AppLocalization.of(context).preferences,
+                          style: TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w100,
+                              color:
+                                  StateContainer.of(context).curTheme.text60)),
+                    ),
+                    Divider(
+                      height: 2,
+                      color: StateContainer.of(context).curTheme.text15,
+                    ),
+                    AppSettings.buildSettingsListItemDoubleLine(
+                        context,
+                        AppLocalization.of(context).changeCurrency,
+                        StateContainer.of(context).curCurrency,
+                        FontAwesome.money,
+                        _currencyDialog),
+                    Divider(
+                      height: 2,
+                      color: StateContainer.of(context).curTheme.text15,
+                    ),
+                    AppSettings.buildSettingsListItemDoubleLine(
+                        context,
+                        AppLocalization.of(context).language,
+                        StateContainer.of(context).curLanguage,
+                        FontAwesome.language,
+                        _languageDialog),
+                    Divider(
+                      height: 2,
+                      color: StateContainer.of(context).curTheme.text15,
+                    ),
+                    AppSettings.buildSettingsListItemSingleLine(
+                        context,
+                        AppLocalization.of(context).securityHeader,
+                        AppIcons.security, onPressed: () {
+                      setState(() {
+                        _securityOpen = true;
+                      });
+                      _securityController.forward();
+                    }),
+                    Divider(
+                      height: 2,
+                      color: StateContainer.of(context).curTheme.text15,
+                    ),
+                    AppSettings.buildSettingsListItemSingleLine(
+                        context,
                         AppLocalization.of(context).logout,
-                        AppIcons.logout, onPressed: () {
+                        FontAwesome.logout, onPressed: () {
                       AppDialogs.showConfirmDialog(
                           context,
                           CaseChange.toUpperCase(

@@ -9,6 +9,7 @@ import 'package:flare_flutter/flare_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:event_taxi/event_taxi.dart';
+import 'package:fluttericon/font_awesome_icons.dart';
 
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
@@ -779,7 +780,7 @@ class _AppHomePageState extends State<AppHomePage>
           AppLocalization.of(context).releaseNoteHeader +
               " " +
               packageInfo.version,
-          "- Addition of the release note",
+          "- Update link to display privacy policy\n- New icons\n- Settings drawer : change order\n- Custom url configuration",
           CaseChange.toUpperCase(AppLocalization.of(context).ok, context),
           () async {
             await sl.get<SharedPrefsUtil>().setVersionApp(packageInfo.version);
@@ -1455,7 +1456,7 @@ class _AppHomePageState extends State<AppHomePage>
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(50.0)),
                   padding: EdgeInsets.all(0.0),
-                  child: Icon(AppIcons.settings,
+                  child: Icon(FontAwesome.sliders,
                       color: StateContainer.of(context).curTheme.icon,
                       size: 24)),
             ),

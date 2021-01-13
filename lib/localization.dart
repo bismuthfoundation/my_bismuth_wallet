@@ -208,6 +208,40 @@ class AppLocalization {
 
   /// -- END GENERIC ITEMS
 
+  /// -- CUSTOM URL
+  
+   String get customUrlHeader {
+    return Intl.message('Custom Urls',
+        desc: '', name: 'customUrlHeader');
+  } 
+
+   String get enterWalletServer {
+    return Intl.message('Enter a custom wallet server',
+        desc: '', name: 'enterWalletServer');
+  } 
+
+   String get enterWalletServerSwitch {
+    return Intl.message('Use a custom wallet server',
+        desc: '', name: 'enterWalletServerSwitch');
+  } 
+
+   String get enterTokenApi {
+    return Intl.message('Enter url token api',
+        desc: '', name: 'enterTokenApi');
+  } 
+
+   String get enterWalletServerInfo {
+    return Intl.message('ip:port (ex: 11.22.33.44:2000)',
+        desc: '', name: 'enterWalletServerInfo');
+  } 
+
+   String get enterTokenApiInfo {
+    return Intl.message('(ex: https://bismuth.today/api/balances/)',
+        desc: '', name: 'enterTokenApiInfo');
+  } 
+  
+  /// -- END CUSTOM URL
+
   /// -- CONTACT ITEMS
 
   String get removeContact {

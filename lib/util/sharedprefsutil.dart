@@ -41,6 +41,10 @@ class SharedPrefsUtil {
 
   static const String version_app = 'fbismuth_version_app';
 
+  static const String wallet_server = 'fbismuth_wallet_server';
+  static const String tokens_api = 'fbismuth_tokens_api';
+
+
   // For plain-text data
   Future<void> set(String key, value) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -178,6 +182,24 @@ class SharedPrefsUtil {
         defaultValue: "");
   }
 
+  Future<void> setWalletServer(String v) async {
+    return await set(wallet_server, v);
+  }
+
+  Future<String> getWalletServer() async {
+    return await get(wallet_server,
+        defaultValue: "auto");
+  }
+
+  Future<void> setTokensApi(String v) async {
+    return await set(tokens_api, v);
+  }
+
+  Future<String> getTokensApi() async {
+    return await get(tokens_api,
+        defaultValue: "https://bismuth.today/api/balances/");
+  }
+
   Future<void> setLock(bool value) async {
     return await set(lock_kalium, value);
   }
@@ -281,5 +303,7 @@ class SharedPrefsUtil {
     await prefs.remove(kalium_lock_timeout);
     await prefs.remove(has_shown_root_warning);
     await prefs.remove(version_app);
+    await prefs.remove(wallet_server);
+    await prefs.remove(tokens_api);
   }
 }

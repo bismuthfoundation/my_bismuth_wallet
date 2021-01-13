@@ -1,0 +1,14 @@
+Version 1.0.30+30 available
+
+- Update link to display privacy policy
+- New icons
+- Settings drawer : change order
+- Custom url configuration
+
+android: 
+- wetransfer: https://we.tl/t-wHwRO2f39H
+- available in few hours on google play store
+ios: 
+- available on test flight
+
+don't hesitate to give your feedback

@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-01-04T16:05:56.071868",
+  "@@last_modified": "2021-01-13T17:51:52.286465",
   "cancel": "Cancel",
   "@cancel": {
     "description": "dialog_cancel",
@@ -219,6 +219,42 @@
   "qrUnknownError": "Could not Read QR Code",
   "@qrUnknownError": {
     "description": "An unknown error occurred with the QR scanner",
+    "type": "text",
+    "placeholders": {}
+  },
+  "customUrlHeader": "Custom Urls",
+  "@customUrlHeader": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterWalletServer": "Enter a custom wallet server",
+  "@enterWalletServer": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterWalletServerSwitch": "Use a custom wallet server",
+  "@enterWalletServerSwitch": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterTokenApi": "Enter url token api",
+  "@enterTokenApi": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterWalletServerInfo": "ip:port (ex: 11.22.33.44:2000)",
+  "@enterWalletServerInfo": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterTokenApiInfo": "(ex: https://bismuth.today/api/balances/)",
+  "@enterTokenApiInfo": {
+    "description": "",
     "type": "text",
     "placeholders": {}
   },
@@ -1161,6 +1197,18 @@
   "requireAPasswordToOpenHeader": "Require a password to open my Bismuth Wallet?",
   "@requireAPasswordToOpenHeader": {
     "description": "A paragraph that asks the users if they would like a password to be required to open my Bismuth Wallet.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "releaseNoteHeader": "What's new",
+  "@releaseNoteHeader": {
+    "description": "What's new",
+    "type": "text",
+    "placeholders": {}
+  },
+  "ok": "Ok",
+  "@ok": {
+    "description": "",
     "type": "text",
     "placeholders": {}
   },

@@ -21,6 +21,15 @@ class AppStyles {
         color: StateContainer.of(context).curTheme.primary);
   }
 
+
+  static TextStyle textStyleParagraphSmall(BuildContext context) {
+    return TextStyle(
+        fontFamily: "Roboto",
+        fontSize: AppFontSizes.small,
+        fontWeight: FontWeight.w200,
+        color: StateContainer.of(context).curTheme.text);
+  }
+  
   // Text style for thin paragraph text with primary color.
   static TextStyle textStyleParagraphThinPrimary(BuildContext context) {
     return TextStyle(
