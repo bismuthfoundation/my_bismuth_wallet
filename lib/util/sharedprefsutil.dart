@@ -38,6 +38,7 @@ class SharedPrefsUtil {
 
   static const String wallet_server = 'fbismuth_wallet_server';
   static const String tokens_api = 'fbismuth_tokens_api';
+  static const String explorer_url = 'fbismuth_explorer_url';
 
 
   // For plain-text data
@@ -177,6 +178,16 @@ class SharedPrefsUtil {
         defaultValue: "https://bismuth.today/api/balances/");
   }
 
+
+  Future<void> setExplorerUrl(String v) async {
+    return await set(explorer_url, v);
+  }
+
+  Future<String> getExplorerUrl() async {
+    return await get(explorer_url,
+        defaultValue: "https://bismuth.online/search?quicksearch=%1");
+  }
+
   Future<void> setLock(bool value) async {
     return await set(lock, value);
   }
@@ -279,5 +290,6 @@ class SharedPrefsUtil {
     await prefs.remove(version_app);
     await prefs.remove(wallet_server);
     await prefs.remove(tokens_api);
+    await prefs.remove(explorer_url);
   }
 }

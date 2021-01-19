@@ -380,15 +380,24 @@ class UIUtil {
 
   static Widget showAccountWebview(BuildContext context, String account) {
     cancelLockEvent();
-    return WebviewScaffold(
-      url: AppLocalization.of(context).getAccountExplorerUrl(account),
-      appBar: new AppBar(
-        backgroundColor: StateContainer.of(context).curTheme.backgroundDark,
-        brightness: StateContainer.of(context).curTheme.brightness,
-        iconTheme:
-            IconThemeData(color: StateContainer.of(context).curTheme.text),
-      ),
-    );
+    return FutureBuilder(
+        future: AppLocalization.of(context).getAccountExplorerUrl(account),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData && snapshot.data != null) {
+            return WebviewScaffold(
+              url: snapshot.data,
+              appBar: new AppBar(
+                backgroundColor:
+                    StateContainer.of(context).curTheme.backgroundDark,
+                brightness: StateContainer.of(context).curTheme.brightness,
+                iconTheme: IconThemeData(
+                    color: StateContainer.of(context).curTheme.text),
+              ),
+            );
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        });
   }
 
   static Widget showWebview(BuildContext context, String url) {
@@ -470,7 +479,6 @@ class UIUtil {
   }
 
   static String getRobohashURL(String address) {
-    
     if (address == null) {
       return "https://robohash.org/bismuth?set=set4";
     } else {

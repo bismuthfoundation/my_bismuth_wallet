@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_bismuth_wallet/model/available_language.dart';
+import 'package:my_bismuth_wallet/service_locator.dart';
+import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
 
 import 'l10n/messages_all.dart';
 
@@ -209,37 +211,52 @@ class AppLocalization {
   /// -- END GENERIC ITEMS
 
   /// -- CUSTOM URL
-  
-   String get customUrlHeader {
-    return Intl.message('Custom Urls',
-        desc: '', name: 'customUrlHeader');
-  } 
 
-   String get enterWalletServer {
+  String get customUrlHeader {
+    return Intl.message('Custom Urls', desc: '', name: 'customUrlHeader');
+  }
+
+  String get enterWalletServer {
     return Intl.message('Enter a custom wallet server',
         desc: '', name: 'enterWalletServer');
-  } 
+  }
 
-   String get enterWalletServerSwitch {
+  String get enterWalletServerSwitch {
     return Intl.message('Use a custom wallet server',
         desc: '', name: 'enterWalletServerSwitch');
-  } 
+  }
 
-   String get enterTokenApi {
-    return Intl.message('Enter url token api',
-        desc: '', name: 'enterTokenApi');
-  } 
+  String get enterTokenApi {
+    return Intl.message('Enter url token api', desc: '', name: 'enterTokenApi');
+  }
 
-   String get enterWalletServerInfo {
+  String get enterExplorerUrlSwitch {
+    return Intl.message('Use a custom explorer url',
+        desc: '', name: 'enterExplorerUrlSwitch');
+  }
+
+  String get enterExplorerUrl {
+    return Intl.message('Enter a custom url explorer',
+        desc: '', name: 'enterExplorerUrl');
+  }
+
+  String get enterExplorerUrlInfo {
+    return Intl.message(
+        '(ex: https://bismuth.online/search?quicksearch=%1\n"%1" will be replaced by BIS address)',
+        desc: '',
+        name: 'enterExplorerUrlInfo');
+  }
+
+  String get enterWalletServerInfo {
     return Intl.message('ip:port (ex: 11.22.33.44:2000)',
         desc: '', name: 'enterWalletServerInfo');
-  } 
+  }
 
-   String get enterTokenApiInfo {
+  String get enterTokenApiInfo {
     return Intl.message('(ex: https://bismuth.today/api/balances/)',
         desc: '', name: 'enterTokenApiInfo');
-  } 
-  
+  }
+
   /// -- END CUSTOM URL
 
   /// -- CONTACT ITEMS
@@ -424,7 +441,7 @@ class AppLocalization {
         desc: 'pasteBisUrlPrefix_hint', name: 'pasteBisUrlPrefix');
   }
 
- String get pasteBisUrlError {
+  String get pasteBisUrlError {
     return Intl.message("Your clipboard doesn't contain a BIS url",
         desc: 'pasteBisUrlError_hint', name: 'pasteBisUrlError');
   }
@@ -578,7 +595,7 @@ class AppLocalization {
   }
 
   String get logout {
-    return Intl.message("Logout", desc: 'settings_logout', name: 'logout');
+    return Intl.message("Delete accounts", desc: 'settings_logout', name: 'logout');
   }
 
   String get rootWarning {
@@ -651,8 +668,7 @@ class AppLocalization {
   }
 
   String get myTokens {
-    return Intl.message("Tokens",
-        desc: 'my_tokens_button', name: 'myTokens');
+    return Intl.message("Tokens", desc: 'my_tokens_button', name: 'myTokens');
   }
 
   String get myTokensListHeader {
@@ -1126,13 +1142,13 @@ class AppLocalization {
   /// HEADERS END
 
   String get releaseNoteHeader {
-    return Intl.message("What's new", desc: "What's new", name: 'releaseNoteHeader');
+    return Intl.message("What's new",
+        desc: "What's new", name: 'releaseNoteHeader');
   }
 
   String get ok {
     return Intl.message("Ok", desc: "", name: 'ok');
   }
-  
 
   /// BUTTONS
   String get noSkipButton {
@@ -1180,8 +1196,9 @@ class AppLocalization {
         name: 'connectingHeader');
   }
 
-  String getAccountExplorerUrl(String account) {
-    return 'https://bismuth.online/search?quicksearch=$account';
+  Future<String> getAccountExplorerUrl(String account) async {
+    String explorerUrl = await sl.get<SharedPrefsUtil>().getExplorerUrl();
+    return explorerUrl.replaceAll("%1", account);
   }
 
   String get privacyUrl {
@@ -1195,6 +1212,11 @@ class AppLocalization {
   String get donationsName {
     return '@Donations';
   }
+
+  String get explorerUrlByDefault {
+    return 'https://bismuth.online/search?quicksearch=%1';
+  }
+
   /// -- END NON-TRANSLATABLE ITEMS
 }
 
