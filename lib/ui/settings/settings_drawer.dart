@@ -928,19 +928,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                             });
                           }
                         } catch (e) {
-                          AppDialogs.showConfirmDialog(
-                              context,
-                              "Error",
-                              e.toString(),
-                              "Copy to clipboard",
-                              () {
-                                Clipboard.setData(
-                                    ClipboardData(text: e.toString()));
-                              },
-                              cancelText: "Close",
-                              cancelAction: () {
-                                Navigator.of(context).pop();
-                              });
+                      
                           await authenticateWithPin();
                         }
                       } else {

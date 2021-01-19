@@ -27,7 +27,6 @@ import 'package:my_bismuth_wallet/network/model/block_types.dart';
 import 'package:my_bismuth_wallet/styles.dart';
 import 'package:my_bismuth_wallet/app_icons.dart';
 import 'package:my_bismuth_wallet/ui/contacts/add_contact.dart';
-import 'package:my_bismuth_wallet/ui/release_note.dart';
 import 'package:my_bismuth_wallet/ui/send/send_sheet.dart';
 import 'package:my_bismuth_wallet/ui/send/send_confirm_sheet.dart';
 import 'package:my_bismuth_wallet/ui/receive/receive_sheet.dart';
@@ -255,7 +254,7 @@ class _AppHomePageState extends State<AppHomePage>
 
   void _registerBus() {
     _historySub = EventTaxiImpl.singleton()
-        .registerTo<HistoryHomeEvent>()
+        .registerTo<HistoryHomeEvent>(true)
         .listen((event) {
       setState(() {
         _isRefreshing = false;
@@ -266,13 +265,13 @@ class _AppHomePageState extends State<AppHomePage>
       }
     });
     _contactModifiedSub = EventTaxiImpl.singleton()
-        .registerTo<ContactModifiedEvent>()
+        .registerTo<ContactModifiedEvent>(true)
         .listen((event) {
       _updateContacts();
     });
     // Hackish event to block auto-lock functionality
     _disableLockSub = EventTaxiImpl.singleton()
-        .registerTo<DisableLockTimeoutEvent>()
+        .registerTo<DisableLockTimeoutEvent>(true)
         .listen((event) {
       if (event.disable) {
         cancelLockEvent();
@@ -281,7 +280,7 @@ class _AppHomePageState extends State<AppHomePage>
     });
     // User changed account
     _switchAccountSub = EventTaxiImpl.singleton()
-        .registerTo<AccountChangedEvent>()
+        .registerTo<AccountChangedEvent>(true)
         .listen((event) {
       setState(() {
         StateContainer.of(context).wallet.loading = true;
@@ -289,6 +288,9 @@ class _AppHomePageState extends State<AppHomePage>
 
         _startAnimation();
         StateContainer.of(context).updateWallet(account: event.account);
+
+                StateContainer.of(context).wallet.loading = false;
+        StateContainer.of(context).wallet.historyLoading = false;
       });
       paintQrCode(address: event.account.address);
       if (event.delayPop) {
@@ -331,10 +333,12 @@ class _AppHomePageState extends State<AppHomePage>
     switch (state) {
       case AppLifecycleState.paused:
         setAppLockEvent();
+        StateContainer.of(context).disconnect();
         super.didChangeAppLifecycleState(state);
         break;
       case AppLifecycleState.resumed:
         cancelLockEvent();
+        StateContainer.of(context).reconnect();
         if (!StateContainer.of(context).wallet.loading &&
             StateContainer.of(context).initialDeepLink != null) {
           handleDeepLink(StateContainer.of(context).initialDeepLink);
@@ -780,7 +784,7 @@ class _AppHomePageState extends State<AppHomePage>
           AppLocalization.of(context).releaseNoteHeader +
               " " +
               packageInfo.version,
-          "- Update link to display privacy policy\n- New icons\n- Settings drawer : change order\n- Custom url configuration",
+          "- Update link to display privacy policy\n- New icons\n- Settings drawer : change order\n- Custom url configuration\n- Fix error when you don't enter a pincode",
           CaseChange.toUpperCase(AppLocalization.of(context).ok, context),
           () async {
             await sl.get<SharedPrefsUtil>().setVersionApp(packageInfo.version);
