@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:my_bismuth_wallet/network/model/response/address_txs_response.dart';
 import 'package:my_bismuth_wallet/network/model/response/balance_get_response.dart';
 import 'package:my_bismuth_wallet/service/app_service.dart';
+import 'package:my_bismuth_wallet/service/http_service.dart';
 import 'package:my_bismuth_wallet/util/app_ffi/encrypt/crypter.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:my_bismuth_wallet/themes.dart';
@@ -121,18 +122,68 @@ class StateContainerState extends State<StateContainer> {
   }
 
   // Subscriptions
-  StreamSubscription<SubscribeEvent> _subscribeEventSub;
+  StreamSubscription<ConnStatusEvent> _connStatusSub;
+  StreamSubscription<BalanceGetEvent> _balanceGetEventSub;
   StreamSubscription<PriceEvent> _priceEventSub;
   StreamSubscription<AccountModifiedEvent> _accountModifiedSub;
+  StreamSubscription<TransactionsListEvent> _transactionsListEventSub;
 
   // Register RX event listeners
   void _registerBus() {
-    _subscribeEventSub =
-        EventTaxiImpl.singleton().registerTo<SubscribeEvent>().listen((event) {
+    _balanceGetEventSub =
+        EventTaxiImpl.singleton().registerTo<BalanceGetEvent>(true).listen((event) {
+      //print("listen BalanceGetEvent");
       handleAddressResponse(event.response);
     });
+
+    _transactionsListEventSub = EventTaxiImpl.singleton()
+        .registerTo<TransactionsListEvent>(true)
+        .listen((event) {
+      //print("listen TransactionsListEvent");
+      AddressTxsResponse addressTxsResponse = new AddressTxsResponse();
+      addressTxsResponse.result = new List<AddressTxsResponseResult>();
+      for (int i = event.response.length - 1; i >= 0; i--) {
+        AddressTxsResponseResult addressTxResponseResult =
+            new AddressTxsResponseResult();
+        addressTxResponseResult.populate(
+            event.response[i], selectedAccount.address);
+        addressTxResponseResult.getBisToken();
+        addressTxsResponse.result.add(addressTxResponseResult);
+      }
+
+      // Iterate list in reverse (oldest to newest block)
+      if (addressTxsResponse != null && addressTxsResponse.result != null) {
+        for (AddressTxsResponseResult item in addressTxsResponse.result) {
+          // If current list doesn't contain this item, insert it and the rest of the items in list and exit loop
+          bool newItem = true;
+          if (wallet.history.length > 0) {
+            for (int i = 0; i < wallet.history.length; i++) {
+              if (wallet.history[i].timestamp == item.timestamp &&
+                  wallet.history[i].hash == item.hash) {
+                newItem = false;
+                break;
+              }
+            }
+          }
+
+          if (newItem) {
+            setState(() {
+              wallet.history.insert(0, item);
+            });
+          }
+        }
+      }
+
+      setState(() {
+        wallet.historyLoading = false;
+        wallet.loading = false;
+      });
+
+      EventTaxiImpl.singleton().fire(HistoryHomeEvent(items: wallet.history));
+    });
+
     _priceEventSub =
-        EventTaxiImpl.singleton().registerTo<PriceEvent>().listen((event) {
+        EventTaxiImpl.singleton().registerTo<PriceEvent>(true).listen((event) {
       // PriceResponse's get pushed periodically, it wasn't a request we made so don't pop the queue
       setState(() {
         wallet.btcPrice = event.response.btcPrice.toString();
@@ -141,9 +192,19 @@ class StateContainerState extends State<StateContainer> {
       });
     });
 
+    _connStatusSub =
+        EventTaxiImpl.singleton().registerTo<ConnStatusEvent>(true).listen((event) {
+      if (event.status == ConnectionStatus.CONNECTED) {
+        requestUpdate();
+      } else if (event.status == ConnectionStatus.DISCONNECTED &&
+          !sl.get<AppService>().suspended) {
+        sl.get<AppService>().initCommunication();
+      }
+    });
+
     // Account has been deleted or name changed
     _accountModifiedSub = EventTaxiImpl.singleton()
-        .registerTo<AccountModifiedEvent>()
+        .registerTo<AccountModifiedEvent>(true)
         .listen((event) {
       if (!event.deleted) {
         if (event.account.index == selectedAccount.index) {
@@ -203,8 +264,11 @@ class StateContainerState extends State<StateContainer> {
   }
 
   void _destroyBus() {
-    if (_subscribeEventSub != null) {
-      _subscribeEventSub.cancel();
+    if (_connStatusSub != null) {
+      _connStatusSub.cancel();
+    }
+    if (_balanceGetEventSub != null) {
+      _balanceGetEventSub.cancel();
     }
     if (_priceEventSub != null) {
       _priceEventSub.cancel();
@@ -215,15 +279,20 @@ class StateContainerState extends State<StateContainer> {
     if (_deepLinkSub != null) {
       _deepLinkSub.cancel();
     }
+    if (_transactionsListEventSub != null) {
+      _transactionsListEventSub.cancel();
+    }
   }
 
   // Update the global wallet instance with a new address
   Future<void> updateWallet({Account account}) async {
+    //print("updateWallet");
     String address;
     address = AppUtil().seedToAddress(await getSeed(), account.index);
     account.address = address;
     selectedAccount = account;
     updateRecentlyUsedAccounts();
+
     setState(() {
       wallet = AppWallet(address: address, loading: true);
       requestUpdate();
@@ -262,7 +331,7 @@ class StateContainerState extends State<StateContainer> {
 
   // Change curency
   void updateCurrency(AvailableCurrency currency) async {
-    await AppService().getSimplePrice(currency.getIso4217Code());
+    await sl.get<HttpService>().getSimplePrice(currency.getIso4217Code());
     setState(() {
       curCurrency = currency;
     });
@@ -282,6 +351,14 @@ class StateContainerState extends State<StateContainer> {
     });
   }
 
+  void disconnect() {
+    sl.get<AppService>().reset(suspend: true);
+  }
+
+  void reconnect() {
+    sl.get<AppService>().initCommunication(unsuspend: true);
+  }
+
   /// Handle address response
   void handleAddressResponse(BalanceGetResponse response) {
     // Set currency locale here for the UI to access
@@ -297,57 +374,39 @@ class StateContainerState extends State<StateContainer> {
           wallet.accountBalance = 0;
         } else {
           wallet.accountBalance = double.tryParse(response.balance);
+          sl.get<DBHelper>().updateAccountBalance(
+              selectedAccount, wallet.accountBalance.toString());
         }
       }
     });
   }
 
-  Future<void> requestUpdate({bool pending = true}) async {
+  Future<void> requestUpdate() async {
+    //print("requestUpdate");
     if (wallet != null &&
         wallet.address != null &&
         Address(wallet.address).isValid()) {
       // Request account history
       int count = 30;
       try {
-        await AppService().getBalanceGetResponse(wallet.address.toString(), true);
-        await AppService().getSimplePrice(curCurrency.getIso4217Code());
+        sl.get<AppService>().getBalanceGetResponse(selectedAccount);
 
-        AddressTxsResponse addressTxsResponse =
-            await AppService().getAddressTxsResponse(wallet.address, count);
+        await sl.get<HttpService>().getSimplePrice(curCurrency.getIso4217Code());
 
-        // Iterate list in reverse (oldest to newest block)
-        if (addressTxsResponse != null && addressTxsResponse.result != null) {
-          for (AddressTxsResponseResult item in addressTxsResponse.result) {
-            // If current list doesn't contain this item, insert it and the rest of the items in list and exit loop
-            bool newItem = true;
-            if (wallet.history.length > 0) {
-              for (int i = 0; i < wallet.history.length; i++) {
-                if (wallet.history[i].timestamp == item.timestamp &&
-                    wallet.history[i].hash == item.hash) {
-                  newItem = false;
-                  break;
-                }
-              }
-            }
+        sl.get<AppService>().getAddressTxsResponse(wallet.address, count);
+        
+        //sl.get<AppService>().getAddressTxsInMempoolResponse(wallet.address);
 
-            if (newItem) {
-              setState(() {
-                wallet.history.insert(0, item);
-              });
-            }
-          }
-        }
-
+        AddressTxsResponse addressTxsResponse = new AddressTxsResponse();
+        addressTxsResponse.tokens = await sl
+            .get<HttpService>()
+            .getTokensBalance(selectedAccount.address);
         setState(() {
-          wallet.historyLoading = false;
-          wallet.loading = false;
           wallet.tokens.clear();
-          wallet.tokens.add(new BisToken(tokenName: "", tokensQuantity: 0, tokenMessage: ""));
+          wallet.tokens.add(
+              new BisToken(tokenName: "", tokensQuantity: 0, tokenMessage: ""));
           wallet.tokens.addAll(addressTxsResponse.tokens);
-          
         });
-
-        EventTaxiImpl.singleton().fire(HistoryHomeEvent(items: wallet.history));
       } catch (e) {
         // TODO handle account history error
         sl.get<Logger>().e("account_history e", e);

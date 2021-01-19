@@ -1,0 +1,16 @@
+Version 1.0.34+34 available
+
+- Update link to display privacy policy (since 1.0.30)
+- New icons (since 1.0.30)
+- Settings drawer : change order (since 1.0.30)
+- Custom url configuration (since 1.0.30)
+- Redesign of the backoffice (since 1.0.33 - fix stability issues)
+- Setting explorer url
+- Display server ip:port on the home page
+
+android: 
+- wetransfer: https://we.tl/t-UJWVp05PcV
+ios: 
+- available on test flight
+
+don't hesitate to give your feedback and how it works on your device in real situation

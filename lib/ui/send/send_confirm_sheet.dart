@@ -59,13 +59,53 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
   bool animationOpen;
 
   StreamSubscription<AuthenticatedEvent> _authSub;
+  StreamSubscription<TransactionSendEvent> _sendTxSub;
 
   void _registerBus() {
     _authSub = EventTaxiImpl.singleton()
-        .registerTo<AuthenticatedEvent>()
+        .registerTo<AuthenticatedEvent>(true)
         .listen((event) {
       if (event.authType == AUTH_EVENT_TYPE.SEND) {
         _doSend();
+      }
+    });
+
+    _sendTxSub = EventTaxiImpl.singleton()
+        .registerTo<TransactionSendEvent>(true)
+        .listen((event) {
+      //print("listen TransactionSendEvent");
+      //print("result : " + event.response);
+      if (event.response != "Success") {
+        // Send failed
+        if (animationOpen) {
+          Navigator.of(context).pop();
+        }
+        UIUtil.showSnackbar(
+            AppLocalization.of(context).sendError + " (" + event.response + ")",
+            context);
+        Navigator.of(context).pop();
+      } else {
+        StateContainer.of(context).wallet.accountBalance -=
+            double.parse(widget.amountRaw);
+
+        // Show complete
+        Contact contact;
+        sl
+            .get<DBHelper>()
+            .getContactWithAddress(widget.destination)
+            .then((value) => contact);
+        String contactName = contact == null ? null : contact.name;
+        Navigator.of(context).popUntil(RouteUtils.withNameLike('/home'));
+        StateContainer.of(context).requestUpdate();
+        Sheets.showAppHeightNineSheet(
+            context: context,
+            closeOnTap: true,
+            removeUntilHome: true,
+            widget: SendCompleteSheet(
+                amountRaw: widget.amountRaw,
+                destination: destinationAltered,
+                contactName: contactName,
+                localAmount: widget.localCurrency));
       }
     });
   }
@@ -73,6 +113,9 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
   void _destroyBus() {
     if (_authSub != null) {
       _authSub.cancel();
+    }
+    if (_sendTxSub != null) {
+      _sendTxSub.cancel();
     }
   }
 
@@ -246,7 +289,8 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
                             "+ " +
                                 AppLocalization.of(context).fees +
                                 ": " +
-                                new AppService()
+                                sl
+                                    .get<AppService>()
                                     .getFeesEstimation(
                                         widget.openfield, widget.operation)
                                     .toStringAsFixed(5) +
@@ -573,65 +617,31 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
       _showSendingAnimation(context);
 
       // Send tx
-      AppService appService = new AppService();
-
-      String result = "";
       String openfield = "";
-      if(widget.openfield.length > 0)
-      {
+      if (widget.openfield.length > 0) {
         openfield = widget.openfield;
       }
-      if(widget.comment.length > 0)
-      {
+      if (widget.comment.length > 0) {
         openfield += ':{"Message":"' + widget.comment + '"}';
       }
-      await appService
-          .sendTx(
-              StateContainer.of(context).wallet.address,
-              widget.amountRaw,
-              destinationAltered,
-              openfield,
-              widget.operation,
-              await AppUtil().seedToPublicKeyBase64(
-                  await StateContainer.of(context).getSeed(),
-                  StateContainer.of(context).selectedAccount.index),
-              await AppUtil().seedToPrivateKey(
-                  await StateContainer.of(context).getSeed(),
-                  StateContainer.of(context).selectedAccount.index))
-          .then((value) => result = value);
-      //print("result : " + result);
-      if (result != "Success") {
-        // Send failed
-        if (animationOpen) {
-          Navigator.of(context).pop();
-        }
-        UIUtil.showSnackbar(
-            AppLocalization.of(context).sendError + " (" + result + ")",
-            context);
-        Navigator.of(context).pop();
-      } else {
-        // TODO: pq + ?
-        //StateContainer.of(context).wallet.accountBalance += double.parse(widget.amountRaw);
-        StateContainer.of(context).wallet.accountBalance -=
-            double.parse(widget.amountRaw);
-
-        // Show complete
-        Contact contact =
-            await sl.get<DBHelper>().getContactWithAddress(widget.destination);
-        String contactName = contact == null ? null : contact.name;
-        Navigator.of(context).popUntil(RouteUtils.withNameLike('/home'));
-        StateContainer.of(context).requestUpdate();
-        Sheets.showAppHeightNineSheet(
-            context: context,
-            closeOnTap: true,
-            removeUntilHome: true,
-            widget: SendCompleteSheet(
-                amountRaw: widget.amountRaw,
-                destination: destinationAltered,
-                contactName: contactName,
-                localAmount: widget.localCurrency));
-      }
-    } catch (e) {}
+      sl.get<AppService>().sendTx(
+          StateContainer.of(context).wallet.address,
+          widget.amountRaw,
+          destinationAltered,
+          openfield,
+          widget.operation,
+          await AppUtil().seedToPublicKeyBase64(
+              await StateContainer.of(context).getSeed(),
+              StateContainer.of(context).selectedAccount.index),
+          await AppUtil().seedToPrivateKey(
+              await StateContainer.of(context).getSeed(),
+              StateContainer.of(context).selectedAccount.index));
+    } catch (e) {
+      // Send failed
+       
+      EventTaxiImpl.singleton()
+          .fire(TransactionSendEvent(response: e.toString()));
+    }
   }
 
   Future<void> authenticateWithPin() async {

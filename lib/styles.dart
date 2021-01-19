@@ -242,6 +242,15 @@ class AppStyles {
     );
   }
 
+  static TextStyle textStyleTiny(BuildContext context) {
+    return TextStyle(
+      fontFamily: "Roboto",
+      color: StateContainer.of(context).curTheme.primary60,
+      fontSize: AppFontSizes.tiny,
+      fontWeight: FontWeight.w100,
+    );
+  }
+
   // Address
   static TextStyle textStyleTransactionAddress(BuildContext context) {
     return TextStyle(
@@ -552,6 +561,7 @@ class AppStyles {
 }
 
 class AppFontSizes {
+  static const tiny = 10.0;
   static const smallest = 12.0;
   static const small = 14.0;
   static const medium = 16.0;

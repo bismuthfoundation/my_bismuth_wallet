@@ -5,6 +5,7 @@ enum ConnectionStatus { CONNECTED, DISCONNECTED }
 
 class ConnStatusEvent implements Event {
   final ConnectionStatus status;
+  final String server;
 
-  ConnStatusEvent({this.status});
+  ConnStatusEvent({this.status, this.server});
 }

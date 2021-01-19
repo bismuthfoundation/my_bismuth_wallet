@@ -784,7 +784,7 @@ class _AppHomePageState extends State<AppHomePage>
           AppLocalization.of(context).releaseNoteHeader +
               " " +
               packageInfo.version,
-          "- Update link to display privacy policy\n- New icons\n- Settings drawer : change order\n- Custom url configuration\n- Fix error when you don't enter a pincode",
+          "- Update link to display privacy policy\n- New icons\n- Settings drawer : change order\n- Custom url configuration\n- Fix error when you don't enter a pincode\n- Add setting explorer url",
           CaseChange.toUpperCase(AppLocalization.of(context).ok, context),
           () async {
             await sl.get<SharedPrefsUtil>().setVersionApp(packageInfo.version);

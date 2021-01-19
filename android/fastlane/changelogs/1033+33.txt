@@ -1,0 +1,14 @@
+Version 1.0.33+33 available
+
+- Update link to display privacy policy
+- New icons
+- Settings drawer : change order
+- Custom url configuration
+- Redesign of the backoffice
+
+android: 
+- wetransfer: https://we.tl/t-WGsvlubwxn
+ios: 
+- available on test flight
+
+don't hesitate to give your feedback

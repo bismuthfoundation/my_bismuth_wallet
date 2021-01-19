@@ -1,8 +1,9 @@
 import 'dart:async';
 
+import 'package:event_taxi/event_taxi.dart';
 import 'package:flutter/material.dart';
-import 'package:my_bismuth_wallet/network/model/response/wstatusget_response.dart';
-import 'package:my_bismuth_wallet/service/app_service.dart';
+import 'package:my_bismuth_wallet/bus/events.dart';
+import 'package:my_bismuth_wallet/styles.dart';
 
 class SyncInfoView extends StatefulWidget {
   const SyncInfoView({Key key}) : super(key: key);
@@ -12,29 +13,42 @@ class SyncInfoView extends StatefulWidget {
 }
 
 class _SyncInfoViewState extends State<SyncInfoView> {
-  Timer _timerSync;
-  WStatusGetResponse wStatusGetResponse;
-  AppService appService = new AppService();
+  bool connected;
+  String serverName = "";
+
+  // Subscriptions
+  StreamSubscription<ConnStatusEvent> _connStatusEventSub;
 
   @override
   void initState() {
-    _timeSyncUpdate();
+    _registerBus();
     super.initState();
+  }
+
+  void _registerBus() {
+    _connStatusEventSub =
+        EventTaxiImpl.singleton().registerTo<ConnStatusEvent>(true).listen((event) {
+      setState(() {
+        serverName = event.server;
+        if (event.status == ConnectionStatus.CONNECTED) {
+          connected = true;
+        } else {
+          connected = false;
+        }
+      });
+    });
   }
 
   @override
   void dispose() {
-    _timerSync.cancel();
+    _destroyBus();
     super.dispose();
   }
 
-  _timeSyncUpdate() {
-    _timerSync = Timer(const Duration(seconds: 2), () async {
-      wStatusGetResponse = await appService.getWStatusGetResponse();
-      if (!mounted) return;
-      setState(() {});
-      _timeSyncUpdate();
-    });
+  void _destroyBus() {
+    if (_connStatusEventSub != null) {
+      _connStatusEventSub.cancel();
+    }
   }
 
   @override
@@ -43,11 +57,15 @@ class _SyncInfoViewState extends State<SyncInfoView> {
   }
 
   Widget _buildChild() {
-    if (wStatusGetResponse == null) {
-      return Icon(Icons.signal_cellular_connected_no_internet_4_bar_rounded,
-          color: Colors.red);
-    } else {
-      return Icon(Icons.signal_cellular_alt_rounded, color: Colors.green);
-    }
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(serverName, style: AppStyles.textStyleTiny(context)), 
+        connected == null || connected == false
+            ? Icon(Icons.signal_cellular_alt_rounded, color: Colors.red)
+            : Icon(Icons.signal_cellular_alt_rounded, color: Colors.green),
+      ],
+    );
   }
 }

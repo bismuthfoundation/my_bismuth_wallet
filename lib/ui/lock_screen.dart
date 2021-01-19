@@ -29,7 +29,7 @@ class _AppLockScreenState extends State<AppLockScreen> {
 
   Future<void> _goHome() async {
     if (StateContainer.of(context).wallet != null) {
-      // TODO: Voir
+      StateContainer.of(context).reconnect();
     } else {
       await AppUtil()
           .loginAccount(await StateContainer.of(context).getSeed(), context);
