@@ -7,8 +7,6 @@ import 'package:my_bismuth_wallet/bus/events.dart';
 import 'package:my_bismuth_wallet/localization.dart';
 import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:my_bismuth_wallet/dimens.dart';
-import 'package:my_bismuth_wallet/network/model/response/balance_get_response.dart';
-import 'package:my_bismuth_wallet/service/app_service.dart';
 import 'package:my_bismuth_wallet/service_locator.dart';
 import 'package:my_bismuth_wallet/model/db/appdb.dart';
 import 'package:my_bismuth_wallet/model/db/account.dart';
@@ -53,6 +51,7 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
   ScrollController _scrollController = new ScrollController();
 
   StreamSubscription<AccountModifiedEvent> _accountModifiedSub;
+
   bool _accountIsChanging;
 
   @override
@@ -61,19 +60,6 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
     _registerBus();
     this._addingAccount = false;
     this._accountIsChanging = false;
-
-    widget.accounts.forEach((account) async {
-      if (account.address != null) {
-        BalanceGetResponse balanceGetResponse =
-            await AppService().getBalanceGetResponse(account.address, false);
-        setState(() {
-          account.balance = balanceGetResponse.balance;
-        });
-        sl
-            .get<DBHelper>()
-            .updateAccountBalance(account, balanceGetResponse.balance);
-      }
-    });
   }
 
   @override
@@ -84,7 +70,7 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
 
   void _registerBus() {
     _accountModifiedSub = EventTaxiImpl.singleton()
-        .registerTo<AccountModifiedEvent>()
+        .registerTo<AccountModifiedEvent>(true)
         .listen((event) {
       if (event.deleted) {
         if (event.account.selected) {
@@ -120,25 +106,6 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
     }
   }
 
-  Future<void> _requestBalances(
-      BuildContext context, List<Account> accounts) async {
-    accounts.forEach((account) async {
-      if (account.address != null) {
-        BalanceGetResponse balanceGetResponse =
-            await AppService().getBalanceGetResponse(account.address, false);
-        sl
-            .get<DBHelper>()
-            .updateAccountBalance(account, balanceGetResponse.balance);
-        setState(() {
-          account.balance =
-              balanceGetResponse == null || balanceGetResponse.balance == null
-                  ? 0
-                  : balanceGetResponse.balance;
-        });
-      }
-    });
-  }
-
   Future<void> _changeAccount(Account account, StateSetter setState) async {
     // Change account
     widget.accounts.forEach((a) {
@@ -168,20 +135,52 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
-              //A container for the header
-              Container(
-                margin: EdgeInsets.only(top: 30.0, bottom: 15),
-                constraints: BoxConstraints(
-                    maxWidth: MediaQuery.of(context).size.width - 140),
-                child: AutoSizeText(
-                  CaseChange.toUpperCase(
-                      AppLocalization.of(context).accounts, context),
-                  style: AppStyles.textStyleHeader(context),
-                  maxLines: 1,
-                  stepGranularity: 0.1,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(
+                    width: 60,
+                    height: 40,
+                  ),
+                  Column(
+                    children: <Widget>[
+                      // Sheet handle
+                      Container(
+                        margin: EdgeInsets.only(top: 10),
+                        height: 5,
+                        width: MediaQuery.of(context).size.width * 0.15,
+                        decoration: BoxDecoration(
+                          color: StateContainer.of(context).curTheme.text10,
+                          borderRadius: BorderRadius.circular(100.0),
+                        ),
+                      ),
+                    ],
+                  ), // Empty SizedBox
+                  SizedBox(
+                    width: 60,
+                    height: 40,
+                  ),
+                ],
               ),
-
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  //A container for the header
+                  Container(
+                    margin: EdgeInsets.only(bottom: 15),
+                    constraints: BoxConstraints(
+                        maxWidth: MediaQuery.of(context).size.width - 140),
+                    child: AutoSizeText(
+                      CaseChange.toUpperCase(
+                          AppLocalization.of(context).accounts, context),
+                      style: AppStyles.textStyleHeader(context),
+                      maxLines: 1,
+                      stepGranularity: 0.1,
+                    ),
+                  ),
+                ],
+              ),
               //A list containing accounts
               Expanded(
                   key: expandedKey,
@@ -273,7 +272,6 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
                                         nameBuilder: AppLocalization.of(context)
                                             .defaultNewAccountName)
                                     .then((newAccount) {
-                                  _requestBalances(context, [newAccount]);
                                   StateContainer.of(context)
                                       .updateRecentlyUsedAccounts();
                                   widget.accounts.add(newAccount);
@@ -452,9 +450,11 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
                                   children: [
                                     // Main balance text
                                     TextSpan(
-                                      text: account.balance == null ? "" : NumberUtil.getRawAsUsableString(
-                                              account.balance) +
-                                          " BIS",
+                                      text: account.balance == null
+                                          ? ""
+                                          : NumberUtil.getRawAsUsableString(
+                                                  account.balance) +
+                                              " BIS",
                                       style: TextStyle(
                                           fontSize: 16.0,
                                           fontFamily: "NunitoSans",
