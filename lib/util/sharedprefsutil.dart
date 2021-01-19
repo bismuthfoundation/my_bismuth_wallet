@@ -10,7 +10,6 @@ import 'package:my_bismuth_wallet/model/available_currency.dart';
 import 'package:my_bismuth_wallet/model/available_language.dart';
 import 'package:my_bismuth_wallet/model/device_lock_timeout.dart';
 import 'package:my_bismuth_wallet/model/vault.dart';
-import 'package:my_bismuth_wallet/model/wallet.dart';
 
 /// Price conversion preference values
 enum PriceConversion { BTC, NONE, HIDDEN }
@@ -19,18 +18,14 @@ enum PriceConversion { BTC, NONE, HIDDEN }
 class SharedPrefsUtil {
   // Keys
   static const String first_launch_key = 'fbismuth_first_launch';
-  static const String seed_backed_up_key = 'fbismuth_seed_backup';
-  static const String app_uuid_key = 'fbismuth_app_uuid';
   static const String price_conversion = 'fbismuth_price_conversion_pref';
   static const String auth_method = 'fbismuth_auth_method';
   static const String cur_currency = 'fbismuth_currency_pref';
   static const String cur_language = 'fbismuth_language_pref';
   static const String cur_theme = 'fbismuth_theme_pref';
-  static const String user_representative =
-      'fbismuth_user_rep'; // For when non-opened accounts have set a representative
   static const String firstcontact_added = 'fbismuth_first_c_added';
-  static const String lock_kalium = 'fbismuth_lock_dev';
-  static const String kalium_lock_timeout = 'fbismuth_lock_timeout';
+  static const String lock = 'fbismuth_lock_dev';
+  static const String lock_timeout = 'fbismuth_lock_timeout';
   static const String has_shown_root_warning =
       'fbismuth_root_warn'; // If user has seen the root/jailbreak warning yet
   // For maximum pin attempts
@@ -91,15 +86,6 @@ class SharedPrefsUtil {
     String encrypted = prefs.get(key);
     if (encrypted == null) return null;
     return encrypter.decrypt(encrypted);
-  }
-
-  // Key-specific helpers
-  Future<void> setSeedBackedUp(bool value) async {
-    return await set(seed_backed_up_key, value);
-  }
-
-  Future<bool> getSeedBackedUp() async {
-    return await get(seed_backed_up_key, defaultValue: false);
   }
 
   Future<void> setHasSeenRootWarning() async {
@@ -164,15 +150,6 @@ class SharedPrefsUtil {
         defaultValue: AvailableLanguage.DEFAULT.index)]);
   }
 
-  Future<void> setRepresentative(String rep) async {
-    return await set(user_representative, rep);
-  }
-
-  Future<String> getRepresentative() async {
-    return await get(user_representative,
-        defaultValue: AppWallet.defaultRepresentative);
-  }
-
   Future<void> setVersionApp(String v) async {
     return await set(version_app, v);
   }
@@ -201,20 +178,20 @@ class SharedPrefsUtil {
   }
 
   Future<void> setLock(bool value) async {
-    return await set(lock_kalium, value);
+    return await set(lock, value);
   }
 
   Future<bool> getLock() async {
-    return await get(lock_kalium, defaultValue: false);
+    return await get(lock, defaultValue: false);
   }
 
   Future<void> setLockTimeout(LockTimeoutSetting setting) async {
-    return await set(kalium_lock_timeout, setting.getIndex());
+    return await set(lock_timeout, setting.getIndex());
   }
 
   Future<LockTimeoutSetting> getLockTimeout() async {
     return LockTimeoutSetting(LockTimeoutOption.values[await get(
-        kalium_lock_timeout,
+        lock_timeout,
         defaultValue: LockTimeoutOption.ONE.index)]);
   }
 
@@ -291,16 +268,13 @@ class SharedPrefsUtil {
   // For logging out
   Future<void> deleteAll() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove(seed_backed_up_key);
-    await prefs.remove(app_uuid_key);
     await prefs.remove(price_conversion);
-    await prefs.remove(user_representative);
     await prefs.remove(cur_currency);
     await prefs.remove(auth_method);
-    await prefs.remove(lock_kalium);
+    await prefs.remove(lock);
     await prefs.remove(pin_attempts);
     await prefs.remove(pin_lock_until);
-    await prefs.remove(kalium_lock_timeout);
+    await prefs.remove(lock_timeout);
     await prefs.remove(has_shown_root_warning);
     await prefs.remove(version_app);
     await prefs.remove(wallet_server);
