@@ -141,7 +141,6 @@ class _IntroBackupConfirmState extends State<IntroBackupConfirm> {
   }
 
   void _pinEnteredCallback(String pin) async {
-    await sl.get<SharedPrefsUtil>().setSeedBackedUp(true);
     await sl.get<Vault>().writePin(pin);
     PriceConversion conversion = await sl.get<SharedPrefsUtil>().getPriceConversion();
 

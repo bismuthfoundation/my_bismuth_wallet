@@ -604,7 +604,7 @@ class _SendSheetState extends State<SendSheet> {
                                         "+ " +
                                             AppLocalization.of(context).fees +
                                             ": " +
-                                            new AppService()
+                                            sl.get<AppService>()
                                                 .getFeesEstimation(
                                                     _sendOpenfieldController
                                                             .text +
@@ -1179,7 +1179,7 @@ class _SendSheetState extends State<SendSheet> {
 
   String _convertFeesToLocalCurrency() {
     String convertedAmt = NumberUtil.sanitizeNumber(
-        new AppService()
+        sl.get<AppService>()
             .getFeesEstimation(
                 _sendOpenfieldController.text + _sendCommentController.text,
                 _sendOperationController.text)
@@ -1247,8 +1247,7 @@ class _SendSheetState extends State<SendSheet> {
             .toInt();
       }
 
-      AppService appService = new AppService();
-      int estimationFeesInt = (Decimal.parse(appService.getFeesEstimation(
+      int estimationFeesInt = (Decimal.parse(sl.get<AppService>().getFeesEstimation(
           _sendOpenfieldController.text + _sendCommentController.text,
           _sendOperationController.text).toString()) *
                 Decimal.fromInt(pow(10, NumberUtil.maxDecimalDigits)))
@@ -1352,8 +1351,7 @@ class _SendSheetState extends State<SendSheet> {
       });
     } else {
       // Estimation of fees
-      AppService appService = new AppService();
-      double estimationFees = appService.getFeesEstimation(
+      double estimationFees = sl.get<AppService>().getFeesEstimation(
           _sendOpenfieldController.text + _sendCommentController.text,
           _sendOperationController.text);
 
@@ -1520,8 +1518,7 @@ class _SendSheetState extends State<SendSheet> {
           }
 
           if (!_localCurrencyMode) {
-            AppService appService = new AppService();
-            double estimationFees = appService.getFeesEstimation(
+            double estimationFees = sl.get<AppService>().getFeesEstimation(
                 _sendOpenfieldController.text + _sendCommentController.text,
                 _sendOperationController.text);
             _sendAmountController.text = StateContainer.of(context)

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:my_bismuth_wallet/model/token_ref.dart';
-import 'package:my_bismuth_wallet/service/app_service.dart';
+import 'package:my_bismuth_wallet/service/http_service.dart';
 import 'package:my_bismuth_wallet/service_locator.dart';
 import 'package:my_bismuth_wallet/styles.dart';
 import 'package:my_bismuth_wallet/app_icons.dart';
@@ -38,8 +38,7 @@ class _TokensListState extends State<TokensList> {
   }
 
   Future<List<TokenRef>> loadTokenRefList() async {
-    AppService appService = new AppService();
-    return await appService.getTokensReflist();
+    return await sl.get<HttpService>().getTokensReflist();
   }
 
   @override
