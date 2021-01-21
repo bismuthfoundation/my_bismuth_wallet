@@ -595,7 +595,7 @@ class AppLocalization {
   }
 
   String get logout {
-    return Intl.message("Delete accounts", desc: 'settings_logout', name: 'logout');
+    return Intl.message("Logout", desc: 'settings_logout', name: 'logout');
   }
 
   String get rootWarning {
