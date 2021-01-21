@@ -205,5 +205,9 @@
   "enterWalletServerSwitch": "Utiliser un serveur personnalisé",
   "enterTokenApi": "Renseignez l'url de l'API des tokens",
   "enterWalletServerInfo": "ip:port (ex: 11.22.33.44:2000)",
-  "enterTokenApiInfo": "(ex: https://bismuth.today/api/balances/)"
+  "enterTokenApiInfo": "(ex: https://bismuth.today/api/balances/)",
+  "enterExplorerUrlSwitch": "Utiliser un explorer personnalisé",
+  "enterExplorerUrl": "Renseignez l'url de l'explorer",
+  "enterExplorerUrlInfo": "(ex: https://bismuth.online/search?quicksearch=%1\n'%1' sera remplacé par l'adresse BIS)",
+  "releaseNoteHeader": "Nouveautés"
 }

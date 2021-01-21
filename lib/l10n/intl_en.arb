@@ -933,5 +933,9 @@
     "description": "",
     "type": "text",
     "placeholders": {}
-  }
+  },
+  "enterExplorerUrlSwitch": "Use a custom explorer url",
+  "enterExplorerUrl": "Enter a custom url explorer",
+  "enterExplorerUrlInfo": "(ex: https://bismuth.online/search?quicksearch=%1\n'%1' will be replaced by BIS address)",
+  "releaseNoteHeader": "What's new"
 }

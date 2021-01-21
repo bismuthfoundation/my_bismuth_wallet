@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-01-13T17:51:52.286465",
+  "@@last_modified": "2021-01-19T22:02:14.181308",
   "cancel": "Cancel",
   "@cancel": {
     "description": "dialog_cancel",
@@ -242,6 +242,24 @@
   },
   "enterTokenApi": "Enter url token api",
   "@enterTokenApi": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterExplorerUrlSwitch": "Use a custom explorer url",
+  "@enterExplorerUrlSwitch": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterExplorerUrl": "Enter a custom url explorer",
+  "@enterExplorerUrl": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterExplorerUrlInfo": "(ex: https://bismuth.online/search?quicksearch=%1\n\"%1\" will be replaced by BIS address)",
+  "@enterExplorerUrlInfo": {
     "description": "",
     "type": "text",
     "placeholders": {}
