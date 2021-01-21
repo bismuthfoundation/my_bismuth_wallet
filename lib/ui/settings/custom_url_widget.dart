@@ -179,6 +179,7 @@ class _CustomUrlState extends State<CustomUrl> {
 
   @override
   Widget build(BuildContext context) {
+     final bottom = MediaQuery.of(context).viewInsets.bottom;
     return Container(
         decoration: BoxDecoration(
           color: StateContainer.of(context).curTheme.backgroundDark,
@@ -237,7 +238,7 @@ class _CustomUrlState extends State<CustomUrl> {
               Expanded(
                   child: SingleChildScrollView(
                       child: Padding(
-                          padding: EdgeInsets.only(top: 30, bottom: 30),
+                          padding: EdgeInsets.only(top: 30, bottom: bottom + 30),
                           child: Column(children: <Widget>[
                             Stack(children: <Widget>[
                               Column(
