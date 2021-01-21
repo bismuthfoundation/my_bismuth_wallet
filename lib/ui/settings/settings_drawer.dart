@@ -995,7 +995,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                       });
                       _securityController.forward();
                     }),
-                    Divider(
+                    /*Divider(
                       height: 2,
                       color: StateContainer.of(context).curTheme.text15,
                     ),
@@ -1031,7 +1031,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                           });
                         });
                       });
-                    }),
+                    }),*/
                     Divider(
                       height: 2,
                       color: StateContainer.of(context).curTheme.text15,
