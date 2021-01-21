@@ -604,7 +604,8 @@ class _SendSheetState extends State<SendSheet> {
                                         "+ " +
                                             AppLocalization.of(context).fees +
                                             ": " +
-                                            sl.get<AppService>()
+                                            sl
+                                                .get<AppService>()
                                                 .getFeesEstimation(
                                                     _sendOpenfieldController
                                                             .text +
@@ -791,30 +792,26 @@ class _SendSheetState extends State<SendSheet> {
                                           ),
                                         ),
                                         Switch(
-                                          value: isTokenToSendSwitched,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              isTokenToSendSwitched = value;
-                                              _sendOpenfieldController =
-                                                  TextEditingController();
-                                              _sendOperationController =
-                                                  TextEditingController();
-                                              _sendTokenQuantityController =
-                                                  TextEditingController();
-                                              _sendCommentController =
-                                                  TextEditingController();
-                                              _selectedTokenName = "";
-                                            });
-                                          },
-                                          activeTrackColor:
-                                              StateContainer.of(context)
-                                                  .curTheme
-                                                  .backgroundDarkest,
-                                          activeColor:
-                                              StateContainer.of(context)
-                                                  .curTheme
-                                                  .background40,
-                                        ),
+                                            value: isTokenToSendSwitched,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                isTokenToSendSwitched = value;
+                                                _sendOpenfieldController =
+                                                    TextEditingController();
+                                                _sendOperationController =
+                                                    TextEditingController();
+                                                _sendTokenQuantityController =
+                                                    TextEditingController();
+                                                _sendCommentController =
+                                                    TextEditingController();
+                                                _selectedTokenName = "";
+                                              });
+                                            },
+                                            activeTrackColor:
+                                                StateContainer.of(context)
+                                                    .curTheme
+                                                    .backgroundDarkest,
+                                            activeColor: Colors.green),
                                       ],
                                     )),
                                     isTokenToSendSwitched == false
@@ -1179,7 +1176,8 @@ class _SendSheetState extends State<SendSheet> {
 
   String _convertFeesToLocalCurrency() {
     String convertedAmt = NumberUtil.sanitizeNumber(
-        sl.get<AppService>()
+        sl
+            .get<AppService>()
             .getFeesEstimation(
                 _sendOpenfieldController.text + _sendCommentController.text,
                 _sendOperationController.text)
@@ -1247,11 +1245,15 @@ class _SendSheetState extends State<SendSheet> {
             .toInt();
       }
 
-      int estimationFeesInt = (Decimal.parse(sl.get<AppService>().getFeesEstimation(
-          _sendOpenfieldController.text + _sendCommentController.text,
-          _sendOperationController.text).toString()) *
-                Decimal.fromInt(pow(10, NumberUtil.maxDecimalDigits)))
-            .toInt();
+      int estimationFeesInt = (Decimal.parse(sl
+                  .get<AppService>()
+                  .getFeesEstimation(
+                      _sendOpenfieldController.text +
+                          _sendCommentController.text,
+                      _sendOperationController.text)
+                  .toString()) *
+              Decimal.fromInt(pow(10, NumberUtil.maxDecimalDigits)))
+          .toInt();
 
       return textFieldInt + estimationFeesInt == balanceInt;
     } catch (e) {

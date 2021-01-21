@@ -289,7 +289,7 @@ class _AppHomePageState extends State<AppHomePage>
         _startAnimation();
         StateContainer.of(context).updateWallet(account: event.account);
 
-                StateContainer.of(context).wallet.loading = false;
+        StateContainer.of(context).wallet.loading = false;
         StateContainer.of(context).wallet.historyLoading = false;
       });
       paintQrCode(address: event.account.address);
@@ -787,8 +787,8 @@ class _AppHomePageState extends State<AppHomePage>
           "- Update link to display privacy policy\n- New icons\n- Settings drawer : change order\n- Custom url configuration\n- Fix error when you don't enter a pincode\n- Add setting explorer url",
           CaseChange.toUpperCase(AppLocalization.of(context).ok, context),
           () async {
-            await sl.get<SharedPrefsUtil>().setVersionApp(packageInfo.version);
-          });
+        await sl.get<SharedPrefsUtil>().setVersionApp(packageInfo.version);
+      });
     });
   }
 
@@ -911,12 +911,19 @@ class _AppHomePageState extends State<AppHomePage>
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text(
-                                text,
-                                textAlign: TextAlign.start,
-                                style:
-                                    AppStyles.textStyleTransactionType(context),
-                              ),
+                              item.isAliasRegister()
+                                  ? Text(
+                                      "Alias",
+                                      textAlign: TextAlign.start,
+                                      style: AppStyles.textStyleTransactionType(
+                                          context),
+                                    )
+                                  : Text(
+                                      text,
+                                      textAlign: TextAlign.start,
+                                      style: AppStyles.textStyleTransactionType(
+                                          context),
+                                    ),
                               Text(
                                 DateFormat.yMd(Localizations.localeOf(context)
                                         .languageCode)
@@ -1013,7 +1020,26 @@ class _AppHomePageState extends State<AppHomePage>
                                           ),
                                         ),
                                       )
-                                    : SizedBox(),
+                                    : item.isAliasRegister()
+                                        ? Container(
+                                            child: RichText(
+                                              textAlign: TextAlign.start,
+                                              text: TextSpan(
+                                                text: '',
+                                                children: [
+                                                  TextSpan(
+                                                    text: item.openfield
+                                                        .replaceAll(
+                                                            "alias=", ""),
+                                                    style: AppStyles
+                                                        .textStyleTransactionTypeBlue(
+                                                            context),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          )
+                                        : SizedBox(),
                                 /*Container(
                                   width: 26.0,
                                   height: 26.0,
