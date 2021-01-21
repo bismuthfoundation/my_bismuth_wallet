@@ -213,6 +213,16 @@ class AppStyles {
               [Colors.green[200], Colors.green[800]]));
   }
 
+  static TextStyle textStyleTransactionTypeBlue(BuildContext context) {
+    return TextStyle(
+        fontFamily: "Roboto",
+        fontSize: AppFontSizes.small,
+        fontWeight: FontWeight.w600,
+        foreground: Paint()
+          ..shader = ui.Gradient.linear(Offset.zero, Offset(0, 60),
+              [Colors.blue[200], Colors.blue[800]]));
+  }
+
   static TextStyle textStyleTransactionTypeRed(BuildContext context) {
     return TextStyle(
         fontFamily: "Roboto",

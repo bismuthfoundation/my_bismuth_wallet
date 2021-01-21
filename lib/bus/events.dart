@@ -13,3 +13,4 @@ export 'transaction_send_event.dart';
 export 'transactions_list_event.dart';
 export 'wstatus_get_event.dart';
 export 'conn_status_event.dart';
+export 'alias_list_event.dart';

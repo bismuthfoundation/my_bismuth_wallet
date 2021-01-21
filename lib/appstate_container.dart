@@ -394,6 +394,8 @@ class StateContainerState extends State<StateContainer> {
         await sl.get<HttpService>().getSimplePrice(curCurrency.getIso4217Code());
 
         sl.get<AppService>().getAddressTxsResponse(wallet.address, count);
+
+        sl.get<AppService>().getAlias(wallet.address);
         
         //sl.get<AppService>().getAddressTxsInMempoolResponse(wallet.address);
 
