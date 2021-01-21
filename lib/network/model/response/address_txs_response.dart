@@ -56,6 +56,8 @@ class AddressTxsResponseResult {
   String hash;
 
   static const String TOKEN_TRANSFER = "token:transfer";
+  static const String ALIAS_REGISTER = "alias:register";
+  
 
   String getShortString() {
     if (type == BlockTypes.RECEIVE) {
@@ -86,6 +88,14 @@ class AddressTxsResponseResult {
         ? isTokenTransfer = true
         : isTokenTransfer = false;
     return isTokenTransfer;
+  }
+
+  bool isAliasRegister() {
+    bool isAliasRegister;
+    operation == ALIAS_REGISTER
+        ? isAliasRegister = true
+        : isAliasRegister = false;
+    return isAliasRegister;
   }
 
   BisToken getBisToken() {

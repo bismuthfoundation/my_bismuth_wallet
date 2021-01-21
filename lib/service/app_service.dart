@@ -6,6 +6,7 @@ import 'package:my_bismuth_wallet/bus/events.dart';
 import 'package:my_bismuth_wallet/model/db/account.dart';
 import 'package:my_bismuth_wallet/network/model/request/send_tx_request.dart';
 import 'package:my_bismuth_wallet/network/model/response/addlistlim_response.dart';
+import 'package:my_bismuth_wallet/network/model/response/alias_get_response.dart';
 import 'package:my_bismuth_wallet/network/model/response/balance_get_response.dart';
 import 'package:my_bismuth_wallet/network/model/response/mpinsert_response.dart';
 import 'package:my_bismuth_wallet/network/model/response/servers_wallet_legacy.dart';
@@ -27,6 +28,7 @@ class AppService {
 
   // Lock instance for synchronization
   Lock _lock;
+  String allMessages = "";
 
   AppService() {
     _isConnected = false;
@@ -97,7 +99,7 @@ class AppService {
             server: serverWalletLegacyResponse.ip +
                 ":" +
                 serverWalletLegacyResponse.port.toString()));
-        _socket.listen(_onMessageReceived,
+       _socket.listen(_onMessageReceived,
             onDone: connectionClosed, onError: connectionClosedError);
       }
     } catch (e) {
@@ -111,6 +113,7 @@ class AppService {
 
   // Send message
   void _send(String message) {
+    allMessages = "";
     bool reset = false;
     try {
       if (_socket != null && _isConnected) {
@@ -166,12 +169,12 @@ class AppService {
       return;
     }
     await _lock.synchronized(() async {
-      String allMessages = "";
+      
       _isConnected = true;
       _isConnecting = false;
       allMessages += new String.fromCharCodes(data).trim();
-      //print("response : " + allMessages);
-      //print("response length : " + allMessages.length.toString());
+      print("response : " + allMessages);
+      print("response length : " + allMessages.length.toString());
       String message = "";
       int lengthMessage = 0;
       if (allMessages != null && allMessages.length >= 10) {
@@ -207,13 +210,20 @@ class AppService {
                   //print("fire BalanceGetEvent");
                   EventTaxiImpl.singleton()
                       .fire(BalanceGetEvent(response: balanceGetResponse));
+                } else if (message.substring(0, 3) == '[["' &&
+                    message.substring(message.length - 3, message.length) ==
+                        '"]]') {
+                  List alias = aliasGetResponseFromJson(message);
+                  //print("fire AliasListEvent");
+                  EventTaxiImpl.singleton()
+                      .fire(AliasListEvent(response: alias));
                 } else if (message.contains("[[") && message.contains("]]") ||
                     message == "[]") {
                   List txs = addlistlimResponseFromJson(message);
                   //print("fire TransactionsListEvent");
                   EventTaxiImpl.singleton()
                       .fire(TransactionsListEvent(response: txs));
-                } else if (message.substring(0, 1) == "[" &&
+                }  else if (message.substring(0, 1) == "[" &&
                     message.substring(message.length - 1, message.length) ==
                         "]") {
                   //print("fire TransactionSendEvent");
@@ -289,6 +299,21 @@ class AppService {
     try {
       //Send the request
       String method = '"mpgetfor"';
+      String param1 = '"' + address + '"';
+
+      String sendMessage =
+          getLengthBuffer(method) + method + getLengthBuffer(param1) + param1;
+      _send(sendMessage);
+    } catch (e) {
+      //print("pb socket" + e.toString());
+    }
+  }
+
+  void getAlias(String address) {
+    //print("getAlias");
+    try {
+      //Send the request
+      String method = '"aliasget"';
       String param1 = '"' + address + '"';
 
       String sendMessage =
