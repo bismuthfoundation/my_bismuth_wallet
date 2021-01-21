@@ -624,21 +624,22 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
       if (widget.comment.length > 0) {
         openfield += ':{"Message":"' + widget.comment + '"}';
       }
+      String seed = await StateContainer.of(context).getSeed();
+      int index = StateContainer.of(context).selectedAccount.index;
+      String publicKeyBase64 =
+          await AppUtil().seedToPublicKeyBase64(seed, index);
+      String privateKey = await AppUtil().seedToPrivateKey(seed, index);
       sl.get<AppService>().sendTx(
           StateContainer.of(context).wallet.address,
           widget.amountRaw,
           destinationAltered,
           openfield,
           widget.operation,
-          await AppUtil().seedToPublicKeyBase64(
-              await StateContainer.of(context).getSeed(),
-              StateContainer.of(context).selectedAccount.index),
-          await AppUtil().seedToPrivateKey(
-              await StateContainer.of(context).getSeed(),
-              StateContainer.of(context).selectedAccount.index));
+          publicKeyBase64,
+          privateKey);
     } catch (e) {
       // Send failed
-       
+
       EventTaxiImpl.singleton()
           .fire(TransactionSendEvent(response: e.toString()));
     }
