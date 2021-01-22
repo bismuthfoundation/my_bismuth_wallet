@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:hex/hex.dart';
 import 'package:logger/logger.dart';
 import 'package:my_bismuth_wallet/model/wallet.dart';
@@ -131,13 +130,13 @@ class StateContainerState extends State<StateContainer> {
   // Register RX event listeners
   void _registerBus() {
     _balanceGetEventSub =
-        EventTaxiImpl.singleton().registerTo<BalanceGetEvent>(true).listen((event) {
+        EventTaxiImpl.singleton().registerTo<BalanceGetEvent>().listen((event) {
       //print("listen BalanceGetEvent");
       handleAddressResponse(event.response);
     });
 
     _transactionsListEventSub = EventTaxiImpl.singleton()
-        .registerTo<TransactionsListEvent>(true)
+        .registerTo<TransactionsListEvent>()
         .listen((event) {
       //print("listen TransactionsListEvent");
       AddressTxsResponse addressTxsResponse = new AddressTxsResponse();
@@ -183,7 +182,7 @@ class StateContainerState extends State<StateContainer> {
     });
 
     _priceEventSub =
-        EventTaxiImpl.singleton().registerTo<PriceEvent>(true).listen((event) {
+        EventTaxiImpl.singleton().registerTo<PriceEvent>().listen((event) {
       // PriceResponse's get pushed periodically, it wasn't a request we made so don't pop the queue
       setState(() {
         wallet.btcPrice = event.response.btcPrice.toString();
@@ -193,7 +192,7 @@ class StateContainerState extends State<StateContainer> {
     });
 
     _connStatusSub =
-        EventTaxiImpl.singleton().registerTo<ConnStatusEvent>(true).listen((event) {
+        EventTaxiImpl.singleton().registerTo<ConnStatusEvent>().listen((event) {
       if (event.status == ConnectionStatus.CONNECTED) {
         requestUpdate();
       } else if (event.status == ConnectionStatus.DISCONNECTED &&
@@ -204,7 +203,7 @@ class StateContainerState extends State<StateContainer> {
 
     // Account has been deleted or name changed
     _accountModifiedSub = EventTaxiImpl.singleton()
-        .registerTo<AccountModifiedEvent>(true)
+        .registerTo<AccountModifiedEvent>()
         .listen((event) {
       if (!event.deleted) {
         if (event.account.index == selectedAccount.index) {
@@ -391,12 +390,14 @@ class StateContainerState extends State<StateContainer> {
       try {
         sl.get<AppService>().getBalanceGetResponse(selectedAccount);
 
-        await sl.get<HttpService>().getSimplePrice(curCurrency.getIso4217Code());
+        await sl
+            .get<HttpService>()
+            .getSimplePrice(curCurrency.getIso4217Code());
 
         sl.get<AppService>().getAddressTxsResponse(wallet.address, count);
 
-        sl.get<AppService>().getAlias(wallet.address);
-        
+        //sl.get<AppService>().getAlias(wallet.address);
+
         //sl.get<AppService>().getAddressTxsInMempoolResponse(wallet.address);
 
         AddressTxsResponse addressTxsResponse = new AddressTxsResponse();

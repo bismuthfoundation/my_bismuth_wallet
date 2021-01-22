@@ -70,7 +70,7 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
 
   void _registerBus() {
     _accountModifiedSub = EventTaxiImpl.singleton()
-        .registerTo<AccountModifiedEvent>(true)
+        .registerTo<AccountModifiedEvent>()
         .listen((event) {
       if (event.deleted) {
         if (event.account.selected) {

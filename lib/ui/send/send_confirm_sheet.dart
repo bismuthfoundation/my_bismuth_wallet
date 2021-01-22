@@ -63,7 +63,7 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
 
   void _registerBus() {
     _authSub = EventTaxiImpl.singleton()
-        .registerTo<AuthenticatedEvent>(true)
+        .registerTo<AuthenticatedEvent>()
         .listen((event) {
       if (event.authType == AUTH_EVENT_TYPE.SEND) {
         _doSend();
@@ -71,7 +71,7 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
     });
 
     _sendTxSub = EventTaxiImpl.singleton()
-        .registerTo<TransactionSendEvent>(true)
+        .registerTo<TransactionSendEvent>()
         .listen((event) {
       //print("listen TransactionSendEvent");
       //print("result : " + event.response);
@@ -629,17 +629,21 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
       String publicKeyBase64 =
           await AppUtil().seedToPublicKeyBase64(seed, index);
       String privateKey = await AppUtil().seedToPrivateKey(seed, index);
-      sl.get<AppService>().sendTx(
-          StateContainer.of(context).wallet.address,
-          widget.amountRaw,
-          destinationAltered,
-          openfield,
-          widget.operation,
-          publicKeyBase64,
-          privateKey);
+      //print("send tx");
+      if (sl.get<AppService>().sendTx(
+              StateContainer.of(context).wallet.address,
+              widget.amountRaw,
+              destinationAltered,
+              openfield,
+              widget.operation,
+              publicKeyBase64,
+              privateKey) ==
+          false) {
+        EventTaxiImpl.singleton().fire(TransactionSendEvent(response: "The transaction was not successful"));
+      }
     } catch (e) {
       // Send failed
-
+      //print("send failed" + e.toString());
       EventTaxiImpl.singleton()
           .fire(TransactionSendEvent(response: e.toString()));
     }
@@ -658,8 +662,10 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
             .replaceAll("%1", amount),
       );
     }));
+    //print("authenticateWithPin - auth : " + auth.toString());
     if (auth != null && auth) {
       await Future.delayed(Duration(milliseconds: 200));
+      //print("authenticateWithPin - fire AuthenticatedEvent");
       EventTaxiImpl.singleton().fire(AuthenticatedEvent(AUTH_EVENT_TYPE.SEND));
     }
   }

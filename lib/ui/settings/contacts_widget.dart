@@ -66,7 +66,7 @@ class _ContactsListState extends State<ContactsList> {
   void _registerBus() {
     // Contact added bus event
     _contactAddedSub = EventTaxiImpl.singleton()
-        .registerTo<ContactAddedEvent>(true)
+        .registerTo<ContactAddedEvent>()
         .listen((event) {
       setState(() {
         _contacts.add(event.contact);
@@ -79,7 +79,7 @@ class _ContactsListState extends State<ContactsList> {
     });
     // Contact removed bus event
     _contactRemovedSub = EventTaxiImpl.singleton()
-        .registerTo<ContactRemovedEvent>(true)
+        .registerTo<ContactRemovedEvent>()
         .listen((event) {
       setState(() {
         _contacts.remove(event.contact);

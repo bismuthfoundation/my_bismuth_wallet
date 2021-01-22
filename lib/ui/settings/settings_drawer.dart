@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:event_taxi/event_taxi.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:fluttericon/iconic_icons.dart';
 import 'package:fluttericon/typicons_icons.dart';
@@ -31,13 +30,11 @@ import 'package:my_bismuth_wallet/model/db/appdb.dart';
 import 'package:my_bismuth_wallet/ui/settings/backupseed_sheet.dart';
 import 'package:my_bismuth_wallet/ui/settings/settings_list_item.dart';
 import 'package:my_bismuth_wallet/ui/settings/contacts_widget.dart';
-import 'package:my_bismuth_wallet/ui/widgets/dialog.dart';
 import 'package:my_bismuth_wallet/ui/widgets/security.dart';
 import 'package:my_bismuth_wallet/ui/util/ui_util.dart';
 import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
 import 'package:my_bismuth_wallet/util/biometrics.dart';
 import 'package:my_bismuth_wallet/util/hapticutil.dart';
-import 'package:my_bismuth_wallet/util/caseconverter.dart';
 
 import '../../appstate_container.dart';
 import '../../util/sharedprefsutil.dart';

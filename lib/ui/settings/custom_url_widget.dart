@@ -165,7 +165,7 @@ class _CustomUrlState extends State<CustomUrl> {
 
   void _registerBus() {
     _connStatusEventSub = EventTaxiImpl.singleton()
-        .registerTo<ConnStatusEvent>(true)
+        .registerTo<ConnStatusEvent>()
         .listen((event) {
       setState(() {
         if (event.status == ConnectionStatus.CONNECTED) {

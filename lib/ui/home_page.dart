@@ -254,7 +254,7 @@ class _AppHomePageState extends State<AppHomePage>
 
   void _registerBus() {
     _historySub = EventTaxiImpl.singleton()
-        .registerTo<HistoryHomeEvent>(true)
+        .registerTo<HistoryHomeEvent>()
         .listen((event) {
       setState(() {
         _isRefreshing = false;
@@ -265,13 +265,13 @@ class _AppHomePageState extends State<AppHomePage>
       }
     });
     _contactModifiedSub = EventTaxiImpl.singleton()
-        .registerTo<ContactModifiedEvent>(true)
+        .registerTo<ContactModifiedEvent>()
         .listen((event) {
       _updateContacts();
     });
     // Hackish event to block auto-lock functionality
     _disableLockSub = EventTaxiImpl.singleton()
-        .registerTo<DisableLockTimeoutEvent>(true)
+        .registerTo<DisableLockTimeoutEvent>()
         .listen((event) {
       if (event.disable) {
         cancelLockEvent();
@@ -280,7 +280,7 @@ class _AppHomePageState extends State<AppHomePage>
     });
     // User changed account
     _switchAccountSub = EventTaxiImpl.singleton()
-        .registerTo<AccountChangedEvent>(true)
+        .registerTo<AccountChangedEvent>()
         .listen((event) {
       setState(() {
         StateContainer.of(context).wallet.loading = true;

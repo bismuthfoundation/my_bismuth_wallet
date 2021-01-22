@@ -50,8 +50,8 @@ class AppService {
       reconnectStream.cancel();
     }
     _isInRetryState = true;
-    log.d("Retrying connection in 1 second...");
-    Future<dynamic> delayed = new Future.delayed(new Duration(seconds: 1));
+    log.d("Retrying connection...");
+    Future<dynamic> delayed = new Future.delayed(new Duration(milliseconds: 100));
     delayed.then((_) {
       return true;
     });
@@ -99,7 +99,7 @@ class AppService {
             server: serverWalletLegacyResponse.ip +
                 ":" +
                 serverWalletLegacyResponse.port.toString()));
-       _socket.listen(_onMessageReceived,
+        _socket.listen(_onMessageReceived,
             onDone: connectionClosed, onError: connectionClosedError);
       }
     } catch (e) {
@@ -112,12 +112,14 @@ class AppService {
   }
 
   // Send message
-  void _send(String message) {
+  bool _send(String message) {
     allMessages = "";
+    bool writeOk = false;
     bool reset = false;
     try {
       if (_socket != null && _isConnected) {
         _socket.write(message);
+        writeOk = true;
       } else {
         reset = true; // Re-establish connection
       }
@@ -130,6 +132,7 @@ class AppService {
         }
       }
     }
+    return writeOk;
   }
 
   // Connection closed (normally)
@@ -169,12 +172,11 @@ class AppService {
       return;
     }
     await _lock.synchronized(() async {
-      
       _isConnected = true;
       _isConnecting = false;
       allMessages += new String.fromCharCodes(data).trim();
-      print("response : " + allMessages);
-      print("response length : " + allMessages.length.toString());
+      //print("response : " + allMessages);
+      //print("response length : " + allMessages.length.toString());
       String message = "";
       int lengthMessage = 0;
       if (allMessages != null && allMessages.length >= 10) {
@@ -210,7 +212,8 @@ class AppService {
                   //print("fire BalanceGetEvent");
                   EventTaxiImpl.singleton()
                       .fire(BalanceGetEvent(response: balanceGetResponse));
-                } else if (message.substring(0, 3) == '[["' &&
+                } else if (message.length > 2 &&
+                    message.substring(0, 3) == '[["' &&
                     message.substring(message.length - 3, message.length) ==
                         '"]]') {
                   List alias = aliasGetResponseFromJson(message);
@@ -223,9 +226,12 @@ class AppService {
                   //print("fire TransactionsListEvent");
                   EventTaxiImpl.singleton()
                       .fire(TransactionsListEvent(response: txs));
-                }  else if (message.substring(0, 1) == "[" &&
+                } else if (message.length > 1 &&
+                    message.substring(0, 1) == "[" &&
                     message.substring(message.length - 1, message.length) ==
                         "]") {
+                  //print("allMessages : " + allMessages);
+                  //print("transactionSendEvent message : " + message);
                   //print("fire TransactionSendEvent");
                   List<String> sendTxResponse =
                       mpinsertResponseFromJson(message);
@@ -275,7 +281,7 @@ class AppService {
   }
 
   void getAddressTxsResponse(String address, int limit) {
-    print("getAddressTxsResponse");
+    //print("getAddressTxsResponse");
     try {
       //Send the request
       String method = '"addlistlim"';
@@ -324,7 +330,7 @@ class AppService {
     }
   }
 
-  void sendTx(String address, String amount, String destination,
+  bool sendTx(String address, String amount, String destination,
       String openfield, String operation, String publicKey, String privateKey) {
     SendTxRequest sendTxRequest = new SendTxRequest();
     Tx tx = new Tx();
@@ -368,8 +374,17 @@ class AppService {
       String param = sendTxRequest.buildCommand();
       String sendMessage =
           getLengthBuffer(method) + method + getLengthBuffer(param) + param;
-      //print("message: " + sendMessage);
-      _send(sendMessage);
+      //print("sendMessage: " + sendMessage);
+      //print("_send n° 1");
+      if (_send(sendMessage) == false) {
+        // Try again once
+        Future.delayed(const Duration(seconds: 2), () {
+          //print("_send n° 2");
+          return _send(sendMessage);
+        });
+      } else {
+        return true;
+      }
     } catch (e) {
       //print("pb socket" + e.toString());
     }

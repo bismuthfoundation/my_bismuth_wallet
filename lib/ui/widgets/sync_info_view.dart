@@ -27,7 +27,7 @@ class _SyncInfoViewState extends State<SyncInfoView> {
 
   void _registerBus() {
     _connStatusEventSub =
-        EventTaxiImpl.singleton().registerTo<ConnStatusEvent>(true).listen((event) {
+        EventTaxiImpl.singleton().registerTo<ConnStatusEvent>().listen((event) {
       setState(() {
         serverName = event.server;
         if (event.status == ConnectionStatus.CONNECTED) {
