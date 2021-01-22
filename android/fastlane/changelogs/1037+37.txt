@@ -1,0 +1,20 @@
+Version 1.0.37+37 available
+
+- Update link to display privacy policy (since 1.0.30)
+- New icons (since 1.0.30)
+- Settings drawer : change order (since 1.0.30)
+- Custom url configuration (since 1.0.30)
+- Setting explorer url (since 1.0.34)
+- Display server ip:port on the home page (since 1.0.34)
+- Redesign of the backoffice (since 1.0.33 - fix stability issues again and again 1.0.37)
+- Change color of switch button in send tx page (1.0.35)
+- Fix fields displaying in setting explorer url page (1.0.35) 
+- Remove "logout" menu (1.0.36)
+- Minor changes (1.0.37)
+
+android: 
+- wetransfer: https://we.tl/t-xQQxCKPuYw
+ios: 
+- available on test flight
+
+don't hesitate to give your feedback and how it works on your device in real situation
