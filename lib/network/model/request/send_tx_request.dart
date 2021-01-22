@@ -63,21 +63,21 @@ class SendTxRequest {
   }
 
   factory SendTxRequest.fromJson(Map<String, dynamic> json) => SendTxRequest(
-        id: json["id"],
-        tx: Tx.fromJson(json["tx"]),
-        buffer: json["buffer"],
-        signature: json["signature"],
-        publicKey: json["public_key"],
-        websocketCommand: json["websocket_command"],
+        id: json['id'],
+        tx: Tx.fromJson(json['tx']),
+        buffer: json['buffer'],
+        signature: json['signature'],
+        publicKey: json['public_key'],
+        websocketCommand: json['websocket_command'],
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "tx": tx.toJson(),
-        "buffer": buffer,
-        "signature": signature,
-        "public_key": publicKey,
-        "websocket_command": websocketCommand,
+        'id': id,
+        'tx': tx.toJson(),
+        'buffer': buffer,
+        'signature': signature,
+        'public_key': publicKey,
+        'websocket_command': websocketCommand,
       };
 
   String buildCommand() {
@@ -112,21 +112,21 @@ class Tx {
   String openfield;
 
   factory Tx.fromJson(Map<String, dynamic> json) => Tx(
-        timestamp: json["timestamp"],
-        address: json["address"],
-        recipient: json["recipient"],
-        amount: json["amount"],
-        operation: json["operation"],
-        openfield: json["openfield"],
+        timestamp: json['timestamp'],
+        address: json['address'],
+        recipient: json['recipient'],
+        amount: json['amount'],
+        operation: json['operation'],
+        openfield: json['openfield'],
       );
 
   Map<String, dynamic> toJson() => {
-        "timestamp": timestamp,
-        "address": address,
-        "recipient": recipient,
-        "amount": amount,
-        "operation": operation,
-        "openfield": openfield,
+        'timestamp': timestamp,
+        'address': address,
+        'recipient': recipient,
+        'amount': amount,
+        'operation': operation,
+        'openfield': openfield,
       };
 
   String buildBufferValue() {

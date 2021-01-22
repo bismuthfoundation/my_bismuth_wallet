@@ -27,20 +27,20 @@ class WStatusGetResponse {
     int co;
 
     factory WStatusGetResponse.fromJson(Map<String, dynamic> json) => WStatusGetResponse(
-        version: json["version"],
-        clients: json["clients"],
-        maxClients: json["max_clients"],
-        of: json["of"],
-        fd: json["fd"],
-        co: json["co"],
+        version: json['version'],
+        clients: json['clients'],
+        maxClients: json['max_clients'],
+        of: json['of'],
+        fd: json['fd'],
+        co: json['co'],
     );
 
     Map<String, dynamic> toJson() => {
-        "version": version,
-        "clients": clients,
-        "max_clients": maxClients,
-        "of": of,
-        "fd": fd,
-        "co": co,
+        'version': version,
+        'clients': clients,
+        'max_clients': maxClients,
+        'of': of,
+        'fd': fd,
+        'co': co,
     };
 }

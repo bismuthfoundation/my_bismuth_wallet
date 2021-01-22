@@ -16,11 +16,11 @@ class SimplePriceCzkResponse {
     Bismuth bismuth;
 
     factory SimplePriceCzkResponse.fromJson(Map<String, dynamic> json) => SimplePriceCzkResponse(
-        bismuth: Bismuth.fromJson(json["bismuth"]),
+        bismuth: Bismuth.fromJson(json['bismuth']),
     );
 
     Map<String, dynamic> toJson() => {
-        "bismuth": bismuth.toJson(),
+        'bismuth': bismuth.toJson(),
     };
 }
 

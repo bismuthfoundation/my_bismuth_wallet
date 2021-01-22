@@ -283,8 +283,8 @@ class _AddContactSheetState extends State<AddContactSheet> {
                     fadeSuffixOnCondition: true,
                     suffixShowFirstCondition: _showPasteButton,
                     onChanged: (text) {
-                      Address address = Address(text);
-                      /*if (address.isValid()) {
+                      /*Address address = Address(text);
+                      if (address.isValid()) {
                             setState(() {
                               _addressValid = true;
                               _showPasteButton = true;

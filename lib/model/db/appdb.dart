@@ -54,9 +54,9 @@ class DBHelper {
     List<Contact> contacts = new List();
     for (int i = 0; i < list.length; i++) {
       contacts.add(new Contact(
-        id: list[i]["id"],
-        name: list[i]["name"],
-        address: list[i]["address"],
+        id: list[i]['id'],
+        name: list[i]['name'],
+        address: list[i]['address'],
       ));
     }
     return contacts;
@@ -69,9 +69,9 @@ class DBHelper {
     List<Contact> contacts = new List();
     for (int i = 0; i < list.length; i++) {
       contacts.add(new Contact(
-        id: list[i]["id"],
-        name: list[i]["name"],
-        address: list[i]["address"],
+        id: list[i]['id'],
+        name: list[i]['name'],
+        address: list[i]['address'],
       ));
     }
     return contacts;
@@ -83,9 +83,9 @@ class DBHelper {
         .rawQuery('SELECT * FROM Contacts WHERE address like \'%$address\'');
     if (list.length > 0) {
       return Contact(
-        id: list[0]["id"],
-        name: list[0]["name"],
-        address: list[0]["address"],
+        id: list[0]['id'],
+        name: list[0]['name'],
+        address: list[0]['address'],
       );
     }
     return null;
@@ -97,9 +97,9 @@ class DBHelper {
         .rawQuery('SELECT * FROM Contacts WHERE name = ?', [name]);
     if (list.length > 0) {
       return Contact(
-        id: list[0]["id"],
-        name: list[0]["name"],
-        address: list[0]["address"],
+        id: list[0]['id'],
+        name: list[0]['name'],
+        address: list[0]['address'],
       );
     }
     return null;
@@ -152,12 +152,12 @@ class DBHelper {
     List<Account> accounts = new List();
     for (int i = 0; i < list.length; i++) {
       accounts.add(Account(
-          id: list[i]["id"],
-          name: list[i]["name"],
-          index: list[i]["acct_index"],
-          lastAccess: list[i]["last_accessed"],
-          selected: list[i]["selected"] == 1 ? true : false,
-          balance: list[i]["balance"]));
+          id: list[i]['id'],
+          name: list[i]['name'],
+          index: list[i]['acct_index'],
+          lastAccess: list[i]['last_accessed'],
+          selected: list[i]['selected'] == 1 ? true : false,
+          balance: list[i]['balance']));
     }
     accounts.forEach((a) {
       a.address = AppUtil().seedToAddress(seed, a.index);
@@ -174,12 +174,12 @@ class DBHelper {
     List<Account> accounts = new List();
     for (int i = 0; i < list.length; i++) {
       accounts.add(Account(
-          id: list[i]["id"],
-          name: list[i]["name"],
-          index: list[i]["acct_index"],
-          lastAccess: list[i]["last_accessed"],
-          selected: list[i]["selected"] == 1 ? true : false,
-          balance: list[i]["balance"]));
+          id: list[i]['id'],
+          name: list[i]['name'],
+          index: list[i]['acct_index'],
+          lastAccess: list[i]['last_accessed'],
+          selected: list[i]['selected'] == 1 ? true : false,
+          balance: list[i]['balance']));
     }
     accounts.forEach((a) async {
       a.address = AppUtil().seedToAddress(seed, a.index);
@@ -196,7 +196,7 @@ class DBHelper {
       List<Map> accounts = await txn.rawQuery(
           'SELECT * from Accounts WHERE acct_index > 0 ORDER BY acct_index ASC');
       for (int i = 0; i < accounts.length; i++) {
-        curIndex = accounts[i]["acct_index"];
+        curIndex = accounts[i]['acct_index'];
         if (curIndex != nextIndex) {
           break;
         }
@@ -260,7 +260,7 @@ class DBHelper {
           .rawQuery('SELECT max(last_accessed) as last_access FROM Accounts');
       await txn.rawUpdate(
           'UPDATE Accounts set selected = ?, last_accessed = ? where acct_index = ?',
-          [1, list[0]["last_access"] + 1, account.index]);
+          [1, list[0]['last_access'] + 1, account.index]);
     });
   }
 
@@ -279,13 +279,13 @@ class DBHelper {
       return null;
     }
     Account account = Account(
-        id: list[0]["id"],
-        name: list[0]["name"],
-        index: list[0]["acct_index"],
+        id: list[0]['id'],
+        name: list[0]['name'],
+        index: list[0]['acct_index'],
         selected: true,
-        lastAccess: list[0]["last_accessed"],
-        balance: list[0]["balance"],
-        address: AppUtil().seedToAddress(seed, list[0]["acct_index"]));
+        lastAccess: list[0]['last_accessed'],
+        balance: list[0]['balance'],
+        address: AppUtil().seedToAddress(seed, list[0]['acct_index']));
     return account;
   }
 
@@ -296,15 +296,15 @@ class DBHelper {
     if (list.length == 0) {
       return null;
     }
-    String address = AppUtil().seedToAddress(seed, list[0]["acct_index"]);
+    String address = AppUtil().seedToAddress(seed, list[0]['acct_index']);
 
     Account account = Account(
-        id: list[0]["id"],
-        name: list[0]["name"],
-        index: list[0]["acct_index"],
+        id: list[0]['id'],
+        name: list[0]['name'],
+        index: list[0]['acct_index'],
         selected: true,
-        lastAccess: list[0]["last_accessed"],
-        balance: list[0]["balance"],
+        lastAccess: list[0]['last_accessed'],
+        balance: list[0]['balance'],
         address: address);
     return account;
   }

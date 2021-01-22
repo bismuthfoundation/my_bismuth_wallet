@@ -22,27 +22,27 @@ class AppWallet {
   AppWallet({String address, double accountBalance, 
                 String representative, String localCurrencyPrice,String btcPrice, 
                 List<AddressTxsResponseResult> history, bool loading, bool historyLoading, List<BisToken> tokens}) {
-    this._address = address;
-    this._accountBalance = accountBalance ?? 0;
-    this._representative = representative;
-    this._localCurrencyPrice = localCurrencyPrice ?? "0";
-    this._btcPrice = btcPrice ?? "0";
-    this._history = history ?? new List<AddressTxsResponseResult>();
-    this._tokens = tokens ?? new List<BisToken>();
-    this._loading = loading ?? true;
-    this._historyLoading = historyLoading  ?? true;
+    _address = address;
+    _accountBalance = accountBalance ?? 0;
+    _representative = representative;
+    _localCurrencyPrice = localCurrencyPrice ?? "0";
+    _btcPrice = btcPrice ?? "0";
+    _history = history ?? new List<AddressTxsResponseResult>();
+    _tokens = tokens ?? new List<BisToken>();
+    _loading = loading ?? true;
+    _historyLoading = historyLoading  ?? true;
   }
 
   String get address => _address;
 
   set address(String address) {
-    this._address = address;
+    _address = address;
   }
 
   double get accountBalance => _accountBalance;
 
   set accountBalance(double accountBalance) {
-    this._accountBalance = accountBalance;
+    _accountBalance = accountBalance;
   }
 
   // Get pretty account balance version

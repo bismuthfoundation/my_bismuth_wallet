@@ -50,13 +50,13 @@ class AppService {
       reconnectStream.cancel();
     }
     _isInRetryState = true;
-    log.d("Retrying connection...");
+    //log.d("Retrying connection...");
     Future<dynamic> delayed = new Future.delayed(new Duration(milliseconds: 100));
     delayed.then((_) {
       return true;
     });
     reconnectStream = delayed.asStream().listen((_) {
-      log.d("Attempting connection to service");
+      //log.d("Attempting connection to service");
       initCommunication(unsuspend: true);
       _isInRetryState = false;
     });
@@ -90,7 +90,7 @@ class AppService {
       } else {
         _socket = await Socket.connect(
             serverWalletLegacyResponse.ip, serverWalletLegacyResponse.port);
-        log.d("Connected to service");
+        //log.d("Connected to service");
         _isConnecting = false;
         _isConnected = true;
 
@@ -139,7 +139,7 @@ class AppService {
   void connectionClosed() {
     _isConnected = false;
     _isConnecting = false;
-    log.d("disconnected from service");
+    //log.d("disconnected from service");
     // Send disconnected message
     EventTaxiImpl.singleton().fire(
         ConnStatusEvent(status: ConnectionStatus.DISCONNECTED, server: ""));
