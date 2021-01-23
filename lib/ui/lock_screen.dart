@@ -28,9 +28,7 @@ class _AppLockScreenState extends State<AppLockScreen> {
   String _countDownTxt = "";
 
   Future<void> _goHome() async {
-    if (StateContainer.of(context).wallet != null) {
-      StateContainer.of(context).reconnect();
-    } else {
+    if (StateContainer.of(context).wallet == null) {
       await AppUtil()
           .loginAccount(await StateContainer.of(context).getSeed(), context);
     }

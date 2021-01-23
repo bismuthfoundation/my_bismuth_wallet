@@ -230,9 +230,7 @@ class _AppPasswordLockScreenState extends State<AppPasswordLockScreen> {
   }
 
   Future<void> _goHome() async {
-    if (StateContainer.of(context).wallet != null) {
-      StateContainer.of(context).reconnect();
-    } else {
+    if (StateContainer.of(context).wallet == null) {
       await AppUtil()
           .loginAccount(await StateContainer.of(context).getSeed(), context);
     }

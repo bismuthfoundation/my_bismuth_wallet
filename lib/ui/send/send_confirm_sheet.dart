@@ -630,17 +630,15 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
           await AppUtil().seedToPublicKeyBase64(seed, index);
       String privateKey = await AppUtil().seedToPrivateKey(seed, index);
       //print("send tx");
-      if (sl.get<AppService>().sendTx(
+      sl.get<AppService>().sendTx(
               StateContainer.of(context).wallet.address,
               widget.amountRaw,
               destinationAltered,
               openfield,
               widget.operation,
               publicKeyBase64,
-              privateKey) ==
-          false) {
-        EventTaxiImpl.singleton().fire(TransactionSendEvent(response: "The transaction was not successful"));
-      }
+              privateKey);
+      
     } catch (e) {
       // Send failed
       //print("send failed" + e.toString());

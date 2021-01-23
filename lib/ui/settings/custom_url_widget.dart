@@ -7,6 +7,7 @@ import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:logger/logger.dart';
 import 'package:my_bismuth_wallet/bus/events.dart';
 import 'package:my_bismuth_wallet/network/model/response/wstatusget_response.dart';
+import 'package:my_bismuth_wallet/service/app_service.dart';
 import 'package:my_bismuth_wallet/service/http_service.dart';
 import 'package:my_bismuth_wallet/service_locator.dart';
 import 'package:my_bismuth_wallet/styles.dart';
@@ -79,8 +80,7 @@ class _CustomUrlState extends State<CustomUrl> {
     await sl
         .get<SharedPrefsUtil>()
         .setWalletServer(_walletServerController.text);
-    StateContainer.of(context).disconnect();
-    StateContainer.of(context).reconnect();
+    sl.get<AppService>().getWStatusGetResponse();
   }
 
   void updateTokenApi() async {
@@ -164,9 +164,8 @@ class _CustomUrlState extends State<CustomUrl> {
   }
 
   void _registerBus() {
-    _connStatusEventSub = EventTaxiImpl.singleton()
-        .registerTo<ConnStatusEvent>()
-        .listen((event) {
+    _connStatusEventSub =
+        EventTaxiImpl.singleton().registerTo<ConnStatusEvent>().listen((event) {
       setState(() {
         if (event.status == ConnectionStatus.CONNECTED) {
           walletServerOk = true;
@@ -179,7 +178,7 @@ class _CustomUrlState extends State<CustomUrl> {
 
   @override
   Widget build(BuildContext context) {
-     final bottom = MediaQuery.of(context).viewInsets.bottom;
+    final bottom = MediaQuery.of(context).viewInsets.bottom;
     return Container(
         decoration: BoxDecoration(
           color: StateContainer.of(context).curTheme.backgroundDark,
@@ -238,7 +237,8 @@ class _CustomUrlState extends State<CustomUrl> {
               Expanded(
                   child: SingleChildScrollView(
                       child: Padding(
-                          padding: EdgeInsets.only(top: 30, bottom: bottom + 30),
+                          padding:
+                              EdgeInsets.only(top: 30, bottom: bottom + 30),
                           child: Column(children: <Widget>[
                             Stack(children: <Widget>[
                               Column(

@@ -124,7 +124,7 @@ class AddressTxsResponseResult {
     hash = signature.length > 56 ? signature.substring(0, 55) : signature;
     publicKey = txs[6];
     blockHash = txs[7];
-    fee = txs[8];
+    fee = txs[8].toDouble();
     reward = txs[9];
     operation = txs[10];
     openfield = txs[11];

@@ -121,7 +121,6 @@ class StateContainerState extends State<StateContainer> {
   }
 
   // Subscriptions
-  StreamSubscription<ConnStatusEvent> _connStatusSub;
   StreamSubscription<BalanceGetEvent> _balanceGetEventSub;
   StreamSubscription<PriceEvent> _priceEventSub;
   StreamSubscription<AccountModifiedEvent> _accountModifiedSub;
@@ -150,26 +149,14 @@ class StateContainerState extends State<StateContainer> {
         addressTxsResponse.result.add(addressTxResponseResult);
       }
 
+      wallet.history.clear();
+
       // Iterate list in reverse (oldest to newest block)
       if (addressTxsResponse != null && addressTxsResponse.result != null) {
         for (AddressTxsResponseResult item in addressTxsResponse.result) {
-          // If current list doesn't contain this item, insert it and the rest of the items in list and exit loop
-          bool newItem = true;
-          if (wallet.history.length > 0) {
-            for (int i = 0; i < wallet.history.length; i++) {
-              if (wallet.history[i].timestamp == item.timestamp &&
-                  wallet.history[i].hash == item.hash) {
-                newItem = false;
-                break;
-              }
-            }
-          }
-
-          if (newItem) {
-            setState(() {
-              wallet.history.insert(0, item);
-            });
-          }
+          setState(() {
+            wallet.history.insert(0, item);
+          });
         }
       }
 
@@ -189,16 +176,6 @@ class StateContainerState extends State<StateContainer> {
         wallet.localCurrencyPrice =
             event.response.localCurrencyPrice.toString();
       });
-    });
-
-    _connStatusSub =
-        EventTaxiImpl.singleton().registerTo<ConnStatusEvent>().listen((event) {
-      if (event.status == ConnectionStatus.CONNECTED) {
-        requestUpdate();
-      } else if (event.status == ConnectionStatus.DISCONNECTED &&
-          !sl.get<AppService>().suspended) {
-        sl.get<AppService>().initCommunication();
-      }
     });
 
     // Account has been deleted or name changed
@@ -263,9 +240,6 @@ class StateContainerState extends State<StateContainer> {
   }
 
   void _destroyBus() {
-    if (_connStatusSub != null) {
-      _connStatusSub.cancel();
-    }
     if (_balanceGetEventSub != null) {
       _balanceGetEventSub.cancel();
     }
@@ -350,14 +324,6 @@ class StateContainerState extends State<StateContainer> {
     });
   }
 
-  void disconnect() {
-    sl.get<AppService>().reset(suspend: true);
-  }
-
-  void reconnect() {
-    sl.get<AppService>().initCommunication(unsuspend: true);
-  }
-
   /// Handle address response
   void handleAddressResponse(BalanceGetResponse response) {
     // Set currency locale here for the UI to access
@@ -388,7 +354,9 @@ class StateContainerState extends State<StateContainer> {
       // Request account history
       int count = 30;
       try {
-        sl.get<AppService>().getBalanceGetResponse(selectedAccount);
+        sl
+            .get<AppService>()
+            .getBalanceGetResponse(selectedAccount.address, true);
 
         await sl
             .get<HttpService>()
@@ -397,8 +365,6 @@ class StateContainerState extends State<StateContainer> {
         sl.get<AppService>().getAddressTxsResponse(wallet.address, count);
 
         //sl.get<AppService>().getAlias(wallet.address);
-
-        //sl.get<AppService>().getAddressTxsInMempoolResponse(wallet.address);
 
         AddressTxsResponse addressTxsResponse = new AddressTxsResponse();
         addressTxsResponse.tokens = await sl

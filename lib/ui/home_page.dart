@@ -333,12 +333,10 @@ class _AppHomePageState extends State<AppHomePage>
     switch (state) {
       case AppLifecycleState.paused:
         setAppLockEvent();
-        StateContainer.of(context).disconnect();
         super.didChangeAppLifecycleState(state);
         break;
       case AppLifecycleState.resumed:
         cancelLockEvent();
-        StateContainer.of(context).reconnect();
         if (!StateContainer.of(context).wallet.loading &&
             StateContainer.of(context).initialDeepLink != null) {
           handleDeepLink(StateContainer.of(context).initialDeepLink);
@@ -784,7 +782,7 @@ class _AppHomePageState extends State<AppHomePage>
           AppLocalization.of(context).releaseNoteHeader +
               " " +
               packageInfo.version,
-          "- Update link to display privacy policy\n- New icons\n- Settings drawer : change order\n- Custom url configuration\n- Fix error when you don't enter a pincode\n- Add setting explorer url",
+          "- Display txs in mempool\n- Fix bugs",
           CaseChange.toUpperCase(AppLocalization.of(context).ok, context),
           () async {
         await sl.get<SharedPrefsUtil>().setVersionApp(packageInfo.version);
@@ -796,17 +794,10 @@ class _AppHomePageState extends State<AppHomePage>
   Widget _buildTransactionCard(AddressTxsResponseResult item,
       Animation<double> animation, String displayName, BuildContext context) {
     String text;
-    IconData icon;
-    Color iconColor;
-    // TODO: vérifier
     if (item.type == BlockTypes.SEND) {
       text = AppLocalization.of(context).sent;
-      icon = AppIcons.sent;
-      iconColor = StateContainer.of(context).curTheme.text60;
     } else {
       text = AppLocalization.of(context).received;
-      icon = AppIcons.received;
-      iconColor = StateContainer.of(context).curTheme.primary60;
     }
     return Slidable(
       delegate: SlidableScrollDelegate(),
@@ -903,9 +894,7 @@ class _AppHomePageState extends State<AppHomePage>
                   children: <Widget>[
                     Row(
                       children: <Widget>[
-                        Container(
-                            margin: EdgeInsetsDirectional.only(end: 10.0),
-                            child: Icon(icon, color: iconColor, size: 15)),
+                        
                         Container(
                           width: MediaQuery.of(context).size.width / 4,
                           child: Column(
@@ -919,7 +908,9 @@ class _AppHomePageState extends State<AppHomePage>
                                           context),
                                     )
                                   : Text(
-                                      text,
+                                      item.blockHeight == -1
+                                          ? text + " - Mempool"
+                                          : text,
                                       textAlign: TextAlign.start,
                                       style: AppStyles.textStyleTransactionType(
                                           context),
@@ -1903,16 +1894,26 @@ class _TransactionDetailsSheetState extends State<TransactionDetailsSheet> {
                                   SizedBox(height: 20),
                                   Text(AppLocalization.of(context)
                                       .transactionDetailBlock),
-                                  SelectableText(widget.item.blockHash,
-                                      style: AppStyles.textStyleTransactionUnit(
-                                          context),
-                                      textAlign: TextAlign.center),
-                                  Text(
-                                      "(" +
-                                          widget.item.blockHeight.toString() +
-                                          ")",
-                                      style: AppStyles.textStyleTransactionUnit(
-                                          context)),
+                                  widget.item.blockHeight == -1
+                                      ? SizedBox()
+                                      : SelectableText(widget.item.blockHash,
+                                          style: AppStyles
+                                              .textStyleTransactionUnit(
+                                                  context),
+                                          textAlign: TextAlign.center),
+                                  widget.item.blockHeight == -1
+                                      ? Text("(Mempool)",
+                                          style: AppStyles
+                                              .textStyleTransactionUnit(
+                                                  context))
+                                      : Text(
+                                          "(" +
+                                              widget.item.blockHeight
+                                                  .toString() +
+                                              ")",
+                                          style: AppStyles
+                                              .textStyleTransactionUnit(
+                                                  context)),
                                   SizedBox(height: 10),
                                   Text(AppLocalization.of(context)
                                       .transactionDetailDate),
