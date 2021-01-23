@@ -1,0 +1,15 @@
+Version 1.0.38+38 available
+
+- Display txs in mempool
+- Try to fix the issue about DROPBOX_ENTRY_ADDED (android)
+- Try to fix the issue about frozen actions
+- Fix the disconnect action when the drawer open
+
+
+
+android: 
+- wetransfer: 
+ios: 
+- available on test flight
+
+don't hesitate to give your feedback and how it works on your device in real situation

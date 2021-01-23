@@ -1,0 +1,10 @@
+Version 1.0.39+39 available
+
+- Perf improvement
+
+android: 
+- wetransfer: 
+ios: 
+- available on test flight
+
+don't hesitate to give your feedback and how it works on your device in real situation
