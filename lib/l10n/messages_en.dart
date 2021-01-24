@@ -102,6 +102,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "logoutDetail" : MessageLookupByLibrary.simpleMessage("Logging out will remove your seed and all my Bismuth Wallet-related data from this device. If your seed is not backed up, you will never be able to access your funds again"),
     "logoutReassurance" : MessageLookupByLibrary.simpleMessage("As long as you\'ve backed up your seed you have nothing to worry about."),
     "manage" : MessageLookupByLibrary.simpleMessage("Manage"),
+    "mempool" : MessageLookupByLibrary.simpleMessage("Unconfirmed"),
     "mnemonicInvalidWord" : MessageLookupByLibrary.simpleMessage("%1 is not a valid word"),
     "mnemonicSizeError" : MessageLookupByLibrary.simpleMessage("Secret phrase may only contain 24 words"),
     "myTokens" : MessageLookupByLibrary.simpleMessage("Tokens"),

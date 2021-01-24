@@ -909,7 +909,8 @@ class _AppHomePageState extends State<AppHomePage>
                                     )
                                   : Text(
                                       item.blockHeight == -1
-                                          ? text + " - Mempool"
+                                          ? text + " - " + AppLocalization.of(context)
+                                        .mempool
                                           : text,
                                       textAlign: TextAlign.start,
                                       style: AppStyles.textStyleTransactionType(
@@ -1902,7 +1903,7 @@ class _TransactionDetailsSheetState extends State<TransactionDetailsSheet> {
                                                   context),
                                           textAlign: TextAlign.center),
                                   widget.item.blockHeight == -1
-                                      ? Text("(Mempool)",
+                                      ? Text("("+AppLocalization.of(context).mempool+")",
                                           style: AppStyles
                                               .textStyleTransactionUnit(
                                                   context))

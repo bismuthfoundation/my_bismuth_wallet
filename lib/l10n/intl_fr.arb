@@ -209,5 +209,6 @@
   "enterExplorerUrlSwitch": "Utiliser un explorer personnalisé",
   "enterExplorerUrl": "Renseignez l'url de l'explorer",
   "enterExplorerUrlInfo": "(ex: https://bismuth.online/search?quicksearch=%1\n'%1' sera remplacé par l'adresse BIS)",
-  "releaseNoteHeader": "Nouveautés"
+  "releaseNoteHeader": "Nouveautés",
+  "mempool": "Non confirmé"
 }

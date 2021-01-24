@@ -144,6 +144,12 @@ class AppLocalization {
         desc: 'transaction_detail', name: 'transactionDetailCopyPaste');
   }
 
+
+  String get mempool {
+    return Intl.message('Unconfirmed',
+        desc: 'mempool', name: 'mempool');
+  }
+
   String get addressCopied {
     return Intl.message('Address Copied',
         desc: 'receive_copied', name: 'addressCopied');

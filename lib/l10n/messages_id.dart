@@ -121,6 +121,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "logoutDetail" : MessageLookupByLibrary.simpleMessage("Keluar akan menghapus benih anda dan semua data terkait my Bismuth Wallet dari perangkat ini. Jika benih anda belum disimpan, Anda tidak akan pernah bisa mengakses dana anda lagi."),
     "logoutReassurance" : MessageLookupByLibrary.simpleMessage("Selama anda yakin sudah menyimpan benih anda dengan aman, anda tidak perlu khawatir."),
     "manage" : MessageLookupByLibrary.simpleMessage("Mengelola"),
+    "mempool" : MessageLookupByLibrary.simpleMessage("Non confirmé"),
     "mnemonicInvalidWord" : MessageLookupByLibrary.simpleMessage("%1 bukanlah kata yang valid"),
     "mnemonicSizeError" : MessageLookupByLibrary.simpleMessage("Kalimat rahasia hanya terdiri dari 24 kata."),
     "myTokens" : MessageLookupByLibrary.simpleMessage("Tokens"),

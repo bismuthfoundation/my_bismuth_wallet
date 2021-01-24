@@ -121,6 +121,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "logoutDetail" : MessageLookupByLibrary.simpleMessage("Le processus de déconnexion effacera votre clé privée ainsi que toutes autres données liées à my Bismuth Wallet de votre appareil. Si vous n’avez pas sauvegardé votre clé privée, vous perdrez l’accès à vos fonds de façon permanente."),
     "logoutReassurance" : MessageLookupByLibrary.simpleMessage("Tant que vous avez sauvegardé votre clé privée, il n’y a pas de soucis à se faire."),
     "manage" : MessageLookupByLibrary.simpleMessage("Gérer"),
+    "mempool" : MessageLookupByLibrary.simpleMessage("Non confirmé"),
     "mnemonicInvalidWord" : MessageLookupByLibrary.simpleMessage("%1 n\'est pas un mot valide"),
     "mnemonicSizeError" : MessageLookupByLibrary.simpleMessage("La phrase secrète ne peut contenir que 24 mots"),
     "myTokens" : MessageLookupByLibrary.simpleMessage("Tokens"),

@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-01-19T22:02:14.181308",
+  "@@last_modified": "2021-01-24T17:11:57.781523",
   "cancel": "Cancel",
   "@cancel": {
     "description": "dialog_cancel",
@@ -147,6 +147,12 @@
   "transactionDetailCopyPaste": "Double click on text to copy to clipboard",
   "@transactionDetailCopyPaste": {
     "description": "transaction_detail",
+    "type": "text",
+    "placeholders": {}
+  },
+  "mempool": "Unconfirmed",
+  "@mempool": {
+    "description": "mempool",
     "type": "text",
     "placeholders": {}
   },

@@ -121,6 +121,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "logoutDetail" : MessageLookupByLibrary.simpleMessage("Uitloggen zorgt ervoor dat jouw seed en alle my Bismuth Wallet-gerelateerde informatie van dit toestel worden verwijderd. Als je geen back-up hebt gemaakt, kan je niet meer bij de inhoud van jouw wallet."),
     "logoutReassurance" : MessageLookupByLibrary.simpleMessage("Als je een back-up hebt gemaakt van jouw seed, is er niks aan de hand."),
     "manage" : MessageLookupByLibrary.simpleMessage("Beheren"),
+    "mempool" : MessageLookupByLibrary.simpleMessage("Non confirmé"),
     "mnemonicInvalidWord" : MessageLookupByLibrary.simpleMessage("%1 is geen geldig woord"),
     "mnemonicSizeError" : MessageLookupByLibrary.simpleMessage("De geheime zin mag slechts 24 woorden bevatten"),
     "myTokens" : MessageLookupByLibrary.simpleMessage("Tokens"),

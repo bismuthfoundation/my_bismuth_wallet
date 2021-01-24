@@ -121,6 +121,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "logoutDetail" : MessageLookupByLibrary.simpleMessage("Cerrar la sesión eliminará su semilla, y todos los datos relacionados a my Bismuth Wallet serán borrados de este dispositivo. Si no ha almacenado una copia de su semilla, nunca será capaz de volver a acceder a sus fondos."),
     "logoutReassurance" : MessageLookupByLibrary.simpleMessage("Si tiene una copia de seguridad de su semilla, no tiene nada de qué preocuparse."),
     "manage" : MessageLookupByLibrary.simpleMessage("Administrar"),
+    "mempool" : MessageLookupByLibrary.simpleMessage("Unconfirmed"),
     "mnemonicInvalidWord" : MessageLookupByLibrary.simpleMessage("% 1 no es una palabra válida"),
     "mnemonicSizeError" : MessageLookupByLibrary.simpleMessage("La frase secreta solo puede contener 24 palabras"),
     "myTokens" : MessageLookupByLibrary.simpleMessage("Tokens"),
