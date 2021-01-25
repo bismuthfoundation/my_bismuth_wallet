@@ -206,8 +206,8 @@
   "enterTokenApi": "Trage URL Token API ein",
   "enterWalletServerInfo": "ip:port (ex: 11.22.33.44:2000)",
   "enterTokenApiInfo": "(ex: https://bismuth.today/api/balances/)",
-  "enterExplorerUrlSwitch": "Benutze eigene Explorer URL",
-  "enterExplorerUrl": "Trage eigene Explorer URL ein",
+  "enterExplorerUrlSwitch": "Benutze eigene Explorer Url",
+  "enterExplorerUrl": "Trage eigene Explorer Url ein",
   "enterExplorerUrlInfo": "(ex: https://bismuth.online/search?quicksearch=%1\n'%1' wird durch BIS Adresse ersetzt)",
   "releaseNoteHeader": "Was ist neu?",
   "mempool": "Unbestätigt"
