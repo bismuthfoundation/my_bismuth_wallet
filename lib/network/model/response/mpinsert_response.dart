@@ -2,6 +2,8 @@
 //
 //     final mpinsertResponse = mpinsertResponseFromJson(jsonString);
 
+// @dart=2.9
+
 import 'dart:convert';
 
 List<String> mpinsertResponseFromJson(String str) => List<String>.from(json.decode(str).map((x) => x));

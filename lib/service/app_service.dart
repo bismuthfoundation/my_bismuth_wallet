@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'dart:async';
 import 'dart:io';
 import 'package:event_taxi/event_taxi.dart';
@@ -411,16 +413,16 @@ class AppService {
         }, cancelOnError: false);
 
         //Send the request
-        // Substract 2 sec to limit the issue with future tx
-        DateTime timeBefore2sec =
-            DateTime.now().subtract(new Duration(seconds: 2));
-        tx.timestamp = timeBefore2sec
+        // Substract 3 sec to limit the issue with future tx
+        DateTime timeBefore4sec =
+            DateTime.now().subtract(new Duration(seconds: 4));
+        tx.timestamp = timeBefore4sec
                 .toUtc()
                 .microsecondsSinceEpoch
                 .toString()
                 .substring(0, 10) +
             "." +
-            timeBefore2sec
+            timeBefore4sec
                 .toUtc()
                 .microsecondsSinceEpoch
                 .toString()

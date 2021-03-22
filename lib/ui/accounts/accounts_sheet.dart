@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'dart:async';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
@@ -329,6 +331,7 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
   Widget _buildAccountListItem(
       BuildContext context, Account account, StateSetter setState) {
     return Slidable(
+       key: Key(account.id.toString()),
       secondaryActions: _getSlideActionsForAccount(context, account, setState),
       actionExtentRatio: 0.2,
       actionPane: SlidableStrechActionPane(),

@@ -2,6 +2,8 @@
 //
 //     final aliasGetResponse = aliasGetResponseFromJson(jsonString);
 
+// @dart=2.9
+
 import 'dart:convert';
 
 List<List<String>> aliasGetResponseFromJson(String str) => List<List<String>>.from(json.decode(str).map((x) => List<String>.from(x.map((x) => x))));

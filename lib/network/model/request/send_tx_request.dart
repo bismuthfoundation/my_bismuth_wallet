@@ -2,11 +2,15 @@
 //
 //     final sendTxRequest = sendTxRequestFromJson(jsonString);
 
+// @dart=2.9
+
 import 'dart:convert';
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:asn1lib/asn1lib.dart' as asn1lib;
 import 'package:pointycastle/pointycastle.dart';
+import 'package:pointycastle/signers/ecdsa_signer.dart';
 
 class SendTxRequest {
   SendTxRequest({
@@ -25,9 +29,18 @@ class SendTxRequest {
   String publicKey;
   String websocketCommand;
 
-  String signString(String privateKey, String msgToSign) {
+  Uint8List getSecureRandom(int length) {
+    var random = Random.secure();
+    List<int> seeds = [];
+    for (int i = 0; i < length; i++) {
+      seeds.add(random.nextInt(255));
+    }
+  
+    return new Uint8List.fromList(seeds);
+  }
 
-    final Signer signer = Signer('SHA-256/ECDSA');
+  String signString(String privateKey, String msgToSign) {
+    final ECDSASigner signer = Signer('SHA-256/ECDSA');
 
     final _privateKey = ECPrivateKey(
       BigInt.parse(privateKey, radix: 16),
@@ -36,16 +49,18 @@ class SendTxRequest {
     var privParams = PrivateKeyParameter(_privateKey);
 
     final rnd = new SecureRandom("AES/CTR/PRNG");
-    final key = new Uint8List(16);
-    final keyParam = new KeyParameter(key);
-    final params = new ParametersWithIV(keyParam, new Uint8List(16));
+    final key = getSecureRandom(16);
+    final iv = getSecureRandom(16);
+    final keyParam = new KeyParameter(new Uint8List.fromList(key));
+
+    final params = new ParametersWithIV(keyParam, new Uint8List.fromList(iv));
     rnd.seed(params);
 
     signer.reset();
     signer.init(true, new ParametersWithRandom(privParams, rnd));
     ECSignature sig = signer.generateSignature(utf8.encode(msgToSign));
     sig = sig.normalize(ECDomainParameters('secp256k1'));
-  
+
     var topLevel = new asn1lib.ASN1Sequence();
     topLevel.add(asn1lib.ASN1Integer(sig.r));
     topLevel.add(asn1lib.ASN1Integer(sig.s));
@@ -54,7 +69,6 @@ class SendTxRequest {
 
     //print("return sig64 : " + sig64);
     return sig64;
-  
   }
 
   void buildSignature(String privateKey) async {
@@ -147,4 +161,3 @@ class Tx {
     return _buffer;
   }
 }
-

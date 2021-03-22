@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:intl/intl.dart';
 import 'package:my_bismuth_wallet/localization.dart';
 import 'package:flutter/material.dart';

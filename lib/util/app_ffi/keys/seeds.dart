@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'dart:math';
 import 'package:my_bismuth_wallet/util/helpers.dart';
 

@@ -2,6 +2,8 @@
 //
 //     final simplePriceNzdResponse = simplePriceNzdResponseFromJson(jsonString);
 
+// @dart=2.9
+
 import 'dart:convert';
 
 SimplePriceNzdResponse simplePriceNzdResponseFromJson(String str) => SimplePriceNzdResponse.fromJson(json.decode(str));

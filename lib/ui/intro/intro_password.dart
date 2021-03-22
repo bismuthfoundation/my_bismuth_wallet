@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:hex/hex.dart';
@@ -49,7 +51,7 @@ class _IntroPasswordState extends State<IntroPassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
       backgroundColor: StateContainer.of(context).curTheme.backgroundDark,
       body: TapOutsideUnfocus(
         child: LayoutBuilder(

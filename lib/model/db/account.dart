@@ -1,5 +1,8 @@
 
 // Represent user-account
+
+// @dart=2.9
+
 class Account {
   int id; // Primary Key
   int index; // Index on the seed

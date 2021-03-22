@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'dart:convert';
 
 /// Top-level function for running in isolate via flutter compute function

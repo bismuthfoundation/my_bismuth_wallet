@@ -2,6 +2,8 @@
 //
 //     final serverWalletLegacyResponse = serverWalletLegacyResponseFromJson(jsonString);
 
+// @dart=2.9
+
 import 'dart:convert';
 
 List<ServerWalletLegacyResponse> serverWalletLegacyResponseFromJson(String str) => List<ServerWalletLegacyResponse>.from(json.decode(str).map((x) => ServerWalletLegacyResponse.fromJson(x)));

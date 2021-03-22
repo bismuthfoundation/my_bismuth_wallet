@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:my_bismuth_wallet/util/app_ffi/keys/seeds.dart';
 

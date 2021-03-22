@@ -2,6 +2,8 @@
 //
 //     final simplePriceRubResponse = simplePriceRubResponseFromJson(jsonString);
 
+// @dart=2.9
+
 import 'dart:convert';
 
 SimplePriceRubResponse simplePriceRubResponseFromJson(String str) => SimplePriceRubResponse.fromJson(json.decode(str));

@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -1212,7 +1214,7 @@ class AppLocalization {
   }
 
   String get donationsUrl {
-    return 'Bis1KZ88di4Xb9P4h4sSgzUwSVdXk9ZGBH5i4';
+    return 'Bis1GbkkAETTh8Q1k5KuHtV2pU2rmBhzUDTHo';
   }
 
   String get donationsName {

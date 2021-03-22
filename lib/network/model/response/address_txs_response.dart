@@ -2,6 +2,8 @@
 //
 //     final addressTxsResponse = addressTxsResponseFromJson(jsonString);
 
+// @dart=2.9
+
 import 'package:my_bismuth_wallet/model/address.dart';
 import 'package:my_bismuth_wallet/network/model/block_types.dart';
 import 'package:my_bismuth_wallet/util/numberutil.dart';

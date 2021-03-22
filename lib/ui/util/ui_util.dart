@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'dart:io';
 import 'dart:async';
 import 'package:event_taxi/event_taxi.dart';

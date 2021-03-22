@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'dart:core';
 
 // Object to represent an account address or address URI, and provide useful utilities
