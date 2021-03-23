@@ -75,7 +75,7 @@ class HttpService {
     HttpClient httpClient = new HttpClient();
     try {
       HttpClientRequest request = await httpClient.getUrl(
-          Uri.parse("http://api.bismuth.live/servers/wallet/legacy.json"));
+          Uri.parse("https://api.bismuth.live/servers/wallet/legacy.json"));
       request.headers.set('content-type', 'application/json');
       HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {
@@ -97,7 +97,9 @@ class HttpService {
           serverWalletLegacyResponse = serverWalletLegacyResponseList[0];
         }
       }
-    } catch (e) {} finally {
+    } catch (e) {
+      print(e);
+    } finally {
       httpClient.close();
     }
     //print("Server Wallet : " +
