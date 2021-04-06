@@ -11,6 +11,7 @@ import 'package:flare_flutter/flare_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:event_taxi/event_taxi.dart';
+import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
 
 import 'package:intl/intl.dart';
@@ -783,7 +784,7 @@ class _AppHomePageState extends State<AppHomePage>
           AppLocalization.of(context).releaseNoteHeader +
               " " +
               packageInfo.version,
-          "- Fix bugs",
+          "- Add Dragginator features",
           CaseChange.toUpperCase(AppLocalization.of(context).ok, context),
           () async {
         await sl.get<SharedPrefsUtil>().setVersionApp(packageInfo.version);
@@ -895,7 +896,6 @@ class _AppHomePageState extends State<AppHomePage>
                   children: <Widget>[
                     Row(
                       children: <Widget>[
-                        
                         Container(
                           width: MediaQuery.of(context).size.width / 4,
                           child: Column(
@@ -910,8 +910,10 @@ class _AppHomePageState extends State<AppHomePage>
                                     )
                                   : Text(
                                       item.blockHeight == -1
-                                          ? text + " - " + AppLocalization.of(context)
-                                        .mempool
+                                          ? text +
+                                              " - " +
+                                              AppLocalization.of(context)
+                                                  .mempool
                                           : text,
                                       textAlign: TextAlign.start,
                                       style: AppStyles.textStyleTransactionType(
@@ -1009,6 +1011,33 @@ class _AppHomePageState extends State<AppHomePage>
                                                         .textStyleTransactionTypeGreen(
                                                             context),
                                               ),
+                                              item.getBisToken().tokenName ==
+                                                      "egg"
+                                                  ? TextSpan(text: " ")
+                                                  : TextSpan(text: ""),
+                                              item.getBisToken().tokenName ==
+                                                      "egg"
+                                                  ? WidgetSpan(
+                                                      child: Icon(
+                                                          FontAwesome5.egg,
+                                                          size: AppFontSizes
+                                                              .small,
+                                                          color: item.type ==
+                                                                  BlockTypes
+                                                                      .SEND
+                                                              ? Colors.red[400]
+                                                              : Colors
+                                                                  .green[400]),
+                                                      style: item.type ==
+                                                              BlockTypes.SEND
+                                                          ? AppStyles
+                                                              .textStyleTransactionTypeRed(
+                                                                  context)
+                                                          : AppStyles
+                                                              .textStyleTransactionTypeGreen(
+                                                                  context),
+                                                    )
+                                                  : TextSpan(text: "")
                                             ],
                                           ),
                                         ),
@@ -1024,6 +1053,87 @@ class _AppHomePageState extends State<AppHomePage>
                                                     text: item.openfield
                                                         .replaceAll(
                                                             "alias=", ""),
+                                                    style: AppStyles
+                                                        .textStyleTransactionTypeBlue(
+                                                            context),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          )
+                                        : item.isDragginatorNew()
+                                        ?
+                                        Container(
+                                            child: RichText(
+                                              textAlign: TextAlign.start,
+                                              text: TextSpan(
+                                                text: '',
+                                                children: [
+                                                  WidgetSpan(
+                                                      child: Icon(
+                                                          FontAwesome5.dragon,
+                                                          size: AppFontSizes
+                                                              .small,
+                                                          color: Colors.blue[400]
+                                                             ),
+                                                    
+                                                    ),
+                                                  TextSpan(
+                                                    text: "   New egg",
+                                                    style: AppStyles
+                                                        .textStyleTransactionTypeBlue(
+                                                            context),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ) :
+                                        item.isDragginatorMerge()
+                                        ?
+                                        Container(
+                                            child: RichText(
+                                              textAlign: TextAlign.start,
+                                              text: TextSpan(
+                                                text: '',
+                                                children: [
+                                                  WidgetSpan(
+                                                      child: Icon(
+                                                          FontAwesome5.dragon,
+                                                          size: AppFontSizes
+                                                              .small,
+                                                          color: Colors.blue[400]
+                                                             ),
+                                                    
+                                                    ),
+                                                  TextSpan(
+                                                    text: "   Eggs merge",
+                                                    style: AppStyles
+                                                        .textStyleTransactionTypeBlue(
+                                                            context),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ) :
+                                          item.isHNRegister()
+                                        ?
+                                        Container(
+                                            child: RichText(
+                                              textAlign: TextAlign.start,
+                                              text: TextSpan(
+                                                text: '',
+                                                children: [
+                                                  WidgetSpan(
+                                                      child: Icon(
+                                                          FontAwesome5.linode,
+                                                          size: AppFontSizes
+                                                              .small,
+                                                          color: Colors.blue[400]
+                                                             ),
+                                                    
+                                                    ),
+                                                  TextSpan(
+                                                    text: "  HN register",
                                                     style: AppStyles
                                                         .textStyleTransactionTypeBlue(
                                                             context),
@@ -1904,7 +2014,11 @@ class _TransactionDetailsSheetState extends State<TransactionDetailsSheet> {
                                                   context),
                                           textAlign: TextAlign.center),
                                   widget.item.blockHeight == -1
-                                      ? Text("("+AppLocalization.of(context).mempool+")",
+                                      ? Text(
+                                          "(" +
+                                              AppLocalization.of(context)
+                                                  .mempool +
+                                              ")",
                                           style: AppStyles
                                               .textStyleTransactionUnit(
                                                   context))

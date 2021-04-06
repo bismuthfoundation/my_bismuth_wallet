@@ -1,0 +1,549 @@
+// @dart=2.9
+
+import 'package:fluttericon/font_awesome5_icons.dart';
+import 'package:fluttericon/font_awesome_icons.dart';
+import 'package:my_bismuth_wallet/localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:my_bismuth_wallet/network/model/response/dragginator_infos_from_dna_response.dart';
+import 'package:my_bismuth_wallet/network/model/response/dragginator_list_from_address_response.dart';
+import 'package:my_bismuth_wallet/service/dragginator_service.dart';
+import 'package:my_bismuth_wallet/service_locator.dart';
+import 'package:my_bismuth_wallet/styles.dart';
+import 'package:my_bismuth_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/ui/util/ui_util.dart';
+import 'package:scrolling_page_indicator/scrolling_page_indicator.dart';
+import 'package:flutter_radar_chart/flutter_radar_chart.dart';
+import 'package:flip_card/flip_card.dart';
+
+class MyDragginatorBreedingList extends StatefulWidget {
+  final String address;
+
+  MyDragginatorBreedingList(this.address) : super();
+
+  _MyDragginatorBreedingListStateState createState() =>
+      _MyDragginatorBreedingListStateState();
+}
+
+class _MyDragginatorBreedingListStateState
+    extends State<MyDragginatorBreedingList> {
+  bool loaded;
+  List<List> dragginatorInfosList;
+  List<DragginatorListFromAddressResponse>
+      dragginatorListFromAddressResponseList;
+  PageController _controller;
+
+  double numberOfFeatures = 8;
+  var data = [
+    [0, 0, 0, 0, 0, 0, 0, 0]
+  ];
+  var ticks = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+
+  var features = [
+    "strategy",
+    "bravery",
+    "strength",
+    "agility",
+    "power",
+    "stamina",
+    "speed",
+    "health"
+  ];
+
+  @override
+  void initState() {
+    loaded = false;
+    features = features.sublist(0, numberOfFeatures.floor());
+    data = data
+        .map((graph) => graph.sublist(0, numberOfFeatures.floor()))
+        .toList();
+    _controller = PageController();
+    loadEggsAndDragonsList();
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void loadEggsAndDragonsList() async {
+    dragginatorListFromAddressResponseList = await sl
+        .get<DragginatorService>()
+        .getEggsAndDragonsListFromAddress(widget.address);
+
+    dragginatorInfosList =
+        new List.filled(dragginatorListFromAddressResponseList.length, null);
+    for (int i = 0; i < dragginatorListFromAddressResponseList.length; i++) {
+      dragginatorInfosList[i] = new List.filled(2, null);
+      dragginatorInfosList[i][0] = dragginatorListFromAddressResponseList[i];
+      dragginatorInfosList[i][1] = await sl
+          .get<DragginatorService>()
+          .getInfosFromDna(dragginatorListFromAddressResponseList[i].dna);
+    }
+
+    setState(() {
+      if (mounted) {
+        loaded = true;
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+        minimum:
+            EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.035),
+        child: Column(
+          children: <Widget>[
+            // A row for the address text and close button
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                //Empty SizedBox
+                SizedBox(
+                  width: 60,
+                  height: 40,
+                ),
+                Column(
+                  children: <Widget>[
+                    // Sheet handle
+                    Container(
+                      margin: EdgeInsets.only(top: 10),
+                      height: 5,
+                      width: MediaQuery.of(context).size.width * 0.15,
+                      decoration: BoxDecoration(
+                        color: StateContainer.of(context).curTheme.text10,
+                        borderRadius: BorderRadius.circular(100.0),
+                      ),
+                    ),
+                  ],
+                ),
+                //Empty SizedBox
+                SizedBox(
+                  width: 60,
+                  height: 40,
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  AppLocalization.of(context).dragginatorBreedingListHeader,
+                  style: AppStyles.textStyleSettingsHeader(context),
+                ),
+              ],
+            ),
+            Expanded(
+              child: Center(
+                child: Stack(children: <Widget>[
+                  Container(
+                      height: 500,
+                      child: SafeArea(
+                        minimum: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).size.height * 0.035,
+                          top: 10,
+                        ),
+                        child: Column(
+                          children: <Widget>[
+                            // list
+                            Expanded(
+                              child: Stack(
+                                children: <Widget>[
+                                  loaded == true
+                                      ? PageView.builder(
+                                          physics:
+                                              const AlwaysScrollableScrollPhysics(),
+                                          controller: _controller,
+                                          itemCount:
+                                              dragginatorInfosList.length,
+                                          itemBuilder: (context, index) {
+                                            // Build
+                                            return buildSingle(context,
+                                                dragginatorInfosList[index]);
+                                          },
+                                        )
+                                      : Center(
+                                          child: CircularProgressIndicator()),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      )),
+                ]),
+              ),
+            ),
+            dragginatorListFromAddressResponseList != null &&
+                    dragginatorListFromAddressResponseList.length > 0
+                ? ScrollingPageIndicator(
+                    dotColor: StateContainer.of(context).curTheme.primary30,
+                    dotSelectedColor:
+                        StateContainer.of(context).curTheme.primary,
+                    dotSize: 6,
+                    dotSelectedSize: 8,
+                    dotSpacing: 12,
+                    controller: _controller,
+                    itemCount: dragginatorListFromAddressResponseList.length,
+                    orientation: Axis.horizontal,
+                  )
+                : SizedBox(),
+          ],
+        ));
+  }
+
+  Widget buildSingle(BuildContext context, List dragginatorInfosList) {
+    DragginatorListFromAddressResponse dragginatorListFromAddressResponse =
+        dragginatorInfosList[0];
+    DragginatorInfosFromDnaResponse dragginatorInfosFromDnaResponse =
+        dragginatorInfosList[1];
+    data = [
+      [
+        dragginatorInfosFromDnaResponse.abilities[0][0],
+        dragginatorInfosFromDnaResponse.abilities[0][1],
+        dragginatorInfosFromDnaResponse.abilities[0][2],
+        dragginatorInfosFromDnaResponse.abilities[0][3],
+        dragginatorInfosFromDnaResponse.abilities[0][4],
+        dragginatorInfosFromDnaResponse.abilities[0][5],
+        dragginatorInfosFromDnaResponse.abilities[0][6],
+        dragginatorInfosFromDnaResponse.abilities[0][7]
+      ]
+    ];
+
+    return Container(
+        padding: EdgeInsets.all(0.0),
+        child: SingleChildScrollView(
+          child: Column(children: <Widget>[
+            // Main Container
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 8.0),
+              margin: new EdgeInsetsDirectional.only(start: 12.0, end: 12.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    child: Container(
+                        margin: EdgeInsetsDirectional.only(start: 2.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  FontAwesome5.dna,
+                                  size: AppFontSizes.small,
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                SelectableText(dragginatorInfosList[0].dna,
+                                    style: AppStyles.textStyleParagraphSmall(
+                                        context)),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                              children: [
+                                Text("Capacities: ",
+                                    style: AppStyles.textStyleParagraphSmall(
+                                        context)),
+                                Text(dragginatorInfosFromDnaResponse.capacities,
+                                    style: AppStyles.textStyleParagraphSmall(
+                                        context)),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text("Creator: ",
+                                    style: AppStyles.textStyleParagraphSmall(
+                                        context)),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                SelectableText(
+                                    dragginatorInfosFromDnaResponse.creator,
+                                    style: AppStyles.textStyleParagraphSmall(
+                                        context)),
+                              ],
+                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text("Owner: ",
+                                    style: AppStyles.textStyleParagraphSmall(
+                                        context)),
+                              ],
+                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SelectableText(
+                                    dragginatorInfosFromDnaResponse.owner,
+                                    style: AppStyles.textStyleParagraphSmall(
+                                        context)),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          dragginatorInfosList[0].status ==
+                                                  "egg"
+                                              ? FontAwesome5.egg
+                                              : FontAwesome5.dragon,
+                                          size: AppFontSizes.small,
+                                        ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(dragginatorInfosList[0].status,
+                                            style: AppStyles
+                                                .textStyleParagraphSmall(
+                                                    context)),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        dragginatorInfosList[0]
+                                                    .type
+                                                    .toLowerCase() ==
+                                                "water"
+                                            ? Icon(
+                                                FontAwesome5.water,
+                                                size: AppFontSizes.small,
+                                              )
+                                            : dragginatorInfosList[0]
+                                                        .type
+                                                        .toLowerCase() ==
+                                                    "air"
+                                                ? Icon(
+                                                    FontAwesome5.wind,
+                                                    size: AppFontSizes.small,
+                                                  )
+                                                : dragginatorInfosList[0]
+                                                            .type
+                                                            .toLowerCase() ==
+                                                        "earth"
+                                                    ? Icon(
+                                                        FontAwesome5.globe,
+                                                        size:
+                                                            AppFontSizes.small,
+                                                      )
+                                                    : dragginatorInfosList[0]
+                                                                .type
+                                                                .toLowerCase() ==
+                                                            "fire"
+                                                        ? Icon(
+                                                            FontAwesome5
+                                                                .fire_alt,
+                                                            size: AppFontSizes
+                                                                .small,
+                                                          )
+                                                        : dragginatorInfosList[0]
+                                                                    .type
+                                                                    .toLowerCase() ==
+                                                                "gold"
+                                                            ? Icon(FontAwesome5.circle,
+                                                                size: AppFontSizes
+                                                                    .small,
+                                                                color: Color(
+                                                                    0xffaf9500))
+                                                            : dragginatorInfosList[0]
+                                                                        .type
+                                                                        .toLowerCase() ==
+                                                                    "silver"
+                                                                ? Icon(
+                                                                    FontAwesome5
+                                                                        .circle,
+                                                                    size: AppFontSizes.small,
+                                                                    color: Color(0xffB4B4B4))
+                                                                : dragginatorInfosList[0].type.toLowerCase() == "bronze"
+                                                                    ? Icon(FontAwesome5.circle, size: AppFontSizes.small, color: Color(0xff6A3805))
+                                                                    : Icon(
+                                                                        FontAwesome
+                                                                            .globe,
+                                                                        size: AppFontSizes
+                                                                            .small,
+                                                                      ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(dragginatorInfosList[0].type,
+                                            style: AppStyles
+                                                .textStyleParagraphSmall(
+                                                    context)),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          FontAwesome5.fingerprint,
+                                          size: AppFontSizes.small,
+                                        ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(dragginatorInfosList[0].species,
+                                            style: AppStyles
+                                                .textStyleParagraphSmall(
+                                                    context)),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          FontAwesome5.gift,
+                                          size: AppFontSizes.small,
+                                        ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          dragginatorInfosFromDnaResponse.age,
+                                          style:
+                                              AppStyles.textStyleParagraphSmall(
+                                                  context),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Row(
+                                      children: [
+                                        Text("Generation: ",
+                                            style: AppStyles
+                                                .textStyleParagraphSmall(
+                                                    context)),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                            dragginatorInfosFromDnaResponse.gen,
+                                            style: AppStyles
+                                                .textStyleParagraphSmall(
+                                                    context)),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text("Rarity: ",
+                                            style: AppStyles
+                                                .textStyleParagraphSmall(
+                                                    context)),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                            dragginatorInfosFromDnaResponse
+                                                .rarity
+                                                .toString(),
+                                            style: AppStyles
+                                                .textStyleParagraphSmall(
+                                                    context)),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text("Global Id: ",
+                                            style: AppStyles
+                                                .textStyleParagraphSmall(
+                                                    context)),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                            dragginatorInfosFromDnaResponse
+                                                .globId,
+                                            style: AppStyles
+                                                .textStyleParagraphSmall(
+                                                    context)),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text("Generation Id: ",
+                                            style: AppStyles
+                                                .textStyleParagraphSmall(
+                                                    context)),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                            dragginatorInfosFromDnaResponse
+                                                .genId,
+                                            style: AppStyles
+                                                .textStyleParagraphSmall(
+                                                    context)),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Center(
+                              child: FlipCard(
+                                flipOnTouch: true,
+                                direction: FlipDirection.HORIZONTAL,
+                                front: Container(
+                                  width: 250.0,
+                                  height: 250.0,
+                                  child: CircleAvatar(
+                                    backgroundColor: StateContainer.of(context)
+                                        .curTheme
+                                        .text05,
+                                    backgroundImage: NetworkImage(
+                                      UIUtil.getDragginatorURL(
+                                          dragginatorInfosList[0].dna,
+                                          dragginatorInfosList[0].status),
+                                    ),
+                                    radius: 50.0,
+                                  ),
+                                ),
+                                back: Container(
+                                  width: 250.0,
+                                  height: 250.0,
+                                  child: RadarChart.dark(
+                                    ticks: ticks,
+                                    features: features,
+                                    data: data,
+                                    reverseAxis: false,
+                                    useSides: false,
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        )),
+                  ),
+                ],
+              ),
+            ),
+          ]),
+        )
+        );
+  }
+}

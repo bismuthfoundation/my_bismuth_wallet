@@ -218,6 +218,33 @@ class AppLocalization {
 
   /// -- END GENERIC ITEMS
 
+  /// -- DRAGGINATOR
+  String get dragginatorHeader {
+    return Intl.message('Dragginator', desc: '', name: 'dragginatorHeader');
+  }
+
+  String get dragginatorBreedingListHeader {
+    return Intl.message('My breeding', desc: '', name: 'dragginatorBreedingListHeader');
+  }
+
+  String get dragginatorGetEggWithEggHeader {
+    return Intl.message('Get an egg with 1 EGG', desc: '', name: 'dragginatorGetEggWithEggHeader');
+  }
+
+  String get dragginatorGetEggWithBisHeader {
+    return Intl.message('Get an egg with 3 BIS', desc: '', name: 'dragginatorGetEggWithBisHeader');
+  }
+
+  String get dragginatorMarketPlace {
+    return Intl.message('Marketplace', desc: '', name: 'dragginatorMarketPlace');
+  }
+
+  String get dragginatorHelp {
+    return Intl.message('Help', desc: '', name: 'dragginatorHelp');
+  }
+
+  ///  -- END DRAGGINATOR
+  
   /// -- CUSTOM URL
 
   String get customUrlHeader {
@@ -668,6 +695,11 @@ class AppLocalization {
   String get informations {
     return Intl.message("Informations",
         desc: 'settings_informations_header', name: 'informations');
+  }
+
+  String get letsPlay {
+    return Intl.message("Let's play",
+        desc: '', name: 'letsPlay');
   }
 
   String get searchField {
@@ -1215,6 +1247,14 @@ class AppLocalization {
 
   String get donationsUrl {
     return 'Bis1GbkkAETTh8Q1k5KuHtV2pU2rmBhzUDTHo';
+  }
+
+  String get dragginatorAddress {
+    return '9ba0f8ca03439a8b4222b256a5f56f4f563f6d83755f525992fa5daf';
+  }
+
+  String getDragginatorHelp() {
+    return 'https://dragginator.com/help.php';
   }
 
   String get donationsName {

@@ -1,5 +1,6 @@
 // @dart=2.9
 
+import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:my_bismuth_wallet/localization.dart';
 import 'package:flutter/material.dart';
@@ -166,14 +167,29 @@ class _MyTokensListStateState extends State<MyTokensList> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(
-                          NumberFormat.compact(
-                                      locale: Localizations.localeOf(context)
-                                          .languageCode)
-                                  .format(bisToken.tokensQuantity) +
-                              " " +
-                              bisToken.tokenName,
-                          style: AppStyles.textStyleSettingItemHeader(context)),
+                      Row(
+                        children: [
+                          Text(
+                              NumberFormat.compact(
+                                          locale:
+                                              Localizations.localeOf(context)
+                                                  .languageCode)
+                                      .format(bisToken.tokensQuantity) +
+                                  " " +
+                                  bisToken.tokenName,
+                              style: AppStyles.textStyleSettingItemHeader(
+                                  context)),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          bisToken.tokenName == "egg"
+                              ? Icon(
+                                  FontAwesome5.egg,
+                                  size: AppFontSizes.small,
+                                )
+                              : SizedBox(),
+                        ],
+                      )
                     ],
                   ),
                 ),

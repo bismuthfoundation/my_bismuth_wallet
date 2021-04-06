@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.46+46
+version: 1.0.47+47
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
@@ -73,11 +73,8 @@ dependencies:
       url: https://github.com/redDwarf03/bip32-dart.git
       ref: master
 
-  bip39: 
-    git:
-      url: https://github.com/redDwarf03/bip39.git
-      ref: master
-
+  bip39: ^1.0.6
+  
   # SQLite
   sqflite: ^2.0.0+3
 
@@ -104,6 +101,15 @@ dependencies:
     git:
       url: https://github.com/redDwarf03/flutter_barcode_reader.git
       ref: master
+  
+  flutter_radar_chart: ^0.2.0
+
+  flip_card: ^0.5.0
+
+  scrolling_page_indicator:
+    git: 
+     url: https://github.com/redDwarf03/FlutterScrollingPageIndicator.git
+     ref: master
   
   # Deep link support
   uni_links:
