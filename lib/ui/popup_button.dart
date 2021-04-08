@@ -39,39 +39,45 @@ class _AppPopupButtonState extends State<AppPopupButton> {
   }
 
   Future<void> scanAndHandlResult() async {
-    dynamic scanResult = await Navigator.pushNamed(context, '/before_scan_screen');
+    dynamic scanResult =
+        await Navigator.pushNamed(context, '/before_scan_screen');
     // Parse scan data and route appropriately
     if (scanResult == null) {
-      UIUtil.showSnackbar(AppLocalization.of(context).qrInvalidAddress, context);
+      UIUtil.showSnackbar(
+          AppLocalization.of(context).qrInvalidAddress, context);
     } else if (!QRScanErrs.ERROR_LIST.contains(scanResult)) {
       // Is a URI
       Address address = Address(scanResult);
       if (address.address == null) {
-        UIUtil.showSnackbar(AppLocalization.of(context).qrInvalidAddress, context);
+        UIUtil.showSnackbar(
+            AppLocalization.of(context).qrInvalidAddress, context);
       } else {
         // See if this address belongs to a contact
-        Contact contact = await sl.get<DBHelper>().getContactWithAddress(address.address);
+        Contact contact =
+            await sl.get<DBHelper>().getContactWithAddress(address.address);
         // If amount is present, fill it and go to SendConfirm
-        double amount = address.amount != null ? double.tryParse(address.amount) : null;
-        if (amount != null && StateContainer.of(context).wallet.accountBalance > amount) {
+        double amount =
+            address.amount != null ? double.tryParse(address.amount) : null;
+        if (amount != null &&
+            StateContainer.of(context).wallet.accountBalance > amount) {
           // Go to confirm sheet
           Sheets.showAppHeightNineSheet(
-            context: context,
-            widget: SendConfirmSheet(
-                      amountRaw: address.amount,
-                      destination: contact != null ? contact.address : address.address,
-                      contactName: contact != null ? contact.name : null)
-          );
+              context: context,
+              widget: SendConfirmSheet(
+                  amountRaw: address.amount,
+                  destination:
+                      contact != null ? contact.address : address.address,
+                  contactName: contact != null ? contact.name : null));
         } else {
           // Go to send sheet
           Sheets.showAppHeightNineSheet(
-            context: context,
-            widget: SendSheet(
-              localCurrency: StateContainer.of(context).curCurrency,
-              contact: contact,
-              address: contact != null ? contact.address : address.address
-            )
-          );            
+              context: context,
+              widget: SendSheet(
+                  sendATokenActive: true,
+                  localCurrency: StateContainer.of(context).curCurrency,
+                  contact: contact,
+                  address:
+                      contact != null ? contact.address : address.address));
         }
       }
     }
@@ -103,8 +109,7 @@ class _AppPopupButtonState extends State<AppPopupButton> {
         // Send Button
         GestureDetector(
           onVerticalDragStart: (StateContainer.of(context).wallet != null &&
-                  StateContainer.of(context).wallet.accountBalance >
-                      0)
+                  StateContainer.of(context).wallet.accountBalance > 0)
               ? (value) {
                   setState(() {
                     popupColor = StateContainer.of(context).curTheme.primary;
@@ -112,8 +117,7 @@ class _AppPopupButtonState extends State<AppPopupButton> {
                 }
               : (value) {},
           onVerticalDragEnd: (StateContainer.of(context).wallet != null &&
-                  StateContainer.of(context).wallet.accountBalance >
-                      0)
+                  StateContainer.of(context).wallet.accountBalance > 0)
               ? (value) {
                   isSendButtonColorPrimary = true;
                   firstTime = true;
@@ -130,8 +134,7 @@ class _AppPopupButtonState extends State<AppPopupButton> {
                 }
               : (value) {},
           onVerticalDragUpdate: (StateContainer.of(context).wallet != null &&
-                  StateContainer.of(context).wallet.accountBalance >
-                      0)
+                  StateContainer.of(context).wallet.accountBalance > 0)
               ? (dragUpdateDetails) {
                   if (dragUpdateDetails.localPosition.dy < -60) {
                     isScrolledUpEnough = true;
@@ -182,8 +185,7 @@ class _AppPopupButtonState extends State<AppPopupButton> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(100.0)),
               color: StateContainer.of(context).wallet != null &&
-                      StateContainer.of(context).wallet.accountBalance >
-                          0
+                      StateContainer.of(context).wallet.accountBalance > 0
                   ? isSendButtonColorPrimary
                       ? StateContainer.of(context).curTheme.primary
                       : StateContainer.of(context).curTheme.success
@@ -197,23 +199,21 @@ class _AppPopupButtonState extends State<AppPopupButton> {
               ),
               onPressed: () {
                 if (StateContainer.of(context).wallet != null &&
-                    StateContainer.of(context).wallet.accountBalance >
-                        0) {
+                    StateContainer.of(context).wallet.accountBalance > 0) {
                   Sheets.showAppHeightNineSheet(
                       context: context,
                       widget: SendSheet(
+                          sendATokenActive: true,
                           localCurrency:
                               StateContainer.of(context).curCurrency));
                 }
               },
               highlightColor: StateContainer.of(context).wallet != null &&
-                      StateContainer.of(context).wallet.accountBalance >
-                          0
+                      StateContainer.of(context).wallet.accountBalance > 0
                   ? StateContainer.of(context).curTheme.background40
                   : Colors.transparent,
               splashColor: StateContainer.of(context).wallet != null &&
-                      StateContainer.of(context).wallet.accountBalance >
-                          0
+                      StateContainer.of(context).wallet.accountBalance > 0
                   ? StateContainer.of(context).curTheme.background40
                   : Colors.transparent,
             ),

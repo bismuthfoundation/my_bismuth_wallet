@@ -7,9 +7,11 @@ import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:fluttericon/iconic_icons.dart';
 import 'package:fluttericon/typicons_icons.dart';
 import 'package:logger/logger.dart';
+import 'package:my_bismuth_wallet/service/dragginator_service.dart';
 import 'package:my_bismuth_wallet/ui/accounts/accountdetails_sheet.dart';
 import 'package:my_bismuth_wallet/ui/accounts/accounts_sheet.dart';
 import 'package:my_bismuth_wallet/ui/dragginator/my_dragginator_breeding_list.dart';
+import 'package:my_bismuth_wallet/ui/dragginator/my_dragginator_merging.dart';
 import 'package:my_bismuth_wallet/ui/send/send_confirm_sheet.dart';
 import 'package:my_bismuth_wallet/ui/settings/custom_url_widget.dart';
 import 'package:my_bismuth_wallet/ui/settings/disable_password_sheet.dart';
@@ -902,8 +904,8 @@ class _SettingsSheetState extends State<SettingsSheet>
                       color: StateContainer.of(context).curTheme.text15,
                     ),
                     Container(
-                      margin:
-                          EdgeInsetsDirectional.only(start: 30.0, top: 20.0, bottom: 10.0),
+                      margin: EdgeInsetsDirectional.only(
+                          start: 30.0, top: 20.0, bottom: 10.0),
                       child: Text(AppLocalization.of(context).letsPlay,
                           style: TextStyle(
                               fontSize: 16.0,
@@ -911,7 +913,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                               color:
                                   StateContainer.of(context).curTheme.text60)),
                     ),
-                                        Divider(
+                    Divider(
                       height: 2,
                       color: StateContainer.of(context).curTheme.text15,
                     ),
@@ -1235,19 +1237,45 @@ class _SettingsSheetState extends State<SettingsSheet>
                     AppSettings.buildSettingsListItemSingleLine(
                         context,
                         AppLocalization.of(context)
-                            .dragginatorGetEggWithEggHeader,
-                        FontAwesome5.egg, onPressed: () {
+                            .dragginatorMergingHeader,
+                        Typicons.flow_merge, onPressed: () {
                       Sheets.showAppHeightNineSheet(
                           context: context,
-                          widget: SendConfirmSheet(
-                              amountRaw: "0",
-                              operation: "token:transfer",
-                              openfield: "egg:1",
-                              comment: "",
-                              destination: AppLocalization.of(context).dragginatorAddress,
-                              contactName: ""));
-                              
+                          widget: MyDragginatorMerging(
+                              StateContainer.of(context)
+                                  .selectedAccount
+                                  .address));
                     }),
+                    sl.get<DragginatorService>().isEggOwner(
+                                StateContainer.of(context).wallet.tokens) ==
+                            false
+                        ? SizedBox()
+                        : Divider(
+                            height: 2,
+                            color: StateContainer.of(context).curTheme.text15,
+                          ),
+                    sl.get<DragginatorService>().isEggOwner(
+                                StateContainer.of(context).wallet.tokens) ==
+                            false
+                        ? SizedBox()
+                        : AppSettings.buildSettingsListItemSingleLine(
+                            context,
+                            AppLocalization.of(context)
+                                .dragginatorGetEggWithEggHeader,
+                            FontAwesome5.egg, onPressed: () {
+                            Sheets.showAppHeightNineSheet(
+                                context: context,
+                                widget: SendConfirmSheet(
+                                    title: AppLocalization.of(context)
+                                        .dragginatorGetEggWithEggHeader,
+                                    amountRaw: "0",
+                                    operation: "token:transfer",
+                                    openfield: "egg:1",
+                                    comment: "",
+                                    destination: AppLocalization.of(context)
+                                        .dragginatorAddress,
+                                    contactName: ""));
+                          }),
                     Divider(
                       height: 2,
                       color: StateContainer.of(context).curTheme.text15,
@@ -1260,13 +1288,15 @@ class _SettingsSheetState extends State<SettingsSheet>
                       Sheets.showAppHeightNineSheet(
                           context: context,
                           widget: SendConfirmSheet(
+                              title: AppLocalization.of(context)
+                                  .dragginatorGetEggWithBisHeader,
                               amountRaw: "3",
                               operation: "",
                               openfield: "",
                               comment: "",
-                              destination: AppLocalization.of(context).dragginatorAddress,
+                              destination: AppLocalization.of(context)
+                                  .dragginatorAddress,
                               contactName: ""));
-                              
                     }),
                     Divider(
                       height: 2,

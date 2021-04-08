@@ -137,6 +137,8 @@ dependencies:
   # Slidable list actions
   flutter_slidable: ^0.6.0-nullsafety.0
 
+  circular_profile_avatar: ^2.0.1-nullsafety
+
   # Lock helper
   synchronized: ^3.0.0
 

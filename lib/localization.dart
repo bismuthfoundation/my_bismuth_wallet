@@ -146,10 +146,8 @@ class AppLocalization {
         desc: 'transaction_detail', name: 'transactionDetailCopyPaste');
   }
 
-
   String get mempool {
-    return Intl.message('Unconfirmed',
-        desc: 'mempool', name: 'mempool');
+    return Intl.message('Unconfirmed', desc: 'mempool', name: 'mempool');
   }
 
   String get addressCopied {
@@ -224,27 +222,65 @@ class AppLocalization {
   }
 
   String get dragginatorBreedingListHeader {
-    return Intl.message('My breeding', desc: '', name: 'dragginatorBreedingListHeader');
+    return Intl.message('My breeding',
+        desc: '', name: 'dragginatorBreedingListHeader');
+  }
+
+  String get dragginatorMergingHeader {
+    return Intl.message('Merging',
+        desc: '', name: 'dragginatorMergingHeader');
   }
 
   String get dragginatorGetEggWithEggHeader {
-    return Intl.message('Get an egg with 1 EGG', desc: '', name: 'dragginatorGetEggWithEggHeader');
+    return Intl.message('Get an egg with 1 EGG',
+        desc: '', name: 'dragginatorGetEggWithEggHeader');
   }
 
   String get dragginatorGetEggWithBisHeader {
-    return Intl.message('Get an egg with 3 BIS', desc: '', name: 'dragginatorGetEggWithBisHeader');
+    return Intl.message('Get an egg with 3 BIS',
+        desc: '', name: 'dragginatorGetEggWithBisHeader');
   }
 
   String get dragginatorMarketPlace {
-    return Intl.message('Marketplace', desc: '', name: 'dragginatorMarketPlace');
+    return Intl.message('Marketplace',
+        desc: '', name: 'dragginatorMarketPlace');
   }
 
   String get dragginatorHelp {
     return Intl.message('Help', desc: '', name: 'dragginatorHelp');
   }
 
+  String get dragginatorSendEgg {
+    return Intl.message('Send the %1', desc: '', name: 'dragginatorSendEgg');
+  }
+
+  String get dragginatorAllowTransfer {
+    return Intl.message('Allow to transfer',
+        desc: '', name: 'dragginatorAllowTransfer');
+  }
+
+
+  String get dragginatorRegisterAnEggToTheHunt {
+    return Intl.message('Register to the hunt',
+        desc: '', name: 'dragginatorRegisterAnEggToTheHunt');
+  }
+
+  String get dragginatorHatchAnEgg {
+    return Intl.message('Hatch the egg',
+        desc: '', name: 'dragginatorHatchAnEgg');
+  }
+
+  String get dragginatorOffersAnEgg {
+    return Intl.message('Offers the egg',
+        desc: '', name: 'dragginatorOffersAnEgg');
+  }
+
+  String get dragginatorRevert {
+    return Intl.message('Revert', desc: '', name: 'dragginatorRevert');
+  }
+
   ///  -- END DRAGGINATOR
-  
+
   /// -- CUSTOM URL
 
   String get customUrlHeader {
@@ -698,8 +734,7 @@ class AppLocalization {
   }
 
   String get letsPlay {
-    return Intl.message("Let's play",
-        desc: '', name: 'letsPlay');
+    return Intl.message("Let's play", desc: '', name: 'letsPlay');
   }
 
   String get searchField {

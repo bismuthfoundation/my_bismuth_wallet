@@ -17,31 +17,38 @@ import 'package:my_bismuth_wallet/ui/send/send_sheet.dart';
 import 'package:my_bismuth_wallet/ui/util/ui_util.dart';
 import 'package:my_bismuth_wallet/ui/widgets/buttons.dart';
 import 'package:my_bismuth_wallet/ui/widgets/sheet_util.dart';
-import 'package:scrolling_page_indicator/scrolling_page_indicator.dart';
 import 'package:flutter_radar_chart/flutter_radar_chart.dart';
 import 'package:flip_card/flip_card.dart';
+import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 
-class MyDragginatorBreedingList extends StatefulWidget {
+class MyDragginatorMerging extends StatefulWidget {
   final String address;
 
-  MyDragginatorBreedingList(this.address) : super();
+  MyDragginatorMerging(this.address) : super();
 
-  _MyDragginatorBreedingListStateState createState() =>
-      _MyDragginatorBreedingListStateState();
+  _MyDragginatorMergingStateState createState() =>
+      _MyDragginatorMergingStateState();
 }
 
-class _MyDragginatorBreedingListStateState
-    extends State<MyDragginatorBreedingList> {
+class _MyDragginatorMergingStateState extends State<MyDragginatorMerging> {
   bool loaded;
   List<List> dragginatorInfosList;
   List<DragginatorListFromAddressResponse>
       dragginatorListFromAddressResponseList;
   PageController _controller;
 
+  bool dna1isSelected;
+  bool dna2isSelected;
+  String dna1selected;
+  String dna2selected;
+  List<String> dnaCompatible;
+
   double numberOfFeatures = 8;
   var data = [
-    [0, 0, 0, 0, 0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
   ];
+
   var ticks = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 
   var features = [
@@ -59,6 +66,8 @@ class _MyDragginatorBreedingListStateState
 
   @override
   void initState() {
+    dna1isSelected = false;
+    dna2isSelected = false;
     loaded = false;
     features = features.sublist(0, numberOfFeatures.floor());
     data = data
@@ -140,7 +149,7 @@ class _MyDragginatorBreedingListStateState
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  AppLocalization.of(context).dragginatorBreedingListHeader,
+                  AppLocalization.of(context).dragginatorMergingHeader,
                   style: AppStyles.textStyleSettingsHeader(context),
                 ),
               ],
@@ -157,22 +166,250 @@ class _MyDragginatorBreedingListStateState
                         ),
                         child: Column(
                           children: <Widget>[
+                            Container(
+                              width: 200.0,
+                              height: 200.0,
+                              child: RadarChart.dark(
+                                ticks: ticks,
+                                features: features,
+                                data: data,
+                                reverseAxis: false,
+                                useSides: false,
+                              ),
+                            ),
                             // list
                             Expanded(
                               child: Stack(
                                 children: <Widget>[
                                   loaded == true
-                                      ? PageView.builder(
-                                          physics:
-                                              const AlwaysScrollableScrollPhysics(),
-                                          controller: _controller,
-                                          itemCount:
+                                      ? GridView.count(
+                                          crossAxisCount: 2,
+                                          children: List.generate(
                                               dragginatorInfosList.length,
-                                          itemBuilder: (context, index) {
-                                            // Build
-                                            return buildSingle(context,
-                                                dragginatorInfosList[index]);
-                                          },
+                                              (index) {
+                                            return Center(
+                                              child: Container(
+                                                width: 100.0,
+                                                height: 100.0,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          100.0),
+                                                  border: Border.all(
+                                                      color: dna1selected ==
+                                                              dragginatorInfosList[
+                                                                      index][1]
+                                                                  .dna
+                                                          ? Colors.green
+                                                          : dna2selected ==
+                                                                  dragginatorInfosList[
+                                                                              index]
+                                                                          [1]
+                                                                      .dna
+                                                              ? Colors.blue
+                                                              : StateContainer.of(
+                                                                      context)
+                                                                  .curTheme
+                                                                  .primary,
+                                                      width: dna1selected ==
+                                                                  dragginatorInfosList[
+                                                                              index]
+                                                                          [1]
+                                                                      .dna ||
+                                                              dna2selected ==
+                                                                  dragginatorInfosList[
+                                                                          index][1]
+                                                                      .dna
+                                                          ? 4
+                                                          : 0),
+                                                ),
+                                                alignment:
+                                                    AlignmentDirectional(-4, 0),
+                                                child: Hero(
+                                                  tag: "dragginator",
+                                                  child: InkWell(
+                                                    onTap: () async {
+                                                      
+                                                        if (dna1isSelected ==
+                                                                true &&
+                                                            dna1selected ==
+                                                                dragginatorInfosList[
+                                                                        index][1]
+                                                                    .dna) {
+                                                          dna1isSelected =
+                                                              false;
+                                                          dna1selected = null;
+                                                          data[0] = [
+                                                            0,
+                                                            0,
+                                                            0,
+                                                            0,
+                                                            0,
+                                                            0,
+                                                            0,
+                                                            0
+                                                          ];
+                                                          dnaCompatible = null;
+                                                        } else {
+                                                          if (dna2isSelected ==
+                                                                  true &&
+                                                              dna2selected ==
+                                                                  dragginatorInfosList[
+                                                                          index][1]
+                                                                      .dna) {
+                                                            dna2isSelected =
+                                                                false;
+                                                            dna2selected = null;
+                                                            data[1] = [
+                                                              0,
+                                                              0,
+                                                              0,
+                                                              0,
+                                                              0,
+                                                              0,
+                                                              0,
+                                                              0
+                                                            ];
+                                                            dnaCompatible =
+                                                                null;
+                                                          } else {
+                                                            if (dna1isSelected ==
+                                                                false) {
+                                                              dna1isSelected =
+                                                                  true;
+                                                              dna1selected =
+                                                                  dragginatorInfosList[
+                                                                          index][1]
+                                                                      .dna;
+                                                              await getListCompatible(
+                                                                  dragginatorInfosList[
+                                                                          index][1]
+                                                                      .dna);
+                                                              data[0] = [
+                                                                dragginatorInfosList[
+                                                                        index][1]
+                                                                    .abilities[0][0],
+                                                                dragginatorInfosList[
+                                                                        index][1]
+                                                                    .abilities[0][1],
+                                                                dragginatorInfosList[
+                                                                        index][1]
+                                                                    .abilities[0][2],
+                                                                dragginatorInfosList[
+                                                                        index][1]
+                                                                    .abilities[0][3],
+                                                                dragginatorInfosList[
+                                                                        index][1]
+                                                                    .abilities[0][4],
+                                                                dragginatorInfosList[
+                                                                        index][1]
+                                                                    .abilities[0][5],
+                                                                dragginatorInfosList[
+                                                                        index][1]
+                                                                    .abilities[0][6],
+                                                                dragginatorInfosList[
+                                                                        index][1]
+                                                                    .abilities[0][7]
+                                                              ];
+                                                            } else {
+                                                              dna2isSelected =
+                                                                  true;
+                                                              dna2selected =
+                                                                  dragginatorInfosList[
+                                                                          index][1]
+                                                                      .dna;
+                                                              data[1] = [
+                                                                dragginatorInfosList[
+                                                                        index][1]
+                                                                    .abilities[0][0],
+                                                                dragginatorInfosList[
+                                                                        index][1]
+                                                                    .abilities[0][1],
+                                                                dragginatorInfosList[
+                                                                        index][1]
+                                                                    .abilities[0][2],
+                                                                dragginatorInfosList[
+                                                                        index][1]
+                                                                    .abilities[0][3],
+                                                                dragginatorInfosList[
+                                                                        index][1]
+                                                                    .abilities[0][4],
+                                                                dragginatorInfosList[
+                                                                        index][1]
+                                                                    .abilities[0][5],
+                                                                dragginatorInfosList[
+                                                                        index][1]
+                                                                    .abilities[0][6],
+                                                                dragginatorInfosList[
+                                                                        index][1]
+                                                                    .abilities[0][7]
+                                                              ];
+                                                            }
+                                                          }
+                                                        }
+                                                        setState(() {
+                                                      });
+                                                    },
+                                                    child:
+                                                        CircularProfileAvatar(
+                                                      UIUtil.getDragginatorURL(
+                                                          dragginatorInfosList[
+                                                                  index][1]
+                                                              .dna,
+                                                          dragginatorInfosList[
+                                                                  index][1]
+                                                              .status),
+                                                      elevation: 25,
+                                                      foregroundColor: dnaCompatible ==
+                                                              null
+                                                          ? StateContainer.of(
+                                                                  context)
+                                                              .curTheme
+                                                              .backgroundDark
+                                                              .withOpacity(0)
+                                                          : dnaCompatible !=
+                                                                      null &&
+                                                                  dnaCompatible.contains(
+                                                                          dragginatorInfosList[index][1]
+                                                                              .dna) ==
+                                                                      true
+                                                              ? StateContainer.of(
+                                                                      context)
+                                                                  .curTheme
+                                                                  .backgroundDark
+                                                                  .withOpacity(
+                                                                      0)
+                                                              : StateContainer.of(
+                                                                      context)
+                                                                  .curTheme
+                                                                  .backgroundDark
+                                                                  .withOpacity(
+                                                                      0.8),
+                                                      showInitialTextAbovePicture:
+                                                          true,
+                                                      backgroundColor: dnaCompatible !=
+                                                                  null &&
+                                                              dnaCompatible.contains(
+                                                                      dragginatorInfosList[index]
+                                                                              [
+                                                                              1]
+                                                                          .dna) ==
+                                                                  true
+                                                          ? StateContainer.of(
+                                                                  context)
+                                                              .curTheme
+                                                              .text05
+                                                          : StateContainer.of(
+                                                                  context)
+                                                              .curTheme
+                                                              .text45,
+                                                      radius: 50.0,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          }),
                                         )
                                       : Center(
                                           child: CircularProgressIndicator()),
@@ -185,22 +422,15 @@ class _MyDragginatorBreedingListStateState
                 ]),
               ),
             ),
-            dragginatorListFromAddressResponseList != null &&
-                    dragginatorListFromAddressResponseList.length > 0
-                ? ScrollingPageIndicator(
-                    dotColor: StateContainer.of(context).curTheme.primary30,
-                    dotSelectedColor:
-                        StateContainer.of(context).curTheme.primary,
-                    dotSize: 6,
-                    dotSelectedSize: 8,
-                    dotSpacing: 12,
-                    controller: _controller,
-                    itemCount: dragginatorListFromAddressResponseList.length,
-                    orientation: Axis.horizontal,
-                  )
-                : SizedBox(),
           ],
         ));
+  }
+
+  getListCompatible(String dna) async {
+    sl.get<DragginatorService>().getEggsCompatible(dna).then((value) {
+      dnaCompatible = value;
+      dnaCompatible.add(dna);
+    });
   }
 
   Widget buildSingle(BuildContext context, List dragginatorInfosList) {
@@ -266,16 +496,23 @@ class _MyDragginatorBreedingListStateState
                             ),
                             Row(
                               children: [
-                                Text("Creator: " + Address(dragginatorInfosFromDnaResponse.creator).getShortString2(),
+                                Text(
+                                    "Creator: " +
+                                        Address(dragginatorInfosFromDnaResponse
+                                                .creator)
+                                            .getShortString2(),
                                     style: AppStyles.textStyleParagraphSmall(
                                         context)),
                               ],
                             ),
-                           
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Text("Owner: " + Address(dragginatorInfosFromDnaResponse.owner).getShortString2(),
+                                Text(
+                                    "Owner: " +
+                                        Address(dragginatorInfosFromDnaResponse
+                                                .owner)
+                                            .getShortString2(),
                                     style: AppStyles.textStyleParagraphSmall(
                                         context)),
                               ],
@@ -541,7 +778,10 @@ class _MyDragginatorBreedingListStateState
                   SizedBox(
                     height: 10,
                   ),
-                  Text("Send the "+dragginatorInfosFromDnaResponse.status+" to another address",
+                  Text(
+                      "Send the " +
+                          dragginatorInfosFromDnaResponse.status +
+                          " to another address",
                       style: AppStyles.textStyleParagraphSmall(context)),
                   SizedBox(
                     height: 10,
@@ -552,14 +792,23 @@ class _MyDragginatorBreedingListStateState
                       AppButton.buildAppButton(
                           context,
                           AppButtonType.PRIMARY,
-                          AppLocalization.of(context).dragginatorSendEgg.replaceAll("%1", dragginatorInfosFromDnaResponse.status),
+                          AppLocalization.of(context)
+                              .dragginatorSendEgg
+                              .replaceAll(
+                                  "%1", dragginatorInfosFromDnaResponse.status),
                           Dimens.BUTTON_TOP_DIMENS, onPressed: () {
                         Sheets.showAppHeightNineSheet(
                             context: context,
                             widget: SendSheet(
                               sendATokenActive: false,
-                              title: AppLocalization.of(context).dragginatorSendEgg.replaceAll("%1", dragginatorInfosFromDnaResponse.status),
-                              actionButtonTitle: AppLocalization.of(context).dragginatorSendEgg.replaceAll("%1", dragginatorInfosFromDnaResponse.status),
+                              title: AppLocalization.of(context)
+                                  .dragginatorSendEgg
+                                  .replaceAll("%1",
+                                      dragginatorInfosFromDnaResponse.status),
+                              actionButtonTitle: AppLocalization.of(context)
+                                  .dragginatorSendEgg
+                                  .replaceAll("%1",
+                                      dragginatorInfosFromDnaResponse.status),
                               quickSendAmount: "0",
                               operation: "dragg:transfer",
                               openfield: dragginatorInfosFromDnaResponse.dna,
@@ -581,10 +830,16 @@ class _MyDragginatorBreedingListStateState
                   SizedBox(
                     height: 10,
                   ),
-                  Text("Allow someone to transfer the " + dragginatorInfosFromDnaResponse.status,
+                  Text(
+                      "Allow someone to transfer the " +
+                          dragginatorInfosFromDnaResponse.status,
                       style: AppStyles.textStyleParagraphSmall(context)),
                   Text(
-                      "This transaction will allow the recipient address to transfer the dna given in the data field. After using this command, the "+dragginatorInfosFromDnaResponse.status+" owner still can transfer the "+dragginatorInfosFromDnaResponse.status+". The owner can at anytime revert this action",
+                      "This transaction will allow the recipient address to transfer the dna given in the data field. After using this command, the " +
+                          dragginatorInfosFromDnaResponse.status +
+                          " owner still can transfer the " +
+                          dragginatorInfosFromDnaResponse.status +
+                          ". The owner can at anytime revert this action",
                       style: AppStyles.textStyleSettingItemSubheader(context)),
                   SizedBox(
                     height: 10,
@@ -628,7 +883,9 @@ class _MyDragginatorBreedingListStateState
                   Text("Revert the sell",
                       style: AppStyles.textStyleParagraphSmall(context)),
                   Text(
-                      "If the "+dragginatorInfosFromDnaResponse.status+" is transfered by the owner or the seller, only the new owner will be able to transfer it.",
+                      "If the " +
+                          dragginatorInfosFromDnaResponse.status +
+                          " is transfered by the owner or the seller, only the new owner will be able to transfer it.",
                       style: AppStyles.textStyleSettingItemSubheader(context)),
                   SizedBox(
                     height: 10,
@@ -762,7 +1019,6 @@ class _MyDragginatorBreedingListStateState
                       ),
                     ]))
                 : SizedBox(),
-            
           ]),
         ));
   }

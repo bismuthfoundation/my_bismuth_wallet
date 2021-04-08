@@ -819,6 +819,7 @@ class _AppHomePageState extends State<AppHomePage>
             Sheets.showAppHeightNineSheet(
                 context: context,
                 widget: SendSheet(
+                  sendATokenActive: true,
                   localCurrency: StateContainer.of(context).curCurrency,
                   contact: contact,
                   address: item.from,
@@ -1079,7 +1080,7 @@ class _AppHomePageState extends State<AppHomePage>
                                                     
                                                     ),
                                                   TextSpan(
-                                                    text: "   New egg",
+                                                    text: "   new egg",
                                                     style: AppStyles
                                                         .textStyleTransactionTypeBlue(
                                                             context),
@@ -1106,7 +1107,34 @@ class _AppHomePageState extends State<AppHomePage>
                                                     
                                                     ),
                                                   TextSpan(
-                                                    text: "   Eggs merge",
+                                                    text: "   eggs merge",
+                                                    style: AppStyles
+                                                        .textStyleTransactionTypeBlue(
+                                                            context),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ) :
+                                          item.isDragginator()
+                                        ?
+                                        Container(
+                                            child: RichText(
+                                              textAlign: TextAlign.start,
+                                              text: TextSpan(
+                                                text: '',
+                                                children: [
+                                                  WidgetSpan(
+                                                      child: Icon(
+                                                          FontAwesome5.dragon,
+                                                          size: AppFontSizes
+                                                              .small,
+                                                          color: Colors.blue[400]
+                                                             ),
+                                                    
+                                                    ),
+                                                  TextSpan(
+                                                    text: "   " + item.operation.split(":")[1],
                                                     style: AppStyles
                                                         .textStyleTransactionTypeBlue(
                                                             context),

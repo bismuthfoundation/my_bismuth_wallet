@@ -62,7 +62,7 @@ class AddressTxsResponseResult {
   static const String DRAGGINATOR_NEW = "dragg:new";
   static const String DRAGGINATOR_MERGE = "dragg:merge";
   static const String HN_REGISTER = "hypernode:register";
-  
+  static const String DRAGGINATOR_PREFIX = "dragg:";
 
   String getShortString() {
     if (type == BlockTypes.RECEIVE) {
@@ -101,6 +101,14 @@ class AddressTxsResponseResult {
         ? isAliasRegister = true
         : isAliasRegister = false;
     return isAliasRegister;
+  }
+
+  bool isDragginator() {
+    bool isDragginator;
+    operation.contains(DRAGGINATOR_PREFIX)
+        ? isDragginator = true
+        : isDragginator = false;
+    return isDragginator;   
   }
 
   bool isDragginatorNew() {
