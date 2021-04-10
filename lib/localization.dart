@@ -232,12 +232,12 @@ class AppLocalization {
   }
 
   String get dragginatorGetEggWithEggHeader {
-    return Intl.message('Get an egg with 1 EGG',
+    return Intl.message('Get an egg for 1 EGG',
         desc: '', name: 'dragginatorGetEggWithEggHeader');
   }
 
   String get dragginatorGetEggWithBisHeader {
-    return Intl.message('Get an egg with 3 BIS',
+    return Intl.message('Get an egg for 3 BIS',
         desc: '', name: 'dragginatorGetEggWithBisHeader');
   }
 
@@ -263,6 +263,11 @@ class AppLocalization {
   String get dragginatorRegisterAnEggToTheHunt {
     return Intl.message('Register to the hunt',
         desc: '', name: 'dragginatorRegisterAnEggToTheHunt');
+  }
+
+  String get dragginatorMerging2Eggs {
+    return Intl.message('Merging 2 eggs',
+        desc: '', name: 'dragginatorMerging2Eggs');
   }
 
   String get dragginatorHatchAnEgg {

@@ -1655,10 +1655,23 @@ class _AppHomePageState extends State<AppHomePage>
                         child: CircleAvatar(
                           backgroundColor:
                               StateContainer.of(context).curTheme.text05,
-                          backgroundImage: NetworkImage(UIUtil.getRobohashURL(
-                              StateContainer.of(context)
-                                  .selectedAccount
-                                  .address)),
+                          backgroundImage: NetworkImage(StateContainer.of(context)
+                                            .selectedAccount
+                                            .dragginatorDna ==
+                                        null ||
+                                    StateContainer.of(context)
+                                            .selectedAccount
+                                            .dragginatorDna ==
+                                        ""
+                                ? UIUtil.getRobohashURL(
+                                    StateContainer.of(context)
+                                        .selectedAccount
+                                        .address)
+                                : UIUtil.getDragginatorURL(
+                                    StateContainer.of(context)
+                                        .selectedAccount
+                                        .dragginatorDna,
+                                    "draggon"),),
                           radius: 50.0,
                         ),
                       ),

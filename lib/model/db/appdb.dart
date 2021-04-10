@@ -10,7 +10,7 @@ import 'package:my_bismuth_wallet/model/db/contact.dart';
 import 'package:my_bismuth_wallet/util/app_ffi/apputil.dart';
 
 class DBHelper {
-  static const int DB_VERSION = 1;
+  static const int DB_VERSION = 2;
   static const String CONTACTS_SQL = """CREATE TABLE Contacts( 
         id INTEGER PRIMARY KEY AUTOINCREMENT, 
         name TEXT, 
@@ -23,7 +23,8 @@ class DBHelper {
         last_accessed INTEGER,
         private_key TEXT,
         address TEXT,
-        balance TEXT)""";
+        balance TEXT,
+        dragginatorDna TEXT)""";
   static Database _db;
 
   Future<Database> get db async {
@@ -159,7 +160,8 @@ class DBHelper {
           index: list[i]['acct_index'],
           lastAccess: list[i]['last_accessed'],
           selected: list[i]['selected'] == 1 ? true : false,
-          balance: list[i]['balance']));
+          balance: list[i]['balance'],
+          dragginatorDna: list[i]['dragginatorDna']));
     }
     accounts.forEach((a) {
       a.address = AppUtil().seedToAddress(seed, a.index);
@@ -181,7 +183,8 @@ class DBHelper {
           index: list[i]['acct_index'],
           lastAccess: list[i]['last_accessed'],
           selected: list[i]['selected'] == 1 ? true : false,
-          balance: list[i]['balance']));
+          balance: list[i]['balance'],
+          dragginatorDna: list[i]['dragginatorDna']));
     }
     accounts.forEach((a) async {
       a.address = AppUtil().seedToAddress(seed, a.index);
@@ -212,16 +215,18 @@ class DBHelper {
           lastAccess: 0,
           balance: "0",
           selected: false,
-          address: AppUtil().seedToAddress(seed, nextIndex));
+          address: AppUtil().seedToAddress(seed, nextIndex),
+          dragginatorDna: "");
       await txn.rawInsert(
-          'INSERT INTO Accounts (name, acct_index, last_accessed, selected, address, balance) values(?, ?, ?, ?, ?, ?)',
+          'INSERT INTO Accounts (name, acct_index, last_accessed, selected, address, balance, dragginatorDna) values(?, ?, ?, ?, ?, ?, ?)',
           [
             account.name,
             account.index,
             account.lastAccess,
             account.selected ? 1 : 0,
             account.address,
-            account.balance
+            account.balance,
+            account.dragginatorDna
           ]);
     });
     return account;
@@ -236,13 +241,14 @@ class DBHelper {
   Future<int> saveAccount(Account account) async {
     var dbClient = await db;
     return await dbClient.rawInsert(
-        'INSERT INTO Accounts (name, acct_index, last_accessed, selected, balance) values(?, ?, ?, ?, ?)',
+        'INSERT INTO Accounts (name, acct_index, last_accessed, selected, balance, dragginatorDna) values(?, ?, ?, ?, ?, ?)',
         [
           account.name,
           account.index,
           account.lastAccess,
           account.selected ? 1 : 0,
-          account.balance
+          account.balance,
+          account.dragginatorDna
         ]);
   }
 
@@ -251,6 +257,13 @@ class DBHelper {
     return await dbClient.rawUpdate(
         'UPDATE Accounts SET name = ? WHERE acct_index = ?',
         [name, account.index]);
+  }
+
+  Future<int> changeAccountDragginatorDna(Account account, String dna) async {
+    var dbClient = await db;
+    return await dbClient.rawUpdate(
+        'UPDATE Accounts SET dragginatorDna = ? WHERE acct_index = ?',
+        [dna, account.index]);
   }
 
   Future<void> changeAccount(Account account) async {
@@ -287,7 +300,8 @@ class DBHelper {
         selected: true,
         lastAccess: list[0]['last_accessed'],
         balance: list[0]['balance'],
-        address: AppUtil().seedToAddress(seed, list[0]['acct_index']));
+        address: AppUtil().seedToAddress(seed, list[0]['acct_index']),
+        dragginatorDna: list[0]['dragginatorDna']);
     return account;
   }
 
@@ -307,7 +321,8 @@ class DBHelper {
         selected: true,
         lastAccess: list[0]['last_accessed'],
         balance: list[0]['balance'],
-        address: address);
+        address: address,
+        dragginatorDna: list[0]['dragginatorDna']);
     return account;
   }
 

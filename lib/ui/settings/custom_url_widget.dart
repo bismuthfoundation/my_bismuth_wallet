@@ -321,7 +321,16 @@ class _CustomUrlState extends State<CustomUrl> {
                                           )
                                         : SizedBox(),
                                     SizedBox(
-                                      height: 40,
+                                      height: 10,
+                                    ),
+                                    Divider(
+                                      height: 2,
+                                      color: StateContainer.of(context)
+                                          .curTheme
+                                          .text15,
+                                    ),
+                                    SizedBox(
+                                      height: 10,
                                     ),
                                     Container(
                                       child: getTokenApiContainer(),
@@ -338,6 +347,12 @@ class _CustomUrlState extends State<CustomUrl> {
                                             fontFamily: 'Roboto',
                                             fontWeight: FontWeight.w600,
                                           )),
+                                    ),
+                                    Divider(
+                                      height: 2,
+                                      color: StateContainer.of(context)
+                                          .curTheme
+                                          .text15,
                                     ),
                                     Row(
                                         mainAxisAlignment:

@@ -108,14 +108,14 @@ class AbilityClass {
         this.health,
     });
 
-    int? strategy;
-    int? bravery;
-    int? strength;
-    int? agility;
-    int? power;
-    int? stamina;
-    int? speed;
-    int? health;
+    double? strategy;
+    double? bravery;
+    double? strength;
+    double? agility;
+    double? power;
+    double? stamina;
+    double? speed;
+    double? health;
 
     factory AbilityClass.fromJson(Map<String, dynamic> json) => AbilityClass(
         strategy: json["strategy"],

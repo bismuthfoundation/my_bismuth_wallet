@@ -208,14 +208,30 @@ class _MyDragginatorBreedingListStateState
         dragginatorInfosList[1];
     data = [
       [
-        dragginatorInfosFromDnaResponse.abilities[0][0],
-        dragginatorInfosFromDnaResponse.abilities[0][1],
-        dragginatorInfosFromDnaResponse.abilities[0][2],
-        dragginatorInfosFromDnaResponse.abilities[0][3],
-        dragginatorInfosFromDnaResponse.abilities[0][4],
-        dragginatorInfosFromDnaResponse.abilities[0][5],
-        dragginatorInfosFromDnaResponse.abilities[0][6],
-        dragginatorInfosFromDnaResponse.abilities[0][7]
+        double.tryParse(
+                dragginatorInfosFromDnaResponse.abilities[0][0].toString())
+            .toInt(),
+        double.tryParse(
+                dragginatorInfosFromDnaResponse.abilities[0][1].toString())
+            .toInt(),
+        double.tryParse(
+                dragginatorInfosFromDnaResponse.abilities[0][2].toString())
+            .toInt(),
+        double.tryParse(
+                dragginatorInfosFromDnaResponse.abilities[0][3].toString())
+            .toInt(),
+        double.tryParse(
+                dragginatorInfosFromDnaResponse.abilities[0][4].toString())
+            .toInt(),
+        double.tryParse(
+                dragginatorInfosFromDnaResponse.abilities[0][5].toString())
+            .toInt(),
+        double.tryParse(
+                dragginatorInfosFromDnaResponse.abilities[0][6].toString())
+            .toInt(),
+        double.tryParse(
+                dragginatorInfosFromDnaResponse.abilities[0][7].toString())
+            .toInt(),
       ]
     ];
 
@@ -266,16 +282,23 @@ class _MyDragginatorBreedingListStateState
                             ),
                             Row(
                               children: [
-                                Text("Creator: " + Address(dragginatorInfosFromDnaResponse.creator).getShortString2(),
+                                Text(
+                                    "Creator: " +
+                                        Address(dragginatorInfosFromDnaResponse
+                                                .creator)
+                                            .getShortString2(),
                                     style: AppStyles.textStyleParagraphSmall(
                                         context)),
                               ],
                             ),
-                           
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Text("Owner: " + Address(dragginatorInfosFromDnaResponse.owner).getShortString2(),
+                                Text(
+                                    "Owner: " +
+                                        Address(dragginatorInfosFromDnaResponse
+                                                .owner)
+                                            .getShortString2(),
                                     style: AppStyles.textStyleParagraphSmall(
                                         context)),
                               ],
@@ -541,7 +564,10 @@ class _MyDragginatorBreedingListStateState
                   SizedBox(
                     height: 10,
                   ),
-                  Text("Send the "+dragginatorInfosFromDnaResponse.status+" to another address",
+                  Text(
+                      "Send the " +
+                          dragginatorInfosFromDnaResponse.status +
+                          " to another address",
                       style: AppStyles.textStyleParagraphSmall(context)),
                   SizedBox(
                     height: 10,
@@ -552,14 +578,23 @@ class _MyDragginatorBreedingListStateState
                       AppButton.buildAppButton(
                           context,
                           AppButtonType.PRIMARY,
-                          AppLocalization.of(context).dragginatorSendEgg.replaceAll("%1", dragginatorInfosFromDnaResponse.status),
+                          AppLocalization.of(context)
+                              .dragginatorSendEgg
+                              .replaceAll(
+                                  "%1", dragginatorInfosFromDnaResponse.status),
                           Dimens.BUTTON_TOP_DIMENS, onPressed: () {
                         Sheets.showAppHeightNineSheet(
                             context: context,
                             widget: SendSheet(
                               sendATokenActive: false,
-                              title: AppLocalization.of(context).dragginatorSendEgg.replaceAll("%1", dragginatorInfosFromDnaResponse.status),
-                              actionButtonTitle: AppLocalization.of(context).dragginatorSendEgg.replaceAll("%1", dragginatorInfosFromDnaResponse.status),
+                              title: AppLocalization.of(context)
+                                  .dragginatorSendEgg
+                                  .replaceAll("%1",
+                                      dragginatorInfosFromDnaResponse.status),
+                              actionButtonTitle: AppLocalization.of(context)
+                                  .dragginatorSendEgg
+                                  .replaceAll("%1",
+                                      dragginatorInfosFromDnaResponse.status),
                               quickSendAmount: "0",
                               operation: "dragg:transfer",
                               openfield: dragginatorInfosFromDnaResponse.dna,
@@ -581,10 +616,16 @@ class _MyDragginatorBreedingListStateState
                   SizedBox(
                     height: 10,
                   ),
-                  Text("Allow someone to transfer the " + dragginatorInfosFromDnaResponse.status,
+                  Text(
+                      "Allow someone to transfer the " +
+                          dragginatorInfosFromDnaResponse.status,
                       style: AppStyles.textStyleParagraphSmall(context)),
                   Text(
-                      "This transaction will allow the recipient address to transfer the dna given in the data field. After using this command, the "+dragginatorInfosFromDnaResponse.status+" owner still can transfer the "+dragginatorInfosFromDnaResponse.status+". The owner can at anytime revert this action",
+                      "This transaction will allow the recipient address to transfer the dna given in the data field. After using this command, the " +
+                          dragginatorInfosFromDnaResponse.status +
+                          " owner still can transfer the " +
+                          dragginatorInfosFromDnaResponse.status +
+                          ". The owner can at anytime revert this action",
                       style: AppStyles.textStyleSettingItemSubheader(context)),
                   SizedBox(
                     height: 10,
@@ -628,7 +669,9 @@ class _MyDragginatorBreedingListStateState
                   Text("Revert the sell",
                       style: AppStyles.textStyleParagraphSmall(context)),
                   Text(
-                      "If the "+dragginatorInfosFromDnaResponse.status+" is transfered by the owner or the seller, only the new owner will be able to transfer it.",
+                      "If the " +
+                          dragginatorInfosFromDnaResponse.status +
+                          " is transfered by the owner or the seller, only the new owner will be able to transfer it.",
                       style: AppStyles.textStyleSettingItemSubheader(context)),
                   SizedBox(
                     height: 10,
@@ -762,7 +805,6 @@ class _MyDragginatorBreedingListStateState
                       ),
                     ]))
                 : SizedBox(),
-            
           ]),
         ));
   }

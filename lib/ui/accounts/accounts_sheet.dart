@@ -331,7 +331,7 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
   Widget _buildAccountListItem(
       BuildContext context, Account account, StateSetter setState) {
     return Slidable(
-       key: Key(account.id.toString()),
+      key: Key(account.id.toString()),
       secondaryActions: _getSlideActionsForAccount(context, account, setState),
       actionExtentRatio: 0.2,
       actionPane: SlidableStrechActionPane(),
@@ -390,7 +390,13 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
                                         .curTheme
                                         .text05,
                                     backgroundImage: NetworkImage(
-                                      UIUtil.getRobohashURL(account.address),
+                                      account.dragginatorDna == null ||
+                                              account.dragginatorDna == ""
+                                          ? UIUtil.getRobohashURL(
+                                              account.address)
+                                          : UIUtil.getDragginatorURL(
+                                              account.dragginatorDna,
+                                              "draggon"),
                                     ),
                                     radius: 50.0,
                                   ),

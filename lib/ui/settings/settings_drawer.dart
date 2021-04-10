@@ -575,10 +575,23 @@ class _SettingsSheetState extends State<SettingsSheet>
                                       .curTheme
                                       .text05,
                                   backgroundImage: NetworkImage(
-                                    UIUtil.getRobohashURL(
-                                        StateContainer.of(context)
+                                    StateContainer.of(context)
                                             .selectedAccount
-                                            .address),
+                                            .dragginatorDna ==
+                                        null ||
+                                    StateContainer.of(context)
+                                            .selectedAccount
+                                            .dragginatorDna ==
+                                        ""
+                                ? UIUtil.getRobohashURL(
+                                    StateContainer.of(context)
+                                        .selectedAccount
+                                        .address)
+                                : UIUtil.getDragginatorURL(
+                                    StateContainer.of(context)
+                                        .selectedAccount
+                                        .dragginatorDna,
+                                    "draggon"),
                                   ),
                                   radius: 50.0,
                                 ),

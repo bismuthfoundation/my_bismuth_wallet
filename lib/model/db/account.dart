@@ -11,8 +11,9 @@ class Account {
   bool selected; // Whether this is the currently selected account
   String address;
   String balance; // Last known balance in RAW
+  String dragginatorDna; // Dna Dragginator for avatar
 
-  Account({this.id, this.index, this.name, this.lastAccess, this.selected = false, this.address, this.balance});
+  Account({this.id, this.index, this.name, this.lastAccess, this.selected = false, this.address, this.balance, this.dragginatorDna});
 
   String getShortName() {
     List<String> splitName = name.split(" ");
