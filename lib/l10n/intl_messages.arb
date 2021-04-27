@@ -132,7 +132,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "transactionDetailOpenfield": "Openfield",
+  "transactionDetailOpenfield": "Data (Openfield)",
   "@transactionDetailOpenfield": {
     "description": "transaction_detail",
     "type": "text",
@@ -450,7 +450,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "enterOpenfield": "Enter Openfield",
+  "enterOpenfield": "Enter Data (Openfield)",
   "@enterOpenfield": {
     "description": "send_openfield_hint",
     "type": "text",
@@ -498,7 +498,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "openfield": "Openfield",
+  "openfield": "Data (Openfield)",
   "@openfield": {
     "description": "openfield",
     "type": "text",

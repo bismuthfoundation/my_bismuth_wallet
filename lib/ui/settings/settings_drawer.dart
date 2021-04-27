@@ -576,22 +576,24 @@ class _SettingsSheetState extends State<SettingsSheet>
                                       .text05,
                                   backgroundImage: NetworkImage(
                                     StateContainer.of(context)
-                                            .selectedAccount
-                                            .dragginatorDna ==
-                                        null ||
-                                    StateContainer.of(context)
-                                            .selectedAccount
-                                            .dragginatorDna ==
-                                        ""
-                                ? UIUtil.getRobohashURL(
-                                    StateContainer.of(context)
-                                        .selectedAccount
-                                        .address)
-                                : UIUtil.getDragginatorURL(
-                                    StateContainer.of(context)
-                                        .selectedAccount
-                                        .dragginatorDna,
-                                    "draggon"),
+                                                    .selectedAccount
+                                                    .dragginatorDna ==
+                                                null ||
+                                            StateContainer.of(context)
+                                                    .selectedAccount
+                                                    .dragginatorDna ==
+                                                ""
+                                        ? UIUtil.getRobohashURL(
+                                            StateContainer.of(context)
+                                                .selectedAccount
+                                                .address)
+                                        : UIUtil.getDragginatorURL(
+                                            StateContainer.of(context)
+                                                .selectedAccount
+                                                .dragginatorDna,
+                                            StateContainer.of(context)
+                                                .selectedAccount
+                                                .dragginatorStatus),
                                   ),
                                   radius: 50.0,
                                 ),
@@ -646,10 +648,25 @@ class _SettingsSheetState extends State<SettingsSheet>
                                                     .curTheme
                                                     .text05,
                                             backgroundImage: NetworkImage(
-                                              UIUtil.getRobohashURL(
-                                                  StateContainer.of(context)
-                                                      .recentLast
-                                                      .address),
+                                              StateContainer.of(context)
+                                                              .recentLast
+                                                              .dragginatorDna ==
+                                                          null ||
+                                                      StateContainer.of(context)
+                                                              .recentLast
+                                                              .dragginatorDna ==
+                                                          ""
+                                                  ? UIUtil.getRobohashURL(
+                                                      StateContainer.of(context)
+                                                          .recentLast
+                                                          .address)
+                                                  : UIUtil.getDragginatorURL(
+                                                      StateContainer.of(context)
+                                                          .recentLast
+                                                          .dragginatorDna,
+                                                      StateContainer.of(context)
+                                                          .recentLast
+                                                          .dragginatorStatus),
                                             ),
                                             radius: 50.0,
                                           ),
@@ -717,11 +734,25 @@ class _SettingsSheetState extends State<SettingsSheet>
                                                     .curTheme
                                                     .text05,
                                             backgroundImage: NetworkImage(
-                                              UIUtil.getRobohashURL(
-                                                StateContainer.of(context)
-                                                    .recentSecondLast
-                                                    .address,
-                                              ),
+                                              StateContainer.of(context)
+                                                              .recentSecondLast
+                                                              .dragginatorDna ==
+                                                          null ||
+                                                      StateContainer.of(context)
+                                                              .recentSecondLast
+                                                              .dragginatorDna ==
+                                                          ""
+                                                  ? UIUtil.getRobohashURL(
+                                                      StateContainer.of(context)
+                                                          .recentSecondLast
+                                                          .address)
+                                                  : UIUtil.getDragginatorURL(
+                                                      StateContainer.of(context)
+                                                          .recentSecondLast
+                                                          .dragginatorDna,
+                                                      StateContainer.of(context)
+                                                          .recentSecondLast
+                                                          .dragginatorStatus),
                                             ),
                                             radius: 50.0,
                                           ),
@@ -1249,8 +1280,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                     ),
                     AppSettings.buildSettingsListItemSingleLine(
                         context,
-                        AppLocalization.of(context)
-                            .dragginatorMergingHeader,
+                        AppLocalization.of(context).dragginatorMergingHeader,
                         Typicons.flow_merge, onPressed: () {
                       Sheets.showAppHeightNineSheet(
                           context: context,
@@ -1311,7 +1341,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                                   .dragginatorAddress,
                               contactName: ""));
                     }),
-                    Divider(
+                    /*Divider(
                       height: 2,
                       color: StateContainer.of(context).curTheme.text15,
                     ),
@@ -1325,7 +1355,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                         AppLocalization.of(context).dragginatorMarketPlace,
                         "Soon...",
                       );
-                    }),
+                    }),*/
                     Divider(
                       height: 2,
                       color: StateContainer.of(context).curTheme.text15,

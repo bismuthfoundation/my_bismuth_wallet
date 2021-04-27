@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:my_bismuth_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/service/dragginator_service.dart';
 import 'package:my_bismuth_wallet/service_locator.dart';
 import 'package:event_taxi/event_taxi.dart';
 import 'package:my_bismuth_wallet/dimens.dart';
@@ -45,7 +46,7 @@ class AccountDetailsSheet {
     this.deleted = false;
   }
 
-  Future<bool> _onWillPop() async {
+  Future<bool> _onWillPop(BuildContext context) async {
     // Update name if changed and valid
     if (originalName != _nameController.text &&
         _nameController.text.trim().length > 0 &&
@@ -55,12 +56,25 @@ class AccountDetailsSheet {
       EventTaxiImpl.singleton().fire(AccountModifiedEvent(account: account));
     }
     // Update avatar dna if changed and valid
-    if (originalName != _dragginatorAvatarDnaController.text &&
-        
-        !deleted) {
-      sl.get<DBHelper>().changeAccountDragginatorDna(account, _dragginatorAvatarDnaController.text);
-      account.dragginatorDna = _dragginatorAvatarDnaController.text;
-      EventTaxiImpl.singleton().fire(AccountModifiedEvent(account: account));
+    if (originalName != _dragginatorAvatarDnaController.text && !deleted) {
+      await sl
+          .get<DragginatorService>()
+          .getInfosFromDna(_dragginatorAvatarDnaController.text)
+          .then((value) {
+        if (value != null && value.status != "") {
+          sl.get<DBHelper>().changeAccountDragginatorDna(
+              account, _dragginatorAvatarDnaController.text, value.status);
+          account.dragginatorDna = _dragginatorAvatarDnaController.text;
+          account.dragginatorStatus = value.status;
+          EventTaxiImpl.singleton()
+              .fire(AccountModifiedEvent(account: account));
+        } else {
+           UIUtil.showSnackbar(
+            "The dna '"+_dragginatorAvatarDnaController.text+"' doesn't exist.",
+            context);
+          return false;
+        }
+      });
     }
     return true;
   }
@@ -68,17 +82,18 @@ class AccountDetailsSheet {
   mainBottomSheet(BuildContext context) {
     _addressCopied = false;
     _nameController = TextEditingController(text: account.name);
-    _dragginatorAvatarDnaController = TextEditingController(text: account.dragginatorDna);
+    _dragginatorAvatarDnaController =
+        TextEditingController(text: account.dragginatorDna);
     _nameFocusNode = FocusNode();
     _dragginatorAvatarDnaFocusNode = FocusNode();
     AppSheets.showAppHeightNineSheet(
         context: context,
-        onDisposed: _onWillPop,
+        onDisposed: () => _onWillPop(context),
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
             return WillPopScope(
-                onWillPop: _onWillPop,
+                onWillPop: () => _onWillPop(context),
                 child: TapOutsideUnfocus(
                     child: SafeArea(
                         minimum: EdgeInsets.only(

@@ -396,7 +396,7 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
                                               account.address)
                                           : UIUtil.getDragginatorURL(
                                               account.dragginatorDna,
-                                              "draggon"),
+                                              account.dragginatorStatus),
                                     ),
                                     radius: 50.0,
                                   ),

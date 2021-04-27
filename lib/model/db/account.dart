@@ -12,8 +12,9 @@ class Account {
   String address;
   String balance; // Last known balance in RAW
   String dragginatorDna; // Dna Dragginator for avatar
+  String dragginatorStatus;
 
-  Account({this.id, this.index, this.name, this.lastAccess, this.selected = false, this.address, this.balance, this.dragginatorDna});
+  Account({this.id, this.index, this.name, this.lastAccess, this.selected = false, this.address, this.balance, this.dragginatorDna, this.dragginatorStatus});
 
   String getShortName() {
     List<String> splitName = name.split(" ");

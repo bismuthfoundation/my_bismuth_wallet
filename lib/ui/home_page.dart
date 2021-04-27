@@ -784,7 +784,7 @@ class _AppHomePageState extends State<AppHomePage>
           AppLocalization.of(context).releaseNoteHeader +
               " " +
               packageInfo.version,
-          "- Add Dragginator features",
+          "- Add Dragginator features\n- Change 'openfield' label by 'data'\n- Cat avatar could be changed by an egg or a draggoon (account sheet)",
           CaseChange.toUpperCase(AppLocalization.of(context).ok, context),
           () async {
         await sl.get<SharedPrefsUtil>().setVersionApp(packageInfo.version);
@@ -1671,7 +1671,9 @@ class _AppHomePageState extends State<AppHomePage>
                                     StateContainer.of(context)
                                         .selectedAccount
                                         .dragginatorDna,
-                                    "draggon"),),
+                                     StateContainer.of(context)
+                                        .selectedAccount
+                                        .dragginatorStatus),),
                           radius: 50.0,
                         ),
                       ),

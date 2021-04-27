@@ -194,7 +194,9 @@ class _ReceiveSheetStateState extends State<ReceiveSheet> {
                                     StateContainer.of(context)
                                         .selectedAccount
                                         .dragginatorDna,
-                                    "draggon"),
+                                    StateContainer.of(context)
+                                        .selectedAccount
+                                        .dragginatorStatus),
                           ),
                           radius: 50.0,
                         ),

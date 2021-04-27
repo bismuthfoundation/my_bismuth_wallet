@@ -10,7 +10,7 @@ import 'package:my_bismuth_wallet/model/db/contact.dart';
 import 'package:my_bismuth_wallet/util/app_ffi/apputil.dart';
 
 class DBHelper {
-  static const int DB_VERSION = 2;
+  static const int DB_VERSION = 4;
   static const String CONTACTS_SQL = """CREATE TABLE Contacts( 
         id INTEGER PRIMARY KEY AUTOINCREMENT, 
         name TEXT, 
@@ -24,8 +24,17 @@ class DBHelper {
         private_key TEXT,
         address TEXT,
         balance TEXT,
-        dragginatorDna TEXT)""";
+        dragginatorDna TEXT,
+        dragginatorStatus TEXT)""";
   static Database _db;
+
+  static const String ACCOUNTS_ADD_ACCOUNT_COLUMN_SQL_DRAGGINATOR_DNA = """
+    ALTER TABLE Accounts ADD dragginatorDna TEXT
+    """;
+
+  static const String ACCOUNTS_ADD_ACCOUNT_COLUMN_SQL_DRAGGINATOR_STATUS = """
+    ALTER TABLE Accounts ADD dragginatorStatus TEXT
+    """;
 
   Future<Database> get db async {
     if (_db != null) return _db;
@@ -47,7 +56,15 @@ class DBHelper {
     await db.execute(ACCOUNTS_SQL);
   }
 
-  void _onUpgrade(Database db, int oldVersion, int newVersion) async {}
+  void _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion == 1) {
+      await db.execute(ACCOUNTS_ADD_ACCOUNT_COLUMN_SQL_DRAGGINATOR_DNA);
+    } else {
+      if (oldVersion == 2 || oldVersion == 3) {
+        await db.execute(ACCOUNTS_ADD_ACCOUNT_COLUMN_SQL_DRAGGINATOR_STATUS);
+      }
+    }
+  }
 
   // Contacts
   Future<List<Contact>> getContacts() async {
@@ -161,7 +178,8 @@ class DBHelper {
           lastAccess: list[i]['last_accessed'],
           selected: list[i]['selected'] == 1 ? true : false,
           balance: list[i]['balance'],
-          dragginatorDna: list[i]['dragginatorDna']));
+          dragginatorDna: list[i]['dragginatorDna'],
+          dragginatorStatus: list[i]['dragginatorStatus']));
     }
     accounts.forEach((a) {
       a.address = AppUtil().seedToAddress(seed, a.index);
@@ -184,7 +202,8 @@ class DBHelper {
           lastAccess: list[i]['last_accessed'],
           selected: list[i]['selected'] == 1 ? true : false,
           balance: list[i]['balance'],
-          dragginatorDna: list[i]['dragginatorDna']));
+          dragginatorDna: list[i]['dragginatorDna'],
+          dragginatorStatus: list[i]['dragginatorStatus']));
     }
     accounts.forEach((a) async {
       a.address = AppUtil().seedToAddress(seed, a.index);
@@ -216,9 +235,10 @@ class DBHelper {
           balance: "0",
           selected: false,
           address: AppUtil().seedToAddress(seed, nextIndex),
-          dragginatorDna: "");
+          dragginatorDna: "",
+          dragginatorStatus: "");
       await txn.rawInsert(
-          'INSERT INTO Accounts (name, acct_index, last_accessed, selected, address, balance, dragginatorDna) values(?, ?, ?, ?, ?, ?, ?)',
+          'INSERT INTO Accounts (name, acct_index, last_accessed, selected, address, balance, dragginatorDna, dragginatorStatus) values(?, ?, ?, ?, ?, ?, ?, ?)',
           [
             account.name,
             account.index,
@@ -226,7 +246,8 @@ class DBHelper {
             account.selected ? 1 : 0,
             account.address,
             account.balance,
-            account.dragginatorDna
+            account.dragginatorDna,
+            account.dragginatorStatus
           ]);
     });
     return account;
@@ -241,14 +262,15 @@ class DBHelper {
   Future<int> saveAccount(Account account) async {
     var dbClient = await db;
     return await dbClient.rawInsert(
-        'INSERT INTO Accounts (name, acct_index, last_accessed, selected, balance, dragginatorDna) values(?, ?, ?, ?, ?, ?)',
+        'INSERT INTO Accounts (name, acct_index, last_accessed, selected, balance, dragginatorDna, dragginatorStatus) values(?, ?, ?, ?, ?, ?, ?)',
         [
           account.name,
           account.index,
           account.lastAccess,
           account.selected ? 1 : 0,
           account.balance,
-          account.dragginatorDna
+          account.dragginatorDna,
+          account.dragginatorStatus
         ]);
   }
 
@@ -259,11 +281,12 @@ class DBHelper {
         [name, account.index]);
   }
 
-  Future<int> changeAccountDragginatorDna(Account account, String dna) async {
+  Future<int> changeAccountDragginatorDna(
+      Account account, String dna, String status) async {
     var dbClient = await db;
     return await dbClient.rawUpdate(
-        'UPDATE Accounts SET dragginatorDna = ? WHERE acct_index = ?',
-        [dna, account.index]);
+        'UPDATE Accounts SET dragginatorDna = ?, dragginatorStatus = ? WHERE acct_index = ?',
+        [dna, status, account.index]);
   }
 
   Future<void> changeAccount(Account account) async {
@@ -301,7 +324,8 @@ class DBHelper {
         lastAccess: list[0]['last_accessed'],
         balance: list[0]['balance'],
         address: AppUtil().seedToAddress(seed, list[0]['acct_index']),
-        dragginatorDna: list[0]['dragginatorDna']);
+        dragginatorDna: list[0]['dragginatorDna'],
+        dragginatorStatus: list[0]['dragginatorStatus']);
     return account;
   }
 
@@ -322,7 +346,8 @@ class DBHelper {
         lastAccess: list[0]['last_accessed'],
         balance: list[0]['balance'],
         address: address,
-        dragginatorDna: list[0]['dragginatorDna']);
+        dragginatorDna: list[0]['dragginatorDna'],
+        dragginatorStatus: list[0]['dragginatorStatus']);
     return account;
   }
 

@@ -132,7 +132,7 @@ class AppLocalization {
   }
 
   String get transactionDetailOpenfield {
-    return Intl.message('Openfield',
+    return Intl.message('Data (Openfield)',
         desc: 'transaction_detail', name: 'transactionDetailOpenfield');
   }
 
@@ -218,7 +218,7 @@ class AppLocalization {
 
   /// -- DRAGGINATOR
   String get dragginatorHeader {
-    return Intl.message('Dragginator', desc: '', name: 'dragginatorHeader');
+    return Intl.message('Dragginator (beta)', desc: '', name: 'dragginatorHeader');
   }
 
   String get dragginatorBreedingListHeader {
@@ -488,7 +488,7 @@ class AppLocalization {
   }
 
   String get enterOpenfield {
-    return Intl.message("Enter Openfield",
+    return Intl.message("Enter Data (Openfield)",
         desc: 'send_openfield_hint', name: 'enterOpenfield');
   }
 
@@ -527,7 +527,7 @@ class AppLocalization {
   }
 
   String get openfield {
-    return Intl.message("Openfield", desc: 'openfield', name: 'openfield');
+    return Intl.message("Data (Openfield)", desc: 'openfield', name: 'openfield');
   }
 
   String get operation {
