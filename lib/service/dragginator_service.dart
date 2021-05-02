@@ -57,7 +57,6 @@ class DragginatorService {
             dragginatorInfosFromDnaResponseFromJson(reply);
       }
     } catch (e) {
-      print(e);
     } finally {
       httpClient.close();
     }

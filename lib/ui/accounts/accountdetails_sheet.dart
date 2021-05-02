@@ -57,24 +57,33 @@ class AccountDetailsSheet {
     }
     // Update avatar dna if changed and valid
     if (originalName != _dragginatorAvatarDnaController.text && !deleted) {
-      await sl
-          .get<DragginatorService>()
-          .getInfosFromDna(_dragginatorAvatarDnaController.text)
-          .then((value) {
-        if (value != null && value.status != "") {
-          sl.get<DBHelper>().changeAccountDragginatorDna(
-              account, _dragginatorAvatarDnaController.text, value.status);
-          account.dragginatorDna = _dragginatorAvatarDnaController.text;
-          account.dragginatorStatus = value.status;
-          EventTaxiImpl.singleton()
-              .fire(AccountModifiedEvent(account: account));
-        } else {
-           UIUtil.showSnackbar(
-            "The dna '"+_dragginatorAvatarDnaController.text+"' doesn't exist.",
-            context);
-          return false;
-        }
-      });
+      if (_dragginatorAvatarDnaController.text.trim() != "") {
+        await sl
+            .get<DragginatorService>()
+            .getInfosFromDna(_dragginatorAvatarDnaController.text)
+            .then((value) {
+          if (value != null && value.status != "") {
+            sl.get<DBHelper>().changeAccountDragginatorDna(
+                account, _dragginatorAvatarDnaController.text, value.status);
+            account.dragginatorDna = _dragginatorAvatarDnaController.text;
+            account.dragginatorStatus = value.status;
+            EventTaxiImpl.singleton()
+                .fire(AccountModifiedEvent(account: account));
+          } else {
+            UIUtil.showSnackbar(
+                "The dna '" +
+                    _dragginatorAvatarDnaController.text +
+                    "' doesn't exist.",
+                context);
+            return false;
+          }
+        });
+      } else {
+        sl.get<DBHelper>().changeAccountDragginatorDna(account, "", "");
+        account.dragginatorDna = "";
+        account.dragginatorStatus = "";
+        EventTaxiImpl.singleton().fire(AccountModifiedEvent(account: account));
+      }
     }
     return true;
   }

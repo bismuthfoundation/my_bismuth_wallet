@@ -83,12 +83,6 @@ android {
           exclude 'META-INF/LICENSE'
           exclude 'META-INF/NOTICE'
     }
-
-    externalNativeBuild {
-    cmake {
-        path "../CMakeLists.txt"
-    }
-    }  
 }
 
 flutter {

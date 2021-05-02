@@ -59,6 +59,7 @@ class DBHelper {
   void _onUpgrade(Database db, int oldVersion, int newVersion) async {
     if (oldVersion == 1) {
       await db.execute(ACCOUNTS_ADD_ACCOUNT_COLUMN_SQL_DRAGGINATOR_DNA);
+      await db.execute(ACCOUNTS_ADD_ACCOUNT_COLUMN_SQL_DRAGGINATOR_STATUS);
     } else {
       if (oldVersion == 2 || oldVersion == 3) {
         await db.execute(ACCOUNTS_ADD_ACCOUNT_COLUMN_SQL_DRAGGINATOR_STATUS);
