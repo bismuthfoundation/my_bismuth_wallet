@@ -45,6 +45,7 @@ class SendSheet extends StatefulWidget {
   final String title;
   final String actionButtonTitle;
   final bool sendATokenActive;
+  final String selectedTokenName;
 
   SendSheet(
       {@required this.localCurrency,
@@ -55,6 +56,7 @@ class SendSheet extends StatefulWidget {
       this.quickSendAmount,
       this.title,
       this.actionButtonTitle,
+      this.selectedTokenName,
       @required this.sendATokenActive})
       : super();
 
@@ -131,6 +133,7 @@ class _SendSheetState extends State<SendSheet> {
     _sendTokenQuantityController = TextEditingController();
     _sendAddressStyle = AddressStyle.TEXT60;
     _contacts = List();
+    _selectedTokenName = widget.selectedTokenName;
     quickSendAmount = widget.quickSendAmount;
     this.animationOpen = false;
     if (widget.contact != null) {

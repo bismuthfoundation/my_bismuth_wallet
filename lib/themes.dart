@@ -143,7 +143,7 @@ class BismuthTheme extends BaseTheme {
   BoxShadow boxShadow = BoxShadow(color: Colors.transparent);
   BoxShadow boxShadowButton = BoxShadow(color: Colors.transparent);
 
-  OverlayTheme qrScanTheme = OverlayTheme.IDENA;
+  OverlayTheme qrScanTheme = OverlayTheme.UNIRIS;
   AppIconEnum appIcon = AppIconEnum.IDENA;
 }
 
