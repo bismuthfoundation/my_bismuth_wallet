@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:my_bismuth_wallet/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:my_bismuth_wallet/model/token_ref.dart';
 import 'package:my_bismuth_wallet/network/model/response/address_txs_response.dart';
 import 'package:my_bismuth_wallet/styles.dart';
 import 'package:my_bismuth_wallet/appstate_container.dart';
@@ -187,12 +188,7 @@ class _MyTokensListStateState extends State<MyTokensList> {
                               SizedBox(
                                 width: 5,
                               ),
-                              bisToken.tokenName == "egg"
-                                  ? Icon(
-                                      FontAwesome5.egg,
-                                      size: AppFontSizes.small,
-                                    )
-                                  : SizedBox(),
+                              TokenRef().getIcon(bisToken.tokenName),
                             ],
                           ),
                           bisToken.tokensQuantity > 0
