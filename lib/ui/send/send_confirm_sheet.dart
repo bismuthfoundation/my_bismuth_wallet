@@ -629,7 +629,7 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
       if (widget.openfield.length > 0) {
         openfield = widget.openfield;
       }
-      if (widget.comment.length > 0) {
+      if (widget.comment.length > 0 && openfield.contains(':{"Message":"') == false) {
         openfield += ':{"Message":"' + widget.comment + '"}';
       }
       String seed = await StateContainer.of(context).getSeed();
