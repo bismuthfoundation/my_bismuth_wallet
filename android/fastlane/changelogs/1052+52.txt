@@ -1,0 +1,3 @@
+- Send token from My Token List screen
+- Fix bug with deep link
+- Add icons relative to token
