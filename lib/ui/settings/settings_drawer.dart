@@ -1,16 +1,24 @@
+// @dart=2.9
+
 import 'dart:async';
 import 'package:event_taxi/event_taxi.dart';
+import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:fluttericon/iconic_icons.dart';
 import 'package:fluttericon/typicons_icons.dart';
 import 'package:logger/logger.dart';
+import 'package:my_bismuth_wallet/service/dragginator_service.dart';
 import 'package:my_bismuth_wallet/ui/accounts/accountdetails_sheet.dart';
 import 'package:my_bismuth_wallet/ui/accounts/accounts_sheet.dart';
+import 'package:my_bismuth_wallet/ui/dragginator/my_dragginator_breeding_list.dart';
+import 'package:my_bismuth_wallet/ui/dragginator/my_dragginator_merging.dart';
+import 'package:my_bismuth_wallet/ui/send/send_confirm_sheet.dart';
 import 'package:my_bismuth_wallet/ui/settings/custom_url_widget.dart';
 import 'package:my_bismuth_wallet/ui/settings/disable_password_sheet.dart';
 import 'package:my_bismuth_wallet/ui/settings/set_password_sheet.dart';
 import 'package:my_bismuth_wallet/ui/settings/tokens_widget.dart';
 import 'package:my_bismuth_wallet/ui/widgets/app_simpledialog.dart';
+import 'package:my_bismuth_wallet/ui/widgets/dialog.dart';
 import 'package:my_bismuth_wallet/ui/widgets/sheet_util.dart';
 import 'package:package_info/package_info.dart';
 import 'package:flutter/material.dart';
@@ -53,6 +61,8 @@ class _SettingsSheetState extends State<SettingsSheet>
   Animation<Offset> _tokensListOffsetFloat;
   AnimationController _customUrlController;
   Animation<Offset> _customUrlOffsetFloat;
+  AnimationController _dragginatorController;
+  Animation<Offset> _dragginatorOffsetFloat;
 
   String versionString = "";
 
@@ -73,6 +83,8 @@ class _SettingsSheetState extends State<SettingsSheet>
 
   bool _customUrlOpen;
 
+  bool _dragginatorOpen;
+
   bool notNull(Object o) => o != null;
 
   @override
@@ -83,6 +95,7 @@ class _SettingsSheetState extends State<SettingsSheet>
     _securityOpen = false;
     _loadingAccounts = false;
     _customUrlOpen = false;
+    _dragginatorOpen = false;
     // Determine if they have face or fingerprint enrolled, if not hide the setting
     sl.get<BiometricUtil>().hasBiometrics().then((bool hasBiometrics) {
       setState(() {
@@ -118,6 +131,10 @@ class _SettingsSheetState extends State<SettingsSheet>
       vsync: this,
       duration: const Duration(milliseconds: 220),
     );
+    _dragginatorController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 220),
+    );
     // For token list menu
     _tokensListController = AnimationController(
       vsync: this,
@@ -134,6 +151,9 @@ class _SettingsSheetState extends State<SettingsSheet>
     _securityOffsetFloat =
         Tween<Offset>(begin: Offset(1.1, 0), end: Offset(0, 0))
             .animate(_securityController);
+    _dragginatorOffsetFloat =
+        Tween<Offset>(begin: Offset(1.1, 0), end: Offset(0, 0))
+            .animate(_dragginatorController);
     _tokensListOffsetFloat =
         Tween<Offset>(begin: Offset(1.1, 0), end: Offset(0, 0))
             .animate(_tokensListController);
@@ -152,6 +172,7 @@ class _SettingsSheetState extends State<SettingsSheet>
   void dispose() {
     _controller.dispose();
     _securityController.dispose();
+    _dragginatorController.dispose();
     _tokensListController.dispose();
     _customUrlController.dispose();
     super.dispose();
@@ -451,6 +472,12 @@ class _SettingsSheetState extends State<SettingsSheet>
       });
       _securityController.reverse();
       return false;
+    } else if (_dragginatorOpen) {
+      setState(() {
+        _dragginatorOpen = false;
+      });
+      _dragginatorController.reverse();
+      return false;
     } else if (_tokensListOpen) {
       setState(() {
         _tokensListOpen = false;
@@ -488,6 +515,9 @@ class _SettingsSheetState extends State<SettingsSheet>
             SlideTransition(
                 position: _securityOffsetFloat,
                 child: buildSecurityMenu(context)),
+            SlideTransition(
+                position: _dragginatorOffsetFloat,
+                child: buildDragginatorMenu(context)),
             SlideTransition(
                 position: _tokensListOffsetFloat,
                 child: TokensList(_tokensListController, _tokensListOpen)),
@@ -545,10 +575,25 @@ class _SettingsSheetState extends State<SettingsSheet>
                                       .curTheme
                                       .text05,
                                   backgroundImage: NetworkImage(
-                                    UIUtil.getRobohashURL(
-                                        StateContainer.of(context)
-                                            .selectedAccount
-                                            .address),
+                                    StateContainer.of(context)
+                                                    .selectedAccount
+                                                    .dragginatorDna ==
+                                                null ||
+                                            StateContainer.of(context)
+                                                    .selectedAccount
+                                                    .dragginatorDna ==
+                                                ""
+                                        ? UIUtil.getRobohashURL(
+                                            StateContainer.of(context)
+                                                .selectedAccount
+                                                .address)
+                                        : UIUtil.getDragginatorURL(
+                                            StateContainer.of(context)
+                                                .selectedAccount
+                                                .dragginatorDna,
+                                            StateContainer.of(context)
+                                                .selectedAccount
+                                                .dragginatorStatus),
                                   ),
                                   radius: 50.0,
                                 ),
@@ -603,10 +648,25 @@ class _SettingsSheetState extends State<SettingsSheet>
                                                     .curTheme
                                                     .text05,
                                             backgroundImage: NetworkImage(
-                                              UIUtil.getRobohashURL(
-                                                  StateContainer.of(context)
-                                                      .recentLast
-                                                      .address),
+                                              StateContainer.of(context)
+                                                              .recentLast
+                                                              .dragginatorDna ==
+                                                          null ||
+                                                      StateContainer.of(context)
+                                                              .recentLast
+                                                              .dragginatorDna ==
+                                                          ""
+                                                  ? UIUtil.getRobohashURL(
+                                                      StateContainer.of(context)
+                                                          .recentLast
+                                                          .address)
+                                                  : UIUtil.getDragginatorURL(
+                                                      StateContainer.of(context)
+                                                          .recentLast
+                                                          .dragginatorDna,
+                                                      StateContainer.of(context)
+                                                          .recentLast
+                                                          .dragginatorStatus),
                                             ),
                                             radius: 50.0,
                                           ),
@@ -674,11 +734,25 @@ class _SettingsSheetState extends State<SettingsSheet>
                                                     .curTheme
                                                     .text05,
                                             backgroundImage: NetworkImage(
-                                              UIUtil.getRobohashURL(
-                                                StateContainer.of(context)
-                                                    .recentSecondLast
-                                                    .address,
-                                              ),
+                                              StateContainer.of(context)
+                                                              .recentSecondLast
+                                                              .dragginatorDna ==
+                                                          null ||
+                                                      StateContainer.of(context)
+                                                              .recentSecondLast
+                                                              .dragginatorDna ==
+                                                          ""
+                                                  ? UIUtil.getRobohashURL(
+                                                      StateContainer.of(context)
+                                                          .recentSecondLast
+                                                          .address)
+                                                  : UIUtil.getDragginatorURL(
+                                                      StateContainer.of(context)
+                                                          .recentSecondLast
+                                                          .dragginatorDna,
+                                                      StateContainer.of(context)
+                                                          .recentSecondLast
+                                                          .dragginatorStatus),
                                             ),
                                             radius: 50.0,
                                           ),
@@ -876,6 +950,33 @@ class _SettingsSheetState extends State<SettingsSheet>
                     Container(
                       margin: EdgeInsetsDirectional.only(
                           start: 30.0, top: 20.0, bottom: 10.0),
+                      child: Text(AppLocalization.of(context).letsPlay,
+                          style: TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w100,
+                              color:
+                                  StateContainer.of(context).curTheme.text60)),
+                    ),
+                    Divider(
+                      height: 2,
+                      color: StateContainer.of(context).curTheme.text15,
+                    ),
+                    AppSettings.buildSettingsListItemSingleLine(
+                        context,
+                        AppLocalization.of(context).dragginatorHeader,
+                        FontAwesome5.dragon, onPressed: () {
+                      setState(() {
+                        _dragginatorOpen = true;
+                      });
+                      _dragginatorController.forward();
+                    }),
+                    Divider(
+                      height: 2,
+                      color: StateContainer.of(context).curTheme.text15,
+                    ),
+                    Container(
+                      margin: EdgeInsetsDirectional.only(
+                          start: 30.0, top: 20.0, bottom: 10.0),
                       child: Text(AppLocalization.of(context).manage,
                           style: TextStyle(
                               fontSize: 16.0,
@@ -925,7 +1026,6 @@ class _SettingsSheetState extends State<SettingsSheet>
                             });
                           }
                         } catch (e) {
-                      
                           await authenticateWithPin();
                         }
                       } else {
@@ -1057,6 +1157,218 @@ class _SettingsSheetState extends State<SettingsSheet>
                         ],
                       ),
                     ),
+                  ].where(notNull).toList(),
+                ),
+                //List Top Gradient End
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Container(
+                    height: 20.0,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          StateContainer.of(context).curTheme.backgroundDark,
+                          StateContainer.of(context).curTheme.backgroundDark00
+                        ],
+                        begin: AlignmentDirectional(0.5, -1.0),
+                        end: AlignmentDirectional(0.5, 1.0),
+                      ),
+                    ),
+                  ),
+                ), //List Top Gradient End
+              ],
+            )),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildDragginatorMenu(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: StateContainer.of(context).curTheme.backgroundDark,
+        boxShadow: [
+          BoxShadow(
+              color: StateContainer.of(context).curTheme.overlay30,
+              offset: Offset(-5, 0),
+              blurRadius: 20),
+        ],
+      ),
+      child: SafeArea(
+        minimum: EdgeInsets.only(
+          top: 60,
+        ),
+        child: Column(
+          children: <Widget>[
+            // Back button
+            Container(
+              margin: EdgeInsets.only(bottom: 10.0, top: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      //Back button
+                      Container(
+                        height: 40,
+                        width: 40,
+                        margin: EdgeInsets.only(right: 10, left: 10),
+                        child: FlatButton(
+                            highlightColor:
+                                StateContainer.of(context).curTheme.text15,
+                            splashColor:
+                                StateContainer.of(context).curTheme.text15,
+                            onPressed: () {
+                              setState(() {
+                                _dragginatorOpen = false;
+                              });
+                              _dragginatorController.reverse();
+                            },
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50.0)),
+                            padding: EdgeInsets.all(8.0),
+                            child: Icon(AppIcons.back,
+                                color: StateContainer.of(context).curTheme.text,
+                                size: 24)),
+                      ),
+                      Text(
+                        AppLocalization.of(context).dragginatorHeader,
+                        style: AppStyles.textStyleSettingsHeader(context),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+                child: Stack(
+              children: <Widget>[
+                ListView(
+                  padding: EdgeInsets.only(top: 15.0),
+                  children: <Widget>[
+                    Container(
+                      margin:
+                          EdgeInsetsDirectional.only(start: 30.0, bottom: 10),
+                      child: Text(AppLocalization.of(context).manage,
+                          style: TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w100,
+                              color:
+                                  StateContainer.of(context).curTheme.text60)),
+                    ),
+                    Divider(
+                      height: 2,
+                      color: StateContainer.of(context).curTheme.text15,
+                    ),
+                    AppSettings.buildSettingsListItemSingleLine(
+                        context,
+                        AppLocalization.of(context)
+                            .dragginatorBreedingListHeader,
+                        FontAwesome5.list, onPressed: () {
+                      Sheets.showAppHeightNineSheet(
+                          context: context,
+                          widget: MyDragginatorBreedingList(
+                              StateContainer.of(context)
+                                  .selectedAccount
+                                  .address));
+                    }),
+                    Divider(
+                      height: 2,
+                      color: StateContainer.of(context).curTheme.text15,
+                    ),
+                    AppSettings.buildSettingsListItemSingleLine(
+                        context,
+                        AppLocalization.of(context).dragginatorMergingHeader,
+                        Typicons.flow_merge, onPressed: () {
+                      Sheets.showAppHeightNineSheet(
+                          context: context,
+                          widget: MyDragginatorMerging(
+                              StateContainer.of(context)
+                                  .selectedAccount
+                                  .address));
+                    }),
+                    sl.get<DragginatorService>().isEggOwner(
+                                StateContainer.of(context).wallet.tokens) ==
+                            false
+                        ? SizedBox()
+                        : Divider(
+                            height: 2,
+                            color: StateContainer.of(context).curTheme.text15,
+                          ),
+                    sl.get<DragginatorService>().isEggOwner(
+                                StateContainer.of(context).wallet.tokens) ==
+                            false
+                        ? SizedBox()
+                        : AppSettings.buildSettingsListItemSingleLine(
+                            context,
+                            AppLocalization.of(context)
+                                .dragginatorGetEggWithEggHeader,
+                            FontAwesome5.egg, onPressed: () {
+                            Sheets.showAppHeightNineSheet(
+                                context: context,
+                                widget: SendConfirmSheet(
+                                    title: AppLocalization.of(context)
+                                        .dragginatorGetEggWithEggHeader,
+                                    amountRaw: "0",
+                                    operation: "token:transfer",
+                                    openfield: "egg:1",
+                                    comment: "",
+                                    destination: AppLocalization.of(context)
+                                        .dragginatorAddress,
+                                    contactName: ""));
+                          }),
+                    Divider(
+                      height: 2,
+                      color: StateContainer.of(context).curTheme.text15,
+                    ),
+                    AppSettings.buildSettingsListItemSingleLine(
+                        context,
+                        AppLocalization.of(context)
+                            .dragginatorGetEggWithBisHeader,
+                        FontAwesome5.money_bill_wave, onPressed: () {
+                      Sheets.showAppHeightNineSheet(
+                          context: context,
+                          widget: SendConfirmSheet(
+                              title: AppLocalization.of(context)
+                                  .dragginatorGetEggWithBisHeader,
+                              amountRaw: "3",
+                              operation: "",
+                              openfield: "",
+                              comment: "",
+                              destination: AppLocalization.of(context)
+                                  .dragginatorAddress,
+                              contactName: ""));
+                    }),
+                    /*Divider(
+                      height: 2,
+                      color: StateContainer.of(context).curTheme.text15,
+                    ),
+                    AppSettings.buildSettingsListItemSingleLineWithInfos(
+                        context,
+                        AppLocalization.of(context).dragginatorMarketPlace,
+                        "It's a virtual marketplace where Egg owners can freely (as in beer) list their eggs to be sold. Other users then can buy those eggs, and Dragginator acts as an Escrow service.",
+                        FontAwesome5.shopping_cart, onPressed: () {
+                      AppDialogs.showInfoDialog(
+                        context,
+                        AppLocalization.of(context).dragginatorMarketPlace,
+                        "Soon...",
+                      );
+                    }),*/
+                    Divider(
+                      height: 2,
+                      color: StateContainer.of(context).curTheme.text15,
+                    ),
+                    AppSettings.buildSettingsListItemSingleLine(
+                        context,
+                        AppLocalization.of(context).dragginatorHelp,
+                        FontAwesome.help_circled, onPressed: () {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (BuildContext context) {
+                        return UIUtil.showDragginatorHelp(context);
+                      }));
+                    }),
                   ].where(notNull).toList(),
                 ),
                 //List Top Gradient End

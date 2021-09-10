@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -40,6 +42,10 @@ class SendSheet extends StatefulWidget {
   final String operation;
   final String openfield;
   final String quickSendAmount;
+  final String title;
+  final String actionButtonTitle;
+  final bool sendATokenActive;
+  final String selectedTokenName;
 
   SendSheet(
       {@required this.localCurrency,
@@ -47,7 +53,11 @@ class SendSheet extends StatefulWidget {
       this.address,
       this.operation,
       this.openfield,
-      this.quickSendAmount})
+      this.quickSendAmount,
+      this.title,
+      this.actionButtonTitle,
+      this.selectedTokenName,
+      @required this.sendATokenActive})
       : super();
 
   _SendSheetState createState() => _SendSheetState();
@@ -123,6 +133,7 @@ class _SendSheetState extends State<SendSheet> {
     _sendTokenQuantityController = TextEditingController();
     _sendAddressStyle = AddressStyle.TEXT60;
     _contacts = List();
+    _selectedTokenName = widget.selectedTokenName;
     quickSendAmount = widget.quickSendAmount;
     this.animationOpen = false;
     if (widget.contact != null) {
@@ -148,7 +159,7 @@ class _SendSheetState extends State<SendSheet> {
       }
     }
     if (widget.openfield != null) {
-      _sendOperationController.text = widget.openfield;
+      _sendOpenfieldController.text = widget.openfield;
     }
     // On amount focus change
     _sendAmountFocusNode.addListener(() {
@@ -321,7 +332,10 @@ class _SendSheetState extends State<SendSheet> {
                           // Header
                           AutoSizeText(
                             CaseChange.toUpperCase(
-                                AppLocalization.of(context).sendFrom, context),
+                                widget.title == null
+                                    ? AppLocalization.of(context).sendFrom
+                                    : widget.title,
+                                context),
                             style: AppStyles.textStyleHeader(context),
                             textAlign: TextAlign.center,
                             maxLines: 1,
@@ -774,46 +788,50 @@ class _SendSheetState extends State<SendSheet> {
                                         ),
                                       ),
                                     ),
-                                    Container(
-                                        child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          AppLocalization.of(context)
-                                              .sendATokenQuestion,
-                                          style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.w100,
-                                            fontFamily: 'Roboto',
-                                            color: StateContainer.of(context)
-                                                .curTheme
-                                                .text60,
-                                          ),
-                                        ),
-                                        Switch(
-                                            value: isTokenToSendSwitched,
-                                            onChanged: (value) {
-                                              setState(() {
-                                                isTokenToSendSwitched = value;
-                                                _sendOpenfieldController =
-                                                    TextEditingController();
-                                                _sendOperationController =
-                                                    TextEditingController();
-                                                _sendTokenQuantityController =
-                                                    TextEditingController();
-                                                _sendCommentController =
-                                                    TextEditingController();
-                                                _selectedTokenName = "";
-                                              });
-                                            },
-                                            activeTrackColor:
-                                                StateContainer.of(context)
-                                                    .curTheme
-                                                    .backgroundDarkest,
-                                            activeColor: Colors.green),
-                                      ],
-                                    )),
+                                    widget.sendATokenActive
+                                        ? Container(
+                                            child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                AppLocalization.of(context)
+                                                    .sendATokenQuestion,
+                                                style: TextStyle(
+                                                  fontSize: 16.0,
+                                                  fontWeight: FontWeight.w100,
+                                                  fontFamily: 'Roboto',
+                                                  color:
+                                                      StateContainer.of(context)
+                                                          .curTheme
+                                                          .text60,
+                                                ),
+                                              ),
+                                              Switch(
+                                                  value: isTokenToSendSwitched,
+                                                  onChanged: (value) {
+                                                    setState(() {
+                                                      isTokenToSendSwitched =
+                                                          value;
+                                                      _sendOpenfieldController =
+                                                          TextEditingController();
+                                                      _sendOperationController =
+                                                          TextEditingController();
+                                                      _sendTokenQuantityController =
+                                                          TextEditingController();
+                                                      _sendCommentController =
+                                                          TextEditingController();
+                                                      _selectedTokenName = "";
+                                                    });
+                                                  },
+                                                  activeTrackColor:
+                                                      StateContainer.of(context)
+                                                          .curTheme
+                                                          .backgroundDarkest,
+                                                  activeColor: Colors.green),
+                                            ],
+                                          ))
+                                        : SizedBox(),
                                     isTokenToSendSwitched == false
                                         ? Column(
                                             children: [
@@ -929,7 +947,9 @@ class _SendSheetState extends State<SendSheet> {
                       AppButton.buildAppButton(
                           context,
                           AppButtonType.PRIMARY,
-                          AppLocalization.of(context).send,
+                          widget.actionButtonTitle == null
+                              ? AppLocalization.of(context).send
+                              : widget.actionButtonTitle,
                           Dimens.BUTTON_TOP_DIMENS, onPressed: () {
                         validRequest = _validateRequest();
                         if (_sendAddressController.text.startsWith("@") &&
@@ -948,6 +968,7 @@ class _SendSheetState extends State<SendSheet> {
                               Sheets.showAppHeightNineSheet(
                                   context: context,
                                   widget: SendConfirmSheet(
+                                      title: widget.title,
                                       amountRaw: _localCurrencyMode
                                           ? NumberUtil.getAmountAsRaw(
                                               _convertLocalCurrencyToCrypto())
@@ -970,6 +991,7 @@ class _SendSheetState extends State<SendSheet> {
                           Sheets.showAppHeightNineSheet(
                               context: context,
                               widget: SendConfirmSheet(
+                                  title: widget.title,
                                   amountRaw: _localCurrencyMode
                                       ? NumberUtil.getAmountAsRaw(
                                           _convertLocalCurrencyToCrypto())
@@ -1115,6 +1137,7 @@ class _SendSheetState extends State<SendSheet> {
                               Sheets.showAppHeightNineSheet(
                                   context: context,
                                   widget: SendConfirmSheet(
+                                      title: widget.title,
                                       amountRaw: _localCurrencyMode
                                           ? NumberUtil.getAmountAsRaw(
                                               _convertLocalCurrencyToCrypto())

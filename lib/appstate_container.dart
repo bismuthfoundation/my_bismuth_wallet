@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'dart:async';
 import 'package:hex/hex.dart';
 import 'package:logger/logger.dart';
@@ -273,7 +275,7 @@ class StateContainerState extends State<StateContainer> {
   }
 
   Future<void> updateRecentlyUsedAccounts() async {
-    List<Account> otherAccounts =
+    List<Account> otherAccounts = 
         await sl.get<DBHelper>().getRecentlyUsedAccounts(await getSeed());
     if (otherAccounts != null && otherAccounts.length > 0) {
       if (otherAccounts.length > 1) {

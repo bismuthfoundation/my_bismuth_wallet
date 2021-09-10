@@ -3,6 +3,8 @@
 // messages from the main program should be duplicated here with the same
 // function name.
 
+// @dart=2.9
+
 // Ignore issues from commonly used lints in this file.
 // ignore_for_file:unnecessary_brace_in_string_interps, unnecessary_new
 // ignore_for_file:prefer_single_quotes,comment_references, directives_ordering
@@ -64,7 +66,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "enterExplorerUrl" : MessageLookupByLibrary.simpleMessage("Enter a custom url explorer"),
     "enterExplorerUrlInfo" : MessageLookupByLibrary.simpleMessage("(ex: https://bismuth.online/search?quicksearch=%1\n\'%1\' will be replaced by BIS address)"),
     "enterExplorerUrlSwitch" : MessageLookupByLibrary.simpleMessage("Use a custom explorer url"),
-    "enterOpenfield" : MessageLookupByLibrary.simpleMessage("Enter Openfield"),
+    "enterOpenfield" : MessageLookupByLibrary.simpleMessage("Enter Data (Openfield)"),
     "enterOperation" : MessageLookupByLibrary.simpleMessage("Enter Operation"),
     "enterTokenApi" : MessageLookupByLibrary.simpleMessage("Enter url token api"),
     "enterTokenApiInfo" : MessageLookupByLibrary.simpleMessage("(ex: https://bismuth.today/api/balances/)"),
@@ -113,7 +115,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "noTokenOwner" : MessageLookupByLibrary.simpleMessage("You don\'t have any token"),
     "off" : MessageLookupByLibrary.simpleMessage("Off"),
     "onStr" : MessageLookupByLibrary.simpleMessage("On"),
-    "openfield" : MessageLookupByLibrary.simpleMessage("Openfield"),
+    "openfield" : MessageLookupByLibrary.simpleMessage("Data (Openfield)"),
     "operation" : MessageLookupByLibrary.simpleMessage("Operation"),
     "optionalParameters" : MessageLookupByLibrary.simpleMessage("Optional Parameters"),
     "pasteBisUrl" : MessageLookupByLibrary.simpleMessage("You can paste a BIS url"),
@@ -180,7 +182,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "transactionDetailDate" : MessageLookupByLibrary.simpleMessage("Date"),
     "transactionDetailFee" : MessageLookupByLibrary.simpleMessage("Fee"),
     "transactionDetailFrom" : MessageLookupByLibrary.simpleMessage("From address"),
-    "transactionDetailOpenfield" : MessageLookupByLibrary.simpleMessage("Openfield"),
+    "transactionDetailOpenfield" : MessageLookupByLibrary.simpleMessage("Data (Openfield)"),
     "transactionDetailOperation" : MessageLookupByLibrary.simpleMessage("Operation"),
     "transactionDetailReward" : MessageLookupByLibrary.simpleMessage("Reward"),
     "transactionDetailSignature" : MessageLookupByLibrary.simpleMessage("Signature"),

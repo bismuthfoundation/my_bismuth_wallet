@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'dart:io';
 import 'dart:async';
 import 'package:event_taxi/event_taxi.dart';
@@ -414,6 +416,19 @@ class UIUtil {
     );
   }
 
+  static Widget showDragginatorHelp(BuildContext context) {
+    cancelLockEvent();
+    return WebviewScaffold(
+      url: AppLocalization.of(context).getDragginatorHelp(),
+      appBar: new AppBar(
+        backgroundColor: StateContainer.of(context).curTheme.backgroundDark,
+        brightness: StateContainer.of(context).curTheme.brightness,
+        iconTheme:
+            IconThemeData(color: StateContainer.of(context).curTheme.text),
+      ),
+    );
+  }
+
   static double drawerWidth(BuildContext context) {
     if (MediaQuery.of(context).size.width < 375)
       return MediaQuery.of(context).size.width * 0.94;
@@ -483,6 +498,14 @@ class UIUtil {
       return "https://robohash.org/bismuth?set=set4";
     } else {
       return "https://robohash.org/$address?set=set4";
+    }
+  }
+
+  static String getDragginatorURL(String dna, String status) {
+    if (status == "egg") {
+      return "https://dragginator.com/data/eggs/"+dna+"/egg.png";
+    } else {
+      return "https://dragginator.com/data/eggs/"+dna+"/draggon.png";
     }
   }
 }

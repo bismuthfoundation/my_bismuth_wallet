@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -130,7 +132,7 @@ class AppLocalization {
   }
 
   String get transactionDetailOpenfield {
-    return Intl.message('Openfield',
+    return Intl.message('Data (Openfield)',
         desc: 'transaction_detail', name: 'transactionDetailOpenfield');
   }
 
@@ -144,10 +146,8 @@ class AppLocalization {
         desc: 'transaction_detail', name: 'transactionDetailCopyPaste');
   }
 
-
   String get mempool {
-    return Intl.message('Unconfirmed',
-        desc: 'mempool', name: 'mempool');
+    return Intl.message('Unconfirmed', desc: 'mempool', name: 'mempool');
   }
 
   String get addressCopied {
@@ -215,6 +215,76 @@ class AppLocalization {
   }
 
   /// -- END GENERIC ITEMS
+
+  /// -- DRAGGINATOR
+  String get dragginatorHeader {
+    return Intl.message('Dragginator (beta)', desc: '', name: 'dragginatorHeader');
+  }
+
+  String get dragginatorBreedingListHeader {
+    return Intl.message('My breeding',
+        desc: '', name: 'dragginatorBreedingListHeader');
+  }
+
+  String get dragginatorMergingHeader {
+    return Intl.message('Merging',
+        desc: '', name: 'dragginatorMergingHeader');
+  }
+
+  String get dragginatorGetEggWithEggHeader {
+    return Intl.message('Get an egg for 1 EGG',
+        desc: '', name: 'dragginatorGetEggWithEggHeader');
+  }
+
+  String get dragginatorGetEggWithBisHeader {
+    return Intl.message('Get an egg for 3 BIS',
+        desc: '', name: 'dragginatorGetEggWithBisHeader');
+  }
+
+  String get dragginatorMarketPlace {
+    return Intl.message('Marketplace',
+        desc: '', name: 'dragginatorMarketPlace');
+  }
+
+  String get dragginatorHelp {
+    return Intl.message('Help', desc: '', name: 'dragginatorHelp');
+  }
+
+  String get dragginatorSendEgg {
+    return Intl.message('Send the %1', desc: '', name: 'dragginatorSendEgg');
+  }
+
+  String get dragginatorAllowTransfer {
+    return Intl.message('Allow to transfer',
+        desc: '', name: 'dragginatorAllowTransfer');
+  }
+
+
+  String get dragginatorRegisterAnEggToTheHunt {
+    return Intl.message('Register to the hunt',
+        desc: '', name: 'dragginatorRegisterAnEggToTheHunt');
+  }
+
+  String get dragginatorMerging2Eggs {
+    return Intl.message('Merging 2 eggs',
+        desc: '', name: 'dragginatorMerging2Eggs');
+  }
+
+  String get dragginatorHatchAnEgg {
+    return Intl.message('Hatch the egg',
+        desc: '', name: 'dragginatorHatchAnEgg');
+  }
+
+  String get dragginatorOffersAnEgg {
+    return Intl.message('Offers the egg',
+        desc: '', name: 'dragginatorOffersAnEgg');
+  }
+
+  String get dragginatorRevert {
+    return Intl.message('Revert', desc: '', name: 'dragginatorRevert');
+  }
+
+  ///  -- END DRAGGINATOR
 
   /// -- CUSTOM URL
 
@@ -418,7 +488,7 @@ class AppLocalization {
   }
 
   String get enterOpenfield {
-    return Intl.message("Enter Openfield",
+    return Intl.message("Enter Data (Openfield)",
         desc: 'send_openfield_hint', name: 'enterOpenfield');
   }
 
@@ -457,7 +527,7 @@ class AppLocalization {
   }
 
   String get openfield {
-    return Intl.message("Openfield", desc: 'openfield', name: 'openfield');
+    return Intl.message("Data (Openfield)", desc: 'openfield', name: 'openfield');
   }
 
   String get operation {
@@ -666,6 +736,10 @@ class AppLocalization {
   String get informations {
     return Intl.message("Informations",
         desc: 'settings_informations_header', name: 'informations');
+  }
+
+  String get letsPlay {
+    return Intl.message("Let's play", desc: '', name: 'letsPlay');
   }
 
   String get searchField {
@@ -1212,7 +1286,15 @@ class AppLocalization {
   }
 
   String get donationsUrl {
-    return 'Bis1KZ88di4Xb9P4h4sSgzUwSVdXk9ZGBH5i4';
+    return 'Bis1GbkkAETTh8Q1k5KuHtV2pU2rmBhzUDTHo';
+  }
+
+  String get dragginatorAddress {
+    return '9ba0f8ca03439a8b4222b256a5f56f4f563f6d83755f525992fa5daf';
+  }
+
+  String getDragginatorHelp() {
+    return 'https://dragginator.com/help.php';
   }
 
   String get donationsName {

@@ -2,6 +2,8 @@
 // This is a library that looks up messages for specific locales by
 // delegating to the appropriate library.
 
+// @dart=2.9
+
 // Ignore issues from commonly used lints in this file.
 // ignore_for_file:implementation_imports, file_names, unnecessary_new
 // ignore_for_file:unnecessary_brace_in_string_interps, directives_ordering

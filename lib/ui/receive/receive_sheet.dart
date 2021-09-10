@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'dart:async';
 import 'dart:typed_data';
 import 'package:my_bismuth_wallet/localization.dart';
@@ -173,11 +175,28 @@ class _ReceiveSheetStateState extends State<ReceiveSheet> {
                         margin: EdgeInsetsDirectional.only(
                             top: MediaQuery.of(context).size.width / 110),
                         child: CircleAvatar(
-                          backgroundColor: StateContainer.of(context).curTheme.text05,
+                          backgroundColor:
+                              StateContainer.of(context).curTheme.text05,
                           backgroundImage: NetworkImage(
-                            UIUtil.getRobohashURL(StateContainer.of(context)
-                                .selectedAccount
-                                .address),
+                            StateContainer.of(context)
+                                            .selectedAccount
+                                            .dragginatorDna ==
+                                        null ||
+                                    StateContainer.of(context)
+                                            .selectedAccount
+                                            .dragginatorDna ==
+                                        ""
+                                ? UIUtil.getRobohashURL(
+                                    StateContainer.of(context)
+                                        .selectedAccount
+                                        .address)
+                                : UIUtil.getDragginatorURL(
+                                    StateContainer.of(context)
+                                        .selectedAccount
+                                        .dragginatorDna,
+                                    StateContainer.of(context)
+                                        .selectedAccount
+                                        .dragginatorStatus),
                           ),
                           radius: 50.0,
                         ),
@@ -221,7 +240,6 @@ class _ReceiveSheetStateState extends State<ReceiveSheet> {
                     }),
                   ],
                 ),
-            
               ],
             ),
           ],

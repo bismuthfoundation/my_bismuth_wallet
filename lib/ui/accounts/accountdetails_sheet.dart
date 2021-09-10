@@ -1,9 +1,12 @@
+// @dart=2.9
+
 import 'dart:async';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:my_bismuth_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/service/dragginator_service.dart';
 import 'package:my_bismuth_wallet/service_locator.dart';
 import 'package:event_taxi/event_taxi.dart';
 import 'package:my_bismuth_wallet/dimens.dart';
@@ -26,8 +29,11 @@ import 'package:my_bismuth_wallet/util/numberutil.dart';
 class AccountDetailsSheet {
   Account account;
   String originalName;
+  String originalDragginatorAvatarDna;
   TextEditingController _nameController;
+  TextEditingController _dragginatorAvatarDnaController;
   FocusNode _nameFocusNode;
+  FocusNode _dragginatorAvatarDnaFocusNode;
   bool deleted;
   // Address copied or not
   bool _addressCopied;
@@ -36,10 +42,11 @@ class AccountDetailsSheet {
 
   AccountDetailsSheet(this.account) {
     this.originalName = account.name;
+    this.originalDragginatorAvatarDna = account.dragginatorDna;
     this.deleted = false;
   }
 
-  Future<bool> _onWillPop() async {
+  Future<bool> _onWillPop(BuildContext context) async {
     // Update name if changed and valid
     if (originalName != _nameController.text &&
         _nameController.text.trim().length > 0 &&
@@ -48,21 +55,54 @@ class AccountDetailsSheet {
       account.name = _nameController.text;
       EventTaxiImpl.singleton().fire(AccountModifiedEvent(account: account));
     }
+    // Update avatar dna if changed and valid
+    if (originalName != _dragginatorAvatarDnaController.text && !deleted) {
+      if (_dragginatorAvatarDnaController.text.trim() != "") {
+        await sl
+            .get<DragginatorService>()
+            .getInfosFromDna(_dragginatorAvatarDnaController.text)
+            .then((value) {
+          if (value != null && value.status != "") {
+            sl.get<DBHelper>().changeAccountDragginatorDna(
+                account, _dragginatorAvatarDnaController.text, value.status);
+            account.dragginatorDna = _dragginatorAvatarDnaController.text;
+            account.dragginatorStatus = value.status;
+            EventTaxiImpl.singleton()
+                .fire(AccountModifiedEvent(account: account));
+          } else {
+            UIUtil.showSnackbar(
+                "The dna '" +
+                    _dragginatorAvatarDnaController.text +
+                    "' doesn't exist.",
+                context);
+            return false;
+          }
+        });
+      } else {
+        sl.get<DBHelper>().changeAccountDragginatorDna(account, "", "");
+        account.dragginatorDna = "";
+        account.dragginatorStatus = "";
+        EventTaxiImpl.singleton().fire(AccountModifiedEvent(account: account));
+      }
+    }
     return true;
   }
 
   mainBottomSheet(BuildContext context) {
     _addressCopied = false;
     _nameController = TextEditingController(text: account.name);
+    _dragginatorAvatarDnaController =
+        TextEditingController(text: account.dragginatorDna);
     _nameFocusNode = FocusNode();
+    _dragginatorAvatarDnaFocusNode = FocusNode();
     AppSheets.showAppHeightNineSheet(
         context: context,
-        onDisposed: _onWillPop,
+        onDisposed: () => _onWillPop(context),
         builder: (BuildContext context) {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
             return WillPopScope(
-                onWillPop: _onWillPop,
+                onWillPop: () => _onWillPop(context),
                 child: TapOutsideUnfocus(
                     child: SafeArea(
                         minimum: EdgeInsets.only(
@@ -277,6 +317,46 @@ class AccountDetailsSheet {
                                                 .primary,
                                             fontFamily: 'NunitoSans',
                                           ),
+                                        ),
+                                        SizedBox(height: 10),
+                                        AppTextField(
+                                          topMargin: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.14,
+                                          rightMargin: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.105,
+                                          controller:
+                                              _dragginatorAvatarDnaController,
+                                          focusNode:
+                                              _dragginatorAvatarDnaFocusNode,
+                                          textInputAction: TextInputAction.done,
+                                          autocorrect: false,
+                                          keyboardType: TextInputType.text,
+                                          inputFormatters: [
+                                            LengthLimitingTextInputFormatter(
+                                                30),
+                                          ],
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 16.0,
+                                            color: StateContainer.of(context)
+                                                .curTheme
+                                                .primary,
+                                            fontFamily: 'NunitoSans',
+                                          ),
+                                        ),
+                                        Container(
+                                          margin:
+                                              new EdgeInsetsDirectional.only(
+                                                  start: 12.0, end: 12.0),
+                                          child: Text(
+                                              "If you want to change your default avatar to an egg or a draggon from your collection, please specify its dna.",
+                                              style: AppStyles
+                                                  .textStyleSettingItemSubheader(
+                                                      context)),
                                         ),
                                       ])),
                             ),

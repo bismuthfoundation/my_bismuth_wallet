@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
@@ -51,7 +53,7 @@ class _TokensListState extends State<TokensList> {
                 color: StateContainer.of(context).curTheme.overlay30,
                 offset: Offset(-5, 0),
                 blurRadius: 20),
-          ], 
+          ],
         ),
         child: SafeArea(
           minimum: EdgeInsets.only(
@@ -209,8 +211,17 @@ class _TokensListState extends State<TokensList> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(tokenRef.token,
-                          style: AppStyles.textStyleSettingItemHeader(context)),
+                      Row(
+                        children: [
+                          Text(tokenRef.token,
+                              style: AppStyles.textStyleSettingItemHeader(
+                                  context)),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          TokenRef().getIcon(tokenRef.token),
+                        ],
+                      ),
                       Text(
                         AppLocalization.of(context).tokensListTotalSupply +
                             NumberFormat.compact(

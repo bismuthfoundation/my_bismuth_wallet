@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:decimal/decimal.dart';
 import 'package:intl/intl.dart';
 import 'package:my_bismuth_wallet/model/available_currency.dart';

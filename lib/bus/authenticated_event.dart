@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:event_taxi/event_taxi.dart';
 
 enum AUTH_EVENT_TYPE { SEND, CHANGE_MANUAL, CHANGE }

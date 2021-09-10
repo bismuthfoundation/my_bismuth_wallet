@@ -2,6 +2,8 @@
 //
 //     final addressTxsResponse = addressTxsResponseFromJson(jsonString);
 
+// @dart=2.9
+
 import 'package:my_bismuth_wallet/model/address.dart';
 import 'package:my_bismuth_wallet/network/model/block_types.dart';
 import 'package:my_bismuth_wallet/util/numberutil.dart';
@@ -57,7 +59,10 @@ class AddressTxsResponseResult {
 
   static const String TOKEN_TRANSFER = "token:transfer";
   static const String ALIAS_REGISTER = "alias:register";
-  
+  static const String DRAGGINATOR_NEW = "dragg:new";
+  static const String DRAGGINATOR_MERGE = "dragg:merge";
+  static const String HN_REGISTER = "hypernode:register";
+  static const String DRAGGINATOR_PREFIX = "dragg:";
 
   String getShortString() {
     if (type == BlockTypes.RECEIVE) {
@@ -96,6 +101,38 @@ class AddressTxsResponseResult {
         ? isAliasRegister = true
         : isAliasRegister = false;
     return isAliasRegister;
+  }
+
+  bool isDragginator() {
+    bool isDragginator;
+    operation.contains(DRAGGINATOR_PREFIX)
+        ? isDragginator = true
+        : isDragginator = false;
+    return isDragginator;   
+  }
+
+  bool isDragginatorNew() {
+    bool isDragginatorNew;
+    operation == DRAGGINATOR_NEW
+        ? isDragginatorNew = true
+        : isDragginatorNew = false;
+    return isDragginatorNew;
+  }
+
+  bool isDragginatorMerge() {
+    bool isDragginatorMerge;
+    operation == DRAGGINATOR_MERGE
+        ? isDragginatorMerge = true
+        : isDragginatorMerge = false;
+    return isDragginatorMerge;
+  }
+
+  bool isHNRegister() {
+    bool isHNRegister;
+    operation == HN_REGISTER
+        ? isHNRegister = true
+        : isHNRegister = false;
+    return isHNRegister;
   }
 
   BisToken getBisToken() {

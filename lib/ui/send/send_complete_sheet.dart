@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:flutter/material.dart';
 import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:my_bismuth_wallet/dimens.dart';
@@ -13,9 +15,10 @@ class SendCompleteSheet extends StatefulWidget {
   final String destination;
   final String contactName;
   final String localAmount;
+  final String title;
 
   SendCompleteSheet(
-      {this.amountRaw, this.destination, this.contactName, this.localAmount})
+      {this.amountRaw, this.destination, this.contactName, this.localAmount, this.title})
       : super();
 
   _SendCompleteSheetState createState() => _SendCompleteSheetState();
@@ -134,7 +137,7 @@ class _SendCompleteSheetState extends State<SendCompleteSheet> {
                         // "SENT TO" text
                         Text(
                           CaseChange.toUpperCase(
-                              AppLocalization.of(context).sentTo, context),
+                              widget.title == null ? AppLocalization.of(context).sentTo : widget.title, context),
                           style: TextStyle(
                             fontSize: 28.0,
                             fontWeight: FontWeight.w700,

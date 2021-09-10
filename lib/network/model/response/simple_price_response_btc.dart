@@ -2,6 +2,8 @@
 //
 //     final simplePriceBtcResponse = simplePriceBtcResponseFromJson(jsonString);
 
+// @dart=2.9
+
 import 'dart:convert';
 
 SimplePriceBtcResponse simplePriceBtcResponseFromJson(String str) => SimplePriceBtcResponse.fromJson(json.decode(str));

@@ -1,5 +1,8 @@
 
 // Represent user-account
+
+// @dart=2.9
+
 class Account {
   int id; // Primary Key
   int index; // Index on the seed
@@ -8,8 +11,10 @@ class Account {
   bool selected; // Whether this is the currently selected account
   String address;
   String balance; // Last known balance in RAW
+  String dragginatorDna; // Dna Dragginator for avatar
+  String dragginatorStatus;
 
-  Account({this.id, this.index, this.name, this.lastAccess, this.selected = false, this.address, this.balance});
+  Account({this.id, this.index, this.name, this.lastAccess, this.selected = false, this.address, this.balance, this.dragginatorDna, this.dragginatorStatus});
 
   String getShortName() {
     List<String> splitName = name.split(" ");

@@ -15,10 +15,10 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.41+41
+version: 1.0.52+52
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -28,146 +28,166 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.0
+  cupertino_icons: ^1.0.2
 
   # Securley store data in a keystore
-  flutter_secure_storage: ^3.3.5
+  flutter_secure_storage: ^4.1.0
 
   # Shared prefs
-  shared_preferences: ^0.5.12+4
+  shared_preferences: ^2.0.5
 
   # Flare for animations
-  flare_flutter: ^2.0.6
+  flare_flutter: ^3.0.0-nullsafety.1
 
-  asn1lib: ^0.8.1
+  asn1lib: ^0.9.0-nullsafety.0 
   
   # Websockets
-  web_socket_channel: ^1.1.0
+  web_socket_channel: ^2.0.0
 
   # Platform-specific build info
-  package_info: ^0.4.3+2
+  package_info: ^2.0.0
 
   # Device-specific info
-  device_info: ^1.0.0
+  device_info: ^2.0.0
 
   # JSON Serialization
-  json_annotation: ^3.0.1
+  json_annotation: ^4.0.0
 
   # Localization
-  intl: ^0.16.1
+  intl: ^0.17.0
 
   # BigDecimal alternative
-  decimal: ^0.3.5
+  decimal: ^1.0.0
 
   # Logger
-  logger: ^0.9.4
+  logger: ^1.0.0
 
   # Native webview plugin
-  flutter_webview_plugin: ^0.3.11
-
-  # SQLite
-  sqflite: ^1.3.2+1
-
-  # Android/iOS path provider
-  path_provider: ^1.6.24
-  
-  # TouchID/FaceID
-  local_auth: ^0.6.3+4
-
-  # Eventbus
-  event_taxi: ^0.1.5
-
-  # SVG
-  flutter_svg: ^0.19.1
-  
-  # Implementation of Bitcoin BIP39: Mnemonic code for generating deterministic keys
-  bip39: 
+  flutter_webview_plugin: 
     git:
-      url: https://github.com/redDwarf03/bip39.git
+      url: https://github.com/redDwarf03/flutter_webview_plugin.git
       ref: master
 
-  ffi: ^0.1.3
+  bip32: 
+    git: 
+      url: https://github.com/redDwarf03/bip32-dart.git
+      ref: master
 
-  flutter_launcher_icons: ^0.8.1
+  bip39: ^1.0.6
+  
+  # SQLite
+  sqflite: ^2.0.0+3
+
+  # Android/iOS path provider
+  path_provider: ^2.0.1
+  
+  # TouchID/FaceID
+  local_auth: ^1.1.0
+ 
+  # Eventbus
+  event_taxi: ^1.0.0
+
+  # SVG
+  flutter_svg: ^0.21.0-nullsafety.0
+  
+  ffi: ^1.0.0
+
+  flutter_launcher_icons: ^0.9.0
 
   # QR Codes
-  qr_flutter: ^2.0.1 # Generator
+  qr_flutter: ^4.0.0
+  # Generator
   barcode_scan:
     git:
       url: https://github.com/redDwarf03/flutter_barcode_reader.git
       ref: master
   
+  flutter_radar_chart: ^0.2.0
+
+  flip_card: ^0.5.0
+
+  scrolling_page_indicator:
+    git: 
+     url: https://github.com/redDwarf03/FlutterScrollingPageIndicator.git
+     ref: master
+  
   # Deep link support
   uni_links:
     git:
-      url: https://github.com/CathalT/uni_links.git
+      url: https://github.com/redDwarf03/uni_links.git
       ref: nfc_android
 
   # HTTP client
-  http: ^0.12.2
+  http: ^0.13.0
 
   # Easy hexadecimal encoding and decoding
-  hex: ^0.1.2
+  hex: ^0.2.0
 
-  pointycastle: ^2.0.0
+  pointycastle: ^3.0.0-nullsafety.2
   
   # Vibrate
   vibrate:
     git:
-      url: https://github.com/bbedward/flutter_vibrate.git
+      url: https://github.com/redDwarf03/flutter_vibrate.git
       ref: master
 
   # Toast
-  oktoast: ^2.3.2
+  oktoast: ^3.0.0
 
   # Slidable list actions
-  flutter_slidable: ^0.5.7
+  flutter_slidable: ^0.6.0-nullsafety.0
+
+  circular_profile_avatar: ^2.0.1-nullsafety
 
   # Lock helper
-  synchronized: ^2.2.0+2
+  synchronized: ^3.0.0
 
   # Service provider
-  get_it: ^5.0.4
+  get_it: ^6.0.0
   
-  convert: ^2.1.1
+  quiver: ^3.0.0
+
+  convert: ^3.0.0
+
+  bs58check: 
+    git: 
+      url: https://github.com/redDwarf03/bs58check-dart.git
+      ref: master
 
   # Root/Jailbreak detection
   root_checker:
     git:
-      url: https://github.com/bbedward/root_checker.git
+      url: https://github.com/redDwarf03/root_checker.git
       ref: master
 
   # Validation utilities
-  validators: ^2.0.0+1
+  validators2: ^3.0.0
 
   # Auto resize text widget
-  auto_size_text: ^2.1.0
+  auto_size_text: ^3.0.0-nullsafety.0
 
   # Avoid keyboard from overlapping text fields
-  keyboard_avoider: ^0.1.2
+  keyboard_avoider: 
+    git:
+      url: https://github.com/redDwarf03/keyboard_avoider.git
+      ref: master
 
-  tweetnacl: ^0.3.2
-
-  bip32: ^1.0.7
-
-  hash: ^1.0.3
-
-  bs58check: ^1.0.1
+  hash:  
+    git: 
+      url: https://github.com/redDwarf03/hash.git
+      ref: master
 
   fast_base58: ^0.1.9
  
-  diacritic: ^0.1.1
+  diacritic: ^0.1.3
   
-  blake2b: ^0.1.2
-  
-  fluttericon: ^1.0.7
+  fluttericon: ^2.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   build_runner: ^1.7.0
-  json_serializable: ^3.2.5
-  intl_translation: ^0.17.9
+  json_serializable: ^4.0.3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec

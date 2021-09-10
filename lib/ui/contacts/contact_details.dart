@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'dart:async';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
@@ -48,63 +50,74 @@ class ContactDetailsSheet {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        contact.address == AppLocalization.of(context).donationsUrl ?
-                        SizedBox() :
-                        // Trashcan Button
-                        Container(
-                          width: 50,
-                          height: 50,
-                          margin: EdgeInsetsDirectional.only(
-                              top: 10.0, start: 10.0),
-                          child: FlatButton(
-                            highlightColor:
-                                StateContainer.of(context).curTheme.text15,
-                            splashColor:
-                                StateContainer.of(context).curTheme.text15,
-                            onPressed: () {
-                              AppDialogs.showConfirmDialog(
-                                  context,
-                                  AppLocalization.of(context).removeContact,
-                                  AppLocalization.of(context)
-                                      .removeContactConfirmation
-                                      .replaceAll('%1', contact.name),
-                                  CaseChange.toUpperCase(
-                                      AppLocalization.of(context).yes, context),
-                                  () {
-                                sl
-                                    .get<DBHelper>()
-                                    .deleteContact(contact)
-                                    .then((deleted) {
-                                  if (deleted) {
-                                    
-                                    EventTaxiImpl.singleton().fire(
-                                        ContactRemovedEvent(contact: contact));
-                                    EventTaxiImpl.singleton().fire(
-                                        ContactModifiedEvent(contact: contact));
-                                    UIUtil.showSnackbar(
+                        contact.address ==
+                                AppLocalization.of(context).donationsUrl
+                            ? SizedBox()
+                            :
+                            // Trashcan Button
+                            Container(
+                                width: 50,
+                                height: 50,
+                                margin: EdgeInsetsDirectional.only(
+                                    top: 10.0, start: 10.0),
+                                child: FlatButton(
+                                  highlightColor: StateContainer.of(context)
+                                      .curTheme
+                                      .text15,
+                                  splashColor: StateContainer.of(context)
+                                      .curTheme
+                                      .text15,
+                                  onPressed: () {
+                                    AppDialogs.showConfirmDialog(
+                                        context,
                                         AppLocalization.of(context)
-                                            .contactRemoved
-                                            .replaceAll("%1", contact.name),
-                                        context);
-                                    Navigator.of(context).pop();
-                                  } else {
-                                    // TODO - error for failing to delete contact
-                                  }
-                                });
-                              },
-                                  cancelText: CaseChange.toUpperCase(
-                                      AppLocalization.of(context).no, context));
-                            },
-                            child: Icon(AppIcons.trashcan,
-                                size: 24,
-                                color:
-                                    StateContainer.of(context).curTheme.text),
-                            padding: EdgeInsets.all(13.0),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(100.0)),
-                            materialTapTargetSize: MaterialTapTargetSize.padded,
-                          ),
-                        ),
+                                            .removeContact,
+                                        AppLocalization.of(context)
+                                            .removeContactConfirmation
+                                            .replaceAll('%1', contact.name),
+                                        CaseChange.toUpperCase(
+                                            AppLocalization.of(context).yes,
+                                            context), () {
+                                      sl
+                                          .get<DBHelper>()
+                                          .deleteContact(contact)
+                                          .then((deleted) {
+                                        if (deleted) {
+                                          EventTaxiImpl.singleton().fire(
+                                              ContactRemovedEvent(
+                                                  contact: contact));
+                                          EventTaxiImpl.singleton().fire(
+                                              ContactModifiedEvent(
+                                                  contact: contact));
+                                          UIUtil.showSnackbar(
+                                              AppLocalization.of(context)
+                                                  .contactRemoved
+                                                  .replaceAll(
+                                                      "%1", contact.name),
+                                              context);
+                                          Navigator.of(context).pop();
+                                        } else {
+                                          // TODO - error for failing to delete contact
+                                        }
+                                      });
+                                    },
+                                        cancelText: CaseChange.toUpperCase(
+                                            AppLocalization.of(context).no,
+                                            context));
+                                  },
+                                  child: Icon(AppIcons.trashcan,
+                                      size: 24,
+                                      color: StateContainer.of(context)
+                                          .curTheme
+                                          .text),
+                                  padding: EdgeInsets.all(13.0),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(100.0)),
+                                  materialTapTargetSize:
+                                      MaterialTapTargetSize.padded,
+                                ),
+                              ),
                         // The header of the sheet
                         Container(
                           margin: EdgeInsets.only(top: 25.0),
@@ -139,7 +152,7 @@ class ContactDetailsSheet {
                             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (BuildContext context) {
-                                return UIUtil.showAccountWebview( 
+                                return UIUtil.showAccountWebview(
                                     context, contact.address);
                               }));
                             },
@@ -165,18 +178,17 @@ class ContactDetailsSheet {
                           children: <Widget>[
                             Container(
                               width: 128.0,
-                                  height: 128.0,
+                              height: 128.0,
                               child: CircleAvatar(
-                                backgroundColor: StateContainer.of(context).curTheme.text05,
+                                backgroundColor:
+                                    StateContainer.of(context).curTheme.text05,
                                 backgroundImage: NetworkImage(
-                                  UIUtil.getRobohashURL(
-                                      contact.address
-                                     ),
+                                  UIUtil.getRobohashURL(contact.address),
                                 ),
                                 radius: 50.0,
                               ),
                             ),
-                            SizedBox(height:12),
+                            SizedBox(height: 12),
 
                             // Contact Name container
                             Container(
@@ -290,6 +302,7 @@ class ContactDetailsSheet {
                                 Sheets.showAppHeightNineSheet(
                                     context: context,
                                     widget: SendSheet(
+                                        sendATokenActive: true,
                                         localCurrency:
                                             StateContainer.of(context)
                                                 .curCurrency,

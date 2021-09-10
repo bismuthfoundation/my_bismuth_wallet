@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'dart:async';
 
 import 'package:event_taxi/event_taxi.dart';
@@ -38,6 +40,7 @@ class SendConfirmSheet extends StatefulWidget {
   final String openfield;
   final String operation;
   final String comment;
+  final String title;
 
   SendConfirmSheet(
       {this.amountRaw,
@@ -47,7 +50,8 @@ class SendConfirmSheet extends StatefulWidget {
       this.openfield,
       this.operation,
       this.comment,
-      this.maxSend = false})
+      this.maxSend = false,
+      this.title})
       : super();
 
   _SendConfirmSheetState createState() => _SendConfirmSheetState();
@@ -102,6 +106,7 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
             closeOnTap: true,
             removeUntilHome: true,
             widget: SendCompleteSheet(
+                title: widget.title,
                 amountRaw: widget.amountRaw,
                 destination: destinationAltered,
                 contactName: contactName,
@@ -182,7 +187,10 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
                       children: <Widget>[
                         Text(
                           CaseChange.toUpperCase(
-                              AppLocalization.of(context).sending, context),
+                              widget.title == null
+                                  ? AppLocalization.of(context).sending
+                                  : widget.title,
+                              context),
                           style: AppStyles.textStyleHeader(context),
                         ),
                       ],
@@ -621,7 +629,7 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
       if (widget.openfield.length > 0) {
         openfield = widget.openfield;
       }
-      if (widget.comment.length > 0) {
+      if (widget.comment.length > 0 && openfield.contains(':{"Message":"') == false) {
         openfield += ':{"Message":"' + widget.comment + '"}';
       }
       String seed = await StateContainer.of(context).getSeed();
@@ -631,14 +639,13 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
       String privateKey = await AppUtil().seedToPrivateKey(seed, index);
       //print("send tx");
       sl.get<AppService>().sendTx(
-              StateContainer.of(context).wallet.address,
-              widget.amountRaw,
-              destinationAltered,
-              openfield,
-              widget.operation,
-              publicKeyBase64,
-              privateKey);
-      
+          StateContainer.of(context).wallet.address,
+          widget.amountRaw,
+          destinationAltered,
+          openfield,
+          widget.operation,
+          publicKeyBase64,
+          privateKey);
     } catch (e) {
       // Send failed
       //print("send failed" + e.toString());
