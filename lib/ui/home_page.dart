@@ -784,7 +784,7 @@ class _AppHomePageState extends State<AppHomePage>
           AppLocalization.of(context).releaseNoteHeader +
               " " +
               packageInfo.version,
-          "- Send token from My Token List screen\n- Fix bug with deep link\n- Add icons relative to token",
+          "- Updated german language file (Thx Damian)",
           CaseChange.toUpperCase(AppLocalization.of(context).ok, context),
           () async {
         await sl.get<SharedPrefsUtil>().setVersionApp(packageInfo.version);
@@ -1063,114 +1063,120 @@ class _AppHomePageState extends State<AppHomePage>
                                             ),
                                           )
                                         : item.isDragginatorNew()
-                                        ?
-                                        Container(
-                                            child: RichText(
-                                              textAlign: TextAlign.start,
-                                              text: TextSpan(
-                                                text: '',
-                                                children: [
-                                                  WidgetSpan(
-                                                      child: Icon(
-                                                          FontAwesome5.dragon,
-                                                          size: AppFontSizes
-                                                              .small,
-                                                          color: Colors.blue[400]
-                                                             ),
-                                                    
-                                                    ),
-                                                  TextSpan(
-                                                    text: "   new egg",
-                                                    style: AppStyles
-                                                        .textStyleTransactionTypeBlue(
-                                                            context),
+                                            ? Container(
+                                                child: RichText(
+                                                  textAlign: TextAlign.start,
+                                                  text: TextSpan(
+                                                    text: '',
+                                                    children: [
+                                                      WidgetSpan(
+                                                        child: Icon(
+                                                            FontAwesome5.dragon,
+                                                            size: AppFontSizes
+                                                                .small,
+                                                            color: Colors
+                                                                .blue[400]),
+                                                      ),
+                                                      TextSpan(
+                                                        text: "   new egg",
+                                                        style: AppStyles
+                                                            .textStyleTransactionTypeBlue(
+                                                                context),
+                                                      ),
+                                                    ],
                                                   ),
-                                                ],
-                                              ),
-                                            ),
-                                          ) :
-                                        item.isDragginatorMerge()
-                                        ?
-                                        Container(
-                                            child: RichText(
-                                              textAlign: TextAlign.start,
-                                              text: TextSpan(
-                                                text: '',
-                                                children: [
-                                                  WidgetSpan(
-                                                      child: Icon(
-                                                          FontAwesome5.dragon,
-                                                          size: AppFontSizes
-                                                              .small,
-                                                          color: Colors.blue[400]
-                                                             ),
-                                                    
+                                                ),
+                                              )
+                                            : item.isDragginatorMerge()
+                                                ? Container(
+                                                    child: RichText(
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                      text: TextSpan(
+                                                        text: '',
+                                                        children: [
+                                                          WidgetSpan(
+                                                            child: Icon(
+                                                                FontAwesome5
+                                                                    .dragon,
+                                                                size:
+                                                                    AppFontSizes
+                                                                        .small,
+                                                                color: Colors
+                                                                    .blue[400]),
+                                                          ),
+                                                          TextSpan(
+                                                            text:
+                                                                "   eggs merge",
+                                                            style: AppStyles
+                                                                .textStyleTransactionTypeBlue(
+                                                                    context),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
-                                                  TextSpan(
-                                                    text: "   eggs merge",
-                                                    style: AppStyles
-                                                        .textStyleTransactionTypeBlue(
-                                                            context),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ) :
-                                          item.isDragginator()
-                                        ?
-                                        Container(
-                                            child: RichText(
-                                              textAlign: TextAlign.start,
-                                              text: TextSpan(
-                                                text: '',
-                                                children: [
-                                                  WidgetSpan(
-                                                      child: Icon(
-                                                          FontAwesome5.dragon,
-                                                          size: AppFontSizes
-                                                              .small,
-                                                          color: Colors.blue[400]
-                                                             ),
-                                                    
-                                                    ),
-                                                  TextSpan(
-                                                    text: "   " + item.operation.split(":")[1],
-                                                    style: AppStyles
-                                                        .textStyleTransactionTypeBlue(
-                                                            context),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ) :
-                                          item.isHNRegister()
-                                        ?
-                                        Container(
-                                            child: RichText(
-                                              textAlign: TextAlign.start,
-                                              text: TextSpan(
-                                                text: '',
-                                                children: [
-                                                  WidgetSpan(
-                                                      child: Icon(
-                                                          FontAwesome5.linode,
-                                                          size: AppFontSizes
-                                                              .small,
-                                                          color: Colors.blue[400]
-                                                             ),
-                                                    
-                                                    ),
-                                                  TextSpan(
-                                                    text: "  HN register",
-                                                    style: AppStyles
-                                                        .textStyleTransactionTypeBlue(
-                                                            context),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          )
-                                        : SizedBox(),
+                                                  )
+                                                : item.isDragginator()
+                                                    ? Container(
+                                                        child: RichText(
+                                                          textAlign:
+                                                              TextAlign.start,
+                                                          text: TextSpan(
+                                                            text: '',
+                                                            children: [
+                                                              WidgetSpan(
+                                                                child: Icon(
+                                                                    FontAwesome5
+                                                                        .dragon,
+                                                                    size: AppFontSizes
+                                                                        .small,
+                                                                    color: Colors
+                                                                            .blue[
+                                                                        400]),
+                                                              ),
+                                                              TextSpan(
+                                                                text: "   " +
+                                                                    item.operation
+                                                                        .split(
+                                                                            ":")[1],
+                                                                style: AppStyles
+                                                                    .textStyleTransactionTypeBlue(
+                                                                        context),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : item.isHNRegister()
+                                                        ? Container(
+                                                            child: RichText(
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .start,
+                                                              text: TextSpan(
+                                                                text: '',
+                                                                children: [
+                                                                  WidgetSpan(
+                                                                    child: Icon(
+                                                                        FontAwesome5
+                                                                            .linode,
+                                                                        size: AppFontSizes
+                                                                            .small,
+                                                                        color: Colors
+                                                                            .blue[400]),
+                                                                  ),
+                                                                  TextSpan(
+                                                                    text:
+                                                                        "  HN register",
+                                                                    style: AppStyles
+                                                                        .textStyleTransactionTypeBlue(
+                                                                            context),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          )
+                                                        : SizedBox(),
                                 /*Container(
                                   width: 26.0,
                                   height: 26.0,
@@ -1655,7 +1661,8 @@ class _AppHomePageState extends State<AppHomePage>
                         child: CircleAvatar(
                           backgroundColor:
                               StateContainer.of(context).curTheme.text05,
-                          backgroundImage: NetworkImage(StateContainer.of(context)
+                          backgroundImage: NetworkImage(
+                            StateContainer.of(context)
                                             .selectedAccount
                                             .dragginatorDna ==
                                         null ||
@@ -1671,9 +1678,10 @@ class _AppHomePageState extends State<AppHomePage>
                                     StateContainer.of(context)
                                         .selectedAccount
                                         .dragginatorDna,
-                                     StateContainer.of(context)
+                                    StateContainer.of(context)
                                         .selectedAccount
-                                        .dragginatorStatus),),
+                                        .dragginatorStatus),
+                          ),
                           radius: 50.0,
                         ),
                       ),

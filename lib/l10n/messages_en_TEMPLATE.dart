@@ -1,5 +1,5 @@
 // DO NOT EDIT. This is code generated via package:intl/generate_localized.dart
-// This is a library that provides messages for a messages locale. All the
+// This is a library that provides messages for a en_TEMPLATE locale. All the
 // messages from the main program should be duplicated here with the same
 // function name.
 
@@ -17,7 +17,7 @@ final messages = MessageLookup();
 typedef String MessageIfAbsent(String? messageStr, List<Object>? args);
 
 class MessageLookup extends MessageLookupByLibrary {
-  String get localeName => 'messages';
+  String get localeName => 'en_TEMPLATE';
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function> {
@@ -71,20 +71,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "disablePasswordSheetHeader" : MessageLookupByLibrary.simpleMessage("Disable"),
     "disablePasswordSuccess" : MessageLookupByLibrary.simpleMessage("Password has been disabled"),
     "disableWalletPassword" : MessageLookupByLibrary.simpleMessage("Disable Wallet Password"),
-    "dragginatorAllowTransfer" : MessageLookupByLibrary.simpleMessage("Allow to transfer"),
-    "dragginatorBreedingListHeader" : MessageLookupByLibrary.simpleMessage("My breeding"),
-    "dragginatorGetEggWithBisHeader" : MessageLookupByLibrary.simpleMessage("Get an egg for 3 BIS"),
-    "dragginatorGetEggWithEggHeader" : MessageLookupByLibrary.simpleMessage("Get an egg for 1 EGG"),
-    "dragginatorHatchAnEgg" : MessageLookupByLibrary.simpleMessage("Hatch the egg"),
-    "dragginatorHeader" : MessageLookupByLibrary.simpleMessage("Dragginator (beta)"),
-    "dragginatorHelp" : MessageLookupByLibrary.simpleMessage("Help"),
-    "dragginatorMarketPlace" : MessageLookupByLibrary.simpleMessage("Marketplace"),
-    "dragginatorMerging2Eggs" : MessageLookupByLibrary.simpleMessage("Merging 2 eggs"),
-    "dragginatorMergingHeader" : MessageLookupByLibrary.simpleMessage("Merging"),
-    "dragginatorOffersAnEgg" : MessageLookupByLibrary.simpleMessage("Offers the egg"),
-    "dragginatorRegisterAnEggToTheHunt" : MessageLookupByLibrary.simpleMessage("Register to the hunt"),
-    "dragginatorRevert" : MessageLookupByLibrary.simpleMessage("Revert"),
-    "dragginatorSendEgg" : MessageLookupByLibrary.simpleMessage("Send the %1"),
     "encryptionFailedError" : MessageLookupByLibrary.simpleMessage("Failed to set a wallet password"),
     "enterAddress" : MessageLookupByLibrary.simpleMessage("Enter Address"),
     "enterAmount" : MessageLookupByLibrary.simpleMessage("Enter Amount"),
@@ -126,7 +112,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "invalidAddress" : MessageLookupByLibrary.simpleMessage("Address entered was invalid"),
     "invalidPassword" : MessageLookupByLibrary.simpleMessage("Invalid Password"),
     "language" : MessageLookupByLibrary.simpleMessage("Language"),
-    "letsPlay" : MessageLookupByLibrary.simpleMessage("Let\'s play"),
     "liveSupportButton" : MessageLookupByLibrary.simpleMessage("Support"),
     "lockAppSetting" : MessageLookupByLibrary.simpleMessage("Authenticate on Launch"),
     "locked" : MessageLookupByLibrary.simpleMessage("Locked"),

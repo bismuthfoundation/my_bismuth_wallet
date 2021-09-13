@@ -218,7 +218,8 @@ class AppLocalization {
 
   /// -- DRAGGINATOR
   String get dragginatorHeader {
-    return Intl.message('Dragginator (beta)', desc: '', name: 'dragginatorHeader');
+    return Intl.message('Dragginator (beta)',
+        desc: '', name: 'dragginatorHeader');
   }
 
   String get dragginatorBreedingListHeader {
@@ -227,8 +228,7 @@ class AppLocalization {
   }
 
   String get dragginatorMergingHeader {
-    return Intl.message('Merging',
-        desc: '', name: 'dragginatorMergingHeader');
+    return Intl.message('Merging', desc: '', name: 'dragginatorMergingHeader');
   }
 
   String get dragginatorGetEggWithEggHeader {
@@ -258,7 +258,6 @@ class AppLocalization {
     return Intl.message('Allow to transfer',
         desc: '', name: 'dragginatorAllowTransfer');
   }
-
 
   String get dragginatorRegisterAnEggToTheHunt {
     return Intl.message('Register to the hunt',
@@ -527,7 +526,8 @@ class AppLocalization {
   }
 
   String get openfield {
-    return Intl.message("Data (Openfield)", desc: 'openfield', name: 'openfield');
+    return Intl.message("Data (Openfield)",
+        desc: 'openfield', name: 'openfield');
   }
 
   String get operation {

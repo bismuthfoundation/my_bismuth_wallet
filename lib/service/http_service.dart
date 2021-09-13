@@ -110,7 +110,7 @@ class HttpService {
   }
 
   Future<SimplePriceResponse> getSimplePrice(String currency) async {
-      //print("getSimplePrice");
+    //print("getSimplePrice");
     SimplePriceResponse simplePriceResponse = new SimplePriceResponse();
     simplePriceResponse.currency = currency;
 

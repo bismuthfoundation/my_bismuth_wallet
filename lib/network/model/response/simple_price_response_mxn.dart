@@ -6,38 +6,41 @@
 
 import 'dart:convert';
 
-SimplePriceMxnResponse simplePriceMxnResponseFromJson(String str) => SimplePriceMxnResponse.fromJson(json.decode(str));
+SimplePriceMxnResponse simplePriceMxnResponseFromJson(String str) =>
+    SimplePriceMxnResponse.fromJson(json.decode(str));
 
-String simplePriceMxnResponseToJson(SimplePriceMxnResponse data) => json.encode(data.toJson());
+String simplePriceMxnResponseToJson(SimplePriceMxnResponse data) =>
+    json.encode(data.toJson());
 
 class SimplePriceMxnResponse {
-    SimplePriceMxnResponse({
-        this.bismuth,
-    });
+  SimplePriceMxnResponse({
+    this.bismuth,
+  });
 
-    Bismuth bismuth;
+  Bismuth bismuth;
 
-    factory SimplePriceMxnResponse.fromJson(Map<String, dynamic> json) => SimplePriceMxnResponse(
+  factory SimplePriceMxnResponse.fromJson(Map<String, dynamic> json) =>
+      SimplePriceMxnResponse(
         bismuth: Bismuth.fromJson(json['bismuth']),
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         'bismuth': bismuth.toJson(),
-    };
+      };
 }
 
 class Bismuth {
-    Bismuth({
-        this.mxn,
-    });
+  Bismuth({
+    this.mxn,
+  });
 
-    double mxn;
+  double mxn;
 
-    factory Bismuth.fromJson(Map<String, dynamic> json) => Bismuth(
+  factory Bismuth.fromJson(Map<String, dynamic> json) => Bismuth(
         mxn: json["mxn"].toDouble(),
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "mxn": mxn,
-    };
+      };
 }

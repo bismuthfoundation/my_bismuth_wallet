@@ -158,9 +158,7 @@ class AnimationLoadingOverlay extends ModalRoute<void> {
   Widget _getAnimation(BuildContext context) {
     switch (type) {
       case AnimationType.SEND:
-        return Center(
-         
-        );
+        return Center();
       case AnimationType.TRANSFER_SEARCHING_QR:
         return Stack(
           children: <Widget>[

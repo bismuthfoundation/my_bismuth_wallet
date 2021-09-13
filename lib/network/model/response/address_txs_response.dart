@@ -9,10 +9,7 @@ import 'package:my_bismuth_wallet/network/model/block_types.dart';
 import 'package:my_bismuth_wallet/util/numberutil.dart';
 
 class AddressTxsResponse {
-  AddressTxsResponse({
-    this.result,
-    this.tokens
-  });
+  AddressTxsResponse({this.result, this.tokens});
 
   List<AddressTxsResponseResult> result;
   List<BisToken> tokens;
@@ -108,7 +105,7 @@ class AddressTxsResponseResult {
     operation.contains(DRAGGINATOR_PREFIX)
         ? isDragginator = true
         : isDragginator = false;
-    return isDragginator;   
+    return isDragginator;
   }
 
   bool isDragginatorNew() {
@@ -129,9 +126,7 @@ class AddressTxsResponseResult {
 
   bool isHNRegister() {
     bool isHNRegister;
-    operation == HN_REGISTER
-        ? isHNRegister = true
-        : isHNRegister = false;
+    operation == HN_REGISTER ? isHNRegister = true : isHNRegister = false;
     return isHNRegister;
   }
 

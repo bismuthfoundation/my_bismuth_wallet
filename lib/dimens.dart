@@ -1,6 +1,6 @@
 // @dart=2.9
 
-class  Dimens {
+class Dimens {
   // Standard dimensions: left, top, right, bottom
   // Button top/bottom style
   static const BUTTON_TOP_DIMENS = [28.0, 0.0, 28.0, 8.0];

@@ -148,7 +148,7 @@ class _AddContactSheetState extends State<AddContactSheet> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // The header of the sheet
-             AutoSizeText(
+              AutoSizeText(
                 CaseChange.toUpperCase(
                     AppLocalization.of(context).addContact, context),
                 style: AppStyles.textStyleHeader(context),

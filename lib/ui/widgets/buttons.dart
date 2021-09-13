@@ -34,7 +34,7 @@ class AppButton {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(100.0)),
               color: disabled
-                  ? StateContainer.of(context).curTheme.primary60 
+                  ? StateContainer.of(context).curTheme.primary60
                   : StateContainer.of(context).curTheme.primary,
               child: AutoSizeText(buttonText,
                   textAlign: TextAlign.center,

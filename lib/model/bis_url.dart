@@ -11,7 +11,6 @@ import 'package:my_bismuth_wallet/network/model/response/address_txs_response.da
 import 'package:my_bismuth_wallet/service_locator.dart';
 import 'package:my_bismuth_wallet/util/base_85_decode.dart';
 
-
 class BisUrl {
   String contactName;
   String address;
@@ -65,7 +64,7 @@ class BisUrl {
       }
       if (paramBisUrl.length > 4) {
         checksum = HEX.encode(base64Url.decode(paramBisUrl[4]));
-       /* print("check fourni : " + checksum);
+        /* print("check fourni : " + checksum);
         String url = "bis://" +
             paramBisUrl[0] +
             "/" +

@@ -56,8 +56,7 @@ class DragginatorService {
         dragginatorInfosFromDnaResponse =
             dragginatorInfosFromDnaResponseFromJson(reply);
       }
-    } catch (e) {
-    } finally {
+    } catch (e) {} finally {
       httpClient.close();
     }
 
@@ -65,8 +64,7 @@ class DragginatorService {
   }
 
   Future<List<String>> getEggsCompatible(String dna) async {
-    List<String>
-        dragginatorMergeListCompatible;
+    List<String> dragginatorMergeListCompatible;
 
     HttpClient httpClient = new HttpClient();
     try {
@@ -88,14 +86,14 @@ class DragginatorService {
     return dragginatorMergeListCompatible;
   }
 
-  Future<List<String>> getMergeListReasonsNotCompatible(String dna1, String dna2) async {
-    List<String>
-        dragginatorMergeListReasonsNotCompatible;
+  Future<List<String>> getMergeListReasonsNotCompatible(
+      String dna1, String dna2) async {
+    List<String> dragginatorMergeListReasonsNotCompatible;
 
     HttpClient httpClient = new HttpClient();
     try {
-      HttpClientRequest request = await httpClient
-          .getUrl(Uri.parse("https://dragginator.com/api/merge/"+dna1+"/"+dna2+"/"));
+      HttpClientRequest request = await httpClient.getUrl(Uri.parse(
+          "https://dragginator.com/api/merge/" + dna1 + "/" + dna2 + "/"));
       request.headers.set('content-type', 'application/json');
       HttpClientResponse response = await request.close();
       if (response.statusCode == 200) {

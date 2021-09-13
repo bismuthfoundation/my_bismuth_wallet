@@ -6,38 +6,41 @@
 
 import 'dart:convert';
 
-SimplePriceBtcResponse simplePriceBtcResponseFromJson(String str) => SimplePriceBtcResponse.fromJson(json.decode(str));
+SimplePriceBtcResponse simplePriceBtcResponseFromJson(String str) =>
+    SimplePriceBtcResponse.fromJson(json.decode(str));
 
-String simplePriceBtcResponseToJson(SimplePriceBtcResponse data) => json.encode(data.toJson());
+String simplePriceBtcResponseToJson(SimplePriceBtcResponse data) =>
+    json.encode(data.toJson());
 
 class SimplePriceBtcResponse {
-    SimplePriceBtcResponse({
-        this.bismuth,
-    });
+  SimplePriceBtcResponse({
+    this.bismuth,
+  });
 
-    Bismuth bismuth;
+  Bismuth bismuth;
 
-    factory SimplePriceBtcResponse.fromJson(Map<String, dynamic> json) => SimplePriceBtcResponse(
+  factory SimplePriceBtcResponse.fromJson(Map<String, dynamic> json) =>
+      SimplePriceBtcResponse(
         bismuth: Bismuth.fromJson(json['bismuth']),
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         'bismuth': bismuth.toJson(),
-    };
+      };
 }
 
 class Bismuth {
-    Bismuth({
-        this.btc,
-    });
+  Bismuth({
+    this.btc,
+  });
 
-    double btc;
+  double btc;
 
-    factory Bismuth.fromJson(Map<String, dynamic> json) => Bismuth(
+  factory Bismuth.fromJson(Map<String, dynamic> json) => Bismuth(
         btc: json["btc"].toDouble(),
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "btc": btc,
-    };
+      };
 }

@@ -3,26 +3,24 @@
 // messages from the main program should be duplicated here with the same
 // function name.
 
-// @dart=2.9
-
 // Ignore issues from commonly used lints in this file.
-// ignore_for_file:unnecessary_brace_in_string_interps, unnecessary_new
+// ignore_for_file:unnecessary_brace_in_string_interps
 // ignore_for_file:prefer_single_quotes,comment_references, directives_ordering
 // ignore_for_file:annotate_overrides,prefer_generic_function_type_aliases
-// ignore_for_file:unused_import, file_names
+// ignore_for_file:unused_import, file_names, always_declare_return_types
 
 import 'package:intl/intl.dart';
 import 'package:intl/message_lookup_by_library.dart';
 
-final messages = new MessageLookup();
+final messages = MessageLookup();
 
-typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
+typedef String MessageIfAbsent(String? messageStr, List<Object>? args);
 
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'nl';
 
   final messages = _notInlinedMessages(_notInlinedMessages);
-  static _notInlinedMessages(_) => <String, Function> {
+  static Map<String, Function> _notInlinedMessages(_) => <String, Function> {
     "account" : MessageLookupByLibrary.simpleMessage("Account"),
     "accounts" : MessageLookupByLibrary.simpleMessage("Accounts"),
     "ackBackedUp" : MessageLookupByLibrary.simpleMessage("Weet je zeker dat je een back-up hebt gemaakt van jouw geheime zin of seed?"),
@@ -136,7 +134,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "noTokenOwner" : MessageLookupByLibrary.simpleMessage("You don\'t have any token"),
     "off" : MessageLookupByLibrary.simpleMessage("Uit"),
     "onStr" : MessageLookupByLibrary.simpleMessage("Aan"),
-    "openfield" : MessageLookupByLibrary.simpleMessage("Data (Openfield)"),
+    "openfield" : MessageLookupByLibrary.simpleMessage("Openfield"),
     "operation" : MessageLookupByLibrary.simpleMessage("Operation"),
     "optionalParameters" : MessageLookupByLibrary.simpleMessage("Optional Parameters"),
     "passwordBlank" : MessageLookupByLibrary.simpleMessage("Wachtwoord mag niet leeg zijn"),
@@ -214,7 +212,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "transactionDetailDate" : MessageLookupByLibrary.simpleMessage("Date"),
     "transactionDetailFee" : MessageLookupByLibrary.simpleMessage("Fee"),
     "transactionDetailFrom" : MessageLookupByLibrary.simpleMessage("From address"),
-    "transactionDetailOpenfield" : MessageLookupByLibrary.simpleMessage("Data (Openfield)"),
+    "transactionDetailOpenfield" : MessageLookupByLibrary.simpleMessage("Openfield"),
     "transactionDetailOperation" : MessageLookupByLibrary.simpleMessage("Operation"),
     "transactionDetailReward" : MessageLookupByLibrary.simpleMessage("Reward"),
     "transactionDetailSignature" : MessageLookupByLibrary.simpleMessage("Signature"),

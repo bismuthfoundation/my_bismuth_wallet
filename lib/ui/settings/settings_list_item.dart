@@ -80,7 +80,7 @@ class AppSettings {
     );
   }
 
-static Widget buildSettingsListItemSingleLineWithInfos(
+  static Widget buildSettingsListItemSingleLineWithInfos(
       BuildContext context, String heading, String info, IconData settingIcon,
       {Function onPressed}) {
     return FlatButton(
@@ -142,7 +142,7 @@ static Widget buildSettingsListItemSingleLineWithInfos(
       ),
     );
   }
-  
+
   //Settings item without any dropdown option but rather a direct functionality
   static Widget buildSettingsListItemSingleLine(
       BuildContext context, String heading, IconData settingIcon,
@@ -179,7 +179,9 @@ static Widget buildSettingsListItemSingleLineWithInfos(
                           ? 0
                           : settingIcon == AppIcons.backupseed
                               ? 1
-                              : settingIcon == AppIcons.transferfunds ? 2 : 3,
+                              : settingIcon == AppIcons.transferfunds
+                                  ? 2
+                                  : 3,
                   bottom: 3,
                   end: settingIcon == AppIcons.logout
                       ? 0
@@ -187,7 +189,9 @@ static Widget buildSettingsListItemSingleLineWithInfos(
                           ? 6
                           : settingIcon == AppIcons.backupseed
                               ? 5
-                              : settingIcon == AppIcons.transferfunds ? 4 : 3,
+                              : settingIcon == AppIcons.transferfunds
+                                  ? 4
+                                  : 3,
                 ),
               ),
             ),

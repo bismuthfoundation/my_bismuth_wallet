@@ -22,7 +22,11 @@ class QRScanErrs {
   static const String PERMISSION_DENIED = "qr_denied";
   static const String UNKNOWN_ERROR = "qr_unknown";
   static const String CANCEL_ERROR = "qr_cancel";
-  static const List<String> ERROR_LIST = [PERMISSION_DENIED, UNKNOWN_ERROR, CANCEL_ERROR];
+  static const List<String> ERROR_LIST = [
+    PERMISSION_DENIED,
+    UNKNOWN_ERROR,
+    CANCEL_ERROR
+  ];
 }
 
 class UserDataUtil {
@@ -66,17 +70,20 @@ class UserDataUtil {
   static Future<String> getQRData(DataType type, BuildContext context) async {
     UIUtil.cancelLockEvent();
     try {
-      String data = await BarcodeScanner.scan(StateContainer.of(context).curTheme.qrScanTheme);
+      String data = await BarcodeScanner.scan(
+          StateContainer.of(context).curTheme.qrScanTheme);
       if (isEmpty(data)) {
         return null;
       }
       return _parseData(data, type);
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.CameraAccessDenied) {
-        UIUtil.showSnackbar(AppLocalization.of(context).qrInvalidPermissions, context);
+        UIUtil.showSnackbar(
+            AppLocalization.of(context).qrInvalidPermissions, context);
         return QRScanErrs.PERMISSION_DENIED;
       } else {
-        UIUtil.showSnackbar(AppLocalization.of(context).qrUnknownError, context);
+        UIUtil.showSnackbar(
+            AppLocalization.of(context).qrUnknownError, context);
         return QRScanErrs.UNKNOWN_ERROR;
       }
     } on FormatException {
@@ -106,7 +113,9 @@ class UserDataUtil {
       });
       setStream = delayed.asStream().listen((_) {
         Clipboard.getData("text/plain").then((data) {
-          if (data != null && data.text != null && AppSeeds.isValidSeed(data.text)) {
+          if (data != null &&
+              data.text != null &&
+              AppSeeds.isValidSeed(data.text)) {
             Clipboard.setData(ClipboardData(text: ""));
           }
         });

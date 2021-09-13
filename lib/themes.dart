@@ -51,7 +51,7 @@ abstract class BaseTheme {
   Color overlay80;
   Color overlay85;
   Color overlay90;
-  
+
   Color animationOverlayMedium;
   Color animationOverlayStrong;
 
@@ -143,11 +143,12 @@ class BismuthTheme extends BaseTheme {
   BoxShadow boxShadow = BoxShadow(color: Colors.transparent);
   BoxShadow boxShadowButton = BoxShadow(color: Colors.transparent);
 
-  OverlayTheme qrScanTheme = OverlayTheme.UNIRIS;
+  OverlayTheme qrScanTheme = OverlayTheme.IDENA;
   AppIconEnum appIcon = AppIconEnum.IDENA;
 }
 
 enum AppIconEnum { IDENA }
+
 class AppIcon {
   static const _channel = const MethodChannel('fappchannel');
 
@@ -156,7 +157,7 @@ class AppIcon {
       return null;
     }
     final Map<String, dynamic> params = <String, dynamic>{
-     'icon': "idena",
+      'icon': "idena",
     };
     return await _channel.invokeMethod('changeIcon', params);
   }
