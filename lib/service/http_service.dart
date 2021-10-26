@@ -356,7 +356,8 @@ class HttpService {
       }
       // Post to callbacks
       EventTaxiImpl.singleton().fire(PriceEvent(response: simplePriceResponse));
-    } catch (e) {} finally {
+    } catch (e) {
+    } finally {
       httpClient.close();
     }
     return simplePriceResponse;
@@ -439,5 +440,22 @@ class HttpService {
       }
     } catch (e) {}
     return tokensRefList;
+  }
+
+  Future<int> getEggPrice() async {
+    int price = 0;
+    HttpClient httpClient = new HttpClient();
+    try {
+      HttpClientRequest request = await httpClient
+          .getUrl(Uri.parse("https://dragginator.com/api/info.php?type=price"));
+      request.headers.set('content-type', 'application/json');
+      HttpClientResponse response = await request.close();
+      if (response.statusCode == 200) {
+        String reply = await response.transform(utf8.decoder).join();
+        price = int.tryParse(
+            reply.replaceAll('[', '').replaceAll(']', '').split(',')[0]);
+      }
+    } catch (e) {}
+    return price;
   }
 }

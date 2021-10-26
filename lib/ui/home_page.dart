@@ -18,6 +18,7 @@ import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:my_bismuth_wallet/model/bis_url.dart';
 import 'package:my_bismuth_wallet/network/model/response/address_txs_response.dart';
+import 'package:my_bismuth_wallet/service/http_service.dart';
 import 'package:my_bismuth_wallet/ui/popup_button.dart';
 import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:my_bismuth_wallet/dimens.dart';
@@ -74,6 +75,8 @@ class _AppHomePageState extends State<AppHomePage>
   bool _animationDisposed;
 
   bool _displayReleaseNote;
+
+  int _eggPrice = 0;
 
   // Receive card instance
   ReceiveSheet receive;
@@ -134,13 +137,17 @@ class _AppHomePageState extends State<AppHomePage>
     });
   }
 
+  _getEggPrice() async {
+    _eggPrice = await sl.get<HttpService>().getEggPrice();
+  }
+
   @override
   void initState() {
     super.initState();
 
     _displayReleaseNote = false;
     _checkVersionApp();
-
+    _getEggPrice();
     _registerBus();
     WidgetsBinding.instance.addObserver(this);
     if (widget.priceConversion != null) {
@@ -562,7 +569,7 @@ class _AppHomePageState extends State<AppHomePage>
       drawer: SizedBox(
         width: UIUtil.drawerWidth(context),
         child: Drawer(
-          child: SettingsSheet(),
+          child: SettingsSheet(_eggPrice),
         ),
       ),
       body: SafeArea(
@@ -784,7 +791,7 @@ class _AppHomePageState extends State<AppHomePage>
           AppLocalization.of(context).releaseNoteHeader +
               " " +
               packageInfo.version,
-          "- Updated german language file (Thx Damian)",
+          "- Minor changes",
           CaseChange.toUpperCase(AppLocalization.of(context).ok, context),
           () async {
         await sl.get<SharedPrefsUtil>().setVersionApp(packageInfo.version);

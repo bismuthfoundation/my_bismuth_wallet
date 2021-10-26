@@ -18,7 +18,6 @@ import 'package:my_bismuth_wallet/ui/settings/disable_password_sheet.dart';
 import 'package:my_bismuth_wallet/ui/settings/set_password_sheet.dart';
 import 'package:my_bismuth_wallet/ui/settings/tokens_widget.dart';
 import 'package:my_bismuth_wallet/ui/widgets/app_simpledialog.dart';
-import 'package:my_bismuth_wallet/ui/widgets/dialog.dart';
 import 'package:my_bismuth_wallet/ui/widgets/sheet_util.dart';
 import 'package:package_info/package_info.dart';
 import 'package:flutter/material.dart';
@@ -48,6 +47,11 @@ import '../../appstate_container.dart';
 import '../../util/sharedprefsutil.dart';
 
 class SettingsSheet extends StatefulWidget {
+
+
+  final int eggPrice;
+  SettingsSheet(this.eggPrice);
+
   _SettingsSheetState createState() => _SettingsSheetState();
 }
 
@@ -90,6 +94,7 @@ class _SettingsSheetState extends State<SettingsSheet>
   @override
   void initState() {
     super.initState();
+
     _contactsOpen = false;
     _tokensListOpen = false;
     _securityOpen = false;
@@ -1326,14 +1331,14 @@ class _SettingsSheetState extends State<SettingsSheet>
                     AppSettings.buildSettingsListItemSingleLine(
                         context,
                         AppLocalization.of(context)
-                            .dragginatorGetEggWithBisHeader,
+                            .dragginatorGetEggWithBisHeader.replaceAll('%1', widget.eggPrice.toString()),
                         FontAwesome5.money_bill_wave, onPressed: () {
                       Sheets.showAppHeightNineSheet(
                           context: context,
                           widget: SendConfirmSheet(
                               title: AppLocalization.of(context)
-                                  .dragginatorGetEggWithBisHeader,
-                              amountRaw: "3",
+                                  .dragginatorGetEggWithBisHeader.replaceAll('%1', widget.eggPrice.toString()),
+                              amountRaw: widget.eggPrice.toString(),
                               operation: "",
                               openfield: "",
                               comment: "",

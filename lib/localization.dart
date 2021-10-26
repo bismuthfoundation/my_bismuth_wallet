@@ -237,7 +237,7 @@ class AppLocalization {
   }
 
   String get dragginatorGetEggWithBisHeader {
-    return Intl.message('Get an egg for 3 BIS',
+    return Intl.message('Get an egg for %1 BIS',
         desc: '', name: 'dragginatorGetEggWithBisHeader');
   }
 
