@@ -1,22 +1,25 @@
 // @dart=2.9
 
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Project imports:
 import 'package:my_bismuth_wallet/app_icons.dart';
-import 'package:my_bismuth_wallet/service_locator.dart';
+import 'package:my_bismuth_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/dimens.dart';
+import 'package:my_bismuth_wallet/localization.dart';
 import 'package:my_bismuth_wallet/model/authentication_method.dart';
 import 'package:my_bismuth_wallet/model/vault.dart';
+import 'package:my_bismuth_wallet/service_locator.dart';
 import 'package:my_bismuth_wallet/styles.dart';
-import 'package:my_bismuth_wallet/ui/widgets/dialog.dart';
-import 'package:my_bismuth_wallet/util/biometrics.dart';
-import 'package:my_bismuth_wallet/util/app_ffi/apputil.dart';
-import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
-import 'package:my_bismuth_wallet/util/caseconverter.dart';
-import 'package:my_bismuth_wallet/ui/widgets/buttons.dart';
-import 'package:my_bismuth_wallet/ui/widgets/security.dart';
-import 'package:my_bismuth_wallet/appstate_container.dart';
-import 'package:my_bismuth_wallet/localization.dart';
-import 'package:my_bismuth_wallet/dimens.dart';
 import 'package:my_bismuth_wallet/ui/util/routes.dart';
+import 'package:my_bismuth_wallet/ui/widgets/buttons.dart';
+import 'package:my_bismuth_wallet/ui/widgets/dialog.dart';
+import 'package:my_bismuth_wallet/ui/widgets/security.dart';
+import 'package:my_bismuth_wallet/util/app_ffi/apputil.dart';
+import 'package:my_bismuth_wallet/util/biometrics.dart';
+import 'package:my_bismuth_wallet/util/caseconverter.dart';
+import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
 
 class AppLockScreen extends StatefulWidget {
   @override

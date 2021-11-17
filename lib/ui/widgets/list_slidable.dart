@@ -1,10 +1,16 @@
 // @dart=2.9
 
+// Dart imports:
 import 'dart:async';
 
+// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+// Package imports:
+import 'package:flutter_vibrate/flutter_vibrate.dart';
+
+// Project imports:
 import 'package:my_bismuth_wallet/service_locator.dart';
 import 'package:my_bismuth_wallet/util/hapticutil.dart';
 
@@ -1052,7 +1058,7 @@ class SlidableState extends State<Slidable>
         _callbackComplete = true;
         close();
       });
-      sl.get<HapticUtil>().success();
+      sl.get<HapticUtil>().feedback(FeedbackType.success);
       var delayed = new Future.delayed(new Duration(milliseconds: 150));
       delayed.then((_) {
         Future.delayed(Duration(milliseconds: 100), () {

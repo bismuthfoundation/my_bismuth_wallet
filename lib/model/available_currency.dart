@@ -1,7 +1,12 @@
 // @dart=2.9
 
-import 'package:flutter/material.dart';
+// Dart imports:
 import 'dart:ui';
+
+// Flutter imports:
+import 'package:flutter/material.dart';
+
+// Project imports:
 import 'package:my_bismuth_wallet/model/setting_item.dart';
 
 enum AvailableCurrencyEnum {

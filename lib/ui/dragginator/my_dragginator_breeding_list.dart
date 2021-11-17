@@ -1,25 +1,30 @@
 // @dart=2.9
 
-import 'package:fluttericon/font_awesome5_icons.dart';
-import 'package:fluttericon/font_awesome_icons.dart';
-import 'package:my_bismuth_wallet/dimens.dart';
-import 'package:my_bismuth_wallet/localization.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+
+// Package imports:
+import 'package:flip_card/flip_card.dart';
+import 'package:flutter_radar_chart/flutter_radar_chart.dart';
+import 'package:fluttericon/font_awesome5_icons.dart';
+import 'package:fluttericon/font_awesome_icons.dart';
+import 'package:scrolling_page_indicator/scrolling_page_indicator.dart';
+
+// Project imports:
+import 'package:my_bismuth_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/dimens.dart';
+import 'package:my_bismuth_wallet/localization.dart';
 import 'package:my_bismuth_wallet/model/address.dart';
 import 'package:my_bismuth_wallet/network/model/response/dragginator_infos_from_dna_response.dart';
 import 'package:my_bismuth_wallet/network/model/response/dragginator_list_from_address_response.dart';
 import 'package:my_bismuth_wallet/service/dragginator_service.dart';
 import 'package:my_bismuth_wallet/service_locator.dart';
 import 'package:my_bismuth_wallet/styles.dart';
-import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:my_bismuth_wallet/ui/send/send_sheet.dart';
 import 'package:my_bismuth_wallet/ui/util/ui_util.dart';
 import 'package:my_bismuth_wallet/ui/widgets/buttons.dart';
 import 'package:my_bismuth_wallet/ui/widgets/sheet_util.dart';
-import 'package:scrolling_page_indicator/scrolling_page_indicator.dart';
-import 'package:flutter_radar_chart/flutter_radar_chart.dart';
-import 'package:flip_card/flip_card.dart';
 
 class MyDragginatorBreedingList extends StatefulWidget {
   final String address;

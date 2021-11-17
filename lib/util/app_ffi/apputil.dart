@@ -1,18 +1,24 @@
 // @dart=2.9
 
+// Dart imports:
 import 'dart:convert';
 import 'dart:typed_data';
 
+// Flutter imports:
+import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:bip32/bip32.dart' as bip32;
 import 'package:bip39/bip39.dart' as bip39;
-import 'package:flutter/material.dart';
+import 'package:bs58check/bs58check.dart' as bs58check;
 import 'package:hex/hex.dart';
-import 'package:my_bismuth_wallet/model/db/appdb.dart';
-import 'package:my_bismuth_wallet/model/db/account.dart' as Account;
+
+// Project imports:
 import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:my_bismuth_wallet/localization.dart';
+import 'package:my_bismuth_wallet/model/db/appdb.dart';
+import 'package:my_bismuth_wallet/model/db/hiveDB.dart';
 import 'package:my_bismuth_wallet/service_locator.dart';
-import 'package:bs58check/bs58check.dart' as bs58check;
 
 class AppUtil {
   String seedToAddress(String seed, int index) {
@@ -86,10 +92,9 @@ class AppUtil {
   }
 
   Future<void> loginAccount(String seed, BuildContext context) async {
-    Account.Account selectedAcct =
-        await sl.get<DBHelper>().getSelectedAccount(seed);
+    Account selectedAcct = await sl.get<DBHelper>().getSelectedAccount(seed);
     if (selectedAcct == null) {
-      selectedAcct = Account.Account(
+      selectedAcct = Account(
           index: 0,
           lastAccess: 0,
           name: AppLocalization.of(context).defaultAccountName,

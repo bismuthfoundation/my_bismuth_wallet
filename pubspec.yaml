@@ -1,21 +1,9 @@
 name: my_bismuth_wallet
 description: Bismuth Wallet app (iOS/Android).
 
-# The following line prevents the package from being accidentally published to
-# pub.dev using `pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: 'none'
 
-# The following defines the version and build number for your application.
-# A version number is three numbers separated by dots, like 1.2.43
-# followed by an optional build number separated by a +.
-# Both the version and the builder number may be overridden in flutter
-# build by specifying --build-name and --build-number, respectively.
-# In Android, build-name is used as versionName while build-number used as versionCode.
-# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
-# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
-# Read more about iOS versioning at
-# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.55+55
+version: 1.0.56+56
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
@@ -28,30 +16,27 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.3
+  cupertino_icons: ^1.0.4
 
   # Securley store data in a keystore
-  flutter_secure_storage: ^4.2.1
+  flutter_secure_storage: ^5.0.2
 
   # Shared prefs
-  shared_preferences: ^2.0.7
+  shared_preferences: ^2.0.8
 
   # Flare for animations
   flare_flutter: ^3.0.2
 
-  asn1lib: ^1.0.2
+  asn1lib: ^1.0.3
   
   # Websockets
   web_socket_channel: ^2.1.0
 
   # Platform-specific build info
-  package_info: ^2.0.2
+  package_info_plus: ^1.3.0
 
   # Device-specific info
-  device_info: ^2.0.2
-
-  # JSON Serialization
-  json_annotation: ^4.0.0
+  device_info_plus: ^3.1.1
 
   # Localization
   intl: ^0.17.0
@@ -61,12 +46,12 @@ dependencies:
 
   # Logger
   logger: ^1.1.0
+  
+  # A Flutter plugin that provides a WebView widget
+  webview_flutter: ^2.3.0
 
-  # Native webview plugin
-  flutter_webview_plugin: 
-    git:
-      url: https://github.com/redDwarf03/flutter_webview_plugin.git
-      ref: master
+  # With the Flutter safe_device package, you can easily implement security steps such as Jailbroken, root, emulator and fake location detection.
+  #safe_device: ^1.0.9
 
   bip32: 
     git: 
@@ -75,20 +60,18 @@ dependencies:
 
   bip39: ^1.0.6
   
-  # SQLite
-  sqflite: ^2.0.0+4
+  # Hive is a lightweight and blazing fast key-value database written in pure Dart
+  hive: ^2.0.4
+  hive_flutter: ^1.1.0
 
-  # Android/iOS path provider
-  path_provider: ^2.0.3
-  
   # TouchID/FaceID
-  local_auth: ^1.1.7
+  local_auth: ^1.1.8
  
   # Eventbus
   event_taxi: ^1.0.0
 
   # SVG
-  flutter_svg: ^0.22.0
+  flutter_svg: ^0.23.0+1
   
   ffi: ^1.1.2
 
@@ -96,47 +79,40 @@ dependencies:
 
   # QR Codes
   qr_flutter: ^4.0.0
-  # Generator
-  barcode_scan:
-    git:
-      url: https://github.com/redDwarf03/flutter_barcode_reader.git
-      ref: master
+
+  # A flutter plugin for scanning 2D barcodes and QRCodes via camera
+  barcode_scan2: ^4.1.4
   
   flutter_radar_chart: ^0.2.0
 
-  flip_card: ^0.5.0
+  flip_card: ^0.6.0
 
   scrolling_page_indicator:
     git: 
      url: https://github.com/redDwarf03/FlutterScrollingPageIndicator.git
      ref: master
   
-  # Deep link support
-  uni_links:
-    git:
-      url: https://github.com/redDwarf03/uni_links.git
-      ref: nfc_android
+  # Flutter plugin for accepting incoming links - App/Deep Links (Android), Universal Links and Custom URL schemes (iOS)
+  uni_links: ^0.5.1
 
   # HTTP client
-  http: ^0.13.3
+  http: ^0.13.4
 
   # Easy hexadecimal encoding and decoding
   hex: ^0.2.0
 
-  pointycastle: ^3.3.4
+  pointycastle: ^3.4.0
   
-  # Vibrate
-  vibrate:
-    git:
-      url: https://github.com/redDwarf03/flutter_vibrate.git
-      ref: master
+  # A Flutter plugin to vibrate the device
+  flutter_vibrate: ^1.3.0
 
   # Toast
-  oktoast: ^3.1.1
+  oktoast: ^3.1.5
 
   # Slidable list actions
   flutter_slidable: ^0.6.0-nullsafety.0
 
+  # ****
   circular_profile_avatar: ^2.0.5
 
   # Lock helper
@@ -145,7 +121,7 @@ dependencies:
   # Service provider
   get_it: ^7.2.0
   
-  quiver: ^3.0.1
+  quiver: ^3.0.1+1
 
   convert: ^3.0.1
 
@@ -154,17 +130,11 @@ dependencies:
       url: https://github.com/redDwarf03/bs58check-dart.git
       ref: master
 
-  # Root/Jailbreak detection
-  root_checker:
-    git:
-      url: https://github.com/redDwarf03/root_checker.git
-      ref: master
-
   # Validation utilities
-  validators2: ^3.0.0
+  validators: ^3.0.0
 
   # Auto resize text widget
-  auto_size_text: ^3.0.0-nullsafety.0
+  auto_size_text: ^3.0.0
 
   # Avoid keyboard from overlapping text fields
   keyboard_avoider: 
@@ -177,24 +147,25 @@ dependencies:
       url: https://github.com/redDwarf03/hash.git
       ref: master
 
-  fast_base58: ^0.2.0
+  fast_base58: ^0.2.1
  
   diacritic: ^0.1.3
   
   fluttericon: ^2.0.0
 
 dev_dependencies:
-  # Automatically organize your dart imports
-  import_sorter: ^4.6.0
+  build_runner: ^2.1.4
   flutter_test:
     sdk: flutter
-  build_runner: ^1.7.0
-  json_serializable: ^4.0.3
-  intl_generator: ^0.2.0+0
+  # A build system for Dart code generation and modular compilation
+  hive_generator: ^1.1.1
+  # Automatically organize your dart imports
+  import_sorter: ^4.6.0
+  # Contains code to deal with internationalized/localized messages, date and number formatting and parsing, bi-directional text, and other internationalization issues.
+  intl_generator: ^0.2.1
+  # Automatically generate code for converting to and from JSON by annotating Dart classes.
+  json_serializable: ^6.0.1
   
-# For information on the generic Dart part of this file, see the
-# following page: https://www.dartlang.org/tools/pub/pubspec
-
 flutter_icons:
   android: true
   ios: true
@@ -244,17 +215,8 @@ flutter:
   assets:
     - assets/QR.svg
     - assets/icon.png
-    - assets/send_animation.flr
-    - assets/searchseedqr_animation_magnifyingglassonly.flr
-    - assets/searchseedqr_animation_glassonly.flr
-    - assets/searchseedqr_animation_qronly.flr
-    - assets/searchseedmanual_animation_magnifyingglassonly.flr
-    - assets/searchseedmanual_animation_glassonly.flr
-    - assets/searchseedmanual_animation_seedonly.flr
     - assets/sharecard_logo.svg
     - assets/pulltosend_animation.flr
-    - assets/sheethandle_animation.flr
-    
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

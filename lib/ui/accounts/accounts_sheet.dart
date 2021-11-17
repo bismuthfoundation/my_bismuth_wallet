@@ -1,23 +1,30 @@
 // @dart=2.9
 
+// Dart imports:
 import 'dart:async';
-import 'package:auto_size_text/auto_size_text.dart';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
+
+// Package imports:
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:event_taxi/event_taxi.dart';
-import 'package:my_bismuth_wallet/bus/events.dart';
-import 'package:my_bismuth_wallet/localization.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+
+// Project imports:
 import 'package:my_bismuth_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/bus/events.dart';
 import 'package:my_bismuth_wallet/dimens.dart';
-import 'package:my_bismuth_wallet/service_locator.dart';
+import 'package:my_bismuth_wallet/localization.dart';
 import 'package:my_bismuth_wallet/model/db/appdb.dart';
-import 'package:my_bismuth_wallet/model/db/account.dart';
+import 'package:my_bismuth_wallet/model/db/hiveDB.dart';
+import 'package:my_bismuth_wallet/service_locator.dart';
+import 'package:my_bismuth_wallet/styles.dart';
 import 'package:my_bismuth_wallet/ui/accounts/accountdetails_sheet.dart';
 import 'package:my_bismuth_wallet/ui/util/ui_util.dart';
-import 'package:my_bismuth_wallet/ui/widgets/sheets.dart';
 import 'package:my_bismuth_wallet/ui/widgets/buttons.dart';
 import 'package:my_bismuth_wallet/ui/widgets/dialog.dart';
-import 'package:my_bismuth_wallet/styles.dart';
+import 'package:my_bismuth_wallet/ui/widgets/sheets.dart';
 import 'package:my_bismuth_wallet/util/caseconverter.dart';
 import 'package:my_bismuth_wallet/util/numberutil.dart';
 
@@ -331,7 +338,7 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
   Widget _buildAccountListItem(
       BuildContext context, Account account, StateSetter setState) {
     return Slidable(
-      key: Key(account.id.toString()),
+      key: Key(account.index.toString()),
       secondaryActions: _getSlideActionsForAccount(context, account, setState),
       actionExtentRatio: 0.2,
       actionPane: SlidableStrechActionPane(),

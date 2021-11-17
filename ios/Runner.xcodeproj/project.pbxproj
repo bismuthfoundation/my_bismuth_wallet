@@ -14,17 +14,6 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
-		E496E4B62560972100A66CB3 /* ed25519_blake2b.c in Sources */ = {isa = PBXBuildFile; fileRef = E496E4B52560972100A66CB3 /* ed25519_blake2b.c */; };
-		E496E4D02560973E00A66CB3 /* curve25519-donna-32bit.c in Sources */ = {isa = PBXBuildFile; fileRef = E496E4B72560973C00A66CB3 /* curve25519-donna-32bit.c */; };
-		E496E4D12560973E00A66CB3 /* ed25519.c in Sources */ = {isa = PBXBuildFile; fileRef = E496E4B82560973C00A66CB3 /* ed25519.c */; };
-		E496E4D22560973E00A66CB3 /* ed25519-donna-basepoint-table.c in Sources */ = {isa = PBXBuildFile; fileRef = E496E4BA2560973C00A66CB3 /* ed25519-donna-basepoint-table.c */; };
-		E496E4D32560973E00A66CB3 /* ed25519-donna-32bit-tables.c in Sources */ = {isa = PBXBuildFile; fileRef = E496E4BD2560973D00A66CB3 /* ed25519-donna-32bit-tables.c */; };
-		E496E4D42560973E00A66CB3 /* ed25519-donna-impl-base.c in Sources */ = {isa = PBXBuildFile; fileRef = E496E4BF2560973D00A66CB3 /* ed25519-donna-impl-base.c */; };
-		E496E4D52560973E00A66CB3 /* modm-donna-32bit.c in Sources */ = {isa = PBXBuildFile; fileRef = E496E4C12560973D00A66CB3 /* modm-donna-32bit.c */; };
-		E496E4D62560973E00A66CB3 /* curve25519-donna-helpers.c in Sources */ = {isa = PBXBuildFile; fileRef = E496E4C42560973D00A66CB3 /* curve25519-donna-helpers.c */; };
-		E496E4D72560973E00A66CB3 /* blake2b.c in Sources */ = {isa = PBXBuildFile; fileRef = E496E4C62560973D00A66CB3 /* blake2b.c */; };
-		E496E4D82560973E00A66CB3 /* curve25519-donna-scalarmult-base.c in Sources */ = {isa = PBXBuildFile; fileRef = E496E4CC2560973D00A66CB3 /* curve25519-donna-scalarmult-base.c */; };
-		E496E4D92560973E00A66CB3 /* memzero.c in Sources */ = {isa = PBXBuildFile; fileRef = E496E4CF2560973E00A66CB3 /* memzero.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -57,33 +46,6 @@
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BD03CC854743D901CC316504 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
-		E496E4B42560971700A66CB3 /* ed25519_blake2b.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ed25519_blake2b.h; path = Classes/ed25519_blake2b/ed25519_blake2b.h; sourceTree = "<group>"; };
-		E496E4B52560972100A66CB3 /* ed25519_blake2b.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ed25519_blake2b.c; path = Classes/ed25519_blake2b/ed25519_blake2b.c; sourceTree = "<group>"; };
-		E496E4B72560973C00A66CB3 /* curve25519-donna-32bit.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "curve25519-donna-32bit.c"; path = "Classes/ed25519_blake2b/ed25519-donna/curve25519-donna-32bit.c"; sourceTree = "<group>"; };
-		E496E4B82560973C00A66CB3 /* ed25519.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ed25519.c; path = "Classes/ed25519_blake2b/ed25519-donna/ed25519.c"; sourceTree = "<group>"; };
-		E496E4B92560973C00A66CB3 /* ed25519-donna.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ed25519-donna.h"; path = "Classes/ed25519_blake2b/ed25519-donna/ed25519-donna.h"; sourceTree = "<group>"; };
-		E496E4BA2560973C00A66CB3 /* ed25519-donna-basepoint-table.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "ed25519-donna-basepoint-table.c"; path = "Classes/ed25519_blake2b/ed25519-donna/ed25519-donna-basepoint-table.c"; sourceTree = "<group>"; };
-		E496E4BB2560973C00A66CB3 /* ed25519-hash-custom-blake2b.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ed25519-hash-custom-blake2b.h"; path = "Classes/ed25519_blake2b/ed25519-donna/ed25519-hash-custom-blake2b.h"; sourceTree = "<group>"; };
-		E496E4BC2560973C00A66CB3 /* memzero.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = memzero.h; path = "Classes/ed25519_blake2b/ed25519-donna/memzero.h"; sourceTree = "<group>"; };
-		E496E4BD2560973D00A66CB3 /* ed25519-donna-32bit-tables.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "ed25519-donna-32bit-tables.c"; path = "Classes/ed25519_blake2b/ed25519-donna/ed25519-donna-32bit-tables.c"; sourceTree = "<group>"; };
-		E496E4BE2560973D00A66CB3 /* curve25519-donna-helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "curve25519-donna-helpers.h"; path = "Classes/ed25519_blake2b/ed25519-donna/curve25519-donna-helpers.h"; sourceTree = "<group>"; };
-		E496E4BF2560973D00A66CB3 /* ed25519-donna-impl-base.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "ed25519-donna-impl-base.c"; path = "Classes/ed25519_blake2b/ed25519-donna/ed25519-donna-impl-base.c"; sourceTree = "<group>"; };
-		E496E4C02560973D00A66CB3 /* ed25519-donna-32bit-tables.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ed25519-donna-32bit-tables.h"; path = "Classes/ed25519_blake2b/ed25519-donna/ed25519-donna-32bit-tables.h"; sourceTree = "<group>"; };
-		E496E4C12560973D00A66CB3 /* modm-donna-32bit.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "modm-donna-32bit.c"; path = "Classes/ed25519_blake2b/ed25519-donna/modm-donna-32bit.c"; sourceTree = "<group>"; };
-		E496E4C22560973D00A66CB3 /* blake2b.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = blake2b.h; path = "Classes/ed25519_blake2b/ed25519-donna/blake2b.h"; sourceTree = "<group>"; };
-		E496E4C32560973D00A66CB3 /* ed25519-hash-custom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ed25519-hash-custom.h"; path = "Classes/ed25519_blake2b/ed25519-donna/ed25519-hash-custom.h"; sourceTree = "<group>"; };
-		E496E4C42560973D00A66CB3 /* curve25519-donna-helpers.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "curve25519-donna-helpers.c"; path = "Classes/ed25519_blake2b/ed25519-donna/curve25519-donna-helpers.c"; sourceTree = "<group>"; };
-		E496E4C52560973D00A66CB3 /* curve25519-donna-32bit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "curve25519-donna-32bit.h"; path = "Classes/ed25519_blake2b/ed25519-donna/curve25519-donna-32bit.h"; sourceTree = "<group>"; };
-		E496E4C62560973D00A66CB3 /* blake2b.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = blake2b.c; path = "Classes/ed25519_blake2b/ed25519-donna/blake2b.c"; sourceTree = "<group>"; };
-		E496E4C72560973D00A66CB3 /* curve25519-donna-scalarmult-base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "curve25519-donna-scalarmult-base.h"; path = "Classes/ed25519_blake2b/ed25519-donna/curve25519-donna-scalarmult-base.h"; sourceTree = "<group>"; };
-		E496E4C82560973D00A66CB3 /* ed25519.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ed25519.h; path = "Classes/ed25519_blake2b/ed25519-donna/ed25519.h"; sourceTree = "<group>"; };
-		E496E4C92560973D00A66CB3 /* blake2_common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = blake2_common.h; path = "Classes/ed25519_blake2b/ed25519-donna/blake2_common.h"; sourceTree = "<group>"; };
-		E496E4CA2560973D00A66CB3 /* modm-donna-32bit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "modm-donna-32bit.h"; path = "Classes/ed25519_blake2b/ed25519-donna/modm-donna-32bit.h"; sourceTree = "<group>"; };
-		E496E4CB2560973D00A66CB3 /* ed25519-donna-portable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ed25519-donna-portable.h"; path = "Classes/ed25519_blake2b/ed25519-donna/ed25519-donna-portable.h"; sourceTree = "<group>"; };
-		E496E4CC2560973D00A66CB3 /* curve25519-donna-scalarmult-base.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "curve25519-donna-scalarmult-base.c"; path = "Classes/ed25519_blake2b/ed25519-donna/curve25519-donna-scalarmult-base.c"; sourceTree = "<group>"; };
-		E496E4CD2560973E00A66CB3 /* ed25519-donna-impl-base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ed25519-donna-impl-base.h"; path = "Classes/ed25519_blake2b/ed25519-donna/ed25519-donna-impl-base.h"; sourceTree = "<group>"; };
-		E496E4CE2560973E00A66CB3 /* ed25519-donna-basepoint-table.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ed25519-donna-basepoint-table.h"; path = "Classes/ed25519_blake2b/ed25519-donna/ed25519-donna-basepoint-table.h"; sourceTree = "<group>"; };
-		E496E4CF2560973E00A66CB3 /* memzero.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = memzero.c; path = "Classes/ed25519_blake2b/ed25519-donna/memzero.c"; sourceTree = "<group>"; };
 		F2F86492D3BC0967AD09544F /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -121,33 +83,6 @@
 		97C146E51CF9000F007C117D = {
 			isa = PBXGroup;
 			children = (
-				E496E4C92560973D00A66CB3 /* blake2_common.h */,
-				E496E4C62560973D00A66CB3 /* blake2b.c */,
-				E496E4C22560973D00A66CB3 /* blake2b.h */,
-				E496E4B72560973C00A66CB3 /* curve25519-donna-32bit.c */,
-				E496E4C52560973D00A66CB3 /* curve25519-donna-32bit.h */,
-				E496E4C42560973D00A66CB3 /* curve25519-donna-helpers.c */,
-				E496E4BE2560973D00A66CB3 /* curve25519-donna-helpers.h */,
-				E496E4CC2560973D00A66CB3 /* curve25519-donna-scalarmult-base.c */,
-				E496E4C72560973D00A66CB3 /* curve25519-donna-scalarmult-base.h */,
-				E496E4BD2560973D00A66CB3 /* ed25519-donna-32bit-tables.c */,
-				E496E4C02560973D00A66CB3 /* ed25519-donna-32bit-tables.h */,
-				E496E4BA2560973C00A66CB3 /* ed25519-donna-basepoint-table.c */,
-				E496E4CE2560973E00A66CB3 /* ed25519-donna-basepoint-table.h */,
-				E496E4BF2560973D00A66CB3 /* ed25519-donna-impl-base.c */,
-				E496E4CD2560973E00A66CB3 /* ed25519-donna-impl-base.h */,
-				E496E4CB2560973D00A66CB3 /* ed25519-donna-portable.h */,
-				E496E4B92560973C00A66CB3 /* ed25519-donna.h */,
-				E496E4BB2560973C00A66CB3 /* ed25519-hash-custom-blake2b.h */,
-				E496E4C32560973D00A66CB3 /* ed25519-hash-custom.h */,
-				E496E4B82560973C00A66CB3 /* ed25519.c */,
-				E496E4C82560973D00A66CB3 /* ed25519.h */,
-				E496E4CF2560973E00A66CB3 /* memzero.c */,
-				E496E4BC2560973C00A66CB3 /* memzero.h */,
-				E496E4C12560973D00A66CB3 /* modm-donna-32bit.c */,
-				E496E4CA2560973D00A66CB3 /* modm-donna-32bit.h */,
-				E496E4B52560972100A66CB3 /* ed25519_blake2b.c */,
-				E496E4B42560971700A66CB3 /* ed25519_blake2b.h */,
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
 				97C146EF1CF9000F007C117D /* Products */,
@@ -337,18 +272,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
-				E496E4D62560973E00A66CB3 /* curve25519-donna-helpers.c in Sources */,
-				E496E4D22560973E00A66CB3 /* ed25519-donna-basepoint-table.c in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
-				E496E4D82560973E00A66CB3 /* curve25519-donna-scalarmult-base.c in Sources */,
-				E496E4D32560973E00A66CB3 /* ed25519-donna-32bit-tables.c in Sources */,
-				E496E4D52560973E00A66CB3 /* modm-donna-32bit.c in Sources */,
-				E496E4D02560973E00A66CB3 /* curve25519-donna-32bit.c in Sources */,
-				E496E4D92560973E00A66CB3 /* memzero.c in Sources */,
-				E496E4D42560973E00A66CB3 /* ed25519-donna-impl-base.c in Sources */,
-				E496E4B62560972100A66CB3 /* ed25519_blake2b.c in Sources */,
-				E496E4D72560973E00A66CB3 /* blake2b.c in Sources */,
-				E496E4D12560973E00A66CB3 /* ed25519.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,11 +1,17 @@
 // @dart=2.9
 
-import 'package:auto_size_text/auto_size_text.dart';
+// Flutter imports:
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:auto_size_text/auto_size_text.dart';
+
+// Project imports:
 import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:my_bismuth_wallet/dimens.dart';
-import 'package:my_bismuth_wallet/styles.dart';
 import 'package:my_bismuth_wallet/localization.dart';
+import 'package:my_bismuth_wallet/styles.dart';
 import 'package:my_bismuth_wallet/ui/widgets/buttons.dart';
 
 class IntroWelcomePage extends StatefulWidget {
@@ -26,7 +32,7 @@ class _IntroWelcomePageState extends State<IntroWelcomePage> {
         builder: (context, constraints) => SafeArea(
           minimum: EdgeInsets.only(
             bottom: MediaQuery.of(context).size.height * 0.035,
-            top: MediaQuery.of(context).size.height * 0.10,
+            top: kIsWeb ? 400 : MediaQuery.of(context).size.height * 0.10,
           ),
           child: Column(
             children: <Widget>[
@@ -37,7 +43,9 @@ class _IntroWelcomePageState extends State<IntroWelcomePage> {
                     Container(
                       //
                       width: double.infinity,
-                      height: MediaQuery.of(context).size.width * 5 / 8,
+                      height: kIsWeb
+                          ? 100
+                          : MediaQuery.of(context).size.width * 5 / 8,
                       child: Center(
                         child: Container(
                           child: SizedBox(

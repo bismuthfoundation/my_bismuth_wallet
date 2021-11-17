@@ -1,21 +1,27 @@
 // @dart=2.9
 
+// Dart imports:
 import 'dart:async';
 
-import 'package:event_taxi/event_taxi.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+// Package imports:
+import 'package:event_taxi/event_taxi.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:logger/logger.dart';
+
+// Project imports:
+import 'package:my_bismuth_wallet/app_icons.dart';
+import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:my_bismuth_wallet/bus/events.dart';
+import 'package:my_bismuth_wallet/localization.dart';
 import 'package:my_bismuth_wallet/network/model/response/wstatusget_response.dart';
 import 'package:my_bismuth_wallet/service/app_service.dart';
 import 'package:my_bismuth_wallet/service/http_service.dart';
 import 'package:my_bismuth_wallet/service_locator.dart';
 import 'package:my_bismuth_wallet/styles.dart';
-import 'package:my_bismuth_wallet/app_icons.dart';
-import 'package:my_bismuth_wallet/appstate_container.dart';
-import 'package:my_bismuth_wallet/localization.dart';
 import 'package:my_bismuth_wallet/ui/widgets/app_text_field.dart';
 import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
 

@@ -1,9 +1,14 @@
 // @dart=2.9
 
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:fluttericon/maki_icons.dart';
+
+// Project imports:
 import 'package:my_bismuth_wallet/styles.dart';
 
 class TokenRef {

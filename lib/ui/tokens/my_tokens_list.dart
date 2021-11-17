@@ -1,14 +1,19 @@
 // @dart=2.9
 
-import 'package:fluttericon/font_awesome5_icons.dart';
-import 'package:intl/intl.dart';
-import 'package:my_bismuth_wallet/localization.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+
+// Package imports:
+import 'package:fluttericon/font_awesome5_icons.dart';
+import 'package:intl/intl.dart';
+
+// Project imports:
+import 'package:my_bismuth_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/localization.dart';
 import 'package:my_bismuth_wallet/model/token_ref.dart';
 import 'package:my_bismuth_wallet/network/model/response/address_txs_response.dart';
 import 'package:my_bismuth_wallet/styles.dart';
-import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:my_bismuth_wallet/ui/send/send_sheet.dart';
 import 'package:my_bismuth_wallet/ui/widgets/sheet_util.dart';
 

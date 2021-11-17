@@ -1,7 +1,10 @@
 // @dart=2.9
 
-import 'dart:typed_data';
+// Dart imports:
 import 'dart:convert';
+import 'dart:typed_data';
+
+// Package imports:
 import 'package:hex/hex.dart';
 
 class AppHelpers {

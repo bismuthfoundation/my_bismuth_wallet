@@ -1,15 +1,21 @@
 // @dart=2.9
 
-import 'dart:io';
+// Dart imports:
 import 'dart:async';
+
+// Flutter imports:
+import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:event_taxi/event_taxi.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+
+// Project imports:
 import 'package:my_bismuth_wallet/appstate_container.dart';
-import 'package:my_bismuth_wallet/styles.dart';
-import 'package:my_bismuth_wallet/localization.dart';
 import 'package:my_bismuth_wallet/bus/events.dart';
+import 'package:my_bismuth_wallet/localization.dart';
+import 'package:my_bismuth_wallet/styles.dart';
 import 'package:my_bismuth_wallet/ui/util/exceptions.dart';
 
 enum ThreeLineAddressTextType { PRIMARY60, PRIMARY, SUCCESS, SUCCESS_FULL }
@@ -386,15 +392,9 @@ class UIUtil {
         future: AppLocalization.of(context).getAccountExplorerUrl(account),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData && snapshot.data != null) {
-            return WebviewScaffold(
-              url: snapshot.data,
-              appBar: new AppBar(
-                backgroundColor:
-                    StateContainer.of(context).curTheme.backgroundDark,
-                brightness: StateContainer.of(context).curTheme.brightness,
-                iconTheme: IconThemeData(
-                    color: StateContainer.of(context).curTheme.text),
-              ),
+            return WebView(
+              initialUrl: snapshot.data,
+              gestureNavigationEnabled: true,
             );
           } else {
             return Center(child: CircularProgressIndicator());
@@ -402,30 +402,18 @@ class UIUtil {
         });
   }
 
-  static Widget showWebview(BuildContext context, String url) {
-    cancelLockEvent();
-    return WebviewScaffold(
-      resizeToAvoidBottomInset: Platform.isAndroid,
-      url: url,
-      appBar: new AppBar(
-        backgroundColor: StateContainer.of(context).curTheme.backgroundDark,
-        brightness: StateContainer.of(context).curTheme.brightness,
-        iconTheme:
-            IconThemeData(color: StateContainer.of(context).curTheme.text),
-      ),
+  static Widget showWebview(BuildContext context, String url, String title) {
+    return WebView(
+      initialUrl: url,
+      gestureNavigationEnabled: true,
     );
   }
 
   static Widget showDragginatorHelp(BuildContext context) {
     cancelLockEvent();
-    return WebviewScaffold(
-      url: AppLocalization.of(context).getDragginatorHelp(),
-      appBar: new AppBar(
-        backgroundColor: StateContainer.of(context).curTheme.backgroundDark,
-        brightness: StateContainer.of(context).curTheme.brightness,
-        iconTheme:
-            IconThemeData(color: StateContainer.of(context).curTheme.text),
-      ),
+    return WebView(
+      initialUrl: AppLocalization.of(context).getDragginatorHelp(),
+      gestureNavigationEnabled: true,
     );
   }
 

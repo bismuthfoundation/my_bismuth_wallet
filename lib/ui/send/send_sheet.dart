@@ -1,37 +1,41 @@
 // @dart=2.9
 
+// Dart imports:
 import 'dart:math';
 
-import 'package:auto_size_text/auto_size_text.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+// Package imports:
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:decimal/decimal.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 
+// Project imports:
+import 'package:my_bismuth_wallet/app_icons.dart';
 import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:my_bismuth_wallet/dimens.dart';
 import 'package:my_bismuth_wallet/localization.dart';
+import 'package:my_bismuth_wallet/model/address.dart';
 import 'package:my_bismuth_wallet/model/available_currency.dart';
 import 'package:my_bismuth_wallet/model/bis_url.dart';
+import 'package:my_bismuth_wallet/model/db/appdb.dart';
+import 'package:my_bismuth_wallet/model/db/hiveDB.dart';
 import 'package:my_bismuth_wallet/network/model/response/address_txs_response.dart';
 import 'package:my_bismuth_wallet/service/app_service.dart';
 import 'package:my_bismuth_wallet/service_locator.dart';
-import 'package:my_bismuth_wallet/app_icons.dart';
-import 'package:my_bismuth_wallet/model/address.dart';
-import 'package:my_bismuth_wallet/model/db/contact.dart';
-import 'package:my_bismuth_wallet/model/db/appdb.dart';
 import 'package:my_bismuth_wallet/styles.dart';
 import 'package:my_bismuth_wallet/ui/send/send_confirm_sheet.dart';
+import 'package:my_bismuth_wallet/ui/util/formatters.dart';
+import 'package:my_bismuth_wallet/ui/util/ui_util.dart';
 import 'package:my_bismuth_wallet/ui/widgets/app_text_field.dart';
 import 'package:my_bismuth_wallet/ui/widgets/buttons.dart';
 import 'package:my_bismuth_wallet/ui/widgets/one_or_three_address_text.dart';
-import 'package:my_bismuth_wallet/ui/util/formatters.dart';
-import 'package:my_bismuth_wallet/ui/util/ui_util.dart';
 import 'package:my_bismuth_wallet/ui/widgets/sheet_util.dart';
-import 'package:my_bismuth_wallet/util/numberutil.dart';
 import 'package:my_bismuth_wallet/util/caseconverter.dart';
+import 'package:my_bismuth_wallet/util/numberutil.dart';
 import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
 import 'package:my_bismuth_wallet/util/user_data_util.dart';
 

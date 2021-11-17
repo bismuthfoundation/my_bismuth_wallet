@@ -1,2 +1,2 @@
-dart format lib test
-dart run import_sorter:main
+flutter format lib test
+flutter pub run import_sorter:main

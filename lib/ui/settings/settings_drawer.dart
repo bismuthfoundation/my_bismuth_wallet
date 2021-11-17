@@ -1,54 +1,59 @@
 // @dart=2.9
 
+// Dart imports:
 import 'dart:async';
+
+// Flutter imports:
+import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:event_taxi/event_taxi.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:fluttericon/iconic_icons.dart';
 import 'package:fluttericon/typicons_icons.dart';
 import 'package:logger/logger.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+
+// Project imports:
+import 'package:my_bismuth_wallet/app_icons.dart';
+import 'package:my_bismuth_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/bus/events.dart';
+import 'package:my_bismuth_wallet/localization.dart';
+import 'package:my_bismuth_wallet/model/authentication_method.dart';
+import 'package:my_bismuth_wallet/model/available_currency.dart';
+import 'package:my_bismuth_wallet/model/available_language.dart';
+import 'package:my_bismuth_wallet/model/db/appdb.dart';
+import 'package:my_bismuth_wallet/model/device_lock_timeout.dart';
+import 'package:my_bismuth_wallet/model/device_unlock_option.dart';
+import 'package:my_bismuth_wallet/model/vault.dart';
 import 'package:my_bismuth_wallet/service/dragginator_service.dart';
+import 'package:my_bismuth_wallet/service_locator.dart';
+import 'package:my_bismuth_wallet/styles.dart';
 import 'package:my_bismuth_wallet/ui/accounts/accountdetails_sheet.dart';
 import 'package:my_bismuth_wallet/ui/accounts/accounts_sheet.dart';
 import 'package:my_bismuth_wallet/ui/dragginator/my_dragginator_breeding_list.dart';
 import 'package:my_bismuth_wallet/ui/dragginator/my_dragginator_merging.dart';
 import 'package:my_bismuth_wallet/ui/send/send_confirm_sheet.dart';
+import 'package:my_bismuth_wallet/ui/settings/backupseed_sheet.dart';
+import 'package:my_bismuth_wallet/ui/settings/contacts_widget.dart';
 import 'package:my_bismuth_wallet/ui/settings/custom_url_widget.dart';
 import 'package:my_bismuth_wallet/ui/settings/disable_password_sheet.dart';
 import 'package:my_bismuth_wallet/ui/settings/set_password_sheet.dart';
-import 'package:my_bismuth_wallet/ui/settings/tokens_widget.dart';
-import 'package:my_bismuth_wallet/ui/widgets/app_simpledialog.dart';
-import 'package:my_bismuth_wallet/ui/widgets/sheet_util.dart';
-import 'package:package_info/package_info.dart';
-import 'package:flutter/material.dart';
-import 'package:my_bismuth_wallet/appstate_container.dart';
-import 'package:my_bismuth_wallet/localization.dart';
-import 'package:my_bismuth_wallet/styles.dart';
-import 'package:my_bismuth_wallet/app_icons.dart';
-import 'package:my_bismuth_wallet/service_locator.dart';
-import 'package:my_bismuth_wallet/bus/events.dart';
-import 'package:my_bismuth_wallet/model/authentication_method.dart';
-import 'package:my_bismuth_wallet/model/available_currency.dart';
-import 'package:my_bismuth_wallet/model/device_unlock_option.dart';
-import 'package:my_bismuth_wallet/model/device_lock_timeout.dart';
-import 'package:my_bismuth_wallet/model/available_language.dart';
-import 'package:my_bismuth_wallet/model/vault.dart';
-import 'package:my_bismuth_wallet/model/db/appdb.dart';
-import 'package:my_bismuth_wallet/ui/settings/backupseed_sheet.dart';
 import 'package:my_bismuth_wallet/ui/settings/settings_list_item.dart';
-import 'package:my_bismuth_wallet/ui/settings/contacts_widget.dart';
-import 'package:my_bismuth_wallet/ui/widgets/security.dart';
+import 'package:my_bismuth_wallet/ui/settings/tokens_widget.dart';
 import 'package:my_bismuth_wallet/ui/util/ui_util.dart';
-import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
+import 'package:my_bismuth_wallet/ui/widgets/app_simpledialog.dart';
+import 'package:my_bismuth_wallet/ui/widgets/security.dart';
+import 'package:my_bismuth_wallet/ui/widgets/sheet_util.dart';
 import 'package:my_bismuth_wallet/util/biometrics.dart';
 import 'package:my_bismuth_wallet/util/hapticutil.dart';
-
+import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
 import '../../appstate_container.dart';
 import '../../util/sharedprefsutil.dart';
 
 class SettingsSheet extends StatefulWidget {
-
-
   final int eggPrice;
   SettingsSheet(this.eggPrice);
 
@@ -1025,7 +1030,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                                   AppLocalization.of(context)
                                       .fingerprintSeedBackup);
                           if (authenticated) {
-                            sl.get<HapticUtil>().fingerprintSucess();
+                            sl.get<HapticUtil>().feedback(FeedbackType.success);
                             StateContainer.of(context).getSeed().then((seed) {
                               AppSeedBackupSheet(seed).mainBottomSheet(context);
                             });
@@ -1151,8 +1156,10 @@ class _SettingsSheetState extends State<SettingsSheet>
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (BuildContext context) {
-                                  return UIUtil.showWebview(context,
-                                      AppLocalization.of(context).privacyUrl);
+                                  return UIUtil.showWebview(
+                                      context,
+                                      AppLocalization.of(context).privacyUrl,
+                                      '');
                                 }));
                               },
                               child: Text(
@@ -1331,13 +1338,15 @@ class _SettingsSheetState extends State<SettingsSheet>
                     AppSettings.buildSettingsListItemSingleLine(
                         context,
                         AppLocalization.of(context)
-                            .dragginatorGetEggWithBisHeader.replaceAll('%1', widget.eggPrice.toString()),
+                            .dragginatorGetEggWithBisHeader
+                            .replaceAll('%1', widget.eggPrice.toString()),
                         FontAwesome5.money_bill_wave, onPressed: () {
                       Sheets.showAppHeightNineSheet(
                           context: context,
                           widget: SendConfirmSheet(
                               title: AppLocalization.of(context)
-                                  .dragginatorGetEggWithBisHeader.replaceAll('%1', widget.eggPrice.toString()),
+                                  .dragginatorGetEggWithBisHeader
+                                  .replaceAll('%1', widget.eggPrice.toString()),
                               amountRaw: widget.eggPrice.toString(),
                               operation: "",
                               openfield: "",

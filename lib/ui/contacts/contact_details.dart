@@ -1,20 +1,26 @@
 // @dart=2.9
 
+// Dart imports:
 import 'dart:async';
-import 'package:auto_size_text/auto_size_text.dart';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:my_bismuth_wallet/appstate_container.dart';
+
+// Package imports:
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:event_taxi/event_taxi.dart';
 
-import 'package:my_bismuth_wallet/dimens.dart';
+// Project imports:
 import 'package:my_bismuth_wallet/app_icons.dart';
-import 'package:my_bismuth_wallet/styles.dart';
-import 'package:my_bismuth_wallet/localization.dart';
-import 'package:my_bismuth_wallet/service_locator.dart';
+import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:my_bismuth_wallet/bus/events.dart';
-import 'package:my_bismuth_wallet/model/db/contact.dart';
+import 'package:my_bismuth_wallet/dimens.dart';
+import 'package:my_bismuth_wallet/localization.dart';
 import 'package:my_bismuth_wallet/model/db/appdb.dart';
+import 'package:my_bismuth_wallet/model/db/hiveDB.dart';
+import 'package:my_bismuth_wallet/service_locator.dart';
+import 'package:my_bismuth_wallet/styles.dart';
 import 'package:my_bismuth_wallet/ui/send/send_sheet.dart';
 import 'package:my_bismuth_wallet/ui/util/ui_util.dart';
 import 'package:my_bismuth_wallet/ui/widgets/buttons.dart';
@@ -26,9 +32,8 @@ import 'package:my_bismuth_wallet/util/caseconverter.dart';
 // Contact Details Sheet
 class ContactDetailsSheet {
   Contact contact;
-  String documentsDirectory;
 
-  ContactDetailsSheet(this.contact, this.documentsDirectory);
+  ContactDetailsSheet(this.contact);
 
   // State variables
   bool _addressCopied = false;
@@ -82,23 +87,18 @@ class ContactDetailsSheet {
                                           .get<DBHelper>()
                                           .deleteContact(contact)
                                           .then((deleted) {
-                                        if (deleted) {
-                                          EventTaxiImpl.singleton().fire(
-                                              ContactRemovedEvent(
-                                                  contact: contact));
-                                          EventTaxiImpl.singleton().fire(
-                                              ContactModifiedEvent(
-                                                  contact: contact));
-                                          UIUtil.showSnackbar(
-                                              AppLocalization.of(context)
-                                                  .contactRemoved
-                                                  .replaceAll(
-                                                      "%1", contact.name),
-                                              context);
-                                          Navigator.of(context).pop();
-                                        } else {
-                                          // TODO - error for failing to delete contact
-                                        }
+                                        EventTaxiImpl.singleton().fire(
+                                            ContactRemovedEvent(
+                                                contact: contact));
+                                        EventTaxiImpl.singleton().fire(
+                                            ContactModifiedEvent(
+                                                contact: contact));
+                                        UIUtil.showSnackbar(
+                                            AppLocalization.of(context)
+                                                .contactRemoved
+                                                .replaceAll("%1", contact.name),
+                                            context);
+                                        Navigator.of(context).pop();
                                       });
                                     },
                                         cancelText: CaseChange.toUpperCase(

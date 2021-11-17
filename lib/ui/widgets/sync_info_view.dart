@@ -1,9 +1,15 @@
 // @dart=2.9
 
+// Dart imports:
 import 'dart:async';
 
-import 'package:event_taxi/event_taxi.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:event_taxi/event_taxi.dart';
+
+// Project imports:
 import 'package:my_bismuth_wallet/bus/events.dart';
 import 'package:my_bismuth_wallet/styles.dart';
 

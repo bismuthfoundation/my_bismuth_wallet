@@ -1,7 +1,10 @@
 // @dart=2.9
 
+// Package imports:
 import 'package:decimal/decimal.dart';
 import 'package:intl/intl.dart';
+
+// Project imports:
 import 'package:my_bismuth_wallet/model/available_currency.dart';
 import 'package:my_bismuth_wallet/network/model/response/address_txs_response.dart';
 import 'package:my_bismuth_wallet/util/numberutil.dart';

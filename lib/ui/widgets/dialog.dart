@@ -1,10 +1,12 @@
 // @dart=2.9
 
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:flare_flutter/flare_actor.dart';
+
+// Project imports:
+import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:my_bismuth_wallet/localization.dart';
 import 'package:my_bismuth_wallet/styles.dart';
-import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:my_bismuth_wallet/ui/widgets/app_simpledialog.dart';
 
 class AppDialogs {
@@ -63,40 +65,10 @@ class AppDialogs {
       },
     );
   }
-
-  static void showInfoDialog(var context, var title, var content) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AppAlertDialog(
-          title: Text(
-            title,
-            style: AppStyles.textStyleButtonPrimaryOutline(context),
-          ),
-          content: Text(content, style: AppStyles.textStyleParagraph(context)),
-          actions: <Widget>[
-            FlatButton(
-              child: Text(
-                AppLocalization.of(context).cancel.toUpperCase(),
-                style: AppStyles.textStyleDialogButtonText(context),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 }
 
 enum AnimationType {
   SEND,
-  GENERIC,
-  TRANSFER_SEARCHING_QR,
-  TRANSFER_SEARCHING_MANUAL,
-  TRANSFER_TRANSFERRING
 }
 
 class AnimationLoadingOverlay extends ModalRoute<void> {
@@ -119,11 +91,6 @@ class AnimationLoadingOverlay extends ModalRoute<void> {
 
   @override
   Color get barrierColor {
-    if (type == AnimationType.TRANSFER_TRANSFERRING ||
-        type == AnimationType.TRANSFER_SEARCHING_QR ||
-        type == AnimationType.TRANSFER_SEARCHING_MANUAL) {
-      return overlay85;
-    }
     return overlay70;
   }
 
@@ -159,72 +126,6 @@ class AnimationLoadingOverlay extends ModalRoute<void> {
     switch (type) {
       case AnimationType.SEND:
         return Center();
-      case AnimationType.TRANSFER_SEARCHING_QR:
-        return Stack(
-          children: <Widget>[
-            Center(
-              child: FlareActor(
-                "assets/searchseedqr_animation_qronly.flr",
-                animation: "main",
-                fit: BoxFit.contain,
-              ),
-            ),
-            Center(
-              child: FlareActor(
-                "assets/searchseedqr_animation_glassonly.flr",
-                animation: "main",
-                fit: BoxFit.contain,
-              ),
-            ),
-            Center(
-              child: FlareActor(
-                "assets/searchseedqr_animation_magnifyingglassonly.flr",
-                animation: "main",
-                fit: BoxFit.contain,
-                color: StateContainer.of(context).curTheme.primary,
-              ),
-            ),
-          ],
-        );
-      case AnimationType.TRANSFER_SEARCHING_MANUAL:
-        return Stack(
-          children: <Widget>[
-            Center(
-              child: FlareActor(
-                "assets/searchseedmanual_animation_seedonly.flr",
-                animation: "main",
-                fit: BoxFit.contain,
-                color: StateContainer.of(context).curTheme.primary30,
-              ),
-            ),
-            Center(
-              child: FlareActor(
-                "assets/searchseedmanual_animation_glassonly.flr",
-                animation: "main",
-                fit: BoxFit.contain,
-              ),
-            ),
-            Center(
-              child: FlareActor(
-                "assets/searchseedmanual_animation_magnifyingglassonly.flr",
-                animation: "main",
-                fit: BoxFit.contain,
-                color: StateContainer.of(context).curTheme.primary,
-              ),
-            ),
-          ],
-        );
-      case AnimationType.TRANSFER_TRANSFERRING:
-        return Stack(
-          children: <Widget>[
-            FlareActor(
-              "assets/transfer_animation_paperwalletonly.flr",
-              animation: "main",
-              fit: BoxFit.contain,
-            ),
-          ],
-        );
-      case AnimationType.GENERIC:
       default:
         return CircularProgressIndicator(
             valueColor: new AlwaysStoppedAnimation<Color>(

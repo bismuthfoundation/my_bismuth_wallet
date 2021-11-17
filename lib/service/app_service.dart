@@ -1,9 +1,16 @@
 // @dart=2.9
 
+// Dart imports:
 import 'dart:async';
 import 'dart:io';
+
+// Package imports:
+import 'package:diacritic/diacritic.dart';
 import 'package:event_taxi/event_taxi.dart';
+import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
+
+// Project imports:
 import 'package:my_bismuth_wallet/bus/events.dart';
 import 'package:my_bismuth_wallet/network/model/request/send_tx_request.dart';
 import 'package:my_bismuth_wallet/network/model/response/addlistlim_response.dart';
@@ -12,10 +19,10 @@ import 'package:my_bismuth_wallet/network/model/response/alias_get_response.dart
 import 'package:my_bismuth_wallet/network/model/response/balance_get_response.dart';
 import 'package:my_bismuth_wallet/network/model/response/mpinsert_response.dart';
 import 'package:my_bismuth_wallet/network/model/response/servers_wallet_legacy.dart';
-import 'package:diacritic/diacritic.dart';
 import 'package:my_bismuth_wallet/network/model/response/wstatusget_response.dart';
 import 'package:my_bismuth_wallet/service/http_service.dart';
 import 'package:my_bismuth_wallet/service_locator.dart';
+import 'package:web_socket_channel/io.dart';
 
 class AppService {
   final Logger log = sl.get<Logger>();
@@ -38,9 +45,18 @@ class AppService {
         EventTaxiImpl.singleton().fire(
             ConnStatusEvent(status: ConnectionStatus.DISCONNECTED, server: ""));
       } else {
-        Socket _socket = await Socket.connect(
-            serverWalletLegacyResponse.ip, serverWalletLegacyResponse.port,
-            timeout: Duration(seconds: 3));
+        IOWebSocketChannel _webSocket;
+        Socket _socket;
+        if (kIsWeb) {
+          _webSocket = IOWebSocketChannel.connect(
+              serverWalletLegacyResponse.ip +
+                  ':' +
+                  serverWalletLegacyResponse.port.toString());
+        } else {
+          _socket = await Socket.connect(
+              serverWalletLegacyResponse.ip, serverWalletLegacyResponse.port,
+              timeout: Duration(seconds: 3));
+        }
 
         EventTaxiImpl.singleton().fire(ConnStatusEvent(
             status: ConnectionStatus.CONNECTED,
@@ -50,29 +66,57 @@ class AppService {
 
         //Establish the onData, and onDone callbacks
         String message = "";
-        _socket.listen((data) {
-          if (data != null) {
-            message += new String.fromCharCodes(data).trim();
-            if (message != null &&
-                message.length >= 10 &&
-                int.tryParse(message.substring(0, 10)) != null &&
-                message.length == 10 + int.tryParse(message.substring(0, 10))) {
-              message = message.substring(
-                  10, 10 + int.tryParse(message.substring(0, 10)));
-              WStatusGetResponse wStatusGetResponse =
-                  wStatusGetResponseFromJson(message);
-              if (wStatusGetResponse == null) {
-                EventTaxiImpl.singleton().fire(ConnStatusEvent(
-                    status: ConnectionStatus.DISCONNECTED, server: ""));
+        if (kIsWeb) {
+          _webSocket.stream.listen((data) {
+            if (data != null) {
+              message += new String.fromCharCodes(data).trim();
+              if (message != null &&
+                  message.length >= 10 &&
+                  int.tryParse(message.substring(0, 10)) != null &&
+                  message.length ==
+                      10 + int.tryParse(message.substring(0, 10))) {
+                message = message.substring(
+                    10, 10 + int.tryParse(message.substring(0, 10)));
+                WStatusGetResponse wStatusGetResponse =
+                    wStatusGetResponseFromJson(message);
+                if (wStatusGetResponse == null) {
+                  EventTaxiImpl.singleton().fire(ConnStatusEvent(
+                      status: ConnectionStatus.DISCONNECTED, server: ""));
+                }
               }
             }
-          }
-        }, onError: ((error, StackTrace trace) {
-          //print("Error");
-        }), onDone: () {
-          //print("Done");
-          _socket.destroy();
-        }, cancelOnError: false);
+          }, onError: ((error, StackTrace trace) {
+            //print("Error");
+          }), onDone: () {
+            //print("Done");
+            _socket.destroy();
+          }, cancelOnError: false);
+        } else {
+          _socket.listen((data) {
+            if (data != null) {
+              message += new String.fromCharCodes(data).trim();
+              if (message != null &&
+                  message.length >= 10 &&
+                  int.tryParse(message.substring(0, 10)) != null &&
+                  message.length ==
+                      10 + int.tryParse(message.substring(0, 10))) {
+                message = message.substring(
+                    10, 10 + int.tryParse(message.substring(0, 10)));
+                WStatusGetResponse wStatusGetResponse =
+                    wStatusGetResponseFromJson(message);
+                if (wStatusGetResponse == null) {
+                  EventTaxiImpl.singleton().fire(ConnStatusEvent(
+                      status: ConnectionStatus.DISCONNECTED, server: ""));
+                }
+              }
+            }
+          }, onError: ((error, StackTrace trace) {
+            //print("Error");
+          }), onDone: () {
+            //print("Done");
+            _socket.destroy();
+          }, cancelOnError: false);
+        }
 
         //Send the request
         String method = '"wstatusget"';
@@ -183,9 +227,18 @@ class AppService {
         EventTaxiImpl.singleton().fire(
             ConnStatusEvent(status: ConnectionStatus.DISCONNECTED, server: ""));
       } else {
-        Socket _socket = await Socket.connect(
-            serverWalletLegacyResponse.ip, serverWalletLegacyResponse.port,
-            timeout: Duration(seconds: 3));
+        IOWebSocketChannel _webSocket;
+        Socket _socket;
+        if (kIsWeb) {
+          _webSocket = IOWebSocketChannel.connect(
+              serverWalletLegacyResponse.ip +
+                  ':' +
+                  serverWalletLegacyResponse.port.toString());
+        } else {
+          _socket = await Socket.connect(
+              serverWalletLegacyResponse.ip, serverWalletLegacyResponse.port,
+              timeout: Duration(seconds: 3));
+        }
 
         EventTaxiImpl.singleton().fire(ConnStatusEvent(
             status: ConnectionStatus.CONNECTED,
@@ -195,71 +248,139 @@ class AppService {
 
         //Establish the onData, and onDone callbacks
         String message = "";
-        _socket.listen((data) {
-          if (data != null) {
-            message += new String.fromCharCodes(data).trim();
-            //print("response : " + message);
-            //print("response length : " + message.length.toString());
-            if (message != null &&
-                message.length >= 10 &&
-                int.tryParse(message.substring(0, 10)) != null) {
-              // Parse mempool tx
-              int mempoolTxListStringLength =
-                  int.tryParse(message.substring(0, 10));
-              if (message.length >= 10 + mempoolTxListStringLength) {
-                String mempoolTxListString =
-                    message.substring(10, 10 + mempoolTxListStringLength);
-                int mempoolTxListStringEnd = 10 + mempoolTxListStringLength;
-                //print(
-                //    "getAddressTxsResponse (memPool) : " + mempoolTxListString);
-                List mempoolTxs =
-                    addlistlimResponseFromJson(mempoolTxListString);
+        if (kIsWeb) {
+          _webSocket.stream.listen((data) {
+            if (data != null) {
+              message += new String.fromCharCodes(data).trim();
+              //print("response : " + message);
+              //print("response length : " + message.length.toString());
+              if (message != null &&
+                  message.length >= 10 &&
+                  int.tryParse(message.substring(0, 10)) != null) {
+                // Parse mempool tx
+                int mempoolTxListStringLength =
+                    int.tryParse(message.substring(0, 10));
+                if (message.length >= 10 + mempoolTxListStringLength) {
+                  String mempoolTxListString =
+                      message.substring(10, 10 + mempoolTxListStringLength);
+                  int mempoolTxListStringEnd = 10 + mempoolTxListStringLength;
+                  //print(
+                  //    "getAddressTxsResponse (memPool) : " + mempoolTxListString);
+                  List mempoolTxs =
+                      addlistlimResponseFromJson(mempoolTxListString);
 
-                // Parse blockchain tx
-                if (message.length >= 10 + mempoolTxListStringEnd) {
-                  int blockchainTxListStringLength = int.tryParse(
-                      message.substring(
-                          mempoolTxListStringEnd, 10 + mempoolTxListStringEnd));
-                  if (message.length >=
-                      10 +
-                          mempoolTxListStringEnd +
-                          blockchainTxListStringLength) {
-                    String blockchainTxListString = message.substring(
-                        10 + mempoolTxListStringEnd,
+                  // Parse blockchain tx
+                  if (message.length >= 10 + mempoolTxListStringEnd) {
+                    int blockchainTxListStringLength = int.tryParse(
+                        message.substring(mempoolTxListStringEnd,
+                            10 + mempoolTxListStringEnd));
+                    if (message.length >=
                         10 +
                             mempoolTxListStringEnd +
-                            blockchainTxListStringLength);
-                    //print("getAddressTxsResponse (blockchain) : " +
-                    //    blockchainTxListString);
-                    List blockChainTxs =
-                        addlistlimResponseFromJson(blockchainTxListString);
+                            blockchainTxListStringLength) {
+                      String blockchainTxListString = message.substring(
+                          10 + mempoolTxListStringEnd,
+                          10 +
+                              mempoolTxListStringEnd +
+                              blockchainTxListStringLength);
+                      //print("getAddressTxsResponse (blockchain) : " +
+                      //    blockchainTxListString);
+                      List blockChainTxs =
+                          addlistlimResponseFromJson(blockchainTxListString);
 
-                    List txs = new List();
-                    txs.addAll(mempoolTxs);
-                    txs.addAll(blockChainTxs);
+                      List txs = new List();
+                      txs.addAll(mempoolTxs);
+                      txs.addAll(blockChainTxs);
 
-                    EventTaxiImpl.singleton()
-                        .fire(TransactionsListEvent(response: txs));
-                    for (int i = txs.length - 1; i >= 0; i--) {
-                      AddressTxsResponseResult addressTxResponse =
-                          new AddressTxsResponseResult();
-                      addressTxResponse.populate(txs[i], address);
-                      addressTxResponse.getBisToken();
-                      addressTxsResponse.result.add(addressTxResponse);
+                      EventTaxiImpl.singleton()
+                          .fire(TransactionsListEvent(response: txs));
+                      for (int i = txs.length - 1; i >= 0; i--) {
+                        AddressTxsResponseResult addressTxResponse =
+                            new AddressTxsResponseResult();
+                        addressTxResponse.populate(txs[i], address);
+                        addressTxResponse.getBisToken();
+                        addressTxsResponse.result.add(addressTxResponse);
+                      }
                     }
                   }
                 }
+              } else {
+                //print("response length ko : " + message.length.toString());
               }
-            } else {
-              //print("response length ko : " + message.length.toString());
             }
-          }
-        }, onError: ((error, StackTrace trace) {
-          //print("Error");
-        }), onDone: () {
-          //print("Done");
-          _socket.destroy();
-        }, cancelOnError: false);
+          }, onError: ((error, StackTrace trace) {
+            //print("Error");
+          }), onDone: () {
+            //print("Done");
+            _socket.destroy();
+          }, cancelOnError: false);
+        } else {
+          _socket.listen((data) {
+            if (data != null) {
+              message += new String.fromCharCodes(data).trim();
+              //print("response : " + message);
+              //print("response length : " + message.length.toString());
+              if (message != null &&
+                  message.length >= 10 &&
+                  int.tryParse(message.substring(0, 10)) != null) {
+                // Parse mempool tx
+                int mempoolTxListStringLength =
+                    int.tryParse(message.substring(0, 10));
+                if (message.length >= 10 + mempoolTxListStringLength) {
+                  String mempoolTxListString =
+                      message.substring(10, 10 + mempoolTxListStringLength);
+                  int mempoolTxListStringEnd = 10 + mempoolTxListStringLength;
+                  //print(
+                  //    "getAddressTxsResponse (memPool) : " + mempoolTxListString);
+                  List mempoolTxs =
+                      addlistlimResponseFromJson(mempoolTxListString);
+
+                  // Parse blockchain tx
+                  if (message.length >= 10 + mempoolTxListStringEnd) {
+                    int blockchainTxListStringLength = int.tryParse(
+                        message.substring(mempoolTxListStringEnd,
+                            10 + mempoolTxListStringEnd));
+                    if (message.length >=
+                        10 +
+                            mempoolTxListStringEnd +
+                            blockchainTxListStringLength) {
+                      String blockchainTxListString = message.substring(
+                          10 + mempoolTxListStringEnd,
+                          10 +
+                              mempoolTxListStringEnd +
+                              blockchainTxListStringLength);
+                      //print("getAddressTxsResponse (blockchain) : " +
+                      //    blockchainTxListString);
+                      List blockChainTxs =
+                          addlistlimResponseFromJson(blockchainTxListString);
+
+                      List txs = new List();
+                      txs.addAll(mempoolTxs);
+                      txs.addAll(blockChainTxs);
+
+                      EventTaxiImpl.singleton()
+                          .fire(TransactionsListEvent(response: txs));
+                      for (int i = txs.length - 1; i >= 0; i--) {
+                        AddressTxsResponseResult addressTxResponse =
+                            new AddressTxsResponseResult();
+                        addressTxResponse.populate(txs[i], address);
+                        addressTxResponse.getBisToken();
+                        addressTxsResponse.result.add(addressTxResponse);
+                      }
+                    }
+                  }
+                }
+              } else {
+                //print("response length ko : " + message.length.toString());
+              }
+            }
+          }, onError: ((error, StackTrace trace) {
+            //print("Error");
+          }), onDone: () {
+            //print("Done");
+            _socket.destroy();
+          }, cancelOnError: false);
+        }
 
         //Send the request
         String method = '"addlistlim"';
@@ -295,9 +416,18 @@ class AppService {
         EventTaxiImpl.singleton().fire(
             ConnStatusEvent(status: ConnectionStatus.DISCONNECTED, server: ""));
       } else {
-        Socket _socket = await Socket.connect(
-            serverWalletLegacyResponse.ip, serverWalletLegacyResponse.port,
-            timeout: Duration(seconds: 3));
+        IOWebSocketChannel _webSocket;
+        Socket _socket;
+        if (kIsWeb) {
+          _webSocket = IOWebSocketChannel.connect(
+              serverWalletLegacyResponse.ip +
+                  ':' +
+                  serverWalletLegacyResponse.port.toString());
+        } else {
+          _socket = await Socket.connect(
+              serverWalletLegacyResponse.ip, serverWalletLegacyResponse.port,
+              timeout: Duration(seconds: 3));
+        }
 
         EventTaxiImpl.singleton().fire(ConnStatusEvent(
             status: ConnectionStatus.CONNECTED,
@@ -307,30 +437,59 @@ class AppService {
 
         //Establish the onData, and onDone callbacks
         String message = "";
-        _socket.listen((data) {
-          if (data != null) {
-            message += new String.fromCharCodes(data).trim();
-            if (message != null &&
-                message.length >= 10 &&
-                int.tryParse(message.substring(0, 10)) != null &&
-                message.length == 10 + int.tryParse(message.substring(0, 10))) {
-              message = message.substring(
-                  10, 10 + int.tryParse(message.substring(0, 10)));
-              balanceGetResponse = balanceGetResponseFromJson(message);
-              balanceGetResponse.address = address;
-              //print(message);
-              if (activeBus) {
-                EventTaxiImpl.singleton()
-                    .fire(BalanceGetEvent(response: balanceGetResponse));
+        if (kIsWeb) {
+          _webSocket.stream.listen((data) {
+            if (data != null) {
+              message += new String.fromCharCodes(data).trim();
+              if (message != null &&
+                  message.length >= 10 &&
+                  int.tryParse(message.substring(0, 10)) != null &&
+                  message.length ==
+                      10 + int.tryParse(message.substring(0, 10))) {
+                message = message.substring(
+                    10, 10 + int.tryParse(message.substring(0, 10)));
+                balanceGetResponse = balanceGetResponseFromJson(message);
+                balanceGetResponse.address = address;
+                //print(message);
+                if (activeBus) {
+                  EventTaxiImpl.singleton()
+                      .fire(BalanceGetEvent(response: balanceGetResponse));
+                }
               }
             }
-          }
-        }, onError: ((error, StackTrace trace) {
-          //print("Error");
-        }), onDone: () {
-          //print("Done");
-          _socket.destroy();
-        }, cancelOnError: false);
+          }, onError: ((error, StackTrace trace) {
+            //print("Error");
+          }), onDone: () {
+            //print("Done");
+            _socket.destroy();
+          }, cancelOnError: false);
+        } else {
+          _socket.listen((data) {
+            if (data != null) {
+              message += new String.fromCharCodes(data).trim();
+              if (message != null &&
+                  message.length >= 10 &&
+                  int.tryParse(message.substring(0, 10)) != null &&
+                  message.length ==
+                      10 + int.tryParse(message.substring(0, 10))) {
+                message = message.substring(
+                    10, 10 + int.tryParse(message.substring(0, 10)));
+                balanceGetResponse = balanceGetResponseFromJson(message);
+                balanceGetResponse.address = address;
+                //print(message);
+                if (activeBus) {
+                  EventTaxiImpl.singleton()
+                      .fire(BalanceGetEvent(response: balanceGetResponse));
+                }
+              }
+            }
+          }, onError: ((error, StackTrace trace) {
+            //print("Error");
+          }), onDone: () {
+            //print("Done");
+            _socket.destroy();
+          }, cancelOnError: false);
+        }
 
         //Send the request
         String method = '"balancegetjson"';

@@ -1,12 +1,16 @@
 // @dart=2.9
 
+// Dart imports:
 import 'dart:convert';
 
+// Package imports:
 import 'package:hash/hash.dart';
 import 'package:hex/hex.dart';
+
+// Project imports:
 import 'package:my_bismuth_wallet/model/address.dart';
 import 'package:my_bismuth_wallet/model/db/appdb.dart';
-import 'package:my_bismuth_wallet/model/db/contact.dart';
+import 'package:my_bismuth_wallet/model/db/hiveDB.dart';
 import 'package:my_bismuth_wallet/network/model/response/address_txs_response.dart';
 import 'package:my_bismuth_wallet/service_locator.dart';
 import 'package:my_bismuth_wallet/util/base_85_decode.dart';

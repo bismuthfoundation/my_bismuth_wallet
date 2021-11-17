@@ -1,21 +1,28 @@
 // @dart=2.9
 
+// Dart imports:
 import 'dart:async';
-import 'package:auto_size_text/auto_size_text.dart';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+// Package imports:
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:event_taxi/event_taxi.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
+
+// Project imports:
+import 'package:my_bismuth_wallet/app_icons.dart';
 import 'package:my_bismuth_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/bus/events.dart';
+import 'package:my_bismuth_wallet/dimens.dart';
+import 'package:my_bismuth_wallet/localization.dart';
+import 'package:my_bismuth_wallet/model/db/appdb.dart';
+import 'package:my_bismuth_wallet/model/db/hiveDB.dart';
 import 'package:my_bismuth_wallet/service/dragginator_service.dart';
 import 'package:my_bismuth_wallet/service_locator.dart';
-import 'package:event_taxi/event_taxi.dart';
-import 'package:my_bismuth_wallet/dimens.dart';
-import 'package:my_bismuth_wallet/app_icons.dart';
 import 'package:my_bismuth_wallet/styles.dart';
-import 'package:my_bismuth_wallet/localization.dart';
-import 'package:my_bismuth_wallet/bus/events.dart';
-import 'package:my_bismuth_wallet/model/db/account.dart';
-import 'package:my_bismuth_wallet/model/db/appdb.dart';
 import 'package:my_bismuth_wallet/ui/util/ui_util.dart';
 import 'package:my_bismuth_wallet/ui/widgets/app_text_field.dart';
 import 'package:my_bismuth_wallet/ui/widgets/buttons.dart';

@@ -1,13 +1,18 @@
 // @dart=2.9
 
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:barcode_scan/barcode_scan.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+// Package imports:
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
+
+// Project imports:
+import 'package:my_bismuth_wallet/app_icons.dart';
 import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:my_bismuth_wallet/localization.dart';
-import 'package:my_bismuth_wallet/app_icons.dart';
 import 'package:my_bismuth_wallet/styles.dart';
 import 'package:my_bismuth_wallet/ui/util/formatters.dart';
 import 'package:my_bismuth_wallet/ui/util/ui_util.dart';
@@ -181,27 +186,24 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                                 }
                                                 // Scan QR for seed
                                                 UIUtil.cancelLockEvent();
-                                                BarcodeScanner.scan(
-                                                        StateContainer.of(
-                                                                context)
-                                                            .curTheme
-                                                            .qrScanTheme)
+                                                BarcodeScanner.scan()
                                                     .then((result) {
                                                   if (result != null &&
                                                       AppSeeds.isValidSeed(
-                                                          result)) {
+                                                          result.rawContent)) {
                                                     _seedInputController.text =
-                                                        result;
+                                                        result.rawContent;
                                                     setState(() {
                                                       _seedIsValid = true;
                                                     });
                                                   } else if (result != null &&
                                                       AppMnemomics
                                                           .validateMnemonic(
-                                                              result.split(
-                                                                  ' '))) {
+                                                              result.rawContent
+                                                                  .split(
+                                                                      ' '))) {
                                                     _mnemonicController.text =
-                                                        result;
+                                                        result.rawContent;
                                                     _mnemonicFocusNode
                                                         .unfocus();
                                                     _seedInputFocusNode
@@ -321,27 +323,24 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                                 }
                                                 // Scan QR for mnemonic
                                                 UIUtil.cancelLockEvent();
-                                                BarcodeScanner.scan(
-                                                        StateContainer.of(
-                                                                context)
-                                                            .curTheme
-                                                            .qrScanTheme)
+                                                BarcodeScanner.scan()
                                                     .then((result) {
                                                   if (result != null &&
                                                       AppMnemomics
                                                           .validateMnemonic(
-                                                              result.split(
-                                                                  ' '))) {
+                                                              result.rawContent
+                                                                  .split(
+                                                                      ' '))) {
                                                     _mnemonicController.text =
-                                                        result;
+                                                        result.rawContent;
                                                     setState(() {
                                                       _mnemonicIsValid = true;
                                                     });
                                                   } else if (result != null &&
                                                       AppSeeds.isValidSeed(
-                                                          result)) {
+                                                          result.rawContent)) {
                                                     _seedInputController.text =
-                                                        result;
+                                                        result.rawContent;
                                                     _mnemonicFocusNode
                                                         .unfocus();
                                                     _seedInputFocusNode

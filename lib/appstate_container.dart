@@ -1,30 +1,37 @@
 // @dart=2.9
 
+// Dart imports:
 import 'dart:async';
-import 'package:hex/hex.dart';
-import 'package:logger/logger.dart';
-import 'package:my_bismuth_wallet/model/wallet.dart';
-import 'package:event_taxi/event_taxi.dart';
+import 'dart:io';
+
+// Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:event_taxi/event_taxi.dart';
+import 'package:hex/hex.dart';
+import 'package:logger/logger.dart';
+import 'package:uni_links/uni_links.dart';
+
+// Project imports:
+import 'package:my_bismuth_wallet/bus/events.dart';
+import 'package:my_bismuth_wallet/model/address.dart';
+import 'package:my_bismuth_wallet/model/available_currency.dart';
+import 'package:my_bismuth_wallet/model/available_language.dart';
+import 'package:my_bismuth_wallet/model/db/appdb.dart';
+import 'package:my_bismuth_wallet/model/db/hiveDB.dart';
+import 'package:my_bismuth_wallet/model/vault.dart';
+import 'package:my_bismuth_wallet/model/wallet.dart';
 import 'package:my_bismuth_wallet/network/model/response/address_txs_response.dart';
 import 'package:my_bismuth_wallet/network/model/response/balance_get_response.dart';
 import 'package:my_bismuth_wallet/service/app_service.dart';
 import 'package:my_bismuth_wallet/service/http_service.dart';
-import 'package:my_bismuth_wallet/util/app_ffi/encrypt/crypter.dart';
-import 'package:uni_links/uni_links.dart';
-import 'package:my_bismuth_wallet/themes.dart';
 import 'package:my_bismuth_wallet/service_locator.dart';
-import 'package:my_bismuth_wallet/model/available_currency.dart';
-import 'package:my_bismuth_wallet/model/available_language.dart';
-import 'package:my_bismuth_wallet/model/address.dart';
-import 'package:my_bismuth_wallet/model/vault.dart';
-import 'package:my_bismuth_wallet/model/db/appdb.dart';
-import 'package:my_bismuth_wallet/model/db/account.dart';
-import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
+import 'package:my_bismuth_wallet/themes.dart';
 import 'package:my_bismuth_wallet/util/app_ffi/apputil.dart';
-import 'package:my_bismuth_wallet/bus/events.dart';
-
+import 'package:my_bismuth_wallet/util/app_ffi/encrypt/crypter.dart';
+import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
 import 'util/sharedprefsutil.dart';
 
 class _InheritedStateContainer extends InheritedWidget {
@@ -70,8 +77,6 @@ class StateContainer extends StatefulWidget {
 ///
 /// Basically the central hub behind the entire app
 class StateContainerState extends State<StateContainer> {
-  final Logger log = sl.get<Logger>();
-
   // Minimum receive = 0.000001
   String receiveThreshold = BigInt.from(10).pow(24).toString();
 
@@ -83,7 +88,7 @@ class StateContainerState extends State<StateContainer> {
   BaseTheme curTheme = BismuthTheme();
   // Currently selected account
   Account selectedAccount =
-      Account(id: 1, name: "AB", index: 0, lastAccess: 0, selected: true);
+      Account(name: "AB", index: 0, lastAccess: 0, selected: true);
   // Two most recently used accounts
   Account recentLast;
   Account recentSecondLast;
@@ -99,6 +104,7 @@ class StateContainerState extends State<StateContainer> {
   @override
   void initState() {
     super.initState();
+
     // Register RxBus
     _registerBus();
     // Set currency locale here for the UI to access
@@ -114,12 +120,14 @@ class StateContainerState extends State<StateContainer> {
         curLanguage = language;
       });
     });
-    // Get initial deep link
-    getInitialLink().then((initialLink) {
-      setState(() {
-        initialDeepLink = initialLink;
+    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+      // Get initial deep link
+      getInitialLink().then((initialLink) {
+        setState(() {
+          initialDeepLink = initialLink;
+        });
       });
-    });
+    }
   }
 
   // Subscriptions
@@ -228,11 +236,13 @@ class StateContainerState extends State<StateContainer> {
       }
     });
     // Deep link has been updated
-    _deepLinkSub = getLinksStream().listen((String link) {
-      setState(() {
-        initialDeepLink = link;
+    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+      _deepLinkSub = getLinksStream().listen((String link) {
+        setState(() {
+          initialDeepLink = link;
+        });
       });
-    });
+    }
   }
 
   @override

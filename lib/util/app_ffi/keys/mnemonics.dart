@@ -1,6 +1,9 @@
 // @dart=2.9
 
+// Package imports:
 import 'package:bip39/bip39.dart' as bip39;
+
+// Project imports:
 import 'package:my_bismuth_wallet/util/app_ffi/keys/seeds.dart';
 
 class AppMnemomics {

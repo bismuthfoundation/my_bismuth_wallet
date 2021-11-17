@@ -1,10 +1,14 @@
 // @dart=2.9
 
+// Dart imports:
 import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
+
+// Package imports:
 import 'package:event_taxi/event_taxi.dart';
+import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
+
+// Project imports:
 import 'package:my_bismuth_wallet/bus/events.dart';
 import 'package:my_bismuth_wallet/model/token_ref.dart';
 import 'package:my_bismuth_wallet/network/model/response/address_txs_response.dart';
@@ -72,14 +76,16 @@ class HttpService {
       return serverWalletLegacyResponse;
     }
 
-    HttpClient httpClient = new HttpClient();
     try {
-      HttpClientRequest request = await httpClient.getUrl(
-          Uri.parse("https://api.bismuth.live/servers/wallet/legacy.json"));
-      request.headers.set('content-type', 'application/json');
-      HttpClientResponse response = await request.close();
+      final http.Response response = await http.get(
+          Uri.parse("https://api.bismuth.live/servers/wallet/legacy.json"),
+          headers: {
+            'content-type': 'application/json',
+            'access-Control-Allow-Origin': '*'
+          });
+
       if (response.statusCode == 200) {
-        String reply = await response.transform(utf8.decoder).join();
+        String reply = response.body;
         //print("serverWalletLegacyResponseList=" + reply);
         serverWalletLegacyResponseList =
             serverWalletLegacyResponseFromJson(reply);
@@ -99,8 +105,6 @@ class HttpService {
       }
     } catch (e) {
       print(e);
-    } finally {
-      httpClient.close();
     }
     //print("Server Wallet : " +
     //    serverWalletLegacyResponse.ip +
@@ -114,26 +118,33 @@ class HttpService {
     SimplePriceResponse simplePriceResponse = new SimplePriceResponse();
     simplePriceResponse.currency = currency;
 
-    HttpClient httpClient = new HttpClient();
     try {
-      HttpClientRequest request = await httpClient.getUrl(Uri.parse(
-          "https://api.coingecko.com/api/v3/simple/price?ids=bismuth&vs_currencies=BTC"));
-      request.headers.set('content-type', 'application/json');
-      HttpClientResponse response = await request.close();
+      http.Response response = await http.get(
+          Uri.parse(
+              "https://api.coingecko.com/api/v3/simple/price?ids=bismuth&vs_currencies=BTC"),
+          headers: {
+            'content-type': 'application/json',
+            'access-Control-Allow-Origin': '*'
+          });
+
       if (response.statusCode == 200) {
-        String reply = await response.transform(utf8.decoder).join();
+        String reply = response.body;
         SimplePriceBtcResponse simplePriceBtcResponse =
             simplePriceBtcResponseFromJson(reply);
         simplePriceResponse.btcPrice = simplePriceBtcResponse.bismuth.btc;
       }
 
-      request = await httpClient.getUrl(Uri.parse(
-          "https://api.coingecko.com/api/v3/simple/price?ids=bismuth&vs_currencies=" +
-              currency));
-      request.headers.set('content-type', 'application/json');
-      response = await request.close();
+      response = await http.get(
+          Uri.parse(
+              "https://api.coingecko.com/api/v3/simple/price?ids=bismuth&vs_currencies=" +
+                  currency),
+          headers: {
+            'content-type': 'application/json',
+            'access-Control-Allow-Origin': '*'
+          });
+
       if (response.statusCode == 200) {
-        String reply = await response.transform(utf8.decoder).join();
+        String reply = response.body;
         switch (currency.toUpperCase()) {
           case "ARS":
             SimplePriceArsResponse simplePriceLocalResponse =
@@ -356,15 +367,11 @@ class HttpService {
       }
       // Post to callbacks
       EventTaxiImpl.singleton().fire(PriceEvent(response: simplePriceResponse));
-    } catch (e) {
-    } finally {
-      httpClient.close();
-    }
+    } catch (e) {}
     return simplePriceResponse;
   }
 
   Future<bool> isTokensBalance(String address) async {
-    HttpClient httpClient = new HttpClient();
     try {
       String tokensApi = await sl.get<SharedPrefsUtil>().getTokensApi();
       Uri uri;
@@ -374,12 +381,12 @@ class HttpService {
         return false;
       }
 
-      HttpClientRequest request = await httpClient.getUrl(uri);
-      request.headers.set('content-type', 'application/json');
-      HttpClientResponse response = await request.close();
+      http.Response response = await http.get(uri, headers: {
+        'content-type': 'application/json',
+        'access-Control-Allow-Origin': '*'
+      });
+
       if (response.statusCode == 200) {
-        String reply = await response.transform(utf8.decoder).join();
-        var tokensBalanceGetResponse = tokensBalanceGetResponseFromJson(reply);
         return true;
       } else {
         return false;
@@ -392,15 +399,17 @@ class HttpService {
   Future<List<BisToken>> getTokensBalance(String address) async {
     List<BisToken> bisTokenList = new List<BisToken>();
 
-    HttpClient httpClient = new HttpClient();
     try {
       String tokensApi = await sl.get<SharedPrefsUtil>().getTokensApi();
-      HttpClientRequest request =
-          await httpClient.getUrl(Uri.parse(tokensApi + address));
-      request.headers.set('content-type', 'application/json');
-      HttpClientResponse response = await request.close();
+
+      final http.Response response =
+          await http.get(Uri.parse(tokensApi + address), headers: {
+        'content-type': 'application/json',
+        'access-Control-Allow-Origin': '*'
+      });
+
       if (response.statusCode == 200) {
-        String reply = await response.transform(utf8.decoder).join();
+        String reply = response.body;
         var tokensBalanceGetResponse = tokensBalanceGetResponseFromJson(reply);
 
         for (int i = 0; i < tokensBalanceGetResponse.length; i++) {
@@ -417,14 +426,15 @@ class HttpService {
   Future<List<TokenRef>> getTokensReflist() async {
     List<TokenRef> tokensRefList = new List<TokenRef>();
 
-    HttpClient httpClient = new HttpClient();
     try {
-      HttpClientRequest request = await httpClient
-          .getUrl(Uri.parse("https://bismuth.today/api/tokens/"));
-      request.headers.set('content-type', 'application/json');
-      HttpClientResponse response = await request.close();
+      final http.Response response = await http
+          .get(Uri.parse("https://bismuth.today/api/tokens/"), headers: {
+        'content-type': 'application/json',
+        'access-Control-Allow-Origin': '*'
+      });
+
       if (response.statusCode == 200) {
-        String reply = await response.transform(utf8.decoder).join();
+        String reply = response.body;
         var tokensRefListGetResponse = tokensListGetResponseFromJson(reply);
 
         for (int i = 0; i < tokensRefListGetResponse.length; i++) {
@@ -444,14 +454,16 @@ class HttpService {
 
   Future<int> getEggPrice() async {
     int price = 0;
-    HttpClient httpClient = new HttpClient();
     try {
-      HttpClientRequest request = await httpClient
-          .getUrl(Uri.parse("https://dragginator.com/api/info.php?type=price"));
-      request.headers.set('content-type', 'application/json');
-      HttpClientResponse response = await request.close();
+      final http.Response response = await http.get(
+          Uri.parse("https://dragginator.com/api/info.php?type=price"),
+          headers: {
+            'content-type': 'application/json',
+            'access-Control-Allow-Origin': '*'
+          });
+
       if (response.statusCode == 200) {
-        String reply = await response.transform(utf8.decoder).join();
+        String reply = response.body;
         price = int.tryParse(
             reply.replaceAll('[', '').replaceAll(']', '').split(',')[0]);
       }

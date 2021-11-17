@@ -16,6 +16,7 @@
 
 // @dart=2.9
 
+// Flutter imports:
 import 'package:flutter/widgets.dart';
 
 class AppIcons {

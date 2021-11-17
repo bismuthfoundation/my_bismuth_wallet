@@ -1,15 +1,21 @@
 // @dart=2.9
 
+// Dart imports:
 import 'dart:math';
 
-import 'package:auto_size_text/auto_size_text.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
 
+// Package imports:
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
+
+// Project imports:
+import 'package:my_bismuth_wallet/app_icons.dart';
 import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:my_bismuth_wallet/localization.dart';
-import 'package:my_bismuth_wallet/app_icons.dart';
-import 'package:my_bismuth_wallet/styles.dart';
 import 'package:my_bismuth_wallet/service_locator.dart';
+import 'package:my_bismuth_wallet/styles.dart';
 import 'package:my_bismuth_wallet/util/hapticutil.dart';
 import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
 
@@ -204,7 +210,7 @@ class _PinScreenState extends State<PinScreen>
               if (widget.type == PinOverlayType.ENTER_PIN) {
                 // Pin is not what was expected
                 if (_pin != widget.expectedPin) {
-                  sl.get<HapticUtil>().error();
+                  sl.get<HapticUtil>().feedback(FeedbackType.error);
                   _controller.forward();
                 } else {
                   sl.get<SharedPrefsUtil>().resetLockAttempts().then((_) {
@@ -224,7 +230,7 @@ class _PinScreenState extends State<PinScreen>
                   if (_pin == _pinConfirmed) {
                     Navigator.of(context).pop(_pin);
                   } else {
-                    sl.get<HapticUtil>().error();
+                    sl.get<HapticUtil>().feedback(FeedbackType.error);
                     _controller.forward();
                   }
                 }

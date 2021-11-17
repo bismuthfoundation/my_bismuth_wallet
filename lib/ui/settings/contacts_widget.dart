@@ -1,26 +1,31 @@
 // @dart=2.9
 
+// Dart imports:
 import 'dart:async';
 
-import 'package:event_taxi/event_taxi.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:event_taxi/event_taxi.dart';
 import 'package:logger/logger.dart';
-import 'package:my_bismuth_wallet/ui/widgets/sheet_util.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:my_bismuth_wallet/service_locator.dart';
-import 'package:my_bismuth_wallet/dimens.dart';
-import 'package:my_bismuth_wallet/styles.dart';
+
+// Project imports:
 import 'package:my_bismuth_wallet/app_icons.dart';
 import 'package:my_bismuth_wallet/appstate_container.dart';
-import 'package:my_bismuth_wallet/localization.dart';
 import 'package:my_bismuth_wallet/bus/events.dart';
+import 'package:my_bismuth_wallet/dimens.dart';
+import 'package:my_bismuth_wallet/localization.dart';
 import 'package:my_bismuth_wallet/model/address.dart';
 import 'package:my_bismuth_wallet/model/db/appdb.dart';
-import 'package:my_bismuth_wallet/model/db/contact.dart';
+import 'package:my_bismuth_wallet/model/db/hiveDB.dart';
+import 'package:my_bismuth_wallet/service_locator.dart';
+import 'package:my_bismuth_wallet/styles.dart';
 import 'package:my_bismuth_wallet/ui/contacts/add_contact.dart';
 import 'package:my_bismuth_wallet/ui/contacts/contact_details.dart';
-import 'package:my_bismuth_wallet/ui/widgets/buttons.dart';
 import 'package:my_bismuth_wallet/ui/util/ui_util.dart';
+import 'package:my_bismuth_wallet/ui/widgets/buttons.dart';
+import 'package:my_bismuth_wallet/ui/widgets/sheet_util.dart';
 
 class ContactsList extends StatefulWidget {
   final AnimationController contactsController;
@@ -42,13 +47,7 @@ class _ContactsListState extends State<ContactsList> {
     _registerBus();
     // Initial contacts list
     _contacts = List();
-    getApplicationDocumentsDirectory().then((directory) {
-      documentsDirectory = directory.path;
-      setState(() {
-        documentsDirectory = directory.path;
-      });
-      _updateContacts();
-    });
+    _updateContacts();
   }
 
   @override
@@ -251,7 +250,7 @@ class _ContactsListState extends State<ContactsList> {
   Widget buildSingleContact(BuildContext context, Contact contact) {
     return FlatButton(
       onPressed: () {
-        ContactDetailsSheet(contact, documentsDirectory)
+        ContactDetailsSheet(contact)
             .mainBottomSheet(context);
       },
       padding: EdgeInsets.all(0.0),

@@ -1,8 +1,13 @@
 // @dart=2.9
 
+// Dart imports:
 import 'dart:io';
 
+// Flutter imports:
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+// Project imports:
 import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:my_bismuth_wallet/ui/util/routes.dart';
 
@@ -89,6 +94,7 @@ class _AppHeightNineSheetLayout extends SingleChildLayoutDelegate {
           minHeight: 0.0,
           maxHeight: constraints.maxHeight * 0.95);
     if ((constraints.maxHeight / constraints.maxWidth > 2.1 &&
+            !kIsWeb &&
             Platform.isAndroid) ||
         constraints.maxHeight > 812)
       return BoxConstraints(

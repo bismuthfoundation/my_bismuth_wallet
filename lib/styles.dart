@@ -1,8 +1,13 @@
 // @dart=2.9
 
-import 'package:flutter/material.dart';
-import 'package:my_bismuth_wallet/appstate_container.dart';
+// Dart imports:
 import 'dart:ui' as ui;
+
+// Flutter imports:
+import 'package:flutter/material.dart';
+
+// Project imports:
+import 'package:my_bismuth_wallet/appstate_container.dart';
 
 class AppStyles {
   // Text style for paragraph text.

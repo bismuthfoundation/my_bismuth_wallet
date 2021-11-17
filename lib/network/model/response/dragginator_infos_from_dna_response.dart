@@ -2,6 +2,7 @@
 //
 //     final dragginatorInfosFromDnaResponse = dragginatorInfosFromDnaResponseFromJson(jsonString);
 
+// Dart imports:
 import 'dart:convert';
 
 DragginatorInfosFromDnaResponse dragginatorInfosFromDnaResponseFromJson(
@@ -52,7 +53,7 @@ class DragginatorInfosFromDnaResponse {
   int? cost;
   String? dna;
   bool? gameAllowed;
-  dynamic? huntData;
+  dynamic huntData;
   List<dynamic>? abilities;
 
   factory DragginatorInfosFromDnaResponse.fromJson(Map<String, dynamic> json) =>

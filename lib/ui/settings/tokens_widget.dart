@@ -1,16 +1,21 @@
 // @dart=2.9
 
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
-import 'package:my_bismuth_wallet/model/token_ref.dart';
-import 'package:my_bismuth_wallet/service/http_service.dart';
-import 'package:my_bismuth_wallet/service_locator.dart';
-import 'package:my_bismuth_wallet/styles.dart';
+
+// Project imports:
 import 'package:my_bismuth_wallet/app_icons.dart';
 import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:my_bismuth_wallet/localization.dart';
 import 'package:my_bismuth_wallet/model/address.dart';
+import 'package:my_bismuth_wallet/model/token_ref.dart';
+import 'package:my_bismuth_wallet/service/http_service.dart';
+import 'package:my_bismuth_wallet/service_locator.dart';
+import 'package:my_bismuth_wallet/styles.dart';
 
 class TokensList extends StatefulWidget {
   final AnimationController tokensListController;

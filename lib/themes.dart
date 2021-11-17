@@ -1,7 +1,6 @@
 // @dart=2.9
 
-import 'dart:io';
-import 'package:barcode_scan/barcode_scan.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -60,11 +59,6 @@ abstract class BaseTheme {
 
   BoxShadow boxShadow;
   BoxShadow boxShadowButton;
-
-  // QR scanner theme
-  OverlayTheme qrScanTheme;
-  // App icon (iOS only)
-  AppIconEnum appIcon;
 }
 
 class BismuthTheme extends BaseTheme {
@@ -142,23 +136,4 @@ class BismuthTheme extends BaseTheme {
 
   BoxShadow boxShadow = BoxShadow(color: Colors.transparent);
   BoxShadow boxShadowButton = BoxShadow(color: Colors.transparent);
-
-  OverlayTheme qrScanTheme = OverlayTheme.IDENA;
-  AppIconEnum appIcon = AppIconEnum.IDENA;
-}
-
-enum AppIconEnum { IDENA }
-
-class AppIcon {
-  static const _channel = const MethodChannel('fappchannel');
-
-  static Future<void> setAppIcon() async {
-    if (!Platform.isIOS) {
-      return null;
-    }
-    final Map<String, dynamic> params = <String, dynamic>{
-      'icon': "idena",
-    };
-    return await _channel.invokeMethod('changeIcon', params);
-  }
 }

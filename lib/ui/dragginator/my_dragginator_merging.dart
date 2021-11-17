@@ -1,20 +1,25 @@
 // @dart=2.9
 
-import 'package:my_bismuth_wallet/dimens.dart';
-import 'package:my_bismuth_wallet/localization.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+
+// Package imports:
+import 'package:circular_profile_avatar/circular_profile_avatar.dart';
+import 'package:flutter_radar_chart/flutter_radar_chart.dart';
+
+// Project imports:
+import 'package:my_bismuth_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/dimens.dart';
+import 'package:my_bismuth_wallet/localization.dart';
 import 'package:my_bismuth_wallet/network/model/response/dragginator_list_from_address_response.dart';
 import 'package:my_bismuth_wallet/service/dragginator_service.dart';
 import 'package:my_bismuth_wallet/service_locator.dart';
 import 'package:my_bismuth_wallet/styles.dart';
-import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:my_bismuth_wallet/ui/send/send_sheet.dart';
 import 'package:my_bismuth_wallet/ui/util/ui_util.dart';
 import 'package:my_bismuth_wallet/ui/widgets/buttons.dart';
 import 'package:my_bismuth_wallet/ui/widgets/sheet_util.dart';
-import 'package:flutter_radar_chart/flutter_radar_chart.dart';
-import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 
 class MyDragginatorMerging extends StatefulWidget {
   final String address;

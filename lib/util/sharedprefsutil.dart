@@ -1,17 +1,22 @@
 // @dart=2.9
 
-import 'dart:ui';
+// Dart imports:
 import 'dart:async';
+import 'dart:ui';
+
+// Package imports:
 import 'package:intl/intl.dart';
-import 'package:my_bismuth_wallet/util/random_util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:my_bismuth_wallet/service_locator.dart';
-import 'package:my_bismuth_wallet/util/encrypt.dart';
+
+// Project imports:
 import 'package:my_bismuth_wallet/model/authentication_method.dart';
 import 'package:my_bismuth_wallet/model/available_currency.dart';
 import 'package:my_bismuth_wallet/model/available_language.dart';
 import 'package:my_bismuth_wallet/model/device_lock_timeout.dart';
 import 'package:my_bismuth_wallet/model/vault.dart';
+import 'package:my_bismuth_wallet/service_locator.dart';
+import 'package:my_bismuth_wallet/util/encrypt.dart';
+import 'package:my_bismuth_wallet/util/random_util.dart';
 
 /// Price conversion preference values
 enum PriceConversion { BTC, NONE, HIDDEN }

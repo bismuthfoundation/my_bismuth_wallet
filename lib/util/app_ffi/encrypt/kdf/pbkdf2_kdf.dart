@@ -1,11 +1,15 @@
 // @dart=2.9
 
+// Dart imports:
 import 'dart:typed_data';
 
-import 'package:my_bismuth_wallet/util/helpers.dart';
+// Package imports:
+import 'package:pointycastle/export.dart';
+
+// Project imports:
 import 'package:my_bismuth_wallet/util/app_ffi/encrypt/kdf/kdf.dart';
 import 'package:my_bismuth_wallet/util/app_ffi/encrypt/model/keyiv.dart';
-import 'package:pointycastle/export.dart';
+import 'package:my_bismuth_wallet/util/helpers.dart';
 
 /// pbkdf2 Key derivation function with a random salt
 class PBKDF2 extends KDF {

@@ -1,9 +1,14 @@
 // @dart=2.9
 
-import 'package:auto_size_text/auto_size_text.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:hex/hex.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
+
+// Project imports:
 import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:my_bismuth_wallet/dimens.dart';
 import 'package:my_bismuth_wallet/localization.dart';
@@ -14,9 +19,9 @@ import 'package:my_bismuth_wallet/ui/util/ui_util.dart';
 import 'package:my_bismuth_wallet/ui/widgets/app_text_field.dart';
 import 'package:my_bismuth_wallet/ui/widgets/buttons.dart';
 import 'package:my_bismuth_wallet/ui/widgets/tap_outside_unfocus.dart';
-import 'package:my_bismuth_wallet/util/caseconverter.dart';
 import 'package:my_bismuth_wallet/util/app_ffi/encrypt/crypter.dart';
 import 'package:my_bismuth_wallet/util/app_ffi/keys/seeds.dart';
+import 'package:my_bismuth_wallet/util/caseconverter.dart';
 
 class SetPasswordSheet extends StatefulWidget {
   _SetPasswordSheetState createState() => _SetPasswordSheetState();

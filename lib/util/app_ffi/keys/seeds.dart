@@ -1,6 +1,9 @@
 // @dart=2.9
 
+// Dart imports:
 import 'dart:math';
+
+// Project imports:
 import 'package:my_bismuth_wallet/util/helpers.dart';
 
 class AppSeeds {

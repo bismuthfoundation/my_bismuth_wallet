@@ -1,43 +1,54 @@
 // @dart=2.9
 
+// Dart imports:
 import 'dart:async';
 import 'dart:io';
 
+// Flutter imports:
 import 'package:flutter/foundation.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+
+// Package imports:
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:logger/logger.dart';
-import 'package:my_bismuth_wallet/model/available_language.dart';
-import 'package:my_bismuth_wallet/ui/before_scan_screen.dart';
-import 'package:my_bismuth_wallet/ui/intro/intro_backup_safety.dart';
-import 'package:my_bismuth_wallet/ui/intro/intro_password.dart';
-import 'package:my_bismuth_wallet/ui/intro/intro_password_on_launch.dart';
-import 'package:my_bismuth_wallet/ui/password_lock_screen.dart';
-import 'package:my_bismuth_wallet/ui/widgets/dialog.dart';
-import 'package:my_bismuth_wallet/util/caseconverter.dart';
-import 'package:my_bismuth_wallet/util/helpers.dart';
 import 'package:oktoast/oktoast.dart';
 
-import 'package:my_bismuth_wallet/styles.dart';
+// Project imports:
 import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:my_bismuth_wallet/localization.dart';
-import 'package:my_bismuth_wallet/service_locator.dart';
-import 'package:my_bismuth_wallet/ui/home_page.dart';
-import 'package:my_bismuth_wallet/ui/lock_screen.dart';
-import 'package:my_bismuth_wallet/ui/intro/intro_welcome.dart';
-import 'package:my_bismuth_wallet/ui/intro/intro_backup_seed.dart';
-import 'package:my_bismuth_wallet/ui/intro/intro_backup_confirm.dart';
-import 'package:my_bismuth_wallet/ui/intro/intro_import_seed.dart';
-import 'package:my_bismuth_wallet/ui/util/routes.dart';
+import 'package:my_bismuth_wallet/model/available_language.dart';
+import 'package:my_bismuth_wallet/model/db/appdb.dart';
 import 'package:my_bismuth_wallet/model/vault.dart';
+import 'package:my_bismuth_wallet/service_locator.dart';
+import 'package:my_bismuth_wallet/styles.dart';
+import 'package:my_bismuth_wallet/ui/before_scan_screen.dart';
+import 'package:my_bismuth_wallet/ui/home_page.dart';
+import 'package:my_bismuth_wallet/ui/intro/intro_backup_confirm.dart';
+import 'package:my_bismuth_wallet/ui/intro/intro_backup_safety.dart';
+import 'package:my_bismuth_wallet/ui/intro/intro_backup_seed.dart';
+import 'package:my_bismuth_wallet/ui/intro/intro_import_seed.dart';
+import 'package:my_bismuth_wallet/ui/intro/intro_password.dart';
+import 'package:my_bismuth_wallet/ui/intro/intro_password_on_launch.dart';
+import 'package:my_bismuth_wallet/ui/intro/intro_welcome.dart';
+import 'package:my_bismuth_wallet/ui/lock_screen.dart';
+import 'package:my_bismuth_wallet/ui/password_lock_screen.dart';
+import 'package:my_bismuth_wallet/ui/util/routes.dart';
+import 'package:my_bismuth_wallet/ui/widgets/dialog.dart';
 import 'package:my_bismuth_wallet/util/app_ffi/apputil.dart';
+import 'package:my_bismuth_wallet/util/caseconverter.dart';
+import 'package:my_bismuth_wallet/util/helpers.dart';
 import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
-import 'package:root_checker/root_checker.dart';
 
-void main() async {
+//import 'package:safe_device/safe_device.dart';
+
+
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await DBHelper.setupDatabase();
+
   // Setup Service Provide
   setupServiceLocator();
   // Setup logger, only show warning and higher in release mode.
@@ -158,10 +169,10 @@ class _AppState extends State<App> {
           const Locale('ar', 'SA'), // Saudi Arabia
           const Locale('ar', 'KW'), // Kuwait
         ],
-        initialRoute: '/',
+        initialRoute: '/splash',
         onGenerateRoute: (RouteSettings settings) {
           switch (settings.name) {
-            case '/':
+            case '/splash':
               return NoTransitionRoute(
                 builder: (_) => Splash(),
                 settings: settings,
@@ -238,6 +249,7 @@ class _AppState extends State<App> {
               return null;
           }
         },
+        home: IntroWelcomePage(),
       ),
     );
   }
@@ -273,28 +285,36 @@ class SplashState extends State<Splash> with WidgetsBindingObserver {
   Future checkLoggedIn() async {
     // Update session key
     await sl.get<Vault>().updateSessionKey();
-    // Check if device is rooted or jailbroken, show user a warning informing them of the risks if so
-    if (!(await sl.get<SharedPrefsUtil>().getHasSeenRootWarning()) &&
-        (await RootChecker.isDeviceRooted)) {
-      AppDialogs.showConfirmDialog(
-          context,
-          CaseChange.toUpperCase(AppLocalization.of(context).warning, context),
-          AppLocalization.of(context).rootWarning,
-          AppLocalization.of(context).iUnderstandTheRisks.toUpperCase(),
-          () async {
-            await sl.get<SharedPrefsUtil>().setHasSeenRootWarning();
-            checkLoggedIn();
-          },
-          cancelText: AppLocalization.of(context).exit.toUpperCase(),
-          cancelAction: () {
-            if (Platform.isIOS) {
-              exit(0);
-            } else {
-              SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-            }
-          });
-      return;
+
+    if (!kIsWeb &&
+        !Platform.isMacOS &&
+        !Platform.isWindows &&
+        !Platform.isLinux) {
+      // Check if device is rooted or jailbroken, show user a warning informing them of the risks if so
+      /*if (!(await sl.get<SharedPrefsUtil>().getHasSeenRootWarning()) &&
+          (await SafeDevice.isJailBroken)) {
+        AppDialogs.showConfirmDialog(
+            context,
+            CaseChange.toUpperCase(
+                AppLocalization.of(context).warning, context),
+            AppLocalization.of(context).rootWarning,
+            AppLocalization.of(context).iUnderstandTheRisks.toUpperCase(),
+            () async {
+              await sl.get<SharedPrefsUtil>().setHasSeenRootWarning();
+              checkLoggedIn();
+            },
+            cancelText: AppLocalization.of(context).exit.toUpperCase(),
+            cancelAction: () {
+              if (!kIsWeb && Platform.isIOS) {
+                exit(0);
+              } else {
+                SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+              }
+            });
+        return;
+      }*/
     }
+
     if (!_hasCheckedLoggedIn) {
       _hasCheckedLoggedIn = true;
     } else {
@@ -304,6 +324,7 @@ class SplashState extends State<Splash> with WidgetsBindingObserver {
       // iOS key store is persistent, so if this is first launch then we will clear the keystore
       bool firstLaunch = await sl.get<SharedPrefsUtil>().getFirstLaunch();
       if (firstLaunch) {
+        await sl.get<DBHelper>().dropAll();
         await sl.get<Vault>().deleteAll();
       }
       await sl.get<SharedPrefsUtil>().setFirstLaunch();
@@ -348,13 +369,17 @@ class SplashState extends State<Splash> with WidgetsBindingObserver {
       /// Instead of telling them they are out of luck, this is an automatic "fallback"
       /// It will generate a 64-byte secret using the native android "bottlerocketstudios" Vault
       /// This secret is used to encrypt sensitive data and save it in SharedPreferences
-      if (Platform.isAndroid && e.toString().contains("flutter_secure")) {
+      if (kIsWeb ||
+          (!kIsWeb &&
+              Platform.isAndroid &&
+              e.toString().contains("flutter_secure"))) {
         if (!(await sl.get<SharedPrefsUtil>().useLegacyStorage())) {
           await sl.get<SharedPrefsUtil>().setUseLegacyStorage();
           checkLoggedIn();
         }
       } else {
         await sl.get<Vault>().deleteAll();
+        await sl.get<DBHelper>().dropAll();
         await sl.get<SharedPrefsUtil>().deleteAll();
         if (!_retried) {
           _retried = true;
@@ -413,7 +438,6 @@ class SplashState extends State<Splash> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    // This seems to be the earliest place we can retrieve the device Locale
     setLanguage();
     sl
         .get<SharedPrefsUtil>()

@@ -1,11 +1,15 @@
 // @dart=2.9
 
+// Dart imports:
 import 'dart:typed_data';
 
+// Package imports:
 import 'package:hex/hex.dart';
-import 'package:my_bismuth_wallet/util/helpers.dart';
 import 'package:pointycastle/api.dart' show ParametersWithIV, KeyParameter;
 import 'package:pointycastle/stream/salsa20.dart';
+
+// Project imports:
+import 'package:my_bismuth_wallet/util/helpers.dart';
 
 /*
  * Encryption using Salsa20 from pointycastle

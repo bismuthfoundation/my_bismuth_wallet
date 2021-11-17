@@ -1,11 +1,16 @@
 // @dart=2.9
 
-import 'package:auto_size_text/auto_size_text.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:my_bismuth_wallet/appstate_container.dart';
+
+// Package imports:
+import 'package:auto_size_text/auto_size_text.dart';
+
+// Project imports:
 import 'package:my_bismuth_wallet/app_icons.dart';
-import 'package:my_bismuth_wallet/styles.dart';
+import 'package:my_bismuth_wallet/appstate_container.dart';
 import 'package:my_bismuth_wallet/model/setting_item.dart';
+import 'package:my_bismuth_wallet/styles.dart';
 import 'package:my_bismuth_wallet/ui/util/ui_util.dart';
 
 class AppSettings {

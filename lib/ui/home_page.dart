@@ -1,56 +1,59 @@
 // @dart=2.9
 
+// Dart imports:
 import 'dart:async';
 
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flare_flutter/base/animation/actor_animation.dart';
+// Flutter imports:
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
+// Package imports:
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:event_taxi/event_taxi.dart';
+import 'package:flare_flutter/base/animation/actor_animation.dart';
 import 'package:flare_flutter/flare.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flare_flutter/flare_controller.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:event_taxi/event_taxi.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
-
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
-import 'package:my_bismuth_wallet/model/bis_url.dart';
-import 'package:my_bismuth_wallet/network/model/response/address_txs_response.dart';
-import 'package:my_bismuth_wallet/service/http_service.dart';
-import 'package:my_bismuth_wallet/ui/popup_button.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+
+// Project imports:
+import 'package:my_bismuth_wallet/app_icons.dart';
 import 'package:my_bismuth_wallet/appstate_container.dart';
+import 'package:my_bismuth_wallet/bus/events.dart';
 import 'package:my_bismuth_wallet/dimens.dart';
 import 'package:my_bismuth_wallet/localization.dart';
-import 'package:my_bismuth_wallet/service_locator.dart';
-
-import 'package:my_bismuth_wallet/model/db/contact.dart';
+import 'package:my_bismuth_wallet/model/bis_url.dart';
 import 'package:my_bismuth_wallet/model/db/appdb.dart';
+import 'package:my_bismuth_wallet/model/db/hiveDB.dart';
 import 'package:my_bismuth_wallet/network/model/block_types.dart';
+import 'package:my_bismuth_wallet/network/model/response/address_txs_response.dart';
+import 'package:my_bismuth_wallet/service/http_service.dart';
+import 'package:my_bismuth_wallet/service_locator.dart';
 import 'package:my_bismuth_wallet/styles.dart';
-import 'package:my_bismuth_wallet/app_icons.dart';
 import 'package:my_bismuth_wallet/ui/contacts/add_contact.dart';
-import 'package:my_bismuth_wallet/ui/send/send_sheet.dart';
-import 'package:my_bismuth_wallet/ui/send/send_confirm_sheet.dart';
+import 'package:my_bismuth_wallet/ui/popup_button.dart';
 import 'package:my_bismuth_wallet/ui/receive/receive_sheet.dart';
+import 'package:my_bismuth_wallet/ui/send/send_confirm_sheet.dart';
+import 'package:my_bismuth_wallet/ui/send/send_sheet.dart';
 import 'package:my_bismuth_wallet/ui/settings/settings_drawer.dart';
 import 'package:my_bismuth_wallet/ui/tokens/my_tokens_list.dart';
+import 'package:my_bismuth_wallet/ui/util/routes.dart';
+import 'package:my_bismuth_wallet/ui/util/ui_util.dart';
 import 'package:my_bismuth_wallet/ui/widgets/buttons.dart';
 import 'package:my_bismuth_wallet/ui/widgets/dialog.dart';
-import 'package:my_bismuth_wallet/ui/widgets/sheet_util.dart';
 import 'package:my_bismuth_wallet/ui/widgets/list_slidable.dart';
-import 'package:my_bismuth_wallet/ui/util/routes.dart';
 import 'package:my_bismuth_wallet/ui/widgets/reactive_refresh.dart';
-import 'package:my_bismuth_wallet/ui/util/ui_util.dart';
+import 'package:my_bismuth_wallet/ui/widgets/sheet_util.dart';
 import 'package:my_bismuth_wallet/ui/widgets/sync_info_view.dart';
-
-import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
-import 'package:my_bismuth_wallet/util/hapticutil.dart';
 import 'package:my_bismuth_wallet/util/caseconverter.dart';
-import 'package:package_info/package_info.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-import 'package:my_bismuth_wallet/bus/events.dart';
+import 'package:my_bismuth_wallet/util/hapticutil.dart';
+import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
 
 class AppHomePage extends StatefulWidget {
   PriceConversion priceConversion;
@@ -502,7 +505,7 @@ class _AppHomePageState extends State<AppHomePage>
     setState(() {
       _isRefreshing = true;
     });
-    sl.get<HapticUtil>().success();
+    sl.get<HapticUtil>().feedback(FeedbackType.success);
     StateContainer.of(context).requestUpdate();
 
     // Hide refresh indicator after 3 seconds if no server response

@@ -1,6 +1,9 @@
 // @dart=2.9
 
+// Dart imports:
 import 'dart:typed_data';
+
+// Project imports:
 import 'package:my_bismuth_wallet/util/base85/base_85_codec.dart';
 
 class Base85Decode {

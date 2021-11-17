@@ -1,13 +1,18 @@
 // @dart=2.9
 
+// Dart imports:
 import 'dart:async';
 
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:intl/intl.dart';
+
+// Project imports:
 import 'package:my_bismuth_wallet/model/available_language.dart';
 import 'package:my_bismuth_wallet/service_locator.dart';
 import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
-
 import 'l10n/messages_all.dart';
 
 /// Localization
