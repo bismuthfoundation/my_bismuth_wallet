@@ -32,7 +32,7 @@ class _IntroWelcomePageState extends State<IntroWelcomePage> {
         builder: (context, constraints) => SafeArea(
           minimum: EdgeInsets.only(
             bottom: MediaQuery.of(context).size.height * 0.035,
-            top: kIsWeb ? 400 : MediaQuery.of(context).size.height * 0.10,
+            top: MediaQuery.of(context).size.height * 0.10,
           ),
           child: Column(
             children: <Widget>[
@@ -43,9 +43,8 @@ class _IntroWelcomePageState extends State<IntroWelcomePage> {
                     Container(
                       //
                       width: double.infinity,
-                      height: kIsWeb
-                          ? 100
-                          : MediaQuery.of(context).size.width * 5 / 8,
+                      height:
+                          MediaQuery.of(context).size.width * 5 / 8,
                       child: Center(
                         child: Container(
                           child: SizedBox(

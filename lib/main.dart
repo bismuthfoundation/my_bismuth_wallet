@@ -43,7 +43,6 @@ import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
 
 //import 'package:safe_device/safe_device.dart';
 
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -431,7 +430,7 @@ class SplashState extends State<Splash> with WidgetsBindingObserver {
     });
     sl.get<SharedPrefsUtil>().getLanguage().then((setting) {
       setState(() {
-        StateContainer.of(context).updateLanguage(setting);
+        StateContainer.of(context).curLanguage = setting;
       });
     });
   }
