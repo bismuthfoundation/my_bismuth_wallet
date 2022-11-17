@@ -215,20 +215,13 @@ class _CustomUrlState extends State<CustomUrl> {
                         height: 40,
                         width: 40,
                         margin: EdgeInsets.only(right: 10, left: 10),
-                        child: FlatButton(
-                            highlightColor:
-                                StateContainer.of(context).curTheme.text15,
-                            splashColor:
-                                StateContainer.of(context).curTheme.text15,
+                        child: TextButton(
                             onPressed: () {
                               setState(() {
                                 widget.tokensListOpen = false;
                               });
                               widget.tokensListController.reverse();
                             },
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50.0)),
-                            padding: EdgeInsets.all(8.0),
                             child: Icon(AppIcons.back,
                                 color: StateContainer.of(context).curTheme.text,
                                 size: 24)),

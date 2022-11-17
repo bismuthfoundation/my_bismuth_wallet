@@ -3,10 +3,10 @@ description: Bismuth Wallet app (iOS/Android).
 
 publish_to: 'none'
 
-version: 1.0.56+56
+version: 1.1.0+57
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: '>=2.18.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -19,7 +19,7 @@ dependencies:
   cupertino_icons: ^1.0.4
 
   # Securley store data in a keystore
-  flutter_secure_storage: ^5.0.2
+  flutter_secure_storage: ^6.0.0
 
   # Shared prefs
   shared_preferences: ^2.0.8
@@ -27,28 +27,28 @@ dependencies:
   # Flare for animations
   flare_flutter: ^3.0.2
 
-  asn1lib: ^1.0.3
+  asn1lib: ^1.4.0
   
   # Websockets
   web_socket_channel: ^2.1.0
 
   # Platform-specific build info
-  package_info_plus: ^1.3.0
+  package_info_plus: ^3.0.2
 
   # Device-specific info
-  device_info_plus: ^3.1.1
+  device_info_plus: ^8.0.0
 
   # Localization
   intl: ^0.17.0
 
   # BigDecimal alternative
-  decimal: ^1.3.0
+  decimal: ^1.5.0
 
   # Logger
   logger: ^1.1.0
   
   # A Flutter plugin that provides a WebView widget
-  webview_flutter: ^2.3.0
+  webview_flutter: ^3.0.4
 
   # With the Flutter safe_device package, you can easily implement security steps such as Jailbroken, root, emulator and fake location detection.
   #safe_device: ^1.0.9
@@ -65,15 +65,15 @@ dependencies:
   hive_flutter: ^1.1.0
 
   # TouchID/FaceID
-  local_auth: ^1.1.8
+  local_auth: ^2.1.2
  
   # Eventbus
   event_taxi: ^1.0.0
 
   # SVG
-  flutter_svg: ^0.23.0+1
+  flutter_svg: ^1.1.6
   
-  ffi: ^1.1.2
+  ffi: ^2.0.1
 
   flutter_launcher_icons: ^0.9.2
 
@@ -162,7 +162,7 @@ dev_dependencies:
   # Automatically organize your dart imports
   import_sorter: ^4.6.0
   # Contains code to deal with internationalized/localized messages, date and number formatting and parsing, bi-directional text, and other internationalization issues.
-  intl_generator: ^0.2.1
+  intl_generator: ^0.3.0
   # Automatically generate code for converting to and from JSON by annotating Dart classes.
   json_serializable: ^6.0.1
   

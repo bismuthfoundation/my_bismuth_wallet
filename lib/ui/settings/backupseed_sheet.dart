@@ -113,13 +113,7 @@ class AppSeedBackupSheet {
                                 height: 50,
                                 margin: EdgeInsetsDirectional.only(
                                     top: 10.0, end: 10.0),
-                                child: FlatButton(
-                                  highlightColor: StateContainer.of(context)
-                                      .curTheme
-                                      .text15,
-                                  splashColor: StateContainer.of(context)
-                                      .curTheme
-                                      .text15,
+                                child: TextButton(
                                   onPressed: () {
                                     setState(() {
                                       showMnemonic = !showMnemonic;
@@ -133,12 +127,6 @@ class AppSeedBackupSheet {
                                       color: StateContainer.of(context)
                                           .curTheme
                                           .text),
-                                  padding: EdgeInsets.all(13.0),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(100.0)),
-                                  materialTapTargetSize:
-                                      MaterialTapTargetSize.padded,
                                 ),
                               ),
                             ],

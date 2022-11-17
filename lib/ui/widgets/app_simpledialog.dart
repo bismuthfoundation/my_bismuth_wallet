@@ -159,7 +159,7 @@ class Dialog extends StatelessWidget {
 ///           ),
 ///         ),
 ///         actions: <Widget>[
-///           FlatButton(
+///           TextButton(
 ///             child: Text('Regret'),
 ///             onPressed: () {
 ///               Navigator.of(context).pop();
@@ -237,7 +237,7 @@ class AppAlertDialog extends StatelessWidget {
   /// The (optional) set of actions that are displayed at the bottom of the
   /// dialog.
   ///
-  /// Typically this is a list of [FlatButton] widgets.
+  /// Typically this is a list of [TextButton] widgets.
   ///
   /// These widgets will be wrapped in a [ButtonBar], which introduces 8 pixels
   /// of padding on each side.
@@ -368,7 +368,7 @@ class AppAlertDialog extends StatelessWidget {
 ///
 ///  * [AppSimpleDialog], for a dialog in which to use this widget.
 ///  * [showAppDialog], which actually displays the dialog and returns its result.
-///  * [FlatButton], which are commonly used as actions in other kinds of
+///  * [TextButton], which are commonly used as actions in other kinds of
 ///    dialogs, such as [AppAlertDialog]s.
 ///  * <https://material.google.com/components/dialogs.html#dialogs-simple-dialogs>
 class AppSimpleDialogOption extends StatelessWidget {

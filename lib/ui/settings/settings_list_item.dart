@@ -24,13 +24,10 @@ class AppSettings {
       {bool disabled = false}) {
     return IgnorePointer(
       ignoring: disabled,
-      child: FlatButton(
-        highlightColor: StateContainer.of(context).curTheme.text15,
-        splashColor: StateContainer.of(context).curTheme.text15,
+      child: TextButton(
         onPressed: () {
           onPressed();
         },
-        padding: EdgeInsets.all(0.0),
         child: Container(
           height: 60.0,
           margin: EdgeInsetsDirectional.only(start: 30.0),
@@ -88,9 +85,7 @@ class AppSettings {
   static Widget buildSettingsListItemSingleLineWithInfos(
       BuildContext context, String heading, String info, IconData settingIcon,
       {Function onPressed}) {
-    return FlatButton(
-      highlightColor: StateContainer.of(context).curTheme.text15,
-      splashColor: StateContainer.of(context).curTheme.text15,
+    return TextButton(
       onPressed: () {
         if (onPressed != null) {
           onPressed();
@@ -98,7 +93,6 @@ class AppSettings {
           return;
         }
       },
-      padding: EdgeInsets.all(0.0),
       child: Container(
         height: 100.0,
         margin: EdgeInsetsDirectional.only(start: 30.0),
@@ -152,9 +146,7 @@ class AppSettings {
   static Widget buildSettingsListItemSingleLine(
       BuildContext context, String heading, IconData settingIcon,
       {Function onPressed}) {
-    return FlatButton(
-      highlightColor: StateContainer.of(context).curTheme.text15,
-      splashColor: StateContainer.of(context).curTheme.text15,
+    return TextButton(
       onPressed: () {
         if (onPressed != null) {
           onPressed();
@@ -162,7 +154,6 @@ class AppSettings {
           return;
         }
       },
-      padding: EdgeInsets.all(0.0),
       child: Container(
         height: 60.0,
         margin: EdgeInsetsDirectional.only(start: 30.0),

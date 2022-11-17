@@ -32,7 +32,6 @@ import 'package:my_bismuth_wallet/themes.dart';
 import 'package:my_bismuth_wallet/util/app_ffi/apputil.dart';
 import 'package:my_bismuth_wallet/util/app_ffi/encrypt/crypter.dart';
 import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
-import 'util/sharedprefsutil.dart';
 
 class _InheritedStateContainer extends InheritedWidget {
   // Data is your entire state. In our case just 'User'

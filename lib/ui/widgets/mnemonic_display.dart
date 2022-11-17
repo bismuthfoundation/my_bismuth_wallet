@@ -151,7 +151,7 @@ class _MnemonicDisplayState extends State<MnemonicDisplay> {
           ? Container(
               margin: EdgeInsetsDirectional.only(top: 5),
               padding: EdgeInsets.all(0.0),
-              child: OutlineButton(
+              child: TextButton(
                 onPressed: () {
                   Clipboard.setData(
                       new ClipboardData(text: widget.wordList.join(' ')));
@@ -169,22 +169,6 @@ class _MnemonicDisplayState extends State<MnemonicDisplay> {
                     });
                   });
                 },
-                splashColor: _seedCopied
-                    ? Colors.transparent
-                    : StateContainer.of(context).curTheme.primary30,
-                highlightColor: _seedCopied
-                    ? Colors.transparent
-                    : StateContainer.of(context).curTheme.primary15,
-                highlightedBorderColor: _seedCopied
-                    ? StateContainer.of(context).curTheme.success
-                    : StateContainer.of(context).curTheme.primary,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(100.0)),
-                borderSide: BorderSide(
-                    color: _seedCopied
-                        ? StateContainer.of(context).curTheme.success
-                        : StateContainer.of(context).curTheme.primary,
-                    width: 1.0),
                 child: AutoSizeText(
                   _seedCopied
                       ? AppLocalization.of(context).copied

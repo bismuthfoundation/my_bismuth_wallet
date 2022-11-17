@@ -679,16 +679,7 @@ class _SendSheetState extends State<SendSheet> {
                                               ),
                                             ],
                                           ),
-                                          FlatButton(
-                                            padding: EdgeInsets.all(14.0),
-                                            highlightColor:
-                                                StateContainer.of(context)
-                                                    .curTheme
-                                                    .primary15,
-                                            splashColor:
-                                                StateContainer.of(context)
-                                                    .curTheme
-                                                    .primary30,
+                                          TextButton(
                                             onPressed: () {
                                               if (!_pasteButtonVisible) {
                                                 return;
@@ -750,10 +741,6 @@ class _SendSheetState extends State<SendSheet> {
                                                     StateContainer.of(context)
                                                         .curTheme
                                                         .icon),
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        200.0)),
                                           )
                                         ],
                                       ),
@@ -1340,7 +1327,7 @@ class _SendSheetState extends State<SendSheet> {
         Container(
           height: 42,
           width: double.infinity - 5,
-          child: FlatButton(
+          child: TextButton(
             onPressed: () {
               _sendAddressController.text = contact.name;
               _sendAddressFocusNode.unfocus();

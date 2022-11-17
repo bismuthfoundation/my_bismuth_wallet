@@ -43,14 +43,19 @@ class BiometricUtil {
   /// @param [message] Message shown to user in FaceID/TouchID popup
   /// @returns [true] if successfully authenticated, [false] otherwise
   Future<bool> authenticateWithBiometrics(
-      BuildContext context, String message) async {
-    final bool hasBiometricsEnrolled = await hasBiometrics();
+    BuildContext context,
+    String message,
+  ) async {
+    final hasBiometricsEnrolled = await hasBiometrics();
     if (hasBiometricsEnrolled) {
-      final LocalAuthentication localAuth = LocalAuthentication();
-      return await localAuth.authenticate(
-          localizedReason: message,
+      final localAuth = LocalAuthentication();
+      return localAuth.authenticate(
+        localizedReason: message,
+        options: const AuthenticationOptions(
           useErrorDialogs: false,
-          biometricOnly: true);
+          biometricOnly: true,
+        ),
+      );
     }
     return false;
   }

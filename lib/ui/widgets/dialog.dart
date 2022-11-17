@@ -26,10 +26,7 @@ class AppDialogs {
           ),
           content: Text(content, style: AppStyles.textStyleParagraph(context)),
           actions: <Widget>[
-            FlatButton(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4.0)),
-              padding: EdgeInsets.all(12),
+            TextButton(
               child: Container(
                 constraints: BoxConstraints(maxWidth: 100),
                 child: Text(
@@ -44,10 +41,7 @@ class AppDialogs {
                 }
               },
             ),
-            FlatButton(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4.0)),
-              padding: EdgeInsets.all(12),
+            TextButton(
               child: Container(
                 constraints: BoxConstraints(maxWidth: 100),
                 child: Text(

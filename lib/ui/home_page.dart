@@ -691,16 +691,13 @@ class _AppHomePageState extends State<AppHomePage>
                         width: (MediaQuery.of(context).size.width - 18) / 3,
                         margin: EdgeInsetsDirectional.only(
                             start: 14, top: 0.0, end: 7.0),
-                        child: FlatButton(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100.0)),
-                          color: receive != null
-                              ? StateContainer.of(context).curTheme.primary
-                              : StateContainer.of(context).curTheme.primary60,
+                        child: TextButton(
                           child: AutoSizeText(
                             AppLocalization.of(context).receive,
                             textAlign: TextAlign.center,
-                            style: AppStyles.textStyleButtonPrimary(context),
+                            style: receive != null
+                                ? AppStyles.textStyleButtonPrimary(context)
+                                : AppStyles.textStyleButtonPrimary60(context),
                             maxLines: 1,
                             stepGranularity: 0.5,
                           ),
@@ -711,12 +708,6 @@ class _AppHomePageState extends State<AppHomePage>
                             Sheets.showAppHeightEightSheet(
                                 context: context, widget: receive);
                           },
-                          highlightColor: receive != null
-                              ? StateContainer.of(context).curTheme.background40
-                              : Colors.transparent,
-                          splashColor: receive != null
-                              ? StateContainer.of(context).curTheme.background40
-                              : Colors.transparent,
                         ),
                       ),
                       StateContainer.of(context).wallet == null ||
@@ -736,11 +727,7 @@ class _AppHomePageState extends State<AppHomePage>
                                   (MediaQuery.of(context).size.width - 158) / 3,
                               margin: EdgeInsetsDirectional.only(
                                   start: 7, top: 0.0, end: 7.0),
-                              child: FlatButton(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(100.0)),
-                                color:
-                                    StateContainer.of(context).curTheme.primary,
+                              child: TextButton(
                                 child: Icon(Icons.scatter_plot_rounded,
                                     color: StateContainer.of(context)
                                         .curTheme
@@ -754,24 +741,6 @@ class _AppHomePageState extends State<AppHomePage>
                                               .wallet
                                               .tokens));
                                 },
-                                highlightColor: StateContainer.of(context)
-                                            .wallet
-                                            .tokens
-                                            .length >
-                                        0
-                                    ? StateContainer.of(context)
-                                        .curTheme
-                                        .background40
-                                    : Colors.transparent,
-                                splashColor: StateContainer.of(context)
-                                            .wallet
-                                            .tokens
-                                            .length >
-                                        0
-                                    ? StateContainer.of(context)
-                                        .curTheme
-                                        .background40
-                                    : Colors.transparent,
                               ),
                             ),
                       AppPopupButton(),
@@ -879,13 +848,7 @@ class _AppHomePageState extends State<AppHomePage>
             borderRadius: BorderRadius.circular(10.0),
             boxShadow: [StateContainer.of(context).curTheme.boxShadow],
           ),
-          child: FlatButton(
-            highlightColor: StateContainer.of(context).curTheme.text15,
-            splashColor: StateContainer.of(context).curTheme.text15,
-            color: StateContainer.of(context).curTheme.backgroundDark,
-            padding: EdgeInsets.all(0.0),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
+          child: TextButton(
             onPressed: () {
               Sheets.showAppHeightEightSheet(
                   context: context,
@@ -1245,16 +1208,10 @@ class _AppHomePageState extends State<AppHomePage>
         borderRadius: BorderRadius.circular(10.0),
         boxShadow: [StateContainer.of(context).curTheme.boxShadow],
       ),
-      child: FlatButton(
+      child: TextButton(
         onPressed: () {
           return null;
         },
-        highlightColor: StateContainer.of(context).curTheme.text15,
-        splashColor: StateContainer.of(context).curTheme.text15,
-        color: StateContainer.of(context).curTheme.backgroundDark,
-        padding: EdgeInsets.all(0.0),
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
         child: Center(
           child: Padding(
             padding:
@@ -1428,16 +1385,10 @@ class _AppHomePageState extends State<AppHomePage>
         borderRadius: BorderRadius.circular(10.0),
         boxShadow: [StateContainer.of(context).curTheme.boxShadow],
       ),
-      child: FlatButton(
+      child: TextButton(
         onPressed: () {
           return null;
         },
-        highlightColor: StateContainer.of(context).curTheme.text15,
-        splashColor: StateContainer.of(context).curTheme.text15,
-        color: StateContainer.of(context).curTheme.backgroundDark,
-        padding: EdgeInsets.all(0.0),
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
         child: Center(
           child: Padding(
             padding:
@@ -1624,15 +1575,10 @@ class _AppHomePageState extends State<AppHomePage>
                   top: settingsIconMarginTop, start: 5),
               height: 50,
               width: 50,
-              child: FlatButton(
-                  highlightColor: StateContainer.of(context).curTheme.text15,
-                  splashColor: StateContainer.of(context).curTheme.text15,
+              child: TextButton(
                   onPressed: () {
                     _scaffoldKey.currentState.openDrawer();
                   },
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50.0)),
-                  padding: EdgeInsets.all(0.0),
                   child: Icon(FontAwesome.sliders,
                       color: StateContainer.of(context).curTheme.icon,
                       size: 24)),
@@ -2246,7 +2192,7 @@ class _TransactionDetailsSheetState extends State<TransactionDetailsSheet> {
                                                   // Add Contact Button
                                                   child: !widget.displayName
                                                           .startsWith("@")
-                                                      ? FlatButton(
+                                                      ? TextButton(
                                                           onPressed: () {
                                                             Navigator.of(
                                                                     context)
@@ -2258,21 +2204,6 @@ class _TransactionDetailsSheetState extends State<TransactionDetailsSheet> {
                                                                     address: widget
                                                                         .address));
                                                           },
-                                                          splashColor: Colors
-                                                              .transparent,
-                                                          highlightColor: Colors
-                                                              .transparent,
-                                                          shape: RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          100.0)),
-                                                          padding: EdgeInsets
-                                                              .symmetric(
-                                                                  vertical:
-                                                                      10.0,
-                                                                  horizontal:
-                                                                      10),
                                                           child: Icon(
                                                               AppIcons
                                                                   .addcontact,

@@ -342,9 +342,7 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
       secondaryActions: _getSlideActionsForAccount(context, account, setState),
       actionExtentRatio: 0.2,
       actionPane: SlidableStrechActionPane(),
-      child: FlatButton(
-          highlightColor: StateContainer.of(context).curTheme.text15,
-          splashColor: StateContainer.of(context).curTheme.text15,
+      child: TextButton(
           onPressed: () {
             if (!_accountIsChanging) {
               // Change account
@@ -356,7 +354,6 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
               }
             }
           },
-          padding: EdgeInsets.all(0.0),
           child: Column(
             children: <Widget>[
               Divider(

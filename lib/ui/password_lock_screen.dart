@@ -63,9 +63,7 @@ class _AppPasswordLockScreenState extends State<AppPasswordLockScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      FlatButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(100)),
+                      TextButton(
                         onPressed: () {
                           AppDialogs.showConfirmDialog(
                               context,
@@ -97,10 +95,6 @@ class _AppPasswordLockScreenState extends State<AppPasswordLockScreen> {
                             });
                           });
                         },
-                        highlightColor:
-                            StateContainer.of(context).curTheme.text15,
-                        splashColor: StateContainer.of(context).curTheme.text30,
-                        padding: EdgeInsetsDirectional.fromSTEB(12, 4, 12, 4),
                         child: Container(
                           child: Row(
                             children: <Widget>[
