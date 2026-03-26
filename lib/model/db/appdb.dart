@@ -5,12 +5,11 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 
 // Package imports:
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 // Project imports:
 import 'package:my_bismuth_wallet/model/db/hiveDB.dart';
-import 'package:my_bismuth_wallet/util/app_ffi/apputil.dart';
+import 'package:my_bismuth_wallet/util/address_derivation.dart';
 
 class DBHelper {
   static const String _contactsTable = 'contacts';
@@ -117,9 +116,9 @@ class DBHelper {
   Future<List<Account>> getAccounts(String seed) async {
     final Box<Account> box = await Hive.openBox<Account>(_accountsTable);
     final List<Account> accounts = box.values.toList();
-    accounts.forEach((a) {
-      a.address = AppUtil().seedToAddress(seed, a.index);
-    });
+    for (final Account account in accounts) {
+      account.address = await AddressDerivation.seedToAddress(seed, account.index!);
+    }
     return accounts;
   }
 
@@ -131,7 +130,8 @@ class DBHelper {
         .sort((Account a, Account b) => a.lastAccess!.compareTo(b.lastAccess!));
 
     for (int i = 0; i < accounts.length; i++) {
-      accounts[i].address = AppUtil().seedToAddress(seed, accounts[i].index);
+      accounts[i].address =
+          await AddressDerivation.seedToAddress(seed, accounts[i].index!);
       if (i + 1 == limit) {
         break;
       }
@@ -164,7 +164,7 @@ class DBHelper {
     account.lastAccess = 0;
     account.balance = "0";
     account.selected = false;
-    account.address = AppUtil().seedToAddress(seed, nextIndex);
+    account.address = await AddressDerivation.seedToAddress(seed, nextIndex);
     account.dragginatorDna = "";
     account.dragginatorStatus = "";
     box.put(account.index, account);
@@ -187,7 +187,7 @@ class DBHelper {
   Future<void> changeAccountName(Account account, String name) async {
     Box<Account> box = await Hive.openBox<Account>(_accountsTable);
     account.name = name;
-    box.putAt(account.index!, account);
+    box.put(account.index, account);
   }
 
   Future<void> changeAccountDragginatorDna(
@@ -195,7 +195,7 @@ class DBHelper {
     Box<Account> box = await Hive.openBox<Account>(_accountsTable);
     account.dragginatorDna = dna;
     account.dragginatorStatus = status;
-    box.putAt(account.index!, account);
+    box.put(account.index, account);
   }
 
   Future<void> changeAccount(Account account) async {
@@ -204,7 +204,7 @@ class DBHelper {
     int maxLastAccessed = 0;
     for (Account _account in accountsList) {
       _account.selected = false;
-      box.putAt(_account.index!, _account);
+      box.put(_account.index, _account);
       if (_account.lastAccess != null &&
           maxLastAccessed < _account.lastAccess!) {
         maxLastAccessed = _account.lastAccess!;
@@ -212,13 +212,13 @@ class DBHelper {
     }
     account.selected = true;
     account.lastAccess = maxLastAccessed + 1;
-    box.putAt(account.index!, account);
+    box.put(account.index, account);
   }
 
   Future<void> updateAccountBalance(Account account, String balance) async {
     Box<Account> box = await Hive.openBox<Account>(_accountsTable);
     account.balance = balance;
-    box.putAt(account.index!, account);
+    box.put(account.index, account);
   }
 
   Future<Account?> getSelectedAccount(String seed) async {
@@ -229,7 +229,7 @@ class DBHelper {
       if (_account.selected!) {
         accountSelected = _account;
         accountSelected.address =
-            AppUtil().seedToAddress(seed, accountSelected.index);
+            await AddressDerivation.seedToAddress(seed, accountSelected.index!);
       }
     }
     return accountSelected;
@@ -241,7 +241,8 @@ class DBHelper {
     Account? account;
     for (Account _account in accountsList) {
       if (_account.index! == 0) {
-        _account.address = AppUtil().seedToAddress(seed, _account.index);
+        _account.address =
+            await AddressDerivation.seedToAddress(seed, _account.index!);
         _account.selected = true;
         account = _account;
         break;

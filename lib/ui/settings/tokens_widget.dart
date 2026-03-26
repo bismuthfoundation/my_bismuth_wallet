@@ -1,4 +1,3 @@
-// @dart=2.9
 
 // Flutter imports:
 import 'package:flutter/material.dart';
@@ -125,9 +124,7 @@ class _TokensListState extends State<TokensList> {
                     ListView.builder(
                       physics: const AlwaysScrollableScrollPhysics(),
                       padding: EdgeInsets.only(top: 15.0, bottom: 15),
-                      itemCount: _tokenRefsForDisplay == null
-                          ? 0
-                          : _tokenRefsForDisplay.length,
+                      itemCount: _tokenRefsForDisplay.length,
                       itemBuilder: (context, index) {
                         // Build
                         return buildSingleToken(

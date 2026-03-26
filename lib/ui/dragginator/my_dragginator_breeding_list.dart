@@ -1,8 +1,6 @@
-// @dart=2.9
 
 // Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 // Package imports:
 import 'package:flip_card/flip_card.dart';
@@ -190,8 +188,7 @@ class _MyDragginatorBreedingListStateState
                 ]),
               ),
             ),
-            dragginatorListFromAddressResponseList != null &&
-                    dragginatorListFromAddressResponseList.length > 0
+            dragginatorListFromAddressResponseList.length > 0
                 ? ScrollingPageIndicator(
                     dotColor: StateContainer.of(context).curTheme.primary30,
                     dotSelectedColor:

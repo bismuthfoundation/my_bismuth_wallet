@@ -1,9 +1,9 @@
-// @dart=2.9
 
 // Dart imports:
 import 'dart:async';
 
 // Flutter imports:
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -37,9 +37,9 @@ class UserDataUtil {
   static final Logger log = sl.get<Logger>();
 
   static const MethodChannel _channel = const MethodChannel('fappchannel');
-  static StreamSubscription<dynamic> setStream;
+  static StreamSubscription<dynamic>? setStream;
 
-  static String _parseData(String data, DataType type) {
+  static String? _parseData(String data, DataType type) {
     data = data.trim();
     if (type == DataType.RAW) {
       return data;
@@ -63,16 +63,21 @@ class UserDataUtil {
     return null;
   }
 
-  static Future<String> getClipboardText(DataType type) async {
-    ClipboardData data = await Clipboard.getData("text/plain");
-    if (data == null || data.text == null) {
+  static Future<String?> getClipboardText(DataType type) async {
+    final ClipboardData? data = await Clipboard.getData("text/plain");
+    final text = data?.text;
+    if (text == null) {
       return null;
     }
-    return _parseData(data.text, type);
+    return _parseData(text, type);
   }
 
-  static Future<String> getQRData(DataType type, BuildContext context) async {
+  static Future<String?> getQRData(DataType type, BuildContext context) async {
     UIUtil.cancelLockEvent();
+    if (kIsWeb) {
+      UIUtil.showSnackbar(AppLocalization.of(context).qrUnknownError, context);
+      return QRScanErrs.UNKNOWN_ERROR;
+    }
     try {
       final ScanResult scanResult = await BarcodeScanner.scan();
       final String data = scanResult.rawContent;

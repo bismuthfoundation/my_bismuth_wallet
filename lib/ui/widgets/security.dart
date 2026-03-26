@@ -1,4 +1,3 @@
-// @dart=2.9
 
 // Dart imports:
 import 'dart:math';
@@ -288,9 +287,7 @@ class _PinScreenState extends State<PinScreen>
       body: Container(
         constraints: BoxConstraints.expand(),
         child: Material(
-          color: widget.pinScreenBackgroundColor == null
-              ? StateContainer.of(context).curTheme.backgroundDark
-              : widget.pinScreenBackgroundColor,
+          color: widget.pinScreenBackgroundColor,
           child: Column(
             children: <Widget>[
               Container(

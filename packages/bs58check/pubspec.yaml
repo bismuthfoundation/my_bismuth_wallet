@@ -1,0 +1,16 @@
+name: bs58check
+description: A straight forward implementation of base58check extending upon bs58 for Flutter writing in Dart.
+version: 1.0.3
+homepage: https://github.com/anicdh
+author: andoan <anicdh@gmail.com>
+
+environment:
+  sdk: ">=2.12.0 <4.0.0"
+
+dependencies:
+  hex: ^0.2.0
+  crypto: ^3.0.0
+#  path: ^1.4.1
+
+dev_dependencies:
+  test: ^1.0.0

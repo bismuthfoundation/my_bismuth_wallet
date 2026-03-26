@@ -1,4 +1,3 @@
-// @dart=2.9
 
 // Dart imports:
 import 'dart:async';
@@ -115,15 +114,11 @@ class DragginatorService {
   }
 
   bool isEggOwner(List<BisToken> tokens) {
-    if (tokens == null) {
-      return false;
-    } else {
-      for (int i = 0; i < tokens.length; i++) {
-        if (tokens[i].tokenName == "egg" && tokens[i].tokensQuantity > 0) {
-          return true;
-        }
+    for (int i = 0; i < tokens.length; i++) {
+      if (tokens[i].tokenName == "egg" && tokens[i].tokensQuantity > 0) {
+        return true;
       }
-      return false;
     }
-  }
+    return false;
+    }
 }

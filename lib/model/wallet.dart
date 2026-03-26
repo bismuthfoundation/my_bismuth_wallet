@@ -1,4 +1,3 @@
-// @dart=2.9
 
 // Package imports:
 import 'package:decimal/decimal.dart';
@@ -17,31 +16,31 @@ class AppWallet {
   bool _loading; // Whether or not app is initially loading
   bool
       _historyLoading; // Whether or not we have received initial account history response
-  String _address;
-  double _accountBalance;
-  String _representative;
-  String _localCurrencyPrice;
-  String _btcPrice;
-  List<AddressTxsResponseResult> _history;
-  List<BisToken> _tokens;
+  String _address = '';
+  double _accountBalance = 0;
+  String _representative = '';
+  String _localCurrencyPrice = '0';
+  String _btcPrice = '0';
+  List<AddressTxsResponseResult> _history = <AddressTxsResponseResult>[];
+  List<BisToken> _tokens = <BisToken>[];
 
   AppWallet(
-      {String address,
-      double accountBalance,
-      String representative,
-      String localCurrencyPrice,
-      String btcPrice,
-      List<AddressTxsResponseResult> history,
-      bool loading,
-      bool historyLoading,
-      List<BisToken> tokens}) {
-    _address = address;
+      {String? address,
+      double? accountBalance,
+      String? representative,
+      String? localCurrencyPrice,
+      String? btcPrice,
+      List<AddressTxsResponseResult>? history,
+      bool? loading,
+      bool? historyLoading,
+      List<BisToken>? tokens}) {
+    _address = address ?? '';
     _accountBalance = accountBalance ?? 0;
-    _representative = representative;
+    _representative = representative ?? '';
     _localCurrencyPrice = localCurrencyPrice ?? "0";
     _btcPrice = btcPrice ?? "0";
-    _history = history ?? new List<AddressTxsResponseResult>();
-    _tokens = tokens ?? new List<BisToken>();
+    _history = history ?? <AddressTxsResponseResult>[];
+    _tokens = tokens ?? <BisToken>[];
     _loading = loading ?? true;
     _historyLoading = historyLoading ?? true;
   }
@@ -60,17 +59,11 @@ class AppWallet {
 
   // Get pretty account balance version
   String getAccountBalanceDisplay() {
-    if (accountBalance == null) {
-      return "0";
-    }
     return NumberUtil.getRawAsUsableString(_accountBalance.toString());
   }
 
   // Get pretty account balance version
   String getAccountBalanceMoinsFeesDisplay(estimationFees) {
-    if (accountBalance == null) {
-      return "0";
-    }
     double value = _accountBalance - estimationFees;
     return NumberUtil.getRawAsUsableString(value.toString());
   }

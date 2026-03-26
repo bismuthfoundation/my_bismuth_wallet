@@ -1,4 +1,3 @@
-// @dart=2.9
 
 class BlockTypes {
   static const String SEND = "send";

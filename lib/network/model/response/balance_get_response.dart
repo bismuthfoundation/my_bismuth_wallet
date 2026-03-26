@@ -2,7 +2,6 @@
 //
 //     final balanceGetResponse = balanceGetResponseFromJson(jsonString);
 
-// @dart=2.9
 
 // Dart imports:
 import 'dart:convert';
@@ -24,13 +23,13 @@ class BalanceGetResponse {
     this.balanceNoMempool,
   });
 
-  String address;
-  String balance;
-  String totalCredits;
-  String totalDebits;
-  String totalFees;
-  String totalRewards;
-  String balanceNoMempool;
+  String? address;
+  String? balance;
+  String? totalCredits;
+  String? totalDebits;
+  String? totalFees;
+  String? totalRewards;
+  String? balanceNoMempool;
 
   factory BalanceGetResponse.fromJson(Map<String, dynamic> json) =>
       BalanceGetResponse(

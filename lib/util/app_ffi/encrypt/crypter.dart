@@ -1,4 +1,3 @@
-// @dart=2.9
 
 // Dart imports:
 import 'dart:math';
@@ -15,7 +14,7 @@ import 'package:my_bismuth_wallet/util/helpers.dart';
 class AppCrypt {
   /// Decrypts a value with a password using AES/CBC/PKCS7
   /// KDF is Sha256KDF if not specified
-  static Uint8List decrypt(dynamic value, String password, {KDF kdf}) {
+  static Uint8List decrypt(dynamic value, String password, {KDF? kdf}) {
     kdf = kdf ?? Sha256KDF();
     Uint8List valBytes;
     if (value is String) {
@@ -37,7 +36,7 @@ class AppCrypt {
 
   /// Encrypts a value using AES/CBC/PKCS7
   /// KDF is Sha256KDF if not specified
-  static Uint8List encrypt(dynamic value, String password, {KDF kdf}) {
+  static Uint8List encrypt(dynamic value, String password, {KDF? kdf}) {
     kdf = kdf ?? Sha256KDF();
     Uint8List valBytes;
     if (value is String) {

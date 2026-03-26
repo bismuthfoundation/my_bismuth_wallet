@@ -2,16 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-// @dart=2.9
 
 // Dart imports:
 import 'dart:async';
 import 'dart:math' as math;
 
 // Flutter imports:
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 // The over-scroll distance that moves the indicator to its maximum
 // displacement, as a percentage of the scrollable's container extent.
@@ -104,11 +101,7 @@ class ReactiveRefreshIndicator extends StatefulWidget {
     this.notificationPredicate = defaultScrollNotificationPredicate,
     this.semanticsLabel,
     this.semanticsValue,
-  })  : assert(child != null),
-        assert(onRefresh != null),
-        assert(isRefreshing != null),
-        assert(notificationPredicate != null),
-        super(key: key);
+  })  : super(key: key);
 
   /// The widget below this widget in the tree.
   ///
@@ -199,8 +192,8 @@ class ReactiveRefreshIndicatorState extends State<ReactiveRefreshIndicator>
     final ThemeData theme = Theme.of(context);
     _valueColor = _positionController.drive(
       ColorTween(
-              begin: (widget.color ?? theme.accentColor).withOpacity(0.0),
-              end: (widget.color ?? theme.accentColor).withOpacity(1.0))
+              begin: (widget.color ?? theme.colorScheme.secondary).withOpacity(0.0),
+              end: (widget.color ?? theme.colorScheme.secondary).withOpacity(1.0))
           .chain(CurveTween(
               curve: const Interval(0.0, 1.0 / _kDragSizeFactorLimit))),
     );
@@ -217,7 +210,7 @@ class ReactiveRefreshIndicatorState extends State<ReactiveRefreshIndicator>
   @override
   void didUpdateWidget(ReactiveRefreshIndicator oldWidget) {
     if (!widget.isRefreshing && oldWidget.isRefreshing) {
-      if (_mode != null && _mode != _RefreshIndicatorMode.done) {
+      if (_mode != _RefreshIndicatorMode.done) {
         _dismiss(_RefreshIndicatorMode.done);
       }
     }
@@ -291,7 +284,7 @@ class ReactiveRefreshIndicatorState extends State<ReactiveRefreshIndicator>
   bool _handleGlowNotification(OverscrollIndicatorNotification notification) {
     if (notification.depth != 0 || !notification.leading) return false;
     if (_mode == _RefreshIndicatorMode.drag) {
-      notification.disallowGlow();
+      notification.disallowIndicator();
       return true;
     }
     return false;
@@ -377,7 +370,6 @@ class ReactiveRefreshIndicatorState extends State<ReactiveRefreshIndicator>
             duration: _kIndicatorSnapDuration)
         .then<void>((void value) {
       if (mounted && _mode == _RefreshIndicatorMode.snap) {
-        assert(widget.onRefresh != null);
         setState(() {
           // Show the indeterminate progress indicator.
           _mode = _RefreshIndicatorMode.refresh;
@@ -407,14 +399,13 @@ class ReactiveRefreshIndicatorState extends State<ReactiveRefreshIndicator>
   Future<void> show({bool atTop = true}) {
     if (_mode != _RefreshIndicatorMode.refresh &&
         _mode != _RefreshIndicatorMode.snap) {
-      if (_mode == null) _start(atTop ? AxisDirection.down : AxisDirection.up);
       _show();
     }
     return _pendingRefreshFuture;
   }
 
   void stopRefreshing() {
-    if (_mode != null && _mode != _RefreshIndicatorMode.done) {
+    if (_mode != _RefreshIndicatorMode.done) {
       _dismiss(_RefreshIndicatorMode.done);
     }
   }
@@ -432,13 +423,6 @@ class ReactiveRefreshIndicatorState extends State<ReactiveRefreshIndicator>
         child: widget.child,
       ),
     );
-    if (_mode == null) {
-      assert(_dragOffset == null);
-      assert(_isIndicatorAtTop == null);
-      return child;
-    }
-    assert(_dragOffset != null);
-    assert(_isIndicatorAtTop != null);
 
     final bool showIndeterminateIndicator =
         _mode == _RefreshIndicatorMode.refresh ||

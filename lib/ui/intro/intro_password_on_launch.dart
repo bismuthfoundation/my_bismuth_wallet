@@ -1,4 +1,3 @@
-// @dart=2.9
 
 // Flutter imports:
 import 'package:flutter/material.dart';
@@ -18,11 +17,10 @@ import 'package:my_bismuth_wallet/styles.dart';
 import 'package:my_bismuth_wallet/ui/widgets/buttons.dart';
 import 'package:my_bismuth_wallet/ui/widgets/security.dart';
 import 'package:my_bismuth_wallet/util/app_ffi/apputil.dart';
-import 'package:my_bismuth_wallet/util/app_ffi/keys/seeds.dart';
 import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
 
 class IntroPasswordOnLaunch extends StatefulWidget {
-  final String seed;
+  final String? seed;
 
   IntroPasswordOnLaunch({this.seed});
   @override
@@ -126,37 +124,21 @@ class _IntroPasswordOnLaunchState extends State<IntroPasswordOnLaunch> {
                           AppButtonType.PRIMARY,
                           AppLocalization.of(context).noSkipButton,
                           Dimens.BUTTON_TOP_DIMENS, onPressed: () async {
-                        if (widget.seed != null) {
-                          await sl.get<Vault>().setSeed(widget.seed);
-                          await sl.get<DBHelper>().dropAccounts();
-                          await AppUtil().loginAccount(widget.seed, context);
-                          StateContainer.of(context).requestUpdate();
-                          String pin = await Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) {
-                            return PinScreen(
-                              PinOverlayType.NEW_PIN,
-                            );
-                          }));
-                          if (pin != null && pin.length > 5) {
-                            _pinEnteredCallback(pin);
-                          }
-                        } else {
-                          sl
-                              .get<Vault>()
-                              .setSeed(AppSeeds.generateSeed())
-                              .then((result) {
-                            // Update wallet
-                            StateContainer.of(context).getSeed().then((seed) {
-                              AppUtil().loginAccount(seed, context).then((_) {
-                                StateContainer.of(context).requestUpdate();
-                                Navigator.of(context)
-                                    .pushNamed('/intro_backup_safety');
-                              });
-                            });
-                          });
+                        await sl.get<Vault>().setSeed(widget.seed);
+                        await sl.get<DBHelper>().dropAccounts();
+                        await AppUtil().loginAccount(widget.seed, context);
+                        StateContainer.of(context).requestUpdate();
+                        String pin = await Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (BuildContext context) {
+                          return PinScreen(
+                            PinOverlayType.NEW_PIN,
+                          );
+                        }));
+                        if (pin.length > 5) {
+                          _pinEnteredCallback(pin);
                         }
-                      }),
+                                            }),
                     ],
                   ),
                   Row(

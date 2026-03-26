@@ -1,4 +1,3 @@
-// @dart=2.9
 
 // Dart imports:
 import 'dart:math';
@@ -10,7 +9,7 @@ class AppSeeds {
   // Returns true if a seed is valid, false otherwise
   static bool isValidSeed(String seed) {
     // Ensure seed is 64 characters long
-    if (seed == null || seed.length != 64) {
+    if (seed.length != 64) {
       return false;
     }
     // Ensure seed only contains hex characters, 0-9;A-F

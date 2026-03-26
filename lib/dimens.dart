@@ -1,4 +1,3 @@
-// @dart=2.9
 
 class Dimens {
   // Standard dimensions: left, top, right, bottom

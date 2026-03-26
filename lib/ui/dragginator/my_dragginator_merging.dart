@@ -1,8 +1,6 @@
-// @dart=2.9
 
 // Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 // Package imports:
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
@@ -193,16 +191,12 @@ class _MyDragginatorMergingStateState extends State<MyDragginatorMerging> {
                                                       BorderRadius.circular(
                                                           100.0),
                                                   border: Border.all(
-                                                      color: dna1selected !=
-                                                                  null &&
-                                                              dna1selected ==
+                                                      color: dna1selected ==
                                                                   dragginatorInfosList[index]
                                                                           [1]
                                                                       .dna
                                                           ? Colors.green
-                                                          : dna2selected !=
-                                                                      null &&
-                                                                  dna2selected ==
+                                                          : dna2selected ==
                                                                       dragginatorInfosList[index][1]
                                                                           .dna
                                                               ? Colors.blue
@@ -227,11 +221,7 @@ class _MyDragginatorMergingStateState extends State<MyDragginatorMerging> {
                                                   tag: "dragginator",
                                                   child: InkWell(
                                                     onTap: () async {
-                                                      if (dnaCompatible ==
-                                                              null ||
-                                                          dnaCompatible !=
-                                                                  null &&
-                                                              dnaCompatible.contains(
+                                                      if (dnaCompatible.contains(
                                                                       dragginatorInfosList[index]
                                                                               [
                                                                               1]
@@ -251,16 +241,7 @@ class _MyDragginatorMergingStateState extends State<MyDragginatorMerging> {
                                                                   index][1]
                                                               .status),
                                                       elevation: 25,
-                                                      foregroundColor: dnaCompatible ==
-                                                              null
-                                                          ? StateContainer.of(
-                                                                  context)
-                                                              .curTheme
-                                                              .backgroundDark
-                                                              .withOpacity(0)
-                                                          : dnaCompatible !=
-                                                                      null &&
-                                                                  dnaCompatible.contains(
+                                                      foregroundColor: dnaCompatible.contains(
                                                                           dragginatorInfosList[index][1]
                                                                               .dna) ==
                                                                       true
@@ -278,9 +259,7 @@ class _MyDragginatorMergingStateState extends State<MyDragginatorMerging> {
                                                                       0.8),
                                                       showInitialTextAbovePicture:
                                                           true,
-                                                      backgroundColor: dnaCompatible !=
-                                                                  null &&
-                                                              dnaCompatible.contains(
+                                                      backgroundColor: dnaCompatible.contains(
                                                                       dragginatorInfosList[index]
                                                                               [
                                                                               1]
@@ -335,9 +314,7 @@ class _MyDragginatorMergingStateState extends State<MyDragginatorMerging> {
                                   ),
                                   Row(
                                     children: <Widget>[
-                                      dna1selected == null ||
-                                              dna2selected == null ||
-                                              dna1selected == dna2selected
+                                      dna1selected == dna2selected
                                           ? AppButton.buildAppButton(
                                               context,
                                               AppButtonType.PRIMARY_OUTLINE,
@@ -393,102 +370,31 @@ class _MyDragginatorMergingStateState extends State<MyDragginatorMerging> {
   }
 
   getListCompatible(String dna) async {
-    if (dna != null) {
-      sl.get<DragginatorService>().getEggsCompatible(dna).then((value) {
-        setState(() {
-          dnaCompatible = value;
-          dnaCompatible.add(dna);
-        });
+    sl.get<DragginatorService>().getEggsCompatible(dna).then((value) {
+      setState(() {
+        dnaCompatible = value;
+        dnaCompatible.add(dna);
       });
-    } else {
-      dnaCompatible = null;
+    });
     }
-  }
 
   selectItem(int index) async {
     // CASE : first dna selected
-    if (dna1selected == null) {
-      data[0] = [
-        double.tryParse(
-                dragginatorInfosList[index][1].abilities[0][0].toString())
-            .toInt(),
-        double.tryParse(
-                dragginatorInfosList[index][1].abilities[0][1].toString())
-            .toInt(),
-        double.tryParse(
-                dragginatorInfosList[index][1].abilities[0][2].toString())
-            .toInt(),
-        double.tryParse(
-                dragginatorInfosList[index][1].abilities[0][3].toString())
-            .toInt(),
-        double.tryParse(
-                dragginatorInfosList[index][1].abilities[0][4].toString())
-            .toInt(),
-        double.tryParse(
-                dragginatorInfosList[index][1].abilities[0][5].toString())
-            .toInt(),
-        double.tryParse(
-                dragginatorInfosList[index][1].abilities[0][6].toString())
-            .toInt(),
-        double.tryParse(
-                dragginatorInfosList[index][1].abilities[0][7].toString())
-            .toInt(),
-      ];
-      dna1selected = dragginatorInfosList[index][1].dna;
-      await getListCompatible(dna1selected);
-    } else
     // CASE : disabled dna 1 selected
-    if (dna1selected != null &&
-        dna1selected == dragginatorInfosList[index][1].dna) {
-      if (dna2selected == null) {
-        dna1selected = null;
-        data[0] = [0, 0, 0, 0, 0, 0, 0, 0];
-        await getListCompatible(dna2selected);
-      } else {
-        dna1selected = dna2selected;
-        dna2selected = null;
-        data[0] = data[1];
-        data[1] = [0, 0, 0, 0, 0, 0, 0, 0];
-        await getListCompatible(dna1selected);
-      }
+  if (dna1selected == dragginatorInfosList[index][1].dna) {
+    dna1selected = dna2selected;
+    dna2selected = null;
+    data[0] = data[1];
+    data[1] = [0, 0, 0, 0, 0, 0, 0, 0];
+    await getListCompatible(dna1selected);
     } else
-    // CASE : second dna selected
-    if (dna2selected == null) {
-      data[1] = [
-        double.tryParse(
-                dragginatorInfosList[index][1].abilities[0][0].toString())
-            .toInt(),
-        double.tryParse(
-                dragginatorInfosList[index][1].abilities[0][1].toString())
-            .toInt(),
-        double.tryParse(
-                dragginatorInfosList[index][1].abilities[0][2].toString())
-            .toInt(),
-        double.tryParse(
-                dragginatorInfosList[index][1].abilities[0][3].toString())
-            .toInt(),
-        double.tryParse(
-                dragginatorInfosList[index][1].abilities[0][4].toString())
-            .toInt(),
-        double.tryParse(
-                dragginatorInfosList[index][1].abilities[0][5].toString())
-            .toInt(),
-        double.tryParse(
-                dragginatorInfosList[index][1].abilities[0][6].toString())
-            .toInt(),
-        double.tryParse(
-                dragginatorInfosList[index][1].abilities[0][7].toString())
-            .toInt(),
-      ];
-      dna2selected = dragginatorInfosList[index][1].dna;
-    } else
-    // CASE : disabled dna 2 selected
-    if (dna2selected != null &&
-        dna2selected == dragginatorInfosList[index][1].dna) {
-      dna2selected = null;
-      data[1] = [0, 0, 0, 0, 0, 0, 0, 0];
-      await getListCompatible(dna1selected);
-    }
+  // CASE : second dna selected
+  // CASE : disabled dna 2 selected
+if (dna2selected == dragginatorInfosList[index][1].dna) {
+  dna2selected = null;
+  data[1] = [0, 0, 0, 0, 0, 0, 0, 0];
+  await getListCompatible(dna1selected);
+}
 
     setState(() {});
   }

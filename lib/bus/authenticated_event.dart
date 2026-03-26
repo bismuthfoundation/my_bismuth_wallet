@@ -1,4 +1,3 @@
-// @dart=2.9
 
 // Package imports:
 import 'package:event_taxi/event_taxi.dart';

@@ -1,4 +1,3 @@
-// @dart=2.9
 
 // Dart imports:
 import 'dart:convert';
@@ -54,7 +53,7 @@ class Base85Decoder extends Converter<String, Uint8List> {
   /// The [input] to decode. May be a String.
   /// If ascii85, it is expected to be enclosed in <~ and ~>.
   Uint8List convert(String input) {
-    if (input?.isEmpty ?? true) {
+    if (input.isEmpty ?? true) {
       return Uint8List(0);
     }
     var bytes = Uint8List.fromList(input.codeUnits);

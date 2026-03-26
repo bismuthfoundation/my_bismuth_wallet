@@ -1,4 +1,3 @@
-// @dart=2.9
 
 // Flutter imports:
 import 'package:flutter/material.dart';
@@ -87,12 +86,8 @@ class AppSettings {
       {Function onPressed}) {
     return TextButton(
       onPressed: () {
-        if (onPressed != null) {
-          onPressed();
-        } else {
-          return;
-        }
-      },
+        onPressed();
+            },
       child: Container(
         height: 100.0,
         margin: EdgeInsetsDirectional.only(start: 30.0),
@@ -148,12 +143,8 @@ class AppSettings {
       {Function onPressed}) {
     return TextButton(
       onPressed: () {
-        if (onPressed != null) {
-          onPressed();
-        } else {
-          return;
-        }
-      },
+        onPressed();
+            },
       child: Container(
         height: 60.0,
         margin: EdgeInsetsDirectional.only(start: 30.0),

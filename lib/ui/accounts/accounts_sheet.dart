@@ -1,4 +1,3 @@
-// @dart=2.9
 
 // Dart imports:
 import 'dart:async';
@@ -110,10 +109,8 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
   }
 
   void _destroyBus() {
-    if (_accountModifiedSub != null) {
-      _accountModifiedSub.cancel();
+    _accountModifiedSub.cancel();
     }
-  }
 
   Future<void> _changeAccount(Account account, StateSetter setState) async {
     // Change account
@@ -195,11 +192,7 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
                   key: expandedKey,
                   child: Stack(
                     children: <Widget>[
-                      widget.accounts == null
-                          ? Center(
-                              child: Text("Loading"),
-                            )
-                          : ListView.builder(
+                      ListView.builder(
                               padding: EdgeInsets.symmetric(vertical: 20),
                               itemCount: widget.accounts.length,
                               controller: _scrollController,
@@ -260,8 +253,7 @@ class _AppAccountsWidgetState extends State<AppAccountsWidget> {
               //A row with Add Account button
               Row(
                 children: <Widget>[
-                  widget.accounts == null ||
-                          widget.accounts.length >= MAX_ACCOUNTS
+                  widget.accounts.length >= MAX_ACCOUNTS
                       ? SizedBox()
                       : AppButton.buildAppButton(
                           context,

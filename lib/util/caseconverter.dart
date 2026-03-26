@@ -1,7 +1,5 @@
-// @dart=2.9
 
 // Dart imports:
-import 'dart:ui';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
@@ -14,9 +12,9 @@ class CaseChange {
   static String toUpperCase(String input, BuildContext context) {
     Locale locale =
         Locale(StateContainer.of(context).curLanguage.getLocaleString());
-    if (locale != null && locale.languageCode == 'tr') {
+    if (locale.languageCode == 'tr') {
       input = input.replaceAll("i", "İ");
-    } else if (locale != null && locale.languageCode == 'de') {
+    } else if (locale.languageCode == 'de') {
       input = input.replaceAll("ß", "SS");
     }
     return input.toUpperCase();

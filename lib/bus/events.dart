@@ -1,4 +1,3 @@
-// @dart=2.9
 
 export 'balance_get_event.dart';
 export 'history_home_event.dart';

@@ -1,7 +1,5 @@
-// @dart=2.9
 
 // Dart imports:
-import 'dart:ui';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
@@ -313,7 +311,7 @@ class AvailableCurrency extends SettingSelectionItem {
   static AvailableCurrency getBestForLocale(Locale locale) {
     AvailableCurrencyEnum.values.forEach((value) {
       AvailableCurrency currency = AvailableCurrency(value);
-      if (locale != null && locale.countryCode == null) {
+      if (locale.countryCode == null) {
         // Special cases
         if ([
           'AT',

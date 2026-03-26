@@ -1,11 +1,9 @@
-// @dart=2.9
 
 // Flutter imports:
 import 'package:flutter/material.dart';
 
 // Project imports:
 import 'package:my_bismuth_wallet/appstate_container.dart';
-import 'package:my_bismuth_wallet/localization.dart';
 import 'package:my_bismuth_wallet/styles.dart';
 import 'package:my_bismuth_wallet/ui/widgets/app_simpledialog.dart';
 
@@ -13,9 +11,6 @@ class AppDialogs {
   static void showConfirmDialog(
       var context, var title, var content, var buttonText, Function onPressed,
       {String cancelText, Function cancelAction}) {
-    if (cancelText == null) {
-      cancelText = AppLocalization.of(context).cancel.toUpperCase();
-    }
     showAppDialog(
       context: context,
       builder: (BuildContext context) {
@@ -36,10 +31,8 @@ class AppDialogs {
               ),
               onPressed: () {
                 Navigator.of(context).pop();
-                if (cancelAction != null) {
-                  cancelAction();
-                }
-              },
+                cancelAction();
+                            },
             ),
             TextButton(
               child: Container(
@@ -96,10 +89,8 @@ class AnimationLoadingOverlay extends ModalRoute<void> {
 
   @override
   void didComplete(void result) {
-    if (this.onPoppedCallback != null) {
-      this.onPoppedCallback();
-    }
-    super.didComplete(result);
+    this.onPoppedCallback();
+      super.didComplete(result);
   }
 
   @override
