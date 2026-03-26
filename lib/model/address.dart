@@ -1,12 +1,11 @@
-// @dart=2.9
 
 // Dart imports:
 import 'dart:core';
 
 // Object to represent an account address or address URI, and provide useful utilities
 class Address {
-  String _address;
-  String _amount;
+  String _address = '';
+  String _amount = '';
 
   Address(String value) {
     _address = value;
@@ -17,7 +16,6 @@ class Address {
   String get amount => _amount;
 
   String getShortString() {
-    if (_address == null) return "";
     if (_address.length < 21) {
       return _address;
     } else {
@@ -28,7 +26,6 @@ class Address {
   }
 
   String getShortString2() {
-    if (_address == null) return "";
     if (_address.length < 21) {
       return _address;
     } else {
@@ -39,7 +36,6 @@ class Address {
   }
 
   String getShorterString() {
-    if (_address == null) return "";
     if (_address.length < 21) {
       return _address;
     } else {
@@ -50,6 +46,23 @@ class Address {
   }
 
   bool isValid() {
-    return _address == null ? false : true;
+    final String normalized = _address.trim();
+    if (normalized.isEmpty || normalized.contains(' ')) {
+      return false;
+    }
+
+    // Modern Bismuth addresses use the Bis1... base58 format.
+    final RegExp modernAddress = RegExp(r'^Bis1[1-9A-HJ-NP-Za-km-z]{20,80}$');
+    if (modernAddress.hasMatch(normalized)) {
+      return true;
+    }
+
+    // Legacy RSA addresses are the SHA-224 hex digest of the PEM public key.
+    final RegExp legacyRsa = RegExp(r'^[A-Fa-f0-9]{56}$');
+    if (legacyRsa.hasMatch(normalized)) {
+      return true;
+    }
+
+    return false;
   }
 }

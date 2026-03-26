@@ -2,8 +2,6 @@
 //
 //     final serverWalletLegacyResponse = serverWalletLegacyResponseFromJson(jsonString);
 
-// @dart=2.9
-
 // Dart imports:
 import 'dart:convert';
 
@@ -30,16 +28,16 @@ class ServerWalletLegacyResponse {
     this.lastActive,
   });
 
-  String label;
-  String ip;
-  int port;
-  String country;
-  int height;
-  String version;
-  bool active;
-  int clients;
-  int totalSlots;
-  int lastActive;
+  String? label;
+  String? ip;
+  int? port;
+  String? country;
+  int? height;
+  String? version;
+  bool? active;
+  int? clients;
+  int? totalSlots;
+  int? lastActive;
 
   factory ServerWalletLegacyResponse.fromJson(Map<String, dynamic> json) =>
       ServerWalletLegacyResponse(

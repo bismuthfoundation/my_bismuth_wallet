@@ -1,4 +1,3 @@
-// @dart=2.9
 
 // Dart imports:
 import 'dart:async';
@@ -16,7 +15,6 @@ import 'package:my_bismuth_wallet/model/device_lock_timeout.dart';
 import 'package:my_bismuth_wallet/model/vault.dart';
 import 'package:my_bismuth_wallet/service_locator.dart';
 import 'package:my_bismuth_wallet/util/encrypt.dart';
-import 'package:my_bismuth_wallet/util/random_util.dart';
 
 /// Price conversion preference values
 enum PriceConversion { BTC, NONE, HIDDEN }
@@ -70,12 +68,6 @@ class SharedPrefsUtil {
   Future<void> setEncrypted(String key, String value) async {
     // Retrieve/Generate encryption password
     String secret = await sl.get<Vault>().getEncryptionPhrase();
-    if (secret == null) {
-      secret = RandomUtil.generateEncryptionSecret(16) +
-          ":" +
-          RandomUtil.generateEncryptionSecret(8);
-      await sl.get<Vault>().writeEncryptionPhrase(secret);
-    }
     // Encrypt and save
     Salsa20Encryptor encrypter =
         new Salsa20Encryptor(secret.split(":")[0], secret.split(":")[1]);
@@ -85,13 +77,11 @@ class SharedPrefsUtil {
 
   Future<String> getEncrypted(String key) async {
     String secret = await sl.get<Vault>().getEncryptionPhrase();
-    if (secret == null) return null;
     // Decrypt and return
     Salsa20Encryptor encrypter =
         new Salsa20Encryptor(secret.split(":")[0], secret.split(":")[1]);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String encrypted = prefs.get(key);
-    if (encrypted == null) return null;
     return encrypter.decrypt(encrypted);
   }
 
@@ -264,9 +254,6 @@ class SharedPrefsUtil {
 
   Future<DateTime> getLockDate() async {
     String lockDateStr = await get(pin_lock_until);
-    if (lockDateStr == null) {
-      return null;
-    }
     return DateFormat.yMd().add_jms().parseUtc(lockDateStr);
   }
 

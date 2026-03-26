@@ -1,8 +1,6 @@
-// @dart=2.9
 
 // Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 // Package imports:
 import 'package:auto_size_text/auto_size_text.dart';

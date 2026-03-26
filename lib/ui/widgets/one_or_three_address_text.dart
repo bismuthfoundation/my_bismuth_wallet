@@ -1,4 +1,3 @@
-// @dart=2.9
 
 // Flutter imports:
 import 'package:flutter/material.dart';
@@ -185,13 +184,11 @@ class OneOrThreeLineAddressText extends StatelessWidget {
           ],
         );
       case AddressTextType.PRIMARY:
-        Widget contactWidget = contactName != null
-            ? RichText(
+        Widget contactWidget = RichText(
                 textAlign: TextAlign.center,
                 text: TextSpan(
                     text: contactName,
-                    style: AppStyles.textStyleAddressText90(context)))
-            : SizedBox();
+                    style: AppStyles.textStyleAddressText90(context)));
         return Column(
           children: <Widget>[
             contactWidget,
@@ -242,13 +239,11 @@ class OneOrThreeLineAddressText extends StatelessWidget {
           ],
         );
       case AddressTextType.SUCCESS:
-        Widget contactWidget = contactName != null
-            ? RichText(
+        Widget contactWidget = RichText(
                 textAlign: TextAlign.center,
                 text: TextSpan(
                     text: contactName,
-                    style: AppStyles.textStyleAddressSuccess(context)))
-            : SizedBox();
+                    style: AppStyles.textStyleAddressSuccess(context)));
         return Column(
           children: <Widget>[
             contactWidget,

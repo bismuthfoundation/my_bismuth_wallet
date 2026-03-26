@@ -1,4 +1,3 @@
-// @dart=2.9
 
 // Dart imports:
 import 'dart:async';
@@ -52,13 +51,9 @@ class _ContactsListState extends State<ContactsList> {
 
   @override
   void dispose() {
-    if (_contactAddedSub != null) {
-      _contactAddedSub.cancel();
-    }
-    if (_contactRemovedSub != null) {
+    _contactAddedSub.cancel();
       _contactRemovedSub.cancel();
-    }
-    super.dispose();
+      super.dispose();
   }
 
   StreamSubscription<ContactAddedEvent> _contactAddedSub;

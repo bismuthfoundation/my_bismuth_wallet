@@ -1,4 +1,3 @@
-// @dart=2.9
 
 // Flutter imports:
 import 'package:flutter/material.dart';
@@ -121,9 +120,7 @@ class _SendCompleteSheetState extends State<SendCompleteSheet> {
                             ),
                           ),
                           TextSpan(
-                            text: widget.localAmount != null
-                                ? " (${widget.localAmount})"
-                                : "",
+                            text: " (${widget.localAmount})",
                             style: TextStyle(
                               color:
                                   StateContainer.of(context).curTheme.success,
@@ -144,9 +141,7 @@ class _SendCompleteSheetState extends State<SendCompleteSheet> {
                         // "SENT TO" text
                         Text(
                           CaseChange.toUpperCase(
-                              widget.title == null
-                                  ? AppLocalization.of(context).sentTo
-                                  : widget.title,
+                              widget.title,
                               context),
                           style: TextStyle(
                             fontSize: 28.0,

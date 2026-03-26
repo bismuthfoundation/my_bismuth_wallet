@@ -1,4 +1,3 @@
-// @dart=2.9
 
 // Flutter imports:
 import 'package:flutter/material.dart';
@@ -174,16 +173,14 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                                 UIUtil.cancelLockEvent();
                                                 BarcodeScanner.scan()
                                                     .then((result) {
-                                                  if (result != null &&
-                                                      AppSeeds.isValidSeed(
+                                                  if (AppSeeds.isValidSeed(
                                                           result.rawContent)) {
                                                     _seedInputController.text =
                                                         result.rawContent;
                                                     setState(() {
                                                       _seedIsValid = true;
                                                     });
-                                                  } else if (result != null &&
-                                                      AppMnemomics
+                                                  } else if (AppMnemomics
                                                           .validateMnemonic(
                                                               result.rawContent
                                                                   .split(
@@ -223,8 +220,7 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                                 }
                                                 Clipboard.getData("text/plain")
                                                     .then((ClipboardData data) {
-                                                  if (data == null ||
-                                                      data.text == null) {
+                                                  if (data.text == null) {
                                                     return;
                                                   } else if (AppSeeds
                                                       .isValidSeed(data.text)) {
@@ -311,8 +307,7 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                                 UIUtil.cancelLockEvent();
                                                 BarcodeScanner.scan()
                                                     .then((result) {
-                                                  if (result != null &&
-                                                      AppMnemomics
+                                                  if (AppMnemomics
                                                           .validateMnemonic(
                                                               result.rawContent
                                                                   .split(
@@ -322,8 +317,7 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                                     setState(() {
                                                       _mnemonicIsValid = true;
                                                     });
-                                                  } else if (result != null &&
-                                                      AppSeeds.isValidSeed(
+                                                  } else if (AppSeeds.isValidSeed(
                                                           result.rawContent)) {
                                                     _seedInputController.text =
                                                         result.rawContent;
@@ -362,8 +356,7 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                                 }
                                                 Clipboard.getData("text/plain")
                                                     .then((ClipboardData data) {
-                                                  if (data == null ||
-                                                      data.text == null) {
+                                                  if (data.text == null) {
                                                     return;
                                                   } else if (AppMnemomics
                                                       .validateMnemonic(data
@@ -408,16 +401,14 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                                 setState(() {
                                                   _mnemonicError = null;
                                                 });
-                                              } else if (_mnemonicError !=
-                                                  null) {
-                                                if (!text.contains(
-                                                    _mnemonicError
-                                                        .split(' ')[0])) {
-                                                  setState(() {
-                                                    _mnemonicError = null;
-                                                  });
-                                                }
+                                              } else                                              if (!text.contains(
+                                                  _mnemonicError
+                                                      .split(' ')[0])) {
+                                                setState(() {
+                                                  _mnemonicError = null;
+                                                });
                                               }
+                                            
                                               // If valid mnemonic, clear focus/close keyboard
                                               if (AppMnemomics.validateMnemonic(
                                                   text.split(' '))) {
@@ -470,9 +461,7 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                       margin: EdgeInsets.only(top: 5),
                                       child: Text(
                                           !_seedMode
-                                              ? _mnemonicError == null
-                                                  ? ""
-                                                  : _mnemonicError
+                                              ? _mnemonicError
                                               : _showSeedError
                                                   ? AppLocalization.of(context)
                                                       .seedInvalid
@@ -485,11 +474,9 @@ class _IntroImportSeedState extends State<IntroImportSeedPage> {
                                                         .curTheme
                                                         .primary
                                                     : Colors.transparent
-                                                : _mnemonicError != null
-                                                    ? StateContainer.of(context)
+                                                : StateContainer.of(context)
                                                         .curTheme
-                                                        .primary
-                                                    : Colors.transparent,
+                                                        .primary,
                                             fontFamily: 'NunitoSans',
                                             fontWeight: FontWeight.w600,
                                           )),

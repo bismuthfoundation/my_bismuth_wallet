@@ -1,7 +1,5 @@
-// @dart=2.9
 
 // Flutter imports:
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 // Package imports:
@@ -172,7 +170,7 @@ class UpperCaseTextFormatter extends TextInputFormatter {
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
     return TextEditingValue(
-      text: newValue.text?.toUpperCase(),
+      text: newValue.text.toUpperCase(),
       selection: newValue.selection,
     );
   }
@@ -184,7 +182,7 @@ class LowerCaseTextFormatter extends TextInputFormatter {
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
     return TextEditingValue(
-      text: newValue.text?.toLowerCase(),
+      text: newValue.text.toLowerCase(),
       selection: newValue.selection,
     );
   }

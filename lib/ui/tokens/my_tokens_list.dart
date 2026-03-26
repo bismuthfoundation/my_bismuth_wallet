@@ -1,8 +1,6 @@
-// @dart=2.9
 
 // Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 // Package imports:
 import 'package:fluttericon/font_awesome5_icons.dart';
@@ -130,9 +128,7 @@ class _MyTokensListStateState extends State<MyTokensList> {
                                         const AlwaysScrollableScrollPhysics(),
                                     padding:
                                         EdgeInsets.only(top: 15.0, bottom: 15),
-                                    itemCount: _myBisTokenListForDisplay == null
-                                        ? 0
-                                        : _myBisTokenListForDisplay.length,
+                                    itemCount: _myBisTokenListForDisplay.length,
                                     itemBuilder: (context, index) {
                                       // Build
                                       return buildSingleToken(context,

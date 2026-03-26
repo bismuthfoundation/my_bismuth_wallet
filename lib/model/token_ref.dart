@@ -1,4 +1,3 @@
-// @dart=2.9
 
 // Flutter imports:
 import 'package:flutter/material.dart';
@@ -71,13 +70,9 @@ class TokenRef {
         iconData = null;
         break;
     }
-    if (iconData != null) {
-      return Icon(
-        iconData,
-        size: AppFontSizes.small,
-      );
-    } else {
-      return SizedBox();
+    return Icon(
+      iconData,
+      size: AppFontSizes.small,
+    );
     }
-  }
 }

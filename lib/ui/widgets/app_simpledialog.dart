@@ -2,16 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-// @dart=2.9
 
 // Dart imports:
 import 'dart:async';
-import 'dart:ui';
 
 // Flutter imports:
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 // Examples can assume:
 // enum Department { treasury, state }
@@ -197,8 +193,7 @@ class AppAlertDialog extends StatelessWidget {
     this.actions,
     this.semanticLabel,
     this.shape,
-  })  : assert(contentPadding != null),
-        super(key: key);
+  })  : super(key: key);
 
   /// The (optional) title of the dialog is displayed in a large font at the top
   /// of the dialog.
@@ -239,11 +234,11 @@ class AppAlertDialog extends StatelessWidget {
   ///
   /// Typically this is a list of [TextButton] widgets.
   ///
-  /// These widgets will be wrapped in a [ButtonBar], which introduces 8 pixels
+  /// These widgets will be wrapped in a [OverflowBar], which introduces 8 pixels
   /// of padding on each side.
   ///
   /// If the [title] is not null but the [content] _is_ null, then an extra 20
-  /// pixels of padding is added above the [ButtonBar] to separate the [title]
+  /// pixels of padding is added above the [OverflowBar] to separate the [title]
   /// from the [actions].
   final List<Widget> actions;
 
@@ -269,62 +264,33 @@ class AppAlertDialog extends StatelessWidget {
     final List<Widget> children = <Widget>[];
     String label = semanticLabel;
 
-    if (title != null) {
-      children.add(Padding(
-        padding: titlePadding ??
-            EdgeInsetsDirectional.fromSTEB(
-                24.0, 24.0, 24.0, content == null ? 20.0 : 0.0),
+    children.add(Padding(
+      padding: titlePadding ??
+          EdgeInsetsDirectional.fromSTEB(
+              24.0, 24.0, 24.0, 0.0),
+      child: DefaultTextStyle(
+        style: Theme.of(context).textTheme.titleLarge,
+        child: Semantics(child: title, namesRoute: true),
+      ),
+    ));
+  
+    children.add(Flexible(
+      child: Padding(
+        padding: contentPadding,
         child: DefaultTextStyle(
-          style: Theme.of(context).textTheme.headline6,
-          child: Semantics(child: title, namesRoute: true),
+          style: Theme.of(context).textTheme.titleMedium,
+          child: content,
         ),
-      ));
-    } else {
-      switch (defaultTargetPlatform) {
-        case TargetPlatform.iOS:
-          label = semanticLabel;
-          break;
-        case TargetPlatform.android:
-          label = semanticLabel;
-          break;
-        case TargetPlatform.fuchsia:
-          label = semanticLabel ??
-              MaterialLocalizations.of(context)?.alertDialogLabel;
-          break;
-        case TargetPlatform.linux:
-          label = semanticLabel;
-          break;
-
-        case TargetPlatform.macOS:
-          label = semanticLabel;
-          break;
-        case TargetPlatform.windows:
-          label = semanticLabel;
-          break;
-      }
-    }
-
-    if (content != null) {
-      children.add(Flexible(
-        child: Padding(
-          padding: contentPadding,
-          child: DefaultTextStyle(
-            style: Theme.of(context).textTheme.subtitle1,
-            child: content,
-          ),
-        ),
-      ));
-    }
-
-    if (actions != null) {
-      children.add(new ButtonBarTheme(
-        data: ButtonBarThemeData(alignment: MainAxisAlignment.center),
-        child: ButtonBar(
-          children: actions,
-        ),
-      ));
-    }
-
+      ),
+    ));
+  
+    children.add(new ButtonBarTheme(
+      data: ButtonBarThemeData(alignment: MainAxisAlignment.center),
+      child: OverflowBar(
+        children: actions,
+      ),
+    ));
+  
     Widget dialogChild = IntrinsicWidth(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -333,9 +299,8 @@ class AppAlertDialog extends StatelessWidget {
       ),
     );
 
-    if (label != null)
-      dialogChild =
-          Semantics(namesRoute: true, label: label, child: dialogChild);
+    dialogChild =
+        Semantics(namesRoute: true, label: label, child: dialogChild);
 
     return Dialog(child: dialogChild, shape: shape);
   }
@@ -486,9 +451,7 @@ class AppSimpleDialog extends StatelessWidget {
         const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 16.0),
     this.semanticLabel,
     this.shape,
-  })  : assert(titlePadding != null),
-        assert(contentPadding != null),
-        super(key: key);
+  })  : super(key: key);
 
   /// The (optional) title of the dialog is displayed in a large font at the top
   /// of the dialog.
@@ -549,47 +512,19 @@ class AppSimpleDialog extends StatelessWidget {
     final List<Widget> body = <Widget>[];
     String label = semanticLabel;
 
-    if (title != null) {
-      body.add(Padding(
-          padding: titlePadding,
-          child: DefaultTextStyle(
-            style: Theme.of(context).textTheme.headline6,
-            child: Semantics(namesRoute: true, child: title),
-          )));
-    } else {
-      switch (defaultTargetPlatform) {
-        case TargetPlatform.iOS:
-          label = semanticLabel;
-          break;
-        case TargetPlatform.android:
-          label = semanticLabel;
-          break;
-        case TargetPlatform.fuchsia:
-          label =
-              semanticLabel ?? MaterialLocalizations.of(context)?.dialogLabel;
-          break;
-        case TargetPlatform.linux:
-          label = semanticLabel;
-          break;
-
-        case TargetPlatform.macOS:
-          label = semanticLabel;
-          break;
-
-        case TargetPlatform.windows:
-          label = semanticLabel;
-          break;
-      }
-    }
-
-    if (children != null) {
-      body.add(Flexible(
-          child: SingleChildScrollView(
-        padding: contentPadding,
-        child: ListBody(children: children),
-      )));
-    }
-
+    body.add(Padding(
+        padding: titlePadding,
+        child: DefaultTextStyle(
+          style: Theme.of(context).textTheme.titleLarge,
+          child: Semantics(namesRoute: true, child: title),
+        )));
+  
+    body.add(Flexible(
+        child: SingleChildScrollView(
+      padding: contentPadding,
+      child: ListBody(children: children),
+    )));
+  
     Widget dialogChild = IntrinsicWidth(
       stepWidth: 56.0,
       child: ConstrainedBox(
@@ -602,12 +537,11 @@ class AppSimpleDialog extends StatelessWidget {
       ),
     );
 
-    if (label != null)
-      dialogChild = Semantics(
-        namesRoute: true,
-        label: label,
-        child: dialogChild,
-      );
+    dialogChild = Semantics(
+      namesRoute: true,
+      label: label,
+      child: dialogChild,
+    );
     return Dialog(child: dialogChild, shape: shape);
   }
 }
@@ -669,7 +603,7 @@ Future<T> showAppDialog<T>({
       Widget child,
   WidgetBuilder builder,
 }) {
-  assert(child == null || builder == null);
+  assert(builder == null);
   assert(debugCheckHasMaterialLocalizations(context));
   return showGeneralDialog(
     context: context,
@@ -679,9 +613,7 @@ Future<T> showAppDialog<T>({
       final Widget pageChild = child ?? Builder(builder: builder);
       return SafeArea(
         child: Builder(builder: (BuildContext context) {
-          return theme != null
-              ? Theme(data: theme, child: pageChild)
-              : pageChild;
+          return Theme(data: theme, child: pageChild);
         }),
       );
     },

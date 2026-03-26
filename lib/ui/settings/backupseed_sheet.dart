@@ -1,4 +1,3 @@
-// @dart=2.9
 
 // Dart imports:
 import 'dart:async';
@@ -177,10 +176,8 @@ class AppSeedBackupSheet {
                                     // Set copied style
                                     _mnemonicCopied = true;
                                   });
-                                  if (_mnemonicCopiedTimer != null) {
-                                    _mnemonicCopiedTimer.cancel();
-                                  }
-                                  _mnemonicCopiedTimer = new Timer(
+                                  _mnemonicCopiedTimer.cancel();
+                                                                  _mnemonicCopiedTimer = new Timer(
                                       const Duration(milliseconds: 1000), () {
                                     try {
                                       setState(() {
@@ -211,10 +208,8 @@ class AppSeedBackupSheet {
                                     // Set copied style
                                     _seedCopied = true;
                                   });
-                                  if (_seedCopiedTimer != null) {
-                                    _seedCopiedTimer.cancel();
-                                  }
-                                  _seedCopiedTimer = new Timer(
+                                  _seedCopiedTimer.cancel();
+                                                                  _seedCopiedTimer = new Timer(
                                       const Duration(milliseconds: 1000), () {
                                     setState(() {
                                       _seedCopied = false;

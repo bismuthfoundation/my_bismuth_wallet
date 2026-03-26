@@ -1,4 +1,3 @@
-// @dart=2.9
 
 // Flutter imports:
 import 'package:flutter/material.dart';
@@ -118,12 +117,10 @@ class _DisablePasswordSheetState extends State<DisablePasswordSheet> {
                                   maxLines: 1,
                                   autocorrect: false,
                                   onChanged: (String newText) {
-                                    if (passwordError != null) {
-                                      setState(() {
-                                        passwordError = null;
-                                      });
-                                    }
-                                  },
+                                    setState(() {
+                                      passwordError = null;
+                                    });
+                                                                    },
                                   hintText: AppLocalization.of(context)
                                       .enterPasswordHint,
                                   keyboardType: TextInputType.text,
@@ -142,9 +139,7 @@ class _DisablePasswordSheetState extends State<DisablePasswordSheet> {
                                   alignment: AlignmentDirectional(0, 0),
                                   margin: EdgeInsets.only(top: 3),
                                   child: Text(
-                                      this.passwordError == null
-                                          ? ""
-                                          : passwordError,
+                                      passwordError,
                                       style: TextStyle(
                                         fontSize: 14.0,
                                         color: StateContainer.of(context)

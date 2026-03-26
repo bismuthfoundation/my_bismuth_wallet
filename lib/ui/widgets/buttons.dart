@@ -1,4 +1,3 @@
-// @dart=2.9
 
 // Flutter imports:
 import 'package:flutter/material.dart';
@@ -42,7 +41,7 @@ class AppButton {
                   maxLines: 1,
                   stepGranularity: 0.5),
               onPressed: () {
-                if (onPressed != null && !disabled) {
+                if (!disabled) {
                   onPressed();
                 }
                 return;
@@ -72,7 +71,7 @@ class AppButton {
                 stepGranularity: 0.5,
               ),
               onPressed: () {
-                if (onPressed != null && !disabled) {
+                if (!disabled) {
                   onPressed();
                 }
                 return;
@@ -99,7 +98,7 @@ class AppButton {
                 stepGranularity: 0.5,
               ),
               onPressed: () {
-                if (onPressed != null && !disabled) {
+                if (!disabled) {
                   onPressed();
                 }
                 return;
@@ -127,10 +126,8 @@ class AppButton {
                 stepGranularity: 0.5,
               ),
               onPressed: () {
-                if (onPressed != null) {
-                  onPressed();
-                }
-                return;
+                onPressed();
+                              return;
               },
             ),
           ),
@@ -155,10 +152,8 @@ class AppButton {
                 stepGranularity: 0.5,
               ),
               onPressed: () {
-                if (onPressed != null) {
-                  onPressed();
-                }
-                return;
+                onPressed();
+                              return;
               },
             ),
           ),

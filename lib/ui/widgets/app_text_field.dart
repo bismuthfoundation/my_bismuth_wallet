@@ -1,4 +1,3 @@
-// @dart=2.9
 
 // Flutter imports:
 import 'package:flutter/material.dart';
@@ -21,7 +20,7 @@ class TextFieldButton extends StatelessWidget {
         width: 48,
         child: TextButton(
           onPressed: () {
-            onPressed != null ? onPressed() : null;
+            onPressed();
           },
           child: Icon(icon,
               size: 20, color: StateContainer.of(context).curTheme.icon),
@@ -109,97 +108,6 @@ class _AppTextFieldState extends State<AppTextField> {
           color: StateContainer.of(context).curTheme.backgroundDarkest,
           borderRadius: BorderRadius.circular(25),
         ),
-        child: widget.overrideTextFieldWidget == null
-            ? Stack(alignment: AlignmentDirectional.center, children: <Widget>[
-                TextField(
-                    // User defined fields
-                    textAlign: widget.textAlign,
-                    keyboardAppearance: widget.keyboardAppearance,
-                    autocorrect: widget.autocorrect,
-                    maxLines: widget.maxLines,
-                    focusNode: widget.focusNode,
-                    controller: widget.controller,
-                    cursorColor: widget.cursorColor ??
-                        StateContainer.of(context).curTheme.primary,
-                    inputFormatters: widget.inputFormatters,
-                    textInputAction: widget.textInputAction,
-                    keyboardType: widget.keyboardType,
-                    obscureText: widget.obscureText,
-                    autofocus: widget.autofocus,
-                    onSubmitted: widget.onSubmitted != null
-                        ? widget.onSubmitted
-                        : (text) {
-                            if (widget.textInputAction ==
-                                TextInputAction.done) {
-                              FocusScope.of(context).unfocus();
-                            }
-                          },
-                    onChanged: widget.onChanged,
-                    // Style
-                    style: widget.style,
-                    // Input decoration
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        // Hint
-                        hintText:
-                            widget.hintText == null ? "" : widget.hintText,
-                        hintStyle: TextStyle(
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w100,
-                          fontFamily: 'Roboto',
-                          color: StateContainer.of(context).curTheme.text20,
-                        ),
-                        // First button
-                        prefixIcon: widget.prefixButton == null
-                            ? Container(width: 0, height: 0)
-                            : Container(width: 48, height: 48),
-                        suffixIcon: widget.suffixButton == null
-                            ? Container(width: 0, height: 0)
-                            : Container(width: 48, height: 48))),
-                // Buttons
-                Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          widget.fadePrefixOnCondition != null &&
-                                  widget.prefixButton != null
-                              ? AnimatedCrossFade(
-                                  duration: Duration(
-                                      milliseconds:
-                                          widget.buttonFadeDurationMs),
-                                  firstChild: widget.prefixButton,
-                                  secondChild: SizedBox(height: 48, width: 48),
-                                  crossFadeState:
-                                      widget.prefixShowFirstCondition
-                                          ? CrossFadeState.showFirst
-                                          : CrossFadeState.showSecond,
-                                )
-                              : widget.prefixButton != null
-                                  ? widget.prefixButton
-                                  : SizedBox(),
-                          // Second (suffix) button
-                          widget.fadeSuffixOnCondition != null &&
-                                  widget.suffixButton != null
-                              ? AnimatedCrossFade(
-                                  duration: Duration(
-                                      milliseconds:
-                                          widget.buttonFadeDurationMs),
-                                  firstChild: widget.suffixButton,
-                                  secondChild: SizedBox(height: 48, width: 48),
-                                  crossFadeState:
-                                      widget.suffixShowFirstCondition
-                                          ? CrossFadeState.showFirst
-                                          : CrossFadeState.showSecond,
-                                )
-                              : widget.suffixButton != null
-                                  ? widget.suffixButton
-                                  : SizedBox()
-                        ])
-                  ],
-                )
-              ])
-            : widget.overrideTextFieldWidget);
+        child: widget.overrideTextFieldWidget);
   }
 }

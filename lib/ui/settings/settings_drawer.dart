@@ -1,4 +1,3 @@
-// @dart=2.9
 
 // Dart imports:
 import 'dart:async';
@@ -40,7 +39,6 @@ import 'package:my_bismuth_wallet/ui/settings/backupseed_sheet.dart';
 import 'package:my_bismuth_wallet/ui/settings/contacts_widget.dart';
 import 'package:my_bismuth_wallet/ui/settings/custom_url_widget.dart';
 import 'package:my_bismuth_wallet/ui/settings/disable_password_sheet.dart';
-import 'package:my_bismuth_wallet/ui/settings/set_password_sheet.dart';
 import 'package:my_bismuth_wallet/ui/settings/settings_list_item.dart';
 import 'package:my_bismuth_wallet/ui/settings/tokens_widget.dart';
 import 'package:my_bismuth_wallet/ui/util/ui_util.dart';
@@ -50,8 +48,6 @@ import 'package:my_bismuth_wallet/ui/widgets/sheet_util.dart';
 import 'package:my_bismuth_wallet/util/biometrics.dart';
 import 'package:my_bismuth_wallet/util/hapticutil.dart';
 import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
-import '../../appstate_container.dart';
-import '../../util/sharedprefsutil.dart';
 
 class SettingsSheet extends StatefulWidget {
   final int eggPrice;
@@ -352,22 +348,20 @@ class _SettingsSheetState extends State<SettingsSheet>
                 children: _buildCurrencyOptions(),
               );
             });
-    if (selection != null) {
-      sl
-          .get<SharedPrefsUtil>()
-          .setCurrency(AvailableCurrency(selection))
-          .then((result) {
-        if (StateContainer.of(context).curCurrency.currency != selection) {
-          setState(() {
-            StateContainer.of(context).curCurrency =
-                AvailableCurrency(selection);
-            StateContainer.of(context)
-                .updateCurrency(AvailableCurrency(selection));
-          });
-        }
-      });
+    sl
+        .get<SharedPrefsUtil>()
+        .setCurrency(AvailableCurrency(selection))
+        .then((result) {
+      if (StateContainer.of(context).curCurrency.currency != selection) {
+        setState(() {
+          StateContainer.of(context).curCurrency =
+              AvailableCurrency(selection);
+          StateContainer.of(context)
+              .updateCurrency(AvailableCurrency(selection));
+        });
+      }
+    });
     }
-  }
 
   List<Widget> _buildLanguageOptions() {
     List<Widget> ret = new List();
@@ -403,20 +397,18 @@ class _SettingsSheetState extends State<SettingsSheet>
             children: _buildLanguageOptions(),
           );
         });
-    if (selection != null) {
-      sl
-          .get<SharedPrefsUtil>()
-          .setLanguage(LanguageSetting(selection))
-          .then((result) {
-        if (StateContainer.of(context).curLanguage.language != selection) {
-          setState(() {
-            StateContainer.of(context)
-                .updateLanguage(LanguageSetting(selection));
-          });
-        }
-      });
+    sl
+        .get<SharedPrefsUtil>()
+        .setLanguage(LanguageSetting(selection))
+        .then((result) {
+      if (StateContainer.of(context).curLanguage.language != selection) {
+        setState(() {
+          StateContainer.of(context)
+              .updateLanguage(LanguageSetting(selection));
+        });
+      }
+    });
     }
-  }
 
   List<Widget> _buildLockTimeoutOptions() {
     List<Widget> ret = new List();
@@ -634,8 +626,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                       Row(
                         children: <Widget>[
                           // Second Account
-                          StateContainer.of(context).recentLast != null
-                              ? Container(
+                          Container(
                                   child: Stack(
                                     children: <Widget>[
                                       Center(
@@ -704,11 +695,9 @@ class _SettingsSheetState extends State<SettingsSheet>
                                       ),
                                     ],
                                   ),
-                                )
-                              : SizedBox(),
+                                ),
                           // Third Account
-                          StateContainer.of(context).recentSecondLast != null
-                              ? Container(
+                          Container(
                                   child: Stack(
                                     children: <Widget>[
                                       Center(
@@ -776,8 +765,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                                       ),
                                     ],
                                   ),
-                                )
-                              : SizedBox(),
+                                ),
                           // Account switcher
                           Container(
                             height: 36,
@@ -850,13 +838,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                           // Main account address
                           Container(
                             child: Text(
-                              StateContainer.of(context).wallet != null &&
-                                      StateContainer.of(context)
-                                              .wallet
-                                              .address !=
-                                          null
-                                  ? StateContainer.of(context).wallet?.address
-                                  : "",
+                              StateContainer.of(context).wallet.address,
                               style: TextStyle(
                                 fontFamily: "OverpassMono",
                                 fontWeight: FontWeight.w100,
@@ -1437,20 +1419,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                             _authMethodDialog)
                         : null,
                     // Authenticate on Launch
-                    StateContainer.of(context).encryptedSecret == null
-                        ? Column(children: <Widget>[
-                            Divider(
-                                height: 2,
-                                color:
-                                    StateContainer.of(context).curTheme.text15),
-                            AppSettings.buildSettingsListItemDoubleLine(
-                                context,
-                                AppLocalization.of(context).lockAppSetting,
-                                _curUnlockSetting,
-                                AppIcons.lock,
-                                _lockDialog),
-                          ])
-                        : SizedBox(),
+                    SizedBox(),
                     // Authentication Timer
                     Divider(
                       height: 2,
@@ -1466,22 +1435,7 @@ class _SettingsSheetState extends State<SettingsSheet>
                           StateContainer.of(context).encryptedSecret == null,
                     ),
                     // Encrypt option
-                    StateContainer.of(context).encryptedSecret == null
-                        ? Column(children: <Widget>[
-                            Divider(
-                                height: 2,
-                                color:
-                                    StateContainer.of(context).curTheme.text15),
-                            AppSettings.buildSettingsListItemSingleLine(
-                                context,
-                                AppLocalization.of(context).setWalletPassword,
-                                AppIcons.walletpassword, onPressed: () {
-                              Sheets.showAppHeightNineSheet(
-                                  context: context, widget: SetPasswordSheet());
-                            })
-                          ])
-                        : // Decrypt option
-                        Column(children: <Widget>[
+                    Column(children: <Widget>[
                             Divider(
                                 height: 2,
                                 color:
@@ -1538,7 +1492,7 @@ class _SettingsSheetState extends State<SettingsSheet>
         description: AppLocalization.of(context).pinSeedBackup,
       );
     }));
-    if (auth != null && auth) {
+    if (auth) {
       await Future.delayed(Duration(milliseconds: 200));
       Navigator.of(context).pop();
       StateContainer.of(context).getSeed().then((seed) {

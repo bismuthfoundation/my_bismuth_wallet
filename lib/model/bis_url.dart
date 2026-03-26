@@ -1,135 +1,69 @@
-// @dart=2.9
-
-// Dart imports:
 import 'dart:convert';
+import 'dart:typed_data';
 
-// Package imports:
-import 'package:hash/hash.dart';
-import 'package:hex/hex.dart';
-
-// Project imports:
 import 'package:my_bismuth_wallet/model/address.dart';
-import 'package:my_bismuth_wallet/model/db/appdb.dart';
-import 'package:my_bismuth_wallet/model/db/hiveDB.dart';
 import 'package:my_bismuth_wallet/network/model/response/address_txs_response.dart';
-import 'package:my_bismuth_wallet/service_locator.dart';
-import 'package:my_bismuth_wallet/util/base_85_decode.dart';
 
 class BisUrl {
-  String contactName;
-  String address;
-  String amount;
-  String operation;
-  String openfield;
-  String comment;
-  bool isTokenToSend;
-  int tokenToSendQty;
-  String tokenName;
+  String? contactName;
+  String? address;
+  String? amount;
+  String? operation;
+  String? openfield;
+  String? comment;
+  bool? isTokenToSend;
+  int? tokenToSendQty;
+  String? tokenName;
 
-  BisUrl(
-      {this.contactName,
-      this.address,
-      this.amount,
-      this.operation,
-      this.openfield,
-      this.comment,
-      this.isTokenToSend,
-      this.tokenName,
-      this.tokenToSendQty});
+  BisUrl({
+    this.contactName,
+    this.address,
+    this.amount,
+    this.operation,
+    this.openfield,
+    this.comment,
+    this.isTokenToSend,
+    this.tokenName,
+    this.tokenToSendQty,
+  });
 
   Future<BisUrl> getInfo(String link) async {
-    BisUrl _bisUrl = new BisUrl();
-    bool bisUrlLegacy = true;
-    String checksum;
-    //print("link: " + link);
-    if (link.contains("bis://pay/") == true) {
-      link = link.replaceAll("bis://pay/", "");
+    final BisUrl bisUrl = BisUrl();
+    bool legacyFormat = true;
+
+    if (link.contains('bis://pay/')) {
+      link = link.replaceAll('bis://pay/', '');
     } else {
-      bisUrlLegacy = false;
-      link = link.replaceAll("bis://", "");
-    }
-    List<String> paramBisUrl = link.split("/");
-    Address address;
-    Contact contact;
-
-    if (bisUrlLegacy == false) {
-      // New format url based b64urlsafe
-      if (paramBisUrl.length > 0) {
-        address = Address(paramBisUrl[0]);
-      }
-      if (paramBisUrl.length > 1) {
-        amount = paramBisUrl[1];
-      }
-      if (paramBisUrl.length > 2) {
-        operation = String.fromCharCodes(base64Url.decode(paramBisUrl[2]));
-      }
-      if (paramBisUrl.length > 3) {
-        openfield = String.fromCharCodes(base64Url.decode(paramBisUrl[3]));
-      }
-      if (paramBisUrl.length > 4) {
-        checksum = HEX.encode(base64Url.decode(paramBisUrl[4]));
-        /* print("check fourni : " + checksum);
-        String url = "bis://" +
-            paramBisUrl[0] +
-            "/" +
-            paramBisUrl[1] +
-            "/" +
-            paramBisUrl[2] +
-            "/" +
-            paramBisUrl[3];
-        print("check url : " + HEX.encode(Blake2bHash.hashWithDigestSize(4, base64Url.decode(paramBisUrl[4]))));*/
-
-      }
-    } else {
-      // Old format url based base85
-      if (paramBisUrl.length > 0) {
-        address = Address(paramBisUrl[0]);
-      }
-      if (paramBisUrl.length > 1) {
-        amount = paramBisUrl[1];
-      }
-      if (paramBisUrl.length > 2) {
-        operation = Base85Decode().decode(paramBisUrl[2]);
-      }
-      if (paramBisUrl.length > 3) {
-        openfield = Base85Decode().decode(paramBisUrl[3]);
-      }
-      if (paramBisUrl.length > 4) {
-        var md5 = MD5();
-        var hashMD5 = md5.update(utf8.encode(paramBisUrl[4])).digest();
-        //print("hashMD5 : " + Base85Decode().decode(HEX.encode(hashMD5)));
-        /*print("checksumMD5 : " +
-            Base85Decode().encode("bis://pay/" +
-                address.address +
-                "/" +
-                amount +
-                "/" +
-                operation +
-                "/" +
-                openfield));*/
-      }
-    }
-    if (address != null &&
-        address.address != null &&
-        address.address.length > 0) {
-      // See if a contact
-      contact = await sl.get<DBHelper>().getContactWithAddress(address.address);
-      if (contact != null) {
-        contactName = contact.name;
-      }
+      legacyFormat = false;
+      link = link.replaceAll('bis://', '');
     }
 
-    //print("amount : " + amount);
-    //print("operation : " + operation);
-    //print("openfield : " + openfield);
+    final List<String> params = link.split('/');
+    final Address parsedAddress =
+        params.isNotEmpty ? Address(params[0]) : Address('');
+
+    if (params.length > 1) {
+      amount = params[1];
+    }
+    if (params.length > 2) {
+      operation = legacyFormat
+          ? _decodeLegacyBase85(params[2])
+          : _decodeUrlSafeBase64(params[2]);
+    }
+    if (params.length > 3) {
+      openfield = legacyFormat
+          ? _decodeLegacyBase85(params[3])
+          : _decodeUrlSafeBase64(params[3]);
+    }
+
     isTokenToSend = false;
     if (operation == AddressTxsResponseResult.TOKEN_TRANSFER) {
       isTokenToSend = true;
-      List<String> openfieldSplit = openfield.split(":");
-      if (openfieldSplit.length > 0 && openfieldSplit[0].length > 0) {
+      final List<String> openfieldSplit = (openfield ?? '').split(':');
+      if (openfieldSplit.isNotEmpty && openfieldSplit[0].isNotEmpty) {
         tokenName = openfieldSplit[0];
       }
-      if (openfieldSplit.length > 1 && openfieldSplit[1].length > 0) {
+      if (openfieldSplit.length > 1 && openfieldSplit[1].isNotEmpty) {
         tokenToSendQty = int.tryParse(openfieldSplit[1]);
       }
       if (openfieldSplit.length > 3 && openfieldSplit[3].length > 1) {
@@ -138,22 +72,82 @@ class BisUrl {
             .replaceAll('"', '');
       }
     }
-    if (address != null &&
-        address.address != null &&
-        address.address.length > 0) {
-      _bisUrl.address = address.address;
-    } else {
-      _bisUrl.address = "";
+
+    bisUrl.address = parsedAddress.address;
+    bisUrl.isTokenToSend = isTokenToSend;
+    bisUrl.tokenToSendQty = tokenToSendQty;
+    bisUrl.amount = amount;
+    bisUrl.openfield = openfield;
+    bisUrl.comment = comment;
+    bisUrl.contactName = null;
+    bisUrl.operation = operation;
+    bisUrl.tokenName = tokenName;
+    return bisUrl;
+  }
+
+  String _decodeUrlSafeBase64(String value) {
+    if (value.isEmpty) {
+      return '';
+    }
+    final String normalized =
+        value.padRight(value.length + ((4 - value.length % 4) % 4), '=');
+    return utf8.decode(base64Url.decode(normalized));
+  }
+
+  String _decodeLegacyBase85(String value) {
+    if (value.trim().isEmpty) {
+      return '';
     }
 
-    _bisUrl.isTokenToSend = isTokenToSend;
-    _bisUrl.tokenToSendQty = tokenToSendQty == null ? 0 : tokenToSendQty;
-    _bisUrl.amount = amount == null ? "0" : amount;
-    _bisUrl.openfield = openfield == null ? "" : openfield;
-    _bisUrl.comment = comment == null ? "" : comment;
-    _bisUrl.contactName = contactName == null ? "" : contactName;
-    _bisUrl.operation = operation == null ? "" : operation;
-    _bisUrl.tokenName = tokenName == null ? "" : tokenName;
-    return _bisUrl;
+    const String alphabet =
+        '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!#\$%&()*+-;<=>?@^_`{|}~';
+    final List<int> baseMap = List<int>.filled(256, 255);
+    for (int i = 0; i < alphabet.length; i++) {
+      baseMap[alphabet.codeUnitAt(i)] = i;
+    }
+
+    const List<int> ignored = <int>[0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x20];
+    final Uint8List bytes = Uint8List.fromList(value.codeUnits);
+    final int dataLength = bytes.length;
+    int padding = dataLength % 5 == 0 ? 0 : 5 - dataLength % 5;
+    final Uint8List result = Uint8List(4 * (dataLength / 5).ceil());
+
+    int nextValidByte(int index) {
+      while (index < dataLength && ignored.contains(bytes[index])) {
+        padding = (padding + 1) % 5;
+        index++;
+      }
+      return index;
+    }
+
+    int writeIndex = 0;
+    for (int i = 0; i < dataLength;) {
+      int value85 = 0;
+
+      i = nextValidByte(i);
+      value85 = baseMap[bytes[i]] * 52200625;
+
+      i = nextValidByte(i + 1);
+      value85 += (i >= dataLength ? 84 : baseMap[bytes[i]]) * 614125;
+
+      i = nextValidByte(i + 1);
+      value85 += (i >= dataLength ? 84 : baseMap[bytes[i]]) * 7225;
+
+      i = nextValidByte(i + 1);
+      value85 += (i >= dataLength ? 84 : baseMap[bytes[i]]) * 85;
+
+      i = nextValidByte(i + 1);
+      value85 += (i >= dataLength ? 84 : baseMap[bytes[i]]);
+
+      i = nextValidByte(i + 1);
+
+      result[writeIndex] = value85 >> 24;
+      result[writeIndex + 1] = value85 >> 16;
+      result[writeIndex + 2] = value85 >> 8;
+      result[writeIndex + 3] = value85 & 0xff;
+      writeIndex += 4;
+    }
+
+    return String.fromCharCodes(result.sublist(0, writeIndex - padding));
   }
 }

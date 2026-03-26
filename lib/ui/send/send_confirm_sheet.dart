@@ -1,4 +1,3 @@
-// @dart=2.9
 
 // Dart imports:
 import 'dart:async';
@@ -105,7 +104,7 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
             .get<DBHelper>()
             .getContactWithAddress(widget.destination)
             .then((value) => contact);
-        String contactName = contact == null ? null : contact.name;
+        String contactName = null;
         Navigator.of(context).popUntil(RouteUtils.withNameLike('/home'));
         StateContainer.of(context).requestUpdate();
         Sheets.showAppHeightNineSheet(
@@ -123,13 +122,9 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
   }
 
   void _destroyBus() {
-    if (_authSub != null) {
-      _authSub.cancel();
-    }
-    if (_sendTxSub != null) {
+    _authSub.cancel();
       _sendTxSub.cancel();
     }
-  }
 
   @override
   void initState() {
@@ -194,9 +189,7 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
                       children: <Widget>[
                         Text(
                           CaseChange.toUpperCase(
-                              widget.title == null
-                                  ? AppLocalization.of(context).sending
-                                  : widget.title,
+                              widget.title,
                               context),
                           style: AppStyles.textStyleHeader(context),
                         ),
@@ -248,9 +241,7 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
                                       ),
                                     ),
                                     TextSpan(
-                                      text: widget.localCurrency != null
-                                          ? " (${widget.localCurrency})"
-                                          : "",
+                                      text: " (${widget.localCurrency})",
                                       style: TextStyle(
                                         color: StateContainer.of(context)
                                             .curTheme
@@ -678,7 +669,7 @@ class _SendConfirmSheetState extends State<SendConfirmSheet> {
       );
     }));
     //print("authenticateWithPin - auth : " + auth.toString());
-    if (auth != null && auth) {
+    if (auth) {
       await Future.delayed(Duration(milliseconds: 200));
       //print("authenticateWithPin - fire AuthenticatedEvent");
       EventTaxiImpl.singleton().fire(AuthenticatedEvent(AUTH_EVENT_TYPE.SEND));

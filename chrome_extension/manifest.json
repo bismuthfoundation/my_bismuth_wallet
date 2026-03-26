@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "My Bismuth Wallet",
+  "short_name": "Bismuth",
+  "version": "__VERSION__",
+  "description": "My Bismuth Wallet as a Chrome browser extension.",
+  "action": {
+    "default_title": "My Bismuth Wallet"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "options_ui": {
+    "page": "index.html#/options",
+    "open_in_tab": true
+  },
+  "icons": {
+    "16": "favicon.png",
+    "48": "icons/Icon-192.png",
+    "128": "icons/Icon-512.png"
+  },
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://bismuth.world/*",
+    "https://bismuth.im/*",
+    "https://api.coingecko.com/*",
+    "https://fonts.gstatic.com/*",
+    "ws://*/*",
+    "wss://*/*"
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; connect-src 'self' https://bismuth.world https://bismuth.im https://api.coingecko.com https://fonts.gstatic.com ws://* wss://*;"
+  }
+}

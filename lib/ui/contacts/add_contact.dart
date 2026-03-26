@@ -1,4 +1,3 @@
-// @dart=2.9
 
 // Flutter imports:
 import 'package:flutter/material.dart';
@@ -102,12 +101,8 @@ class _AddContactSheetState extends State<AddContactSheet> {
 
   /// Return true if textfield should be shown, false if colorized should be shown
   bool _shouldShowTextField() {
-    if (widget.address != null) {
-      return false;
-    } else if (_addressValidAndUnfocused) {
-      return false;
-    }
-    return true;
+    return false;
+      return true;
   }
 
   @override
@@ -176,9 +171,7 @@ class _AddContactSheetState extends State<AddContactSheet> {
                     padding: EdgeInsets.symmetric(horizontal: 30),
                     focusNode: _nameFocusNode,
                     controller: _nameController,
-                    textInputAction: widget.address != null
-                        ? TextInputAction.done
-                        : TextInputAction.next,
+                    textInputAction: TextInputAction.done,
                     hintText: _showNameHint
                         ? AppLocalization.of(context).contactNameHint
                         : "",
@@ -194,17 +187,8 @@ class _AddContactSheetState extends State<AddContactSheet> {
                       ContactInputFormatter()
                     ],
                     onSubmitted: (text) {
-                      if (widget.address == null) {
-                        if (!Address(_addressController.text).isValid()) {
-                          FocusScope.of(context)
-                              .requestFocus(_addressFocusNode);
-                        } else {
-                          FocusScope.of(context).unfocus();
-                        }
-                      } else {
-                        FocusScope.of(context).unfocus();
-                      }
-                    },
+                      FocusScope.of(context).unfocus();
+                                        },
                   ),
                   // Enter Name Error Container
                   Container(
@@ -242,22 +226,17 @@ class _AddContactSheetState extends State<AddContactSheet> {
                           UIUtil.cancelLockEvent();
                           String scanResult = await UserDataUtil.getQRData(
                               DataType.ADDRESS, context);
-                          if (scanResult == null) {
-                            UIUtil.showSnackbar(
-                                AppLocalization.of(context).qrInvalidAddress,
-                                context);
-                          } else if (scanResult != null &&
-                              !QRScanErrs.ERROR_LIST.contains(scanResult)) {
-                            if (mounted) {
-                              setState(() {
-                                _addressController.text = scanResult;
-                                _addressValidationText = "";
-                                _addressValid = true;
-                                _addressValidAndUnfocused = true;
-                              });
-                              _addressFocusNode.unfocus();
-                            }
+                          if (!QRScanErrs.ERROR_LIST.contains(scanResult)) {
+                          if (mounted) {
+                            setState(() {
+                              _addressController.text = scanResult;
+                              _addressValidationText = "";
+                              _addressValid = true;
+                              _addressValidAndUnfocused = true;
+                            });
+                            _addressFocusNode.unfocus();
                           }
+                        }
                         }),
                     fadePrefixOnCondition: true,
                     prefixShowFirstCondition: _showPasteButton,
@@ -269,21 +248,14 @@ class _AddContactSheetState extends State<AddContactSheet> {
                         }
                         String data = await UserDataUtil.getClipboardText(
                             DataType.ADDRESS);
-                        if (data != null) {
-                          setState(() {
-                            _addressValid = true;
-                            _showPasteButton = false;
-                            _addressController.text = data;
-                            _addressValidAndUnfocused = true;
-                          });
-                          _addressFocusNode.unfocus();
-                        } else {
-                          setState(() {
-                            _showPasteButton = true;
-                            _addressValid = false;
-                          });
-                        }
-                      },
+                        setState(() {
+                          _addressValid = true;
+                          _showPasteButton = false;
+                          _addressController.text = data;
+                          _addressValidAndUnfocused = true;
+                        });
+                        _addressFocusNode.unfocus();
+                                            },
                     ),
                     fadeSuffixOnCondition: true,
                     suffixShowFirstCondition: _showPasteButton,
@@ -311,10 +283,8 @@ class _AddContactSheetState extends State<AddContactSheet> {
                     overrideTextFieldWidget: !_shouldShowTextField()
                         ? GestureDetector(
                             onTap: () {
-                              if (widget.address != null) {
-                                return;
-                              }
-                              setState(() {
+                              return;
+                                                          setState(() {
                                 _addressValidAndUnfocused = false;
                               });
                               Future.delayed(Duration(milliseconds: 50), () {
@@ -324,9 +294,7 @@ class _AddContactSheetState extends State<AddContactSheet> {
                             },
                             child: UIUtil.threeLineAddressText(
                                 context,
-                                widget.address != null
-                                    ? widget.address
-                                    : _addressController.text))
+                                widget.address))
                         : null,
                   ),
                   // Enter Address Error Container
@@ -359,9 +327,7 @@ class _AddContactSheetState extends State<AddContactSheet> {
                       if (await validateForm()) {
                         Contact newContact = Contact(
                             name: _nameController.text,
-                            address: widget.address == null
-                                ? _addressController.text
-                                : widget.address);
+                            address: widget.address);
                         await sl.get<DBHelper>().saveContact(newContact);
 
                         EventTaxiImpl.singleton()
@@ -400,32 +366,6 @@ class _AddContactSheetState extends State<AddContactSheet> {
 
   Future<bool> validateForm() async {
     bool isValid = true;
-    // Address Validations
-    // Don't validate address if it came pre-filled in
-    if (widget.address == null) {
-      if (_addressController.text.isEmpty) {
-        isValid = false;
-        setState(() {
-          _addressValidationText = AppLocalization.of(context).addressMising;
-        });
-      } else if (!Address(_addressController.text).isValid()) {
-        isValid = false;
-        setState(() {
-          _addressValidationText = AppLocalization.of(context).invalidAddress;
-        });
-      } else {
-        _addressFocusNode.unfocus();
-        bool addressExists = await sl
-            .get<DBHelper>()
-            .contactExistsWithAddress(_addressController.text);
-        if (addressExists) {
-          setState(() {
-            isValid = false;
-            _addressValidationText = AppLocalization.of(context).contactExists;
-          });
-        }
-      }
-    }
     // Name Validations
     if (_nameController.text.isEmpty) {
       isValid = false;

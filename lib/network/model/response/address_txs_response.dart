@@ -2,7 +2,6 @@
 //
 //     final addressTxsResponse = addressTxsResponseFromJson(jsonString);
 
-// @dart=2.9
 
 // Project imports:
 import 'package:my_bismuth_wallet/model/address.dart';
@@ -12,15 +11,15 @@ import 'package:my_bismuth_wallet/util/numberutil.dart';
 class AddressTxsResponse {
   AddressTxsResponse({this.result, this.tokens});
 
-  List<AddressTxsResponseResult> result;
-  List<BisToken> tokens;
+  List<AddressTxsResponseResult>? result;
+  List<BisToken>? tokens;
 }
 
 class BisToken {
   BisToken({this.tokenName, this.tokensQuantity, this.tokenMessage});
-  String tokenName;
-  int tokensQuantity;
-  String tokenMessage;
+  String? tokenName;
+  int? tokensQuantity;
+  String? tokenMessage;
 }
 
 class AddressTxsResponseResult {
@@ -38,22 +37,24 @@ class AddressTxsResponseResult {
       this.operation,
       this.openfield,
       this.type,
-      this.hash});
+      this.hash,
+      this.isPending = false});
 
-  int blockHeight;
-  DateTime timestamp;
-  String from;
-  String recipient;
-  String amount;
-  String signature;
-  String publicKey;
-  String blockHash;
-  double fee;
-  int reward;
-  String operation;
-  String openfield;
-  String type;
-  String hash;
+  int? blockHeight;
+  DateTime? timestamp;
+  String? from;
+  String? recipient;
+  String? amount;
+  String? signature;
+  String? publicKey;
+  String? blockHash;
+  double? fee;
+  int? reward;
+  String? operation;
+  String? openfield;
+  String? type;
+  String? hash;
+  bool isPending;
 
   static const String TOKEN_TRANSFER = "token:transfer";
   static const String ALIAS_REGISTER = "alias:register";
@@ -64,17 +65,17 @@ class AddressTxsResponseResult {
 
   String getShortString() {
     if (type == BlockTypes.RECEIVE) {
-      return new Address(this.from).getShortString();
+      return Address(from ?? '').getShortString();
     } else {
-      return new Address(this.recipient).getShortString();
+      return Address(recipient ?? '').getShortString();
     }
   }
 
   String getShorterString() {
     if (type == BlockTypes.RECEIVE) {
-      return new Address(this.from).getShorterString();
+      return Address(from ?? '').getShorterString();
     } else {
-      return new Address(this.recipient).getShorterString();
+      return Address(recipient ?? '').getShorterString();
     }
   }
 
@@ -103,7 +104,7 @@ class AddressTxsResponseResult {
 
   bool isDragginator() {
     bool isDragginator;
-    operation.contains(DRAGGINATOR_PREFIX)
+    (operation ?? '').contains(DRAGGINATOR_PREFIX)
         ? isDragginator = true
         : isDragginator = false;
     return isDragginator;
@@ -131,16 +132,16 @@ class AddressTxsResponseResult {
     return isHNRegister;
   }
 
-  BisToken getBisToken() {
-    BisToken bisToken;
+  BisToken? getBisToken() {
+    BisToken? bisToken;
     if (isTokenTransfer()) {
-      bisToken = new BisToken(
-          tokenName: openfield.split(":")[0],
-          tokensQuantity: int.tryParse(openfield.split(":")[1]),
-          tokenMessage: openfield.split(":").length < 3
+      final parts = (openfield ?? '').split(':');
+      bisToken = BisToken(
+          tokenName: parts[0],
+          tokensQuantity: parts.length > 1 ? int.tryParse(parts[1]) : null,
+          tokenMessage: parts.length < 4
               ? ""
-              : openfield
-                  .split(":")[3]
+              : parts[3]
                   .replaceAll(RegExp('"'), '')
                   .replaceAll(RegExp('}'), ''));
     }
@@ -154,7 +155,7 @@ class AddressTxsResponseResult {
     recipient = txs[3];
     amount = txs[4].toString();
     signature = txs[5];
-    hash = signature.length > 56 ? signature.substring(0, 55) : signature;
+    hash = (signature ?? '').length > 56 ? signature!.substring(0, 55) : signature;
     publicKey = txs[6];
     blockHash = txs[7];
     fee = txs[8].toDouble();

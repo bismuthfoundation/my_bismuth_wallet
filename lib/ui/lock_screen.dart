@@ -1,4 +1,3 @@
-// @dart=2.9
 
 // Flutter imports:
 import 'package:flutter/material.dart';
@@ -16,7 +15,6 @@ import 'package:my_bismuth_wallet/ui/util/routes.dart';
 import 'package:my_bismuth_wallet/ui/widgets/buttons.dart';
 import 'package:my_bismuth_wallet/ui/widgets/dialog.dart';
 import 'package:my_bismuth_wallet/ui/widgets/security.dart';
-import 'package:my_bismuth_wallet/util/app_ffi/apputil.dart';
 import 'package:my_bismuth_wallet/util/biometrics.dart';
 import 'package:my_bismuth_wallet/util/caseconverter.dart';
 import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
@@ -33,10 +31,6 @@ class _AppLockScreenState extends State<AppLockScreen> {
   String _countDownTxt = "";
 
   Future<void> _goHome() async {
-    if (StateContainer.of(context).wallet == null) {
-      await AppUtil()
-          .loginAccount(await StateContainer.of(context).getSeed(), context);
-    }
     StateContainer.of(context).requestUpdate();
     PriceConversion conversion =
         await sl.get<SharedPrefsUtil>().getPriceConversion();
@@ -174,17 +168,13 @@ class _AppLockScreenState extends State<AppLockScreen> {
     // Test if user is locked out
     // Get duration of lockout
     DateTime lockUntil = await sl.get<SharedPrefsUtil>().getLockDate();
-    if (lockUntil == null) {
-      await sl.get<SharedPrefsUtil>().resetLockAttempts();
-    } else {
-      int countDown = lockUntil.difference(DateTime.now().toUtc()).inSeconds;
-      // They're not allowed to attempt
-      if (countDown > 0) {
-        _runCountdown(countDown);
-        return;
-      }
+    int countDown = lockUntil.difference(DateTime.now().toUtc()).inSeconds;
+    // They're not allowed to attempt
+    if (countDown > 0) {
+      _runCountdown(countDown);
+      return;
     }
-    setState(() {
+      setState(() {
       _lockedOut = false;
     });
     AuthenticationMethod authMethod =

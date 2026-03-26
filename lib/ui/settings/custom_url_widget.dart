@@ -1,4 +1,3 @@
-// @dart=2.9
 
 // Dart imports:
 import 'dart:async';
@@ -166,10 +165,8 @@ class _CustomUrlState extends State<CustomUrl> {
   }
 
   void _destroyBus() {
-    if (_connStatusEventSub != null) {
-      _connStatusEventSub.cancel();
+    _connStatusEventSub.cancel();
     }
-  }
 
   void _registerBus() {
     _connStatusEventSub =
@@ -290,7 +287,7 @@ class _CustomUrlState extends State<CustomUrl> {
                                                 StateContainer.of(context)
                                                     .curTheme
                                                     .backgroundDarkest,
-                                            activeColor: Colors.green),
+                                            activeThumbColor: Colors.green),
                                       ],
                                     ),
                                     SizedBox(
@@ -393,7 +390,7 @@ class _CustomUrlState extends State<CustomUrl> {
                                                   StateContainer.of(context)
                                                       .curTheme
                                                       .backgroundDarkest,
-                                              activeColor: Colors.green),
+                                              activeThumbColor: Colors.green),
                                         ]),
                                     useCustomExplorerUrl
                                         ? Container(
@@ -475,9 +472,7 @@ class _CustomUrlState extends State<CustomUrl> {
           textInputAction: TextInputAction.next,
           maxLines: null,
           autocorrect: false,
-          hintText: _walletServerHint == null
-              ? ""
-              : AppLocalization.of(context).enterWalletServer,
+          hintText: AppLocalization.of(context).enterWalletServer,
           keyboardType: TextInputType.multiline,
           textAlign: TextAlign.left,
           onSubmitted: (text) {
@@ -538,9 +533,7 @@ class _CustomUrlState extends State<CustomUrl> {
           textInputAction: TextInputAction.next,
           maxLines: null,
           autocorrect: false,
-          hintText: _tokenApiHint == null
-              ? ""
-              : AppLocalization.of(context).enterTokenApi,
+          hintText: AppLocalization.of(context).enterTokenApi,
           keyboardType: TextInputType.multiline,
           textAlign: TextAlign.left,
           onSubmitted: (text) {
@@ -594,9 +587,7 @@ class _CustomUrlState extends State<CustomUrl> {
           textInputAction: TextInputAction.next,
           maxLines: null,
           autocorrect: false,
-          hintText: _explorerUrlHint == null
-              ? ""
-              : AppLocalization.of(context).enterExplorerUrl,
+          hintText: AppLocalization.of(context).enterExplorerUrl,
           keyboardType: TextInputType.multiline,
           textAlign: TextAlign.left,
           onSubmitted: (text) {

@@ -1,4 +1,3 @@
-// @dart=2.9
 
 // Dart imports:
 import 'dart:async';
@@ -207,10 +206,8 @@ class ContactDetailsSheet {
                                 setState(() {
                                   _addressCopied = true;
                                 });
-                                if (_addressCopiedTimer != null) {
-                                  _addressCopiedTimer.cancel();
-                                }
-                                _addressCopiedTimer = new Timer(
+                                _addressCopiedTimer.cancel();
+                                                              _addressCopiedTimer = new Timer(
                                     const Duration(milliseconds: 800), () {
                                   setState(() {
                                     _addressCopied = false;

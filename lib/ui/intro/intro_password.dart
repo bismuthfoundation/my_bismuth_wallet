@@ -1,4 +1,3 @@
-// @dart=2.9
 
 // Flutter imports:
 import 'package:flutter/material.dart';
@@ -27,7 +26,7 @@ import 'package:my_bismuth_wallet/util/app_ffi/keys/seeds.dart';
 import 'package:my_bismuth_wallet/util/sharedprefsutil.dart';
 
 class IntroPassword extends StatefulWidget {
-  final String seed;
+  final String? seed;
   IntroPassword({this.seed});
   @override
   _IntroPasswordState createState() => _IntroPasswordState();
@@ -139,12 +138,10 @@ class _IntroPasswordState extends State<IntroPassword> {
                                       maxLines: 1,
                                       autocorrect: false,
                                       onChanged: (String newText) {
-                                        if (passwordError != null) {
-                                          setState(() {
-                                            passwordError = null;
-                                          });
-                                        }
-                                        if (confirmPasswordController.text ==
+                                        setState(() {
+                                          passwordError = null;
+                                        });
+                                                                              if (confirmPasswordController.text ==
                                             createPasswordController.text) {
                                           if (mounted) {
                                             setState(() {
@@ -191,12 +188,10 @@ class _IntroPasswordState extends State<IntroPassword> {
                                       maxLines: 1,
                                       autocorrect: false,
                                       onChanged: (String newText) {
-                                        if (passwordError != null) {
-                                          setState(() {
-                                            passwordError = null;
-                                          });
-                                        }
-                                        if (confirmPasswordController.text ==
+                                        setState(() {
+                                          passwordError = null;
+                                        });
+                                                                              if (confirmPasswordController.text ==
                                             createPasswordController.text) {
                                           if (mounted) {
                                             setState(() {
@@ -234,9 +229,7 @@ class _IntroPasswordState extends State<IntroPassword> {
                                       alignment: AlignmentDirectional(0, 0),
                                       margin: EdgeInsets.only(top: 3),
                                       child: Text(
-                                          this.passwordError == null
-                                              ? ""
-                                              : passwordError,
+                                          passwordError,
                                           style: TextStyle(
                                             fontSize: 14.0,
                                             color: StateContainer.of(context)
@@ -301,39 +294,22 @@ class _IntroPasswordState extends State<IntroPassword> {
           passwordError = AppLocalization.of(context).passwordsDontMatch;
         });
       }
-    } else if (widget.seed != null) {
-      String encryptedSeed = HEX.encode(
-          AppCrypt.encrypt(widget.seed, confirmPasswordController.text));
-      await sl.get<Vault>().setSeed(encryptedSeed);
-      StateContainer.of(context).setEncryptedSecret(HEX.encode(AppCrypt.encrypt(
-          widget.seed, await sl.get<Vault>().getSessionKey())));
-      await sl.get<DBHelper>().dropAccounts();
-      await AppUtil().loginAccount(widget.seed, context);
-      StateContainer.of(context).requestUpdate();
-      String pin = await Navigator.of(context)
-          .push(MaterialPageRoute(builder: (BuildContext context) {
-        return PinScreen(PinOverlayType.NEW_PIN);
-      }));
-      if (pin != null && pin.length > 5) {
-        _pinEnteredCallback(pin);
-      }
-    } else {
-      // Generate a new seed and encrypt
-      String seed = AppSeeds.generateSeed();
-      String encryptedSeed =
-          HEX.encode(AppCrypt.encrypt(seed, confirmPasswordController.text));
-      await sl.get<Vault>().setSeed(encryptedSeed);
-      // Also encrypt it with the session key, so user doesnt need password to sign blocks within the app
-      StateContainer.of(context).setEncryptedSecret(HEX.encode(
-          AppCrypt.encrypt(seed, await sl.get<Vault>().getSessionKey())));
-      // Update wallet
-      AppUtil()
-          .loginAccount(await StateContainer.of(context).getSeed(), context)
-          .then((_) {
-        StateContainer.of(context).requestUpdate();
-        Navigator.of(context).pushNamed('/intro_backup_safety');
-      });
+    } else    String encryptedSeed = HEX.encode(
+        AppCrypt.encrypt(widget.seed, confirmPasswordController.text));
+    await sl.get<Vault>().setSeed(encryptedSeed);
+    StateContainer.of(context).setEncryptedSecret(HEX.encode(AppCrypt.encrypt(
+        widget.seed, await sl.get<Vault>().getSessionKey())));
+    await sl.get<DBHelper>().dropAccounts();
+    await AppUtil().loginAccount(widget.seed, context);
+    StateContainer.of(context).requestUpdate();
+    String pin = await Navigator.of(context)
+        .push(MaterialPageRoute(builder: (BuildContext context) {
+      return PinScreen(PinOverlayType.NEW_PIN);
+    }));
+    if (pin.length > 5) {
+      _pinEnteredCallback(pin);
     }
+  
   }
 
   void _pinEnteredCallback(String pin) async {

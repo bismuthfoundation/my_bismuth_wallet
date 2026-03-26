@@ -1,4 +1,3 @@
-// @dart=2.9
 
 // Dart imports:
 import 'dart:math';
@@ -27,8 +26,8 @@ class NumberUtil {
   ///
   static double truncateDecimal(Decimal input,
       {int digits = maxDecimalDigits}) {
-    return (input * Decimal.fromInt(pow(10, digits))).truncateToDouble() /
-        pow(10, digits);
+    final int scale = pow(10, digits).toInt();
+    return (input * Decimal.fromInt(scale)).truncateToDouble() / scale;
   }
 
   /// Return raw as a normal amount.

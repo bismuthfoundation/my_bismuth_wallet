@@ -1,4 +1,3 @@
-// @dart=2.9
 
 // Package imports:
 import 'package:get_it/get_it.dart';

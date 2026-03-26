@@ -1,8 +1,6 @@
-// @dart=2.9
 
 // Dart imports:
 import 'dart:async';
-import 'dart:io';
 
 // Flutter imports:
 import 'package:flutter/foundation.dart';
@@ -39,10 +37,10 @@ class _InheritedStateContainer extends InheritedWidget {
 
   // You must pass through a child and your state.
   _InheritedStateContainer({
-    Key key,
-    @required this.data,
-    @required Widget child,
-  }) : super(key: key, child: child);
+    super.key,
+    required this.data,
+    required Widget child,
+  }) : super(child: child);
 
   // This is a built in method which you can use to check if
   // any state has changed. If not, no reason to rebuild all the widgets
@@ -55,14 +53,14 @@ class StateContainer extends StatefulWidget {
   // You must pass through a child.
   final Widget child;
 
-  StateContainer({@required this.child});
+  const StateContainer({super.key, required this.child});
 
   // This is the secret sauce. Write your own 'of' method that will behave
   // Exactly like MediaQuery.of and Theme.of
   // It basically says 'get the data from the widget of this type.
   static StateContainerState of(BuildContext context) {
     return context
-        .dependOnInheritedWidgetOfExactType<_InheritedStateContainer>()
+        .dependOnInheritedWidgetOfExactType<_InheritedStateContainer>()!
         .data;
   }
 
@@ -79,8 +77,8 @@ class StateContainerState extends State<StateContainer> {
   // Minimum receive = 0.000001
   String receiveThreshold = BigInt.from(10).pow(24).toString();
 
-  AppWallet wallet;
-  String currencyLocale;
+  AppWallet wallet = AppWallet();
+  String currencyLocale = 'en_US';
   Locale deviceLocale = Locale('en', 'US');
   AvailableCurrency curCurrency = AvailableCurrency(AvailableCurrencyEnum.USD);
   LanguageSetting curLanguage = LanguageSetting(AvailableLanguage.DEFAULT);
@@ -89,16 +87,16 @@ class StateContainerState extends State<StateContainer> {
   Account selectedAccount =
       Account(name: "AB", index: 0, lastAccess: 0, selected: true);
   // Two most recently used accounts
-  Account recentLast;
-  Account recentSecondLast;
+  Account? recentLast;
+  Account? recentSecondLast;
 
   // Initial deep link
-  String initialDeepLink;
+  String? initialDeepLink;
   // Deep link changes
-  StreamSubscription _deepLinkSub;
+  StreamSubscription<String?>? _deepLinkSub;
 
   // When wallet is encrypted
-  String encryptedSecret;
+  String? encryptedSecret;
 
   @override
   void initState() {
@@ -119,7 +117,7 @@ class StateContainerState extends State<StateContainer> {
         curLanguage = language;
       });
     });
-    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+    if (_supportsDeepLinks) {
       // Get initial deep link
       getInitialLink().then((initialLink) {
         setState(() {
@@ -130,10 +128,18 @@ class StateContainerState extends State<StateContainer> {
   }
 
   // Subscriptions
-  StreamSubscription<BalanceGetEvent> _balanceGetEventSub;
-  StreamSubscription<PriceEvent> _priceEventSub;
-  StreamSubscription<AccountModifiedEvent> _accountModifiedSub;
-  StreamSubscription<TransactionsListEvent> _transactionsListEventSub;
+  late final StreamSubscription<BalanceGetEvent> _balanceGetEventSub;
+  late final StreamSubscription<PriceEvent> _priceEventSub;
+  late final StreamSubscription<AccountModifiedEvent> _accountModifiedSub;
+  late final StreamSubscription<TransactionsListEvent> _transactionsListEventSub;
+
+  bool get _supportsDeepLinks {
+    if (kIsWeb) {
+      return false;
+    }
+    return defaultTargetPlatform == TargetPlatform.android ||
+        defaultTargetPlatform == TargetPlatform.iOS;
+  }
 
   // Register RX event listeners
   void _registerBus() {
@@ -147,28 +153,28 @@ class StateContainerState extends State<StateContainer> {
         .registerTo<TransactionsListEvent>()
         .listen((event) {
       //print("listen TransactionsListEvent");
-      AddressTxsResponse addressTxsResponse = new AddressTxsResponse();
-      addressTxsResponse.result = new List<AddressTxsResponseResult>();
-      for (int i = event.response.length - 1; i >= 0; i--) {
-        AddressTxsResponseResult addressTxResponseResult =
-            new AddressTxsResponseResult();
+      final AddressTxsResponse addressTxsResponse = AddressTxsResponse(
+        result: <AddressTxsResponseResult>[],
+      );
+      final responses = event.response ?? <List<dynamic>>[];
+      for (int i = responses.length - 1; i >= 0; i--) {
+        final AddressTxsResponseResult addressTxResponseResult =
+            AddressTxsResponseResult();
         addressTxResponseResult.populate(
-            event.response[i], selectedAccount.address);
+            responses[i], selectedAccount.address ?? '');
         addressTxResponseResult.getBisToken();
-        addressTxsResponse.result.add(addressTxResponseResult);
+        addressTxsResponse.result!.add(addressTxResponseResult);
       }
 
       wallet.history.clear();
 
       // Iterate list in reverse (oldest to newest block)
-      if (addressTxsResponse != null && addressTxsResponse.result != null) {
-        for (AddressTxsResponseResult item in addressTxsResponse.result) {
-          setState(() {
-            wallet.history.insert(0, item);
-          });
-        }
+      for (final AddressTxsResponseResult item in addressTxsResponse.result!) {
+        setState(() {
+          wallet.history.insert(0, item);
+        });
       }
-
+    
       setState(() {
         wallet.historyLoading = false;
         wallet.loading = false;
@@ -181,9 +187,9 @@ class StateContainerState extends State<StateContainer> {
         EventTaxiImpl.singleton().registerTo<PriceEvent>().listen((event) {
       // PriceResponse's get pushed periodically, it wasn't a request we made so don't pop the queue
       setState(() {
-        wallet.btcPrice = event.response.btcPrice.toString();
+        wallet.btcPrice = event.response?.btcPrice?.toString() ?? '0';
         wallet.localCurrencyPrice =
-            event.response.localCurrencyPrice.toString();
+            event.response?.localCurrencyPrice?.toString() ?? '0';
       });
     });
 
@@ -191,10 +197,14 @@ class StateContainerState extends State<StateContainer> {
     _accountModifiedSub = EventTaxiImpl.singleton()
         .registerTo<AccountModifiedEvent>()
         .listen((event) {
+      final account = event.account;
+      if (account == null) {
+        return;
+      }
       if (!event.deleted) {
-        if (event.account.index == selectedAccount.index) {
+        if (account.index == selectedAccount.index) {
           setState(() {
-            selectedAccount.name = event.account.name;
+            selectedAccount.name = account.name;
           });
         } else {
           updateRecentlyUsedAccounts();
@@ -202,25 +212,29 @@ class StateContainerState extends State<StateContainer> {
       } else {
         // Remove account
         updateRecentlyUsedAccounts().then((_) {
-          if (event.account.index == selectedAccount.index &&
-              recentLast != null) {
-            sl.get<DBHelper>().changeAccount(recentLast);
+          if (account.index == selectedAccount.index && recentLast != null) {
+            final Account recent = recentLast!;
+            sl.get<DBHelper>().changeAccount(recent);
             setState(() {
-              selectedAccount = recentLast;
+              selectedAccount = recent;
             });
             EventTaxiImpl.singleton()
-                .fire(AccountChangedEvent(account: recentLast, noPop: true));
-          } else if (event.account.index == selectedAccount.index &&
+                .fire(AccountChangedEvent(account: recent, noPop: true));
+          } else if (account.index == selectedAccount.index &&
               recentSecondLast != null) {
-            sl.get<DBHelper>().changeAccount(recentSecondLast);
+            final Account recent = recentSecondLast!;
+            sl.get<DBHelper>().changeAccount(recent);
             setState(() {
-              selectedAccount = recentSecondLast;
+              selectedAccount = recent;
             });
             EventTaxiImpl.singleton().fire(
-                AccountChangedEvent(account: recentSecondLast, noPop: true));
-          } else if (event.account.index == selectedAccount.index) {
+                AccountChangedEvent(account: recent, noPop: true));
+          } else if (account.index == selectedAccount.index) {
             getSeed().then((seed) {
               sl.get<DBHelper>().getMainAccount(seed).then((mainAccount) {
+                if (mainAccount == null) {
+                  return;
+                }
                 sl.get<DBHelper>().changeAccount(mainAccount);
                 setState(() {
                   selectedAccount = mainAccount;
@@ -235,8 +249,8 @@ class StateContainerState extends State<StateContainer> {
       }
     });
     // Deep link has been updated
-    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
-      _deepLinkSub = getLinksStream().listen((String link) {
+    if (_supportsDeepLinks) {
+      _deepLinkSub = linkStream.listen((String? link) {
         setState(() {
           initialDeepLink = link;
         });
@@ -251,28 +265,18 @@ class StateContainerState extends State<StateContainer> {
   }
 
   void _destroyBus() {
-    if (_balanceGetEventSub != null) {
-      _balanceGetEventSub.cancel();
-    }
-    if (_priceEventSub != null) {
-      _priceEventSub.cancel();
-    }
-    if (_accountModifiedSub != null) {
-      _accountModifiedSub.cancel();
-    }
-    if (_deepLinkSub != null) {
-      _deepLinkSub.cancel();
-    }
-    if (_transactionsListEventSub != null) {
-      _transactionsListEventSub.cancel();
-    }
+    _balanceGetEventSub.cancel();
+    _priceEventSub.cancel();
+    _accountModifiedSub.cancel();
+    _deepLinkSub?.cancel();
+    _transactionsListEventSub.cancel();
   }
 
   // Update the global wallet instance with a new address
-  Future<void> updateWallet({Account account}) async {
+  Future<void> updateWallet({required Account account}) async {
     //print("updateWallet");
-    String address;
-    address = AppUtil().seedToAddress(await getSeed(), account.index);
+    final String address =
+        AppUtil().seedToAddress(await getSeed(), account.index ?? 0);
     account.address = address;
     selectedAccount = account;
     updateRecentlyUsedAccounts();
@@ -284,9 +288,9 @@ class StateContainerState extends State<StateContainer> {
   }
 
   Future<void> updateRecentlyUsedAccounts() async {
-    List<Account> otherAccounts =
+    final List<Account> otherAccounts =
         await sl.get<DBHelper>().getRecentlyUsedAccounts(await getSeed());
-    if (otherAccounts != null && otherAccounts.length > 0) {
+    if (otherAccounts.length > 0) {
       if (otherAccounts.length > 1) {
         setState(() {
           recentLast = otherAccounts[0];
@@ -336,7 +340,10 @@ class StateContainerState extends State<StateContainer> {
   }
 
   /// Handle address response
-  void handleAddressResponse(BalanceGetResponse response) {
+  void handleAddressResponse(BalanceGetResponse? response) {
+    if (response == null) {
+      return;
+    }
     // Set currency locale here for the UI to access
     sl.get<SharedPrefsUtil>().getCurrency(deviceLocale).then((currency) {
       setState(() {
@@ -345,29 +352,21 @@ class StateContainerState extends State<StateContainer> {
       });
     });
     setState(() {
-      if (wallet != null) {
-        if (response == null) {
-          wallet.accountBalance = 0;
-        } else {
-          wallet.accountBalance = double.tryParse(response.balance);
-          sl.get<DBHelper>().updateAccountBalance(
-              selectedAccount, wallet.accountBalance.toString());
-        }
-      }
+      wallet.accountBalance = double.tryParse(response.balance ?? '0') ?? 0;
+      sl.get<DBHelper>().updateAccountBalance(
+          selectedAccount, wallet.accountBalance.toString());
     });
   }
 
   Future<void> requestUpdate() async {
     //print("requestUpdate");
-    if (wallet != null &&
-        wallet.address != null &&
-        Address(wallet.address).isValid()) {
+    if (Address(wallet.address).isValid()) {
       // Request account history
       int count = 30;
       try {
         sl
             .get<AppService>()
-            .getBalanceGetResponse(selectedAccount.address, true);
+            .getBalanceGetResponse(selectedAccount.address ?? '', true);
 
         await sl
             .get<HttpService>()
@@ -377,15 +376,15 @@ class StateContainerState extends State<StateContainer> {
 
         //sl.get<AppService>().getAlias(wallet.address);
 
-        AddressTxsResponse addressTxsResponse = new AddressTxsResponse();
+        final AddressTxsResponse addressTxsResponse = AddressTxsResponse();
         addressTxsResponse.tokens = await sl
             .get<HttpService>()
-            .getTokensBalance(selectedAccount.address);
+            .getTokensBalance(selectedAccount.address ?? '');
         setState(() {
           wallet.tokens.clear();
-          wallet.tokens.add(
-              new BisToken(tokenName: "", tokensQuantity: 0, tokenMessage: ""));
-          wallet.tokens.addAll(addressTxsResponse.tokens);
+          wallet.tokens
+              .add(BisToken(tokenName: "", tokensQuantity: 0, tokenMessage: ""));
+          wallet.tokens.addAll(addressTxsResponse.tokens ?? <BisToken>[]);
         });
       } catch (e) {
         // TODO handle account history error
@@ -403,14 +402,8 @@ class StateContainerState extends State<StateContainer> {
   }
 
   Future<String> getSeed() async {
-    String seed;
-    if (encryptedSecret != null) {
-      seed = HEX.encode(AppCrypt.decrypt(
-          encryptedSecret, await sl.get<Vault>().getSessionKey()));
-    } else {
-      seed = await sl.get<Vault>().getSeed();
-    }
-    return seed;
+    return HEX.encode(AppCrypt.decrypt(
+        encryptedSecret!, await sl.get<Vault>().getSessionKey()));
   }
 
   // Simple build method that just passes this state through

@@ -1,12 +1,9 @@
-// @dart=2.9
 
 // Dart imports:
 import 'dart:async';
-import 'dart:typed_data';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
 // Package imports:
@@ -235,10 +232,8 @@ class _ReceiveSheetStateState extends State<ReceiveSheet> {
                         // Set copied style
                         _addressCopied = true;
                       });
-                      if (_addressCopiedTimer != null) {
-                        _addressCopiedTimer.cancel();
-                      }
-                      _addressCopiedTimer =
+                      _addressCopiedTimer.cancel();
+                                          _addressCopiedTimer =
                           new Timer(const Duration(milliseconds: 800), () {
                         setState(() {
                           _addressCopied = false;

@@ -1,4 +1,3 @@
-// @dart=2.9
 
 // Flutter imports:
 import 'package:flutter/material.dart';
@@ -124,12 +123,10 @@ class _SetPasswordSheetState extends State<SetPasswordSheet> {
                                   maxLines: 1,
                                   autocorrect: false,
                                   onChanged: (String newText) {
-                                    if (passwordError != null) {
-                                      setState(() {
-                                        passwordError = null;
-                                      });
-                                    }
-                                    if (confirmPasswordController.text ==
+                                    setState(() {
+                                      passwordError = null;
+                                    });
+                                                                      if (confirmPasswordController.text ==
                                         createPasswordController.text) {
                                       if (mounted) {
                                         setState(() {
@@ -176,12 +173,10 @@ class _SetPasswordSheetState extends State<SetPasswordSheet> {
                                   maxLines: 1,
                                   autocorrect: false,
                                   onChanged: (String newText) {
-                                    if (passwordError != null) {
-                                      setState(() {
-                                        passwordError = null;
-                                      });
-                                    }
-                                    if (confirmPasswordController.text ==
+                                    setState(() {
+                                      passwordError = null;
+                                    });
+                                                                      if (confirmPasswordController.text ==
                                         createPasswordController.text) {
                                       if (mounted) {
                                         setState(() {
@@ -219,9 +214,7 @@ class _SetPasswordSheetState extends State<SetPasswordSheet> {
                                   alignment: AlignmentDirectional(0, 0),
                                   margin: EdgeInsets.only(top: 3),
                                   child: Text(
-                                      this.passwordError == null
-                                          ? ""
-                                          : passwordError,
+                                      passwordError,
                                       style: TextStyle(
                                         fontSize: 14.0,
                                         color: StateContainer.of(context)
@@ -287,7 +280,7 @@ class _SetPasswordSheetState extends State<SetPasswordSheet> {
           passwordError = AppLocalization.of(context).passwordsDontMatch;
         });
       }
-    } else if (seed == null || !AppSeeds.isValidSeed(seed)) {
+    } else if (!AppSeeds.isValidSeed(seed)) {
       Navigator.pop(context);
       UIUtil.showSnackbar(
           AppLocalization.of(context).encryptionFailedError, context);

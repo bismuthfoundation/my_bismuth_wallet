@@ -1,4 +1,3 @@
-// @dart=2.9
 
 // Dart imports:
 import 'dart:async';
@@ -69,7 +68,7 @@ class AccountDetailsSheet {
             .get<DragginatorService>()
             .getInfosFromDna(_dragginatorAvatarDnaController.text)
             .then((value) {
-          if (value != null && value.status != "") {
+          if (value.status != "") {
             sl.get<DBHelper>().changeAccountDragginatorDna(
                 account, _dragginatorAvatarDnaController.text, value.status);
             account.dragginatorDna = _dragginatorAvatarDnaController.text;
@@ -376,10 +375,8 @@ class AccountDetailsSheet {
                                           // Set copied style
                                           _addressCopied = true;
                                         });
-                                        if (_addressCopiedTimer != null) {
-                                          _addressCopiedTimer.cancel();
-                                        }
-                                        _addressCopiedTimer = new Timer(
+                                        _addressCopiedTimer.cancel();
+                                                                              _addressCopiedTimer = new Timer(
                                             const Duration(milliseconds: 800),
                                             () {
                                           setState(() {

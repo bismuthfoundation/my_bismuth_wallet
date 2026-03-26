@@ -1,9 +1,9 @@
-// @dart=2.9
 
 // Dart imports:
 import 'dart:async';
 
 // Flutter imports:
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -24,7 +24,7 @@ enum OneLineAddressTextType { PRIMARY60, PRIMARY, SUCCESS }
 class UIUtil {
   static Widget threeLineAddressText(BuildContext context, String address,
       {ThreeLineAddressTextType type = ThreeLineAddressTextType.PRIMARY,
-      String contactName}) {
+      String? contactName}) {
     String stringPartOne = "";
     String stringPartTwo = "";
     String stringPartThree = "";
@@ -110,13 +110,11 @@ class UIUtil {
           ],
         );
       case ThreeLineAddressTextType.PRIMARY:
-        Widget contactWidget = contactName != null
-            ? RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                    text: contactName,
-                    style: AppStyles.textStyleAddressText90(context)))
-            : SizedBox();
+        final Widget contactWidget = RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+                text: contactName ?? '',
+                style: AppStyles.textStyleAddressText90(context)));
         return Column(
           children: <Widget>[
             contactWidget,
@@ -167,13 +165,11 @@ class UIUtil {
           ],
         );
       case ThreeLineAddressTextType.SUCCESS:
-        Widget contactWidget = contactName != null
-            ? RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                    text: contactName,
-                    style: AppStyles.textStyleAddressSuccess(context)))
-            : SizedBox();
+        final Widget contactWidget = RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+                text: contactName ?? '',
+                style: AppStyles.textStyleAddressSuccess(context)));
         return Column(
           children: <Widget>[
             contactWidget,
@@ -363,8 +359,8 @@ class UIUtil {
   }
 
   static Widget threeLineSeedText(BuildContext context, String address,
-      {TextStyle textStyle}) {
-    textStyle = textStyle ?? AppStyles.textStyleSeed(context);
+      {TextStyle? textStyle}) {
+    final resolvedTextStyle = textStyle ?? AppStyles.textStyleSeed(context);
     String stringPartOne = address.substring(0, 22);
     String stringPartTwo = address.substring(22, 44);
     String stringPartThree = address.substring(44, 64);
@@ -372,28 +368,63 @@ class UIUtil {
       children: <Widget>[
         Text(
           stringPartOne,
-          style: textStyle,
+          style: resolvedTextStyle,
         ),
         Text(
           stringPartTwo,
-          style: textStyle,
+          style: resolvedTextStyle,
         ),
         Text(
           stringPartThree,
-          style: textStyle,
+          style: resolvedTextStyle,
         ),
       ],
     );
   }
 
+  static Widget _webViewFallback(
+    BuildContext context, {
+    required String title,
+    required String url,
+  }) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(
+              title,
+              style: AppStyles.textStyleHeader(context),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 12),
+            SelectableText(
+              url,
+              textAlign: TextAlign.center,
+              style: AppStyles.textStyleParagraph(context),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   static Widget showAccountWebview(BuildContext context, String account) {
     cancelLockEvent();
-    return FutureBuilder(
+    return FutureBuilder<String>(
         future: AppLocalization.of(context).getAccountExplorerUrl(account),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
           if (snapshot.hasData && snapshot.data != null) {
+            if (kIsWeb) {
+              return _webViewFallback(
+                context,
+                title: 'Explorer',
+                url: snapshot.data!,
+              );
+            }
             return WebView(
-              initialUrl: snapshot.data,
+              initialUrl: snapshot.data!,
               gestureNavigationEnabled: true,
             );
           } else {
@@ -403,6 +434,9 @@ class UIUtil {
   }
 
   static Widget showWebview(BuildContext context, String url, String title) {
+    if (kIsWeb) {
+      return _webViewFallback(context, title: title, url: url);
+    }
     return WebView(
       initialUrl: url,
       gestureNavigationEnabled: true,
@@ -411,8 +445,16 @@ class UIUtil {
 
   static Widget showDragginatorHelp(BuildContext context) {
     cancelLockEvent();
+    final url = AppLocalization.of(context).getDragginatorHelp();
+    if (kIsWeb) {
+      return _webViewFallback(
+        context,
+        title: AppLocalization.of(context).dragginatorHeader,
+        url: url,
+      );
+    }
     return WebView(
-      initialUrl: AppLocalization.of(context).getDragginatorHelp(),
+      initialUrl: url,
       gestureNavigationEnabled: true,
     );
   }
@@ -457,15 +499,13 @@ class UIUtil {
     );
   }
 
-  static StreamSubscription<dynamic> _lockDisableSub;
+  static StreamSubscription<dynamic>? _lockDisableSub;
 
   static Future<void> cancelLockEvent() async {
     // Cancel auto-lock event, usually if we are launching another intent
-    if (_lockDisableSub != null) {
-      _lockDisableSub.cancel();
-    }
+    await _lockDisableSub?.cancel();
     EventTaxiImpl.singleton().fire(DisableLockTimeoutEvent(disable: true));
-    Future<dynamic> delayed = Future.delayed(Duration(seconds: 10));
+    final Future<dynamic> delayed = Future.delayed(Duration(seconds: 10));
     delayed.then((_) {
       return true;
     });
@@ -482,12 +522,8 @@ class UIUtil {
   }
 
   static String getRobohashURL(String address) {
-    if (address == null) {
-      return "https://robohash.org/bismuth?set=set4";
-    } else {
-      return "https://robohash.org/$address?set=set4";
+    return "https://robohash.org/$address?set=set4";
     }
-  }
 
   static String getDragginatorURL(String dna, String status) {
     if (status == "egg") {
