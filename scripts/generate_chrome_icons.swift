@@ -50,7 +50,7 @@ func renderIcon(size: CGFloat) -> Data? {
   NSColor.white.setFill()
   cardPath.fill()
 
-  let logoInset = size * 0.18
+  let logoInset = size * 0.24
   let logoRect = NSRect(
     x: logoInset,
     y: logoInset,

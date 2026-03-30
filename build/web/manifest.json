@@ -1,6 +1,6 @@
 {
-  "name": "My Bismuth Wallet",
-  "short_name": "Bismuth",
+  "name": "myBismuth Wallet",
+  "short_name": "myBismuth",
   "description": "Manage your Bismuth wallet from an installable web app.",
   "start_url": ".",
   "scope": ".",

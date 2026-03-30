@@ -23,10 +23,12 @@ class _BrowserQrScannerDialog extends StatefulWidget {
 
 class _BrowserQrScannerDialogState extends State<_BrowserQrScannerDialog> {
   late final web.HTMLVideoElement _videoElement;
+  late final web.HTMLCanvasElement _canvasElement;
   late final String _viewType;
 
   web.MediaStream? _stream;
   Object? _detector;
+  JSFunction? _jsQrDecoder;
   Timer? _scanTimer;
   bool _scanBusy = false;
   String? _error;
@@ -38,7 +40,11 @@ class _BrowserQrScannerDialogState extends State<_BrowserQrScannerDialog> {
 
   JSObject get _windowObject => JSObject.fromInteropObject(web.window);
 
-  bool get _supportsQrScanner => _windowObject.has('BarcodeDetector');
+  bool get _supportsBarcodeDetector => _windowObject.has('BarcodeDetector');
+
+  bool get _supportsJsQr => _windowObject.has('jsQR');
+
+  bool get _supportsQrScanner => _supportsBarcodeDetector || _supportsJsQr;
 
   @override
   void initState() {
@@ -52,6 +58,7 @@ class _BrowserQrScannerDialogState extends State<_BrowserQrScannerDialog> {
       ..style.height = '100%'
       ..style.objectFit = 'cover'
       ..setAttribute('controls', 'false');
+    _canvasElement = web.HTMLCanvasElement();
 
     ui_web.platformViewRegistry.registerViewFactory(
       _viewType,
@@ -72,19 +79,24 @@ class _BrowserQrScannerDialogState extends State<_BrowserQrScannerDialog> {
   Future<void> _startScanner() async {
     if (!_supportsQrScanner) {
       setState(() {
-        _error = 'This browser does not support the BarcodeDetector QR API.';
+        _error =
+            'This browser does not support QR scanning in the current environment.';
       });
       return;
     }
 
     try {
-      final JSFunction constructor =
-          _windowObject['BarcodeDetector']! as JSFunction;
-      final JSObject detectorOptions = JSObject()
-        ..['formats'] = <JSString>['qr_code'.toJS].toJS;
-      _detector = constructor.callAsConstructorVarArgs<JSObject>(
-        <JSAny?>[detectorOptions],
-      );
+      if (_supportsBarcodeDetector) {
+        final JSFunction constructor =
+            _windowObject['BarcodeDetector']! as JSFunction;
+        final JSObject detectorOptions = JSObject()
+          ..['formats'] = <JSString>['qr_code'.toJS].toJS;
+        _detector = constructor.callAsConstructorVarArgs<JSObject>(
+          <JSAny?>[detectorOptions],
+        );
+      } else if (_supportsJsQr) {
+        _jsQrDecoder = _windowObject['jsQR']! as JSFunction;
+      }
 
       await _startPreferredCamera();
 
@@ -161,8 +173,11 @@ class _BrowserQrScannerDialogState extends State<_BrowserQrScannerDialog> {
   Future<void> _primeCameraPermissions() async {
     final JSObject mediaDevices =
         JSObject.fromInteropObject(web.window.navigator.mediaDevices);
+    final JSObject videoConstraints = JSObject();
+    final JSObject facingMode = JSObject()..['ideal'] = 'environment'.toJS;
+    videoConstraints['facingMode'] = facingMode;
     final JSObject mediaConstraints = JSObject()
-      ..['video'] = true.toJS
+      ..['video'] = videoConstraints
       ..['audio'] = false.toJS;
 
     web.MediaStream? permissionStream;
@@ -246,6 +261,18 @@ class _BrowserQrScannerDialogState extends State<_BrowserQrScannerDialog> {
     if (lower.contains('virtual')) {
       score -= 80;
     }
+    if (lower.contains('back') ||
+        lower.contains('rear') ||
+        lower.contains('environment') ||
+        lower.contains('world')) {
+      score += 120;
+    }
+    if (lower.contains('front') ||
+        lower.contains('facetime') ||
+        lower.contains('selfie') ||
+        lower.contains('user')) {
+      score -= 60;
+    }
     if (lower.contains('facetime') ||
         lower.contains('built-in') ||
         lower.contains('builtin') ||
@@ -288,30 +315,83 @@ class _BrowserQrScannerDialogState extends State<_BrowserQrScannerDialog> {
   }
 
   Future<void> _scanFrame() async {
-    if (_scanBusy || _detector == null || _videoElement.videoWidth == 0) {
+    if (_scanBusy || _videoElement.videoWidth == 0) {
       return;
     }
 
     _scanBusy = true;
     try {
-      final JSArray<JSObject> barcodes = await (_detector! as JSObject)
-          .callMethodVarArgs<JSPromise<JSArray<JSObject>>>(
-            'detect'.toJS,
-            <JSAny?>[JSObject.fromInteropObject(_videoElement)],
-          )
-          .toDart;
-      final List<JSObject> barcodeList = barcodes.toDart;
-      if (barcodeList.isNotEmpty && mounted) {
-        final JSString? rawValue = barcodeList.first['rawValue'] as JSString?;
-        if (rawValue != null && rawValue.toDart.isNotEmpty) {
-          Navigator.of(context).pop(rawValue.toDart);
-        }
+      final String? detectedValue = _detector != null
+          ? await _scanFrameWithBarcodeDetector()
+          : _scanFrameWithJsQr();
+      if (detectedValue != null && detectedValue.isNotEmpty && mounted) {
+        Navigator.of(context).pop(detectedValue);
       }
     } catch (_) {
       // Ignore transient decode failures while scanning live frames.
     } finally {
       _scanBusy = false;
     }
+  }
+
+  Future<String?> _scanFrameWithBarcodeDetector() async {
+    final JSArray<JSObject> barcodes = await (_detector! as JSObject)
+        .callMethodVarArgs<JSPromise<JSArray<JSObject>>>(
+          'detect'.toJS,
+          <JSAny?>[JSObject.fromInteropObject(_videoElement)],
+        )
+        .toDart;
+    final List<JSObject> barcodeList = barcodes.toDart;
+    if (barcodeList.isEmpty) {
+      return null;
+    }
+
+    final JSString? rawValue = barcodeList.first['rawValue'] as JSString?;
+    return rawValue?.toDart;
+  }
+
+  String? _scanFrameWithJsQr() {
+    if (_jsQrDecoder == null) {
+      return null;
+    }
+
+    final int width = _videoElement.videoWidth;
+    final int height = _videoElement.videoHeight;
+    if (width <= 0 || height <= 0) {
+      return null;
+    }
+
+    _canvasElement
+      ..width = width
+      ..height = height;
+
+    final web.CanvasRenderingContext2D? context =
+        _canvasElement.getContext('2d') as web.CanvasRenderingContext2D?;
+    if (context == null) {
+      return null;
+    }
+
+    context.drawImage(_videoElement, 0, 0);
+    final web.ImageData imageData = context.getImageData(
+      0,
+      0,
+      width,
+      height,
+    );
+
+    final JSAny? decoded = _jsQrDecoder!.callAsFunction(
+      _windowObject,
+      JSObject.fromInteropObject(imageData.data),
+      width.toJS,
+      height.toJS,
+    );
+    if (decoded == null) {
+      return null;
+    }
+
+    final JSObject decodedObject = decoded as JSObject;
+    final JSString? rawValue = decodedObject['data'] as JSString?;
+    return rawValue?.toDart;
   }
 
   @override

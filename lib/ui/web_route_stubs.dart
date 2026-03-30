@@ -57,7 +57,7 @@ class AppHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const _WebRouteScaffold(
-      title: 'My Bismuth Wallet',
+      title: 'myBismuth Wallet',
       body:
           'The hosted web wallet is active. The native wallet screens are being migrated to Dart 3 and browser-safe APIs.',
     );
