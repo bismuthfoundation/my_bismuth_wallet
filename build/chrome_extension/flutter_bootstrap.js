@@ -36,6 +36,7 @@ if (!window._flutter) {
 _flutter.buildConfig = {"engineRevision":"052f31d115eceda8cbff1b3481fcde4330c4ae12","builds":[{"compileTarget":"dart2js","renderer":"canvaskit","mainJsPath":"main.dart.js"}]};
 
 
+
 (function () {
   let startupActive = true;
 
@@ -91,7 +92,6 @@ _flutter.buildConfig = {"engineRevision":"052f31d115eceda8cbff1b3481fcde4330c4ae
     config: {
       canvasKitBaseUrl: 'canvaskit/',
     },
-    serviceWorkerSettings: null,
     onEntrypointLoaded: async function (engineInitializer) {
       try {
         const appRunner = await engineInitializer.initializeEngine();

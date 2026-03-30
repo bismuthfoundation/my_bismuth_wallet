@@ -5,12 +5,14 @@ import 'package:diacritic/diacritic.dart';
 import 'package:http/http.dart' as http;
 import 'package:web_socket_channel/web_socket_channel.dart';
 
+import 'package:my_bismuth_wallet/network/model/block_types.dart';
 import 'package:my_bismuth_wallet/network/model/response/addlistlim_response.dart';
 import 'package:my_bismuth_wallet/network/model/response/address_txs_response.dart';
 import 'package:my_bismuth_wallet/network/model/response/balance_get_response.dart';
 import 'package:my_bismuth_wallet/network/model/response/mpinsert_response.dart';
 import 'package:my_bismuth_wallet/network/model/response/tokens_balance_get_response.dart';
 import 'package:my_bismuth_wallet/util/address_derivation.dart';
+import 'package:my_bismuth_wallet/util/numberutil.dart';
 
 class BrowserWalletSnapshot {
   final BalanceGetResponse balance;
@@ -39,6 +41,10 @@ class BrowserWalletTokenTransaction {
   final String sender;
   final String recipient;
   final String amount;
+  final String signature;
+  final String bisAmount;
+  final String operation;
+  final String openfield;
   final bool isPending;
 
   const BrowserWalletTokenTransaction({
@@ -48,6 +54,10 @@ class BrowserWalletTokenTransaction {
     required this.sender,
     required this.recipient,
     required this.amount,
+    this.signature = '',
+    this.bisAmount = '',
+    this.operation = '',
+    this.openfield = '',
     this.isPending = false,
   });
 }
@@ -72,9 +82,46 @@ class BrowserWalletSubmitResult {
   });
 }
 
+class BrowserWalletTransactionDetail {
+  final String amount;
+  final String? displayAmountLabel;
+  final bool isReceive;
+  final String sender;
+  final String recipient;
+  final String fee;
+  final String reward;
+  final DateTime? timestamp;
+  final int? blockHeight;
+  final String blockHash;
+  final String transactionId;
+  final String transactionRef;
+  final String operation;
+  final String openfield;
+  final String signature;
+  final bool isPending;
+
+  const BrowserWalletTransactionDetail({
+    required this.amount,
+    this.displayAmountLabel,
+    required this.isReceive,
+    required this.sender,
+    required this.recipient,
+    required this.fee,
+    required this.reward,
+    required this.timestamp,
+    required this.blockHeight,
+    required this.blockHash,
+    required this.transactionId,
+    required this.transactionRef,
+    required this.operation,
+    required this.openfield,
+    required this.signature,
+    required this.isPending,
+  });
+}
+
 class BrowserWalletNetworkService {
-  static const String _defaultWebSocketUrl =
-      String.fromEnvironment(
+  static const String _defaultWebSocketUrl = String.fromEnvironment(
     'BROWSER_WALLET_WEBSOCKET_URL',
     defaultValue: 'wss://bismuth.world/api/web-socket/',
   );
@@ -133,7 +180,9 @@ class BrowserWalletNetworkService {
     final List<BisToken> tokens = await tokensFuture;
     final List<BrowserWalletTokenTransaction> tokenTransactions =
         await tokenTransactionsFuture;
-    final _PriceData priceData = await priceFuture;
+    final _PriceData priceData = await priceFuture.catchError(
+      (_, __) => const _PriceData(btcPrice: 0, localCurrencyPrice: 0),
+    );
 
     return BrowserWalletSnapshot(
       balance: balance,
@@ -177,6 +226,227 @@ class BrowserWalletNetworkService {
         transactions.isNotEmpty ||
         tokens.isNotEmpty ||
         tokenTransactions.isNotEmpty;
+  }
+
+  Future<BrowserWalletTransactionDetail> loadTransactionDetail(
+    AddressTxsResponseResult transaction,
+  ) async {
+    final String transactionId = _deriveTransactionId(transaction);
+    final String transactionRef = _base58Encode(utf8.encode(transactionId));
+
+    if (transaction.isPending) {
+      return _buildLocalTransactionDetail(
+        transaction: transaction,
+        transactionId: transactionId,
+        transactionRef: transactionRef,
+      );
+    }
+
+    final String sender = (transaction.from ?? '').trim();
+    final List<Uri> candidateUris = <Uri>[
+      if (sender.isNotEmpty)
+        Uri.parse('$_explorerApiBase'
+            'txrefadd/$transactionRef:$sender'),
+      Uri.parse('$_explorerApiBase'
+          'txref/$transactionRef'),
+    ];
+
+    Object? lastError;
+    for (final Uri uri in candidateUris) {
+      try {
+        final http.Response response = await _httpClient.get(
+          uri,
+          headers: const <String, String>{
+            'content-type': 'application/json',
+          },
+        );
+        if (response.statusCode != 200) {
+          lastError = StateError(
+            'Transaction detail lookup failed with status ${response.statusCode}.',
+          );
+          continue;
+        }
+
+        final dynamic decoded = json.decode(response.body);
+        if (decoded is! List<dynamic> || decoded.isEmpty) {
+          lastError = const FormatException(
+            'Transaction detail response was empty.',
+          );
+          continue;
+        }
+
+        final dynamic first = decoded.first;
+        if (first is! Map<String, dynamic>) {
+          lastError = const FormatException(
+            'Transaction detail response was malformed.',
+          );
+          continue;
+        }
+
+        return _buildTransactionDetailFromApi(
+          detail: first,
+          transaction: transaction,
+          transactionId: transactionId,
+          transactionRef: transactionRef,
+        );
+      } catch (error) {
+        lastError = error;
+      }
+    }
+
+    if (lastError != null) {
+      throw lastError;
+    }
+    throw StateError('Transaction detail lookup failed.');
+  }
+
+  Future<BrowserWalletTransactionDetail> loadTransactionDetailFromTokenTransaction({
+    required BrowserWalletTokenTransaction transaction,
+    required String accountAddress,
+  }) async {
+    final String signature = transaction.signature.trim();
+    if (signature.length < 56) {
+      throw StateError('Transaction signature is unavailable for this token transaction.');
+    }
+
+    final String transactionId = signature.substring(0, 56);
+    final String transactionRef = _base58Encode(utf8.encode(transactionId));
+
+    if (transaction.isPending) {
+      return BrowserWalletTransactionDetail(
+        amount: transaction.bisAmount.isNotEmpty ? transaction.bisAmount : transaction.amount,
+        displayAmountLabel: '${transaction.amount} ${transaction.tokenName}',
+        isReceive: transaction.recipient == accountAddress,
+        sender: transaction.sender,
+        recipient: transaction.recipient,
+        fee: '',
+        reward: '',
+        timestamp: transaction.timestamp,
+        blockHeight: transaction.blockHeight > 0 ? transaction.blockHeight : null,
+        blockHash: '',
+        transactionId: transactionId,
+        transactionRef: transactionRef,
+        operation: transaction.operation,
+        openfield: transaction.openfield,
+        signature: transaction.signature,
+        isPending: true,
+      );
+    }
+
+    final List<Uri> candidateUris = <Uri>[
+      if (transaction.sender.trim().isNotEmpty)
+        Uri.parse('$_explorerApiBase'
+            'txrefadd/$transactionRef:${transaction.sender.trim()}'),
+      Uri.parse('$_explorerApiBase'
+          'txref/$transactionRef'),
+    ];
+
+    Object? lastError;
+    for (final Uri uri in candidateUris) {
+      try {
+        final http.Response response = await _httpClient.get(
+          uri,
+          headers: const <String, String>{
+            'content-type': 'application/json',
+          },
+        );
+        if (response.statusCode != 200) {
+          lastError = StateError(
+            'Transaction detail lookup failed with status ${response.statusCode}.',
+          );
+          continue;
+        }
+
+        final dynamic decoded = json.decode(response.body);
+        if (decoded is! List<dynamic> || decoded.isEmpty) {
+          lastError = const FormatException(
+            'Transaction detail response was empty.',
+          );
+          continue;
+        }
+
+        final dynamic first = decoded.first;
+        if (first is! Map<String, dynamic>) {
+          lastError = const FormatException(
+            'Transaction detail response was malformed.',
+          );
+          continue;
+        }
+
+        return BrowserWalletTransactionDetail(
+          amount: _stringValue(first['amount'], fallback: transaction.bisAmount),
+          displayAmountLabel: '${transaction.amount} ${transaction.tokenName}',
+          isReceive: _stringValue(first['to'], fallback: transaction.recipient) ==
+              accountAddress,
+          sender: _stringValue(first['from'], fallback: transaction.sender),
+          recipient: _stringValue(first['to'], fallback: transaction.recipient),
+          fee: _stringValue(first['fee']),
+          reward: _stringValue(first['reward']),
+          timestamp: _parseExplorerTimestamp(first['timestamp']) ?? transaction.timestamp,
+          blockHeight: _intValue(first['block'], fallback: transaction.blockHeight),
+          blockHash: _stringValue(first['hash']),
+          transactionId: _stringValue(first['txid'], fallback: transactionId),
+          transactionRef: transactionRef,
+          operation: _normalizeOperationValue(
+            _stringValue(first['operation'], fallback: transaction.operation),
+          ),
+          openfield: _normalizeOperationValue(
+            _stringValue(first['openfield'], fallback: transaction.openfield),
+          ),
+          signature: _stringValue(first['signature'], fallback: transaction.signature),
+          isPending: false,
+        );
+      } catch (error) {
+        lastError = error;
+      }
+    }
+
+    if (lastError != null) {
+      throw lastError;
+    }
+    throw StateError('Transaction detail lookup failed.');
+  }
+
+  BrowserWalletTransactionDetail loadTransactionDetailFallbackFromTokenTransaction({
+    required BrowserWalletTokenTransaction transaction,
+    required String accountAddress,
+  }) {
+    final String signature = transaction.signature.trim();
+    final String transactionId =
+        signature.length >= 56 ? signature.substring(0, 56) : '';
+    final String transactionRef = transactionId.isEmpty
+        ? ''
+        : _base58Encode(utf8.encode(transactionId));
+    return BrowserWalletTransactionDetail(
+      amount: transaction.bisAmount.isNotEmpty ? transaction.bisAmount : transaction.amount,
+      displayAmountLabel: '${transaction.amount} ${transaction.tokenName}',
+      isReceive: transaction.recipient == accountAddress,
+      sender: transaction.sender,
+      recipient: transaction.recipient,
+      fee: '',
+      reward: '',
+      timestamp: transaction.timestamp,
+      blockHeight: transaction.blockHeight > 0 ? transaction.blockHeight : null,
+      blockHash: '',
+      transactionId: transactionId,
+      transactionRef: transactionRef,
+      operation: transaction.operation,
+      openfield: transaction.openfield,
+      signature: transaction.signature,
+      isPending: transaction.isPending,
+    );
+  }
+
+  BrowserWalletTransactionDetail loadTransactionDetailFallback(
+    AddressTxsResponseResult transaction,
+  ) {
+    final String transactionId = _deriveTransactionId(transaction);
+    final String transactionRef = _base58Encode(utf8.encode(transactionId));
+    return _buildLocalTransactionDetail(
+      transaction: transaction,
+      transactionId: transactionId,
+      transactionRef: transactionRef,
+    );
   }
 
   Future<BrowserWalletSubmitResult> submitTransaction({
@@ -260,7 +530,6 @@ class BrowserWalletNetworkService {
           'node/balancegetjson:$address'),
       headers: const <String, String>{
         'content-type': 'application/json',
-        'access-control-allow-origin': '*',
       },
     );
     if (response.statusCode != 200) {
@@ -341,7 +610,6 @@ class BrowserWalletNetworkService {
           'node/addlistlimjson:$address:$limit'),
       headers: const <String, String>{
         'content-type': 'application/json',
-        'access-control-allow-origin': '*',
       },
     );
     if (response.statusCode != 200) {
@@ -457,12 +725,158 @@ class BrowserWalletNetworkService {
     return (leftValue - rightValue).abs() < 0.00000001;
   }
 
+  BrowserWalletTransactionDetail _buildLocalTransactionDetail({
+    required AddressTxsResponseResult transaction,
+    required String transactionId,
+    required String transactionRef,
+  }) {
+    return BrowserWalletTransactionDetail(
+      amount: transaction.getFormattedAmount(),
+      isReceive: transaction.type == BlockTypes.RECEIVE,
+      sender: transaction.from ?? '',
+      recipient: transaction.recipient ?? '',
+      fee: _formatDecimalValue(transaction.fee),
+      reward: (transaction.reward ?? 0).toString(),
+      timestamp: transaction.timestamp,
+      blockHeight: transaction.blockHeight,
+      blockHash: transaction.blockHash ?? '',
+      transactionId: transactionId,
+      transactionRef: transactionRef,
+      operation: _normalizeOperationValue(transaction.operation),
+      openfield: _normalizeOperationValue(transaction.openfield),
+      signature: transaction.signature ?? '',
+      isPending: transaction.isPending,
+    );
+  }
+
+  BrowserWalletTransactionDetail _buildTransactionDetailFromApi({
+    required Map<String, dynamic> detail,
+    required AddressTxsResponseResult transaction,
+    required String transactionId,
+    required String transactionRef,
+  }) {
+    return BrowserWalletTransactionDetail(
+      amount: _stringValue(detail['amount'],
+          fallback: transaction.getFormattedAmount()),
+      isReceive: transaction.type == BlockTypes.RECEIVE,
+      sender: _stringValue(detail['from'], fallback: transaction.from ?? ''),
+      recipient:
+          _stringValue(detail['to'], fallback: transaction.recipient ?? ''),
+      fee: _stringValue(detail['fee'],
+          fallback: _formatDecimalValue(transaction.fee)),
+      reward: _stringValue(detail['reward'],
+          fallback: (transaction.reward ?? 0).toString()),
+      timestamp:
+          _parseExplorerTimestamp(detail['timestamp']) ?? transaction.timestamp,
+      blockHeight:
+          _intValue(detail['block'], fallback: transaction.blockHeight),
+      blockHash:
+          _stringValue(detail['hash'], fallback: transaction.blockHash ?? ''),
+      transactionId: _stringValue(detail['txid'], fallback: transactionId),
+      transactionRef: transactionRef,
+      operation: _normalizeOperationValue(
+        _stringValue(detail['operation'],
+            fallback: transaction.operation ?? ''),
+      ),
+      openfield: _normalizeOperationValue(
+        _stringValue(detail['openfield'],
+            fallback: transaction.openfield ?? ''),
+      ),
+      signature: _stringValue(detail['signature'],
+          fallback: transaction.signature ?? ''),
+      isPending: transaction.isPending,
+    );
+  }
+
+  String _deriveTransactionId(AddressTxsResponseResult transaction) {
+    final String signature = (transaction.signature ?? '').trim();
+    if (signature.length >= 56) {
+      return signature.substring(0, 56);
+    }
+
+    final String hash = (transaction.hash ?? '').trim();
+    if (hash.length >= 56) {
+      return hash.substring(0, 56);
+    }
+
+    throw StateError('Transaction ID is unavailable for this transaction.');
+  }
+
+  String _base58Encode(List<int> bytes) {
+    const String alphabet =
+        '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+    if (bytes.isEmpty) {
+      return '';
+    }
+
+    BigInt value = BigInt.zero;
+    for (final int byte in bytes) {
+      value = (value << 8) + BigInt.from(byte);
+    }
+
+    final StringBuffer buffer = StringBuffer();
+    while (value > BigInt.zero) {
+      final BigInt remainder = value.remainder(BigInt.from(58));
+      value = value ~/ BigInt.from(58);
+      buffer.write(alphabet[remainder.toInt()]);
+    }
+
+    int leadingZeroes = 0;
+    for (final int byte in bytes) {
+      if (byte != 0) {
+        break;
+      }
+      leadingZeroes++;
+    }
+
+    final String encoded = buffer.toString().split('').reversed.join();
+    final String prefix = leadingZeroes <= 0
+        ? ''
+        : List<String>.filled(leadingZeroes, '1').join();
+    return prefix + encoded;
+  }
+
+  DateTime? _parseExplorerTimestamp(dynamic rawValue) {
+    final double? seconds = double.tryParse(rawValue?.toString() ?? '');
+    if (seconds == null) {
+      return null;
+    }
+    return DateTime.fromMillisecondsSinceEpoch(
+      (seconds * 1000).round(),
+      isUtc: true,
+    ).toLocal();
+  }
+
+  String _stringValue(dynamic rawValue, {String fallback = ''}) {
+    final String value = rawValue?.toString().trim() ?? '';
+    return value.isEmpty ? fallback : value;
+  }
+
+  int? _intValue(dynamic rawValue, {int? fallback}) {
+    final int? parsed = int.tryParse(rawValue?.toString() ?? '');
+    return parsed ?? fallback;
+  }
+
+  String _formatDecimalValue(num? value) {
+    if (value == null) {
+      return '';
+    }
+    return NumberUtil.getRawAsUsableString(value.toString());
+  }
+
+  String _normalizeOperationValue(String? value) {
+    final String normalized = (value ?? '').trim();
+    if (normalized.isEmpty || normalized == '0') {
+      return '';
+    }
+    return normalized;
+  }
+
   Future<List<BisToken>> _fetchTokens(String address) async {
     final http.Response response = await _httpClient.get(
       Uri.parse('$_tokenBalanceApi$address'),
       headers: const <String, String>{
         'content-type': 'application/json',
-        'access-control-allow-origin': '*',
       },
     );
 
@@ -494,7 +908,6 @@ class BrowserWalletNetworkService {
       Uri.parse('$_tokenTransactionsApi$address'),
       headers: const <String, String>{
         'content-type': 'application/json',
-        'access-control-allow-origin': '*',
       },
     );
 
@@ -517,6 +930,7 @@ class BrowserWalletNetworkService {
         sender: row.length > 3 ? row[3]?.toString() ?? '' : '',
         recipient: row.length > 4 ? row[4]?.toString() ?? '' : '',
         amount: row.length > 5 ? row[5]?.toString() ?? '0' : '0',
+        signature: row.length > 6 ? row[6]?.toString() ?? '' : '',
         isPending: false,
       );
     }).toList();
@@ -550,6 +964,10 @@ class BrowserWalletNetworkService {
                 sender: tx.from ?? '',
                 recipient: tx.recipient ?? '',
                 amount: token?.tokensQuantity?.toString() ?? tx.amount ?? '0',
+                signature: tx.signature ?? '',
+                bisAmount: tx.getFormattedAmount(),
+                operation: tx.operation ?? '',
+                openfield: tx.openfield ?? '',
                 isPending: true,
               );
             })
@@ -596,40 +1014,50 @@ class BrowserWalletNetworkService {
 
   Future<_PriceData> _fetchPriceData(String currencyCode) async {
     final String lowerCurrency = currencyCode.toLowerCase();
-    final Uri btcUri = Uri.parse(
-      'https://api.coingecko.com/api/v3/simple/price?ids=bismuth&vs_currencies=btc',
-    );
-    final Uri localUri = Uri.parse(
-      'https://api.coingecko.com/api/v3/simple/price?ids=bismuth&vs_currencies=$lowerCurrency',
+    final String vsCurrencies =
+        lowerCurrency == 'btc' ? 'btc' : 'btc,$lowerCurrency';
+    final Uri priceUri = Uri.parse(
+      'https://api.coingecko.com/api/v3/simple/price?ids=bismuth&vs_currencies=$vsCurrencies',
     );
 
-    final http.Response btcResponse = await _httpClient.get(btcUri);
-    final http.Response localResponse = await _httpClient.get(localUri);
+    final http.Response? priceResponse = await _safeGetPriceResponse(priceUri);
 
     double btcPrice = 0;
     double localCurrencyPrice = 0;
 
-    if (btcResponse.statusCode == 200) {
-      final Map<String, dynamic> jsonBody =
-          json.decode(btcResponse.body) as Map<String, dynamic>;
-      btcPrice = ((jsonBody['bismuth'] as Map<String, dynamic>)['btc'] as num?)
-              ?.toDouble() ??
-          0;
-    }
-
-    if (localResponse.statusCode == 200) {
-      final Map<String, dynamic> jsonBody =
-          json.decode(localResponse.body) as Map<String, dynamic>;
+    if (priceResponse?.statusCode == 200) {
+      btcPrice = _extractPriceValue(priceResponse!.body, 'btc');
       localCurrencyPrice =
-          ((jsonBody['bismuth'] as Map<String, dynamic>)[lowerCurrency] as num?)
-                  ?.toDouble() ??
-              0;
+          _extractPriceValue(priceResponse.body, lowerCurrency);
     }
 
     return _PriceData(
       btcPrice: btcPrice,
       localCurrencyPrice: localCurrencyPrice,
     );
+  }
+
+  Future<http.Response?> _safeGetPriceResponse(Uri uri) async {
+    try {
+      return await _httpClient.get(uri);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  double _extractPriceValue(String body, String currencyKey) {
+    try {
+      final Map<String, dynamic> jsonBody =
+          json.decode(body) as Map<String, dynamic>;
+      final dynamic bismuthNode = jsonBody['bismuth'];
+      if (bismuthNode is! Map<String, dynamic>) {
+        return 0;
+      }
+
+      return (bismuthNode[currencyKey] as num?)?.toDouble() ?? 0;
+    } catch (_) {
+      return 0;
+    }
   }
 
   Future<List<String>> _sendLegacyRequestFrames({
