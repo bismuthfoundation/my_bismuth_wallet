@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:decimal/decimal.dart';
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -86,8 +87,10 @@ const Map<String, Map<String, String>> _webStrings =
     'currency': 'Currency',
     'language': 'Language',
     'theme': 'Theme',
+    'auto': 'Auto',
     'dark': 'Dark',
     'light': 'Light',
+    'mybismuth_non_custodial_wallet': 'myBismuth Non-Custodial Wallet',
     'security': 'Security',
     'wallet_lock': 'Wallet lock',
     'protected': 'Protected',
@@ -346,8 +349,8 @@ const Map<String, Map<String, String>> _webStrings =
     'recovered_accounts_from_seed':
         'Recovered {count} accounts from this seed.',
     'balance_title': '{name} Wallet',
-    'tx_count': '{count} txs',
-    'token_tx_count_on_account': '{count} token transactions on this account',
+    'tx_count': '{count} transactions',
+    'token_tx_count_on_account': '{count} {token} transactions',
     'address_hint': 'Enter Address',
     'scan_qr': 'Scan QR Code',
     'amount': 'Amount',
@@ -376,8 +379,10 @@ const Map<String, Map<String, String>> _webStrings =
     'currency': 'Devise',
     'language': 'Langue',
     'theme': 'Theme',
+    'auto': 'Auto',
     'dark': 'Sombre',
     'light': 'Clair',
+    'mybismuth_non_custodial_wallet': 'Wallet myBismuth non depositaire',
     'security': 'Securite',
     'wallet_lock': 'Verrouillage du Wallet',
     'protected': 'Protege',
@@ -449,7 +454,7 @@ const Map<String, Map<String, String>> _webStrings =
     'status': 'Statut',
     'destination': 'Destination',
     'tx_count': '{count} txs',
-    'token_tx_count_on_account': '{count} transactions de token sur ce compte',
+    'token_tx_count_on_account': '{count} transactions {token}',
     'address_hint': "Entrer l'adresse",
     'scan_qr': 'Scanner le code QR',
     'amount': 'Montant',
@@ -568,6 +573,8 @@ const Map<String, Map<String, String>> _webStrings =
     'currency': 'Währung',
     'language': 'Sprache',
     'theme': 'Design',
+    'auto': 'Auto',
+    'mybismuth_non_custodial_wallet': 'myBismuth Wallet ohne Verwahrung',
     'security': 'Sicherheit',
     'wallet_lock': 'Wallet-Sperre',
     'protected': 'Geschützt',
@@ -838,7 +845,7 @@ const Map<String, Map<String, String>> _webStrings =
         '{count} Konten aus diesem Seed wiederhergestellt.',
     'balance_title': '{name} Wallet',
     'tx_count': '{count} Transaktionen',
-    'token_tx_count_on_account': '{count} Token-Transaktionen auf diesem Konto',
+    'token_tx_count_on_account': '{count} {token}-Transaktionen',
     'address_hint': 'Adresse eingeben',
     'scan_qr': 'QR-Code scannen',
     'amount': 'Betrag',
@@ -868,8 +875,10 @@ const Map<String, Map<String, String>> _webStrings =
     'currency': 'Mata Uang',
     'language': 'Bahasa',
     'theme': 'Tema',
+    'auto': 'Otomatis',
     'dark': 'Gelap',
     'light': 'Terang',
+    'mybismuth_non_custodial_wallet': 'Wallet Non-Kustodial myBismuth',
     'security': 'Keamanan',
     'wallet_lock': 'Kunci Wallet',
     'protected': 'Terlindungi',
@@ -941,7 +950,7 @@ const Map<String, Map<String, String>> _webStrings =
     'status': 'Status',
     'destination': 'Tujuan',
     'tx_count': '{count} tx',
-    'token_tx_count_on_account': '{count} transaksi token pada akun ini',
+    'token_tx_count_on_account': '{count} transaksi {token}',
     'address_hint': 'Masukkan Alamat',
     'scan_qr': 'Pindai Kode QR',
     'amount': 'Jumlah',
@@ -1049,8 +1058,10 @@ const Map<String, Map<String, String>> _webStrings =
     'currency': 'Valuta',
     'language': 'Taal',
     'theme': 'Thema',
+    'auto': 'Auto',
     'dark': 'Donker',
     'light': 'Licht',
+    'mybismuth_non_custodial_wallet': 'myBismuth Wallet zonder bewaring',
     'security': 'Beveiliging',
     'wallet_lock': 'Wallet-vergrendeling',
     'protected': 'Beveiligd',
@@ -1122,7 +1133,7 @@ const Map<String, Map<String, String>> _webStrings =
     'status': 'Status',
     'destination': 'Bestemming',
     'tx_count': '{count} txs',
-    'token_tx_count_on_account': '{count} tokentransacties op deze account',
+    'token_tx_count_on_account': '{count} {token}-transacties',
     'address_hint': 'Adres invoeren',
     'scan_qr': 'QR-code scannen',
     'amount': 'Bedrag',
@@ -1230,8 +1241,10 @@ const Map<String, Map<String, String>> _webStrings =
     'currency': 'Moneda',
     'language': 'Idioma',
     'theme': 'Tema',
+    'auto': 'Auto',
     'dark': 'Oscuro',
     'light': 'Claro',
+    'mybismuth_non_custodial_wallet': 'Wallet no custodial myBismuth',
     'security': 'Seguridad',
     'wallet_lock': 'Bloqueo de Wallet',
     'protected': 'Protegido',
@@ -1303,8 +1316,7 @@ const Map<String, Map<String, String>> _webStrings =
     'status': 'Estado',
     'destination': 'Destino',
     'tx_count': '{count} txs',
-    'token_tx_count_on_account':
-        '{count} transacciones de token en esta cuenta',
+    'token_tx_count_on_account': '{count} transacciones de {token}',
     'address_hint': 'Ingresar direccion',
     'scan_qr': 'Escanear codigo QR',
     'amount': 'Monto',
@@ -1418,8 +1430,10 @@ const Map<String, Map<String, String>> _webStrings =
     'currency': 'Valuta',
     'language': 'Lingua',
     'theme': 'Tema',
+    'auto': 'Auto',
     'dark': 'Scuro',
     'light': 'Chiaro',
+    'mybismuth_non_custodial_wallet': 'Wallet myBismuth non-custodial',
     'security': 'Sicurezza',
     'wallet_lock': 'Blocco Wallet',
     'protected': 'Protetto',
@@ -1491,7 +1505,7 @@ const Map<String, Map<String, String>> _webStrings =
     'status': 'Stato',
     'destination': 'Destinazione',
     'tx_count': '{count} tx',
-    'token_tx_count_on_account': '{count} transazioni token su questo account',
+    'token_tx_count_on_account': '{count} transazioni {token}',
     'address_hint': 'Inserisci indirizzo',
     'scan_qr': 'Scansiona codice QR',
     'amount': 'Importo',
@@ -1607,6 +1621,8 @@ const Map<String, Map<String, String>> _webStrings =
     'currency': 'Валюта',
     'language': 'Язык',
     'theme': 'Тема',
+    'auto': 'Авто',
+    'mybismuth_non_custodial_wallet': 'myBismuth некастодиальный Wallet',
     'security': 'Безопасность',
     'wallet_lock': 'Блокировка Wallet',
     'protected': 'Защищено',
@@ -1784,7 +1800,7 @@ const Map<String, Map<String, String>> _webStrings =
     'could_not_parse_payment_qr': 'Не удалось разобрать платежный QR: {error}',
     'twenty_four_word_mnemonic': 'Mnemonic из 24 слов',
     'tx_count': '{count} транзакций',
-    'token_tx_count_on_account': '{count} транзакций токенов на этом аккаунте',
+    'token_tx_count_on_account': '{count} транзакций {token}',
   },
   'pl': <String, String>{
     'settings': 'Ustawienia',
@@ -1794,8 +1810,10 @@ const Map<String, Map<String, String>> _webStrings =
     'currency': 'Waluta',
     'language': 'Język',
     'theme': 'Motyw',
+    'auto': 'Auto',
     'dark': 'Ciemny',
     'light': 'Jasny',
+    'mybismuth_non_custodial_wallet': 'Portfel bezpowierniczy myBismuth',
     'security': 'Bezpieczeństwo',
     'wallet_lock': 'Blokada Wallet',
     'protected': 'Chronione',
@@ -1887,7 +1905,7 @@ const Map<String, Map<String, String>> _webStrings =
     'status': 'Status',
     'destination': 'Odbiorca',
     'tx_count': '{count} tx',
-    'token_tx_count_on_account': '{count} transakcji tokena na tym koncie',
+    'token_tx_count_on_account': '{count} transakcji {token}',
     'address_hint': 'Wpisz adres',
     'scan_qr': 'Skanuj kod QR',
     'amount': 'Kwota',
@@ -1985,8 +2003,10 @@ const Map<String, Map<String, String>> _webStrings =
     'currency': '货币',
     'language': '语言',
     'theme': '主题',
+    'auto': '自动',
     'dark': '深色',
     'light': '浅色',
+    'mybismuth_non_custodial_wallet': 'myBismuth 非托管钱包',
     'security': '安全',
     'wallet_lock': 'Wallet 锁定',
     'protected': '已保护',
@@ -2074,7 +2094,7 @@ const Map<String, Map<String, String>> _webStrings =
     'pending': '待处理',
     'balance_title': '{name} Wallet',
     'tx_count': '{count} 笔交易',
-    'token_tx_count_on_account': '此账户上有 {count} 笔代币交易',
+    'token_tx_count_on_account': '{count} 笔 {token} 交易',
     'popup': '弹窗',
     'api_connection_established': 'API 连接已建立',
     'no_api_connection_established': 'API 连接未建立',
@@ -2160,8 +2180,10 @@ const Map<String, Map<String, String>> _webStrings =
     'currency': '通貨',
     'language': '言語',
     'theme': 'テーマ',
+    'auto': '自動',
     'dark': 'ダーク',
     'light': 'ライト',
+    'mybismuth_non_custodial_wallet': 'myBismuth ノンカストディアルウォレット',
     'security': 'セキュリティ',
     'wallet_lock': 'Wallet ロック',
     'protected': '保護済み',
@@ -2249,7 +2271,7 @@ const Map<String, Map<String, String>> _webStrings =
     'pending': '保留中',
     'balance_title': '{name} Wallet',
     'tx_count': '{count} 件の取引',
-    'token_tx_count_on_account': 'このアカウントのトークン取引 {count} 件',
+    'token_tx_count_on_account': '{token} の取引 {count} 件',
     'popup': 'ポップアップ',
     'api_connection_established': 'API 接続が確立されました',
     'no_api_connection_established': 'API 接続が確立されていません',
@@ -2335,8 +2357,10 @@ const Map<String, Map<String, String>> _webStrings =
     'currency': '통화',
     'language': '언어',
     'theme': '테마',
+    'auto': '자동',
     'dark': '다크',
     'light': '라이트',
+    'mybismuth_non_custodial_wallet': 'myBismuth 논커스터디얼 월렛',
     'security': '보안',
     'wallet_lock': 'Wallet 잠금',
     'protected': '보호됨',
@@ -2424,7 +2448,7 @@ const Map<String, Map<String, String>> _webStrings =
     'pending': '대기 중',
     'balance_title': '{name} Wallet',
     'tx_count': '{count}건 거래',
-    'token_tx_count_on_account': '이 계정의 토큰 거래 {count}건',
+    'token_tx_count_on_account': '{token} 거래 {count}건',
     'popup': '팝업',
     'api_connection_established': 'API 연결이 설정되었습니다',
     'no_api_connection_established': 'API 연결이 설정되지 않았습니다',
@@ -2593,7 +2617,7 @@ class _MyBismuthWalletWebAppState extends State<MyBismuthWalletWebApp> {
   @override
   void initState() {
     super.initState();
-    _themeMode = widget.preferences.getString(_themeModeKey) ?? 'dark';
+    _themeMode = widget.preferences.getString(_themeModeKey) ?? 'auto';
   }
 
   Future<void> _setThemeMode(String value) async {
@@ -2608,7 +2632,10 @@ class _MyBismuthWalletWebAppState extends State<MyBismuthWalletWebApp> {
 
   @override
   Widget build(BuildContext context) {
-    final bool isDark = _themeMode != 'light';
+    final Brightness platformBrightness =
+        MediaQuery.platformBrightnessOf(context);
+    final bool isDark = _themeMode == 'dark' ||
+        (_themeMode == 'auto' && platformBrightness == Brightness.dark);
     final _Palette palette = isDark
         ? const _Palette(
             background: Color(0xFF081018),
@@ -2742,6 +2769,7 @@ class _ExtensionShellState extends State<_ExtensionShell> {
   static const String _networkKey = 'extension_network';
   static const String _currencyKey = 'extension_currency';
   static const String _priceCachePrefix = 'extension_price_cache_';
+  static const String _walletPresenceKey = 'browser_wallet_present';
   static const String _languageKey = 'extension_language';
   static const String _authMethodKey = 'extension_auth_method';
   static const String _noticeKey = 'extension_notice_acknowledged';
@@ -2837,6 +2865,8 @@ class _ExtensionShellState extends State<_ExtensionShell> {
   bool get _isOptionsView => true;
   bool get _hasWallet =>
       _seed != null && _seed!.isNotEmpty && _selectedAccount != null;
+  bool get _knownWalletExists =>
+      widget.preferences.getBool(_walletPresenceKey) ?? false;
   String get _profileName =>
       widget.preferences.getString(_nameKey) ?? 'Web Wallet';
 
@@ -2869,6 +2899,7 @@ class _ExtensionShellState extends State<_ExtensionShell> {
   };
 
   static const Map<String, String> _supportedThemeModes = <String, String>{
+    'auto': 'Auto',
     'dark': 'Dark',
     'light': 'Light',
   };
@@ -2942,6 +2973,7 @@ class _ExtensionShellState extends State<_ExtensionShell> {
       final BrowserWalletProtectionStatus protectionStatus =
           await _vault.getProtectionStatus();
       if (protectionStatus.hasProtectedWallet) {
+        await widget.preferences.setBool(_walletPresenceKey, true);
         setState(() {
           _protectionStatus = protectionStatus;
           _walletLocked = true;
@@ -2959,6 +2991,7 @@ class _ExtensionShellState extends State<_ExtensionShell> {
 
       final String seed = await _vault.getSeed();
       if (seed.isEmpty) {
+        await widget.preferences.setBool(_walletPresenceKey, false);
         setState(() {
           _protectionStatus = protectionStatus;
           _walletLocked = false;
@@ -2974,6 +3007,7 @@ class _ExtensionShellState extends State<_ExtensionShell> {
         return;
       }
 
+      await widget.preferences.setBool(_walletPresenceKey, true);
       await _applyUnlockedSeed(seed, protectionStatus: protectionStatus);
       _startBackgroundNetworkRefresh(showActivity: false);
     } catch (error) {
@@ -3378,7 +3412,10 @@ class _ExtensionShellState extends State<_ExtensionShell> {
 
     try {
       final BrowserWalletTransactionDetail detail =
-          await _networkService.loadTransactionDetail(transaction);
+          _decorateTransactionDetailForTokenTransfer(
+        transaction: transaction,
+        detail: await _networkService.loadTransactionDetail(transaction),
+      );
       if (!mounted) {
         return;
       }
@@ -3391,13 +3428,46 @@ class _ExtensionShellState extends State<_ExtensionShell> {
         return;
       }
       setState(() {
-        _selectedTransactionDetail =
-            _networkService.loadTransactionDetailFallback(transaction);
+        _selectedTransactionDetail = _decorateTransactionDetailForTokenTransfer(
+          transaction: transaction,
+          detail: _networkService.loadTransactionDetailFallback(transaction),
+        );
         _transactionDetailLoading = false;
         _transactionDetailError =
             _tr(context, 'live_transaction_detail_lookup_failed');
       });
     }
+  }
+
+  BrowserWalletTransactionDetail _decorateTransactionDetailForTokenTransfer({
+    required AddressTxsResponseResult transaction,
+    required BrowserWalletTransactionDetail detail,
+  }) {
+    final BisToken? token = transaction.getBisToken();
+    if (!transaction.isTokenTransfer() || token == null) {
+      return detail;
+    }
+
+    final String tokenAmount =
+        token.tokensQuantity?.toString() ?? transaction.amount ?? '0';
+    return BrowserWalletTransactionDetail(
+      amount: detail.amount,
+      displayAmountLabel: '$tokenAmount ${token.tokenName}',
+      isReceive: detail.isReceive,
+      sender: detail.sender,
+      recipient: detail.recipient,
+      fee: detail.fee,
+      reward: detail.reward,
+      timestamp: detail.timestamp,
+      blockHeight: detail.blockHeight,
+      blockHash: detail.blockHash,
+      transactionId: detail.transactionId,
+      transactionRef: detail.transactionRef,
+      operation: detail.operation,
+      openfield: detail.openfield,
+      signature: detail.signature,
+      isPending: detail.isPending,
+    );
   }
 
   Future<void> _openTokenTransactionDetail(
@@ -4359,6 +4429,7 @@ class _ExtensionShellState extends State<_ExtensionShell> {
         await _db.saveAccount(account);
       }
       await _vault.setSeed(seed);
+      await widget.preferences.setBool(_walletPresenceKey, true);
       await _applyUnlockedSeed(seed);
       _startBackgroundNetworkRefresh(showActivity: false);
       if (discoverExistingAccounts) {
@@ -4560,6 +4631,7 @@ class _ExtensionShellState extends State<_ExtensionShell> {
     try {
       await _vault.deleteAll();
       await _db.dropAll();
+      await widget.preferences.setBool(_walletPresenceKey, false);
       _mnemonicController.clear();
       await _loadWalletState();
 
@@ -4810,9 +4882,11 @@ class _ExtensionShellState extends State<_ExtensionShell> {
       openfield: openfield,
       operation: operation,
     );
-    final double balanceValue =
-        double.tryParse(_snapshot?.balance.balance ?? '0') ?? 0;
-    if (balanceValue > 0 && amountValue + estimatedFee > balanceValue) {
+    if (_exceedsAvailableBalance(
+      amount: amount,
+      estimatedFee: estimatedFee,
+      balance: _snapshot?.balance.balance ?? '0',
+    )) {
       setState(() {
         _sendErrorMessage = _tr(context, 'amount_plus_fee_exceeds_balance');
       });
@@ -5108,6 +5182,31 @@ class _ExtensionShellState extends State<_ExtensionShell> {
       fees += 1;
     }
     return fees;
+  }
+
+  bool _exceedsAvailableBalance({
+    required String amount,
+    required double estimatedFee,
+    required String balance,
+  }) {
+    final Decimal amountValue = _parseBisDecimal(amount);
+    final Decimal feeValue =
+        _parseBisDecimal(estimatedFee.toStringAsFixed(8));
+    final Decimal balanceValue = _parseBisDecimal(balance);
+    return amountValue + feeValue > balanceValue;
+  }
+
+  Decimal _parseBisDecimal(String value) {
+    final String normalized = _normalizeDecimalInput(value);
+    if (normalized.isEmpty) {
+      return Decimal.zero;
+    }
+
+    try {
+      return Decimal.parse(normalized);
+    } catch (_) {
+      return Decimal.zero;
+    }
   }
 
   void _syncBannerTimer({
@@ -5434,7 +5533,8 @@ class _OptionsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _Palette palette = shell.widget.palette;
-    final bool showFirstOpenLayout = !shell._hasWallet;
+    final bool showFirstOpenLayout =
+        !shell._hasWallet && !shell._knownWalletExists;
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
@@ -5574,7 +5674,7 @@ class _FirstOpenOptionsLayout extends StatelessWidget {
             constraints: const BoxConstraints(maxWidth: 760),
             child: _SectionCard(
               palette: palette,
-              title: 'myBismuth Wallet',
+              title: _tr(context, 'mybismuth_non_custodial_wallet'),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -5725,26 +5825,41 @@ class _FirstOpenOptionsLayout extends StatelessWidget {
         ),
         if (shell._statusMessage != null) ...<Widget>[
           const SizedBox(height: 18),
-          _BannerCard(
-            palette: palette,
-            color: palette.primary,
-            message: shell._statusMessage!,
+          Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 760),
+              child: _BannerCard(
+                palette: palette,
+                color: palette.primary,
+                message: shell._statusMessage!,
+              ),
+            ),
           ),
         ],
         if (shell._errorMessage != null) ...<Widget>[
           const SizedBox(height: 18),
-          _BannerCard(
-            palette: palette,
-            color: const Color(0xFFFF8A80),
-            message: shell._errorMessage!,
+          Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 760),
+              child: _BannerCard(
+                palette: palette,
+                color: const Color(0xFFFF8A80),
+                message: shell._errorMessage!,
+              ),
+            ),
           ),
         ],
         if (shell._networkErrorMessage != null) ...<Widget>[
           const SizedBox(height: 18),
-          _BannerCard(
-            palette: palette,
-            color: const Color(0xFFF8C15D),
-            message: shell._networkErrorMessage!,
+          Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 760),
+              child: _BannerCard(
+                palette: palette,
+                color: const Color(0xFFF8C15D),
+                message: shell._networkErrorMessage!,
+              ),
+            ),
           ),
         ],
       ],
@@ -5891,7 +6006,7 @@ class _SettingsView extends StatelessWidget {
                           (MapEntry<String, String> mode) =>
                               ButtonSegment<String>(
                             value: mode.key,
-                            label: Text(mode.value),
+                            label: Text(_tr(context, mode.key)),
                           ),
                         )
                         .toList(),
@@ -6658,10 +6773,12 @@ class _WalletOverviewPanel extends StatelessWidget {
                     onTap: () => shell._setAssetTab(1),
                   ),
                   const Spacer(),
-                  TextButton(
-                    onPressed: shell._working ? null : shell._addDerivedAccount,
-                    child: Text(_tr(context, 'add_new')),
-                  ),
+                  if (shell._assetTabIndex == 0)
+                    TextButton(
+                      onPressed:
+                          shell._working ? null : shell._addDerivedAccount,
+                      child: Text(_tr(context, 'add_new')),
+                    ),
                 ],
               ),
               const SizedBox(height: 12),
@@ -6844,7 +6961,8 @@ class _AccountDetailPanel extends StatelessWidget {
             _OverviewTabButton(
               palette: palette,
               label: _tr(context, 'tokens'),
-              selected: shell._accountDetailViewIndex == 3,
+              selected: shell._accountDetailViewIndex == 3 &&
+                  shell._selectedTokenName == null,
               onTap: shell._selectedTokenName != null
                   ? shell._showTokenBalances
                   : () => shell._setAccountDetailView(3),
@@ -7118,6 +7236,7 @@ class _SelectedAccountHeroCard extends StatelessWidget {
                               'token_tx_count_on_account',
                               <String, String>{
                                 'count': '$tokenTransactionCount',
+                                'token': selectedTokenName ?? '',
                               },
                             ),
                   style: TextStyle(
@@ -7531,29 +7650,35 @@ class _OverviewTabButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 160),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        decoration: BoxDecoration(
-          color: selected
-              ? palette.primary.withValues(alpha: 0.18)
-              : palette.surfaceAlt,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: selected
-                ? palette.primary.withValues(alpha: 0.5)
-                : palette.outline,
-          ),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: selected ? palette.primary : palette.text,
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
+    final Color backgroundColor = palette.isLight
+        ? Colors.white
+        : selected
+            ? palette.primary.withValues(alpha: 0.18)
+            : palette.surfaceAlt;
+    final BorderSide borderSide = BorderSide(
+      color: selected
+          ? palette.primary.withValues(alpha: 0.5)
+          : palette.outline,
+    );
+
+    return Material(
+      color: backgroundColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: borderSide,
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          child: Text(
+            label,
+            style: TextStyle(
+              color: selected ? palette.primary : palette.text,
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ),
       ),
@@ -7721,7 +7846,7 @@ class _TokenSendTransactionCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: palette.surfaceAlt,
+        color: palette.sendFormColor,
         borderRadius: BorderRadius.circular(18),
         border: Border.all(color: palette.outline),
       ),
@@ -7995,9 +8120,10 @@ class _TokenTransactionsCard extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.all(18),
             decoration: BoxDecoration(
-              color: palette.surfaceAlt,
+              color: palette.transactionPanelColor,
               borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: palette.outline),
+              border: Border.all(color: palette.transactionBorderColor),
+              boxShadow: palette.panelShadows,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -8066,91 +8192,101 @@ class _TokenTransactionRow extends StatelessWidget {
     final Color accent =
         isReceive ? const Color(0xFF2EE6A6) : const Color(0xFFF8C15D);
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                width: 10,
-                height: 10,
-                margin: const EdgeInsets.only(top: 5),
-                decoration: BoxDecoration(
-                  color: accent,
-                  shape: BoxShape.circle,
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: palette.transactionItemColor,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: palette.transactionBorderColor,
+        ),
+        boxShadow: palette.itemShadows,
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(16),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  width: 10,
+                  height: 10,
+                  margin: const EdgeInsets.only(top: 5),
+                  decoration: BoxDecoration(
+                    color: accent,
+                    shape: BoxShape.circle,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      spacing: 8,
-                      runSpacing: 4,
-                      children: <Widget>[
-                        Text(
-                          '${_tr(context, isReceive ? 'receive' : 'send')} ${transaction.amount} ${transaction.tokenName}',
-                          style: TextStyle(
-                            color: palette.text,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        if (isPending)
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 3,
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        spacing: 8,
+                        runSpacing: 4,
+                        children: <Widget>[
+                          Text(
+                            '${_tr(context, isReceive ? 'receive' : 'send')} ${transaction.amount} ${transaction.tokenName}',
+                            style: TextStyle(
+                              color: palette.text,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
                             ),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFF9F43)
-                                  .withValues(alpha: 0.18),
-                              borderRadius: BorderRadius.circular(999),
-                              border: Border.all(
+                          ),
+                          if (isPending)
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 3,
+                              ),
+                              decoration: BoxDecoration(
                                 color: const Color(0xFFFF9F43)
-                                    .withValues(alpha: 0.45),
+                                    .withValues(alpha: 0.18),
+                                borderRadius: BorderRadius.circular(999),
+                                border: Border.all(
+                                  color: const Color(0xFFFF9F43)
+                                      .withValues(alpha: 0.45),
+                                ),
+                              ),
+                              child: Text(
+                                _tr(context, 'pending'),
+                                style: TextStyle(
+                                  color: Color(0xFFFFC27A),
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
                             ),
-                            child: Text(
-                              _tr(context, 'pending'),
-                              style: TextStyle(
-                                color: Color(0xFFFFC27A),
-                                fontSize: 10,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      isReceive
-                          ? Address(transaction.sender).getShortString()
-                          : Address(transaction.recipient).getShortString(),
-                      style: TextStyle(
-                        color: palette.muted,
-                        fontSize: 16,
+                        ],
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 2),
+                      Text(
+                        isReceive
+                            ? Address(transaction.sender).getShortString()
+                            : Address(transaction.recipient).getShortString(),
+                        style: TextStyle(
+                          color: palette.muted,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(width: 8),
-              Text(
-                _formatTimestamp(transaction.timestamp),
-                style: TextStyle(
-                  color: palette.muted,
-                  fontSize: 16,
+                const SizedBox(width: 8),
+                Text(
+                  _formatTimestamp(transaction.timestamp),
+                  style: TextStyle(
+                    color: palette.muted,
+                    fontSize: 16,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -8599,7 +8735,7 @@ class _SendTransactionCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: palette.surfaceAlt,
+        color: palette.sendFormColor,
         borderRadius: BorderRadius.circular(18),
         border: Border.all(color: palette.outline),
       ),
@@ -8713,9 +8849,10 @@ class _RecentTransactionsCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: palette.surfaceAlt,
+        color: palette.transactionPanelColor,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: palette.outline),
+        border: Border.all(color: palette.transactionBorderColor),
+        boxShadow: palette.panelShadows,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -8790,9 +8927,10 @@ class _TransactionDetailCard extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
-          color: palette.surfaceAlt,
+          color: palette.transactionPanelColor,
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: palette.outline),
+          border: Border.all(color: palette.transactionBorderColor),
+          boxShadow: palette.panelShadows,
         ),
         child: const Padding(
           padding: EdgeInsets.symmetric(vertical: 28),
@@ -8807,9 +8945,10 @@ class _TransactionDetailCard extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
-          color: palette.surfaceAlt,
+          color: palette.transactionPanelColor,
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: palette.outline),
+          border: Border.all(color: palette.transactionBorderColor),
+          boxShadow: palette.panelShadows,
         ),
         child: Text(
           _tr(context, 'transaction_detail_unavailable'),
@@ -8980,9 +9119,10 @@ class _TransactionDetailSection extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: palette.surfaceAlt,
+        color: palette.transactionPanelColor,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: palette.outline),
+        border: Border.all(color: palette.transactionBorderColor),
+        boxShadow: palette.panelShadows,
       ),
       child: Column(
         children: children,
@@ -9222,100 +9362,107 @@ class _RecentTxRow extends StatelessWidget {
     final bool isPending = transaction.isPending;
     final BisToken? token = transaction.getBisToken();
     final bool isTokenTransfer = transaction.isTokenTransfer() && token != null;
-    final Color accent = isTokenTransfer
-        ? const Color(0xFF77C8FF)
-        : isReceive
-            ? const Color(0xFF2EE6A6)
-            : const Color(0xFFF8C15D);
+    final Color accent =
+        isReceive ? const Color(0xFF2EE6A6) : const Color(0xFFF8C15D);
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                width: 10,
-                height: 10,
-                margin: const EdgeInsets.only(top: 5),
-                decoration: BoxDecoration(
-                  color: accent,
-                  shape: BoxShape.circle,
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: palette.transactionItemColor,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: palette.transactionBorderColor,
+        ),
+        boxShadow: palette.itemShadows,
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(16),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  width: 10,
+                  height: 10,
+                  margin: const EdgeInsets.only(top: 5),
+                  decoration: BoxDecoration(
+                    color: accent,
+                    shape: BoxShape.circle,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      spacing: 8,
-                      runSpacing: 4,
-                      children: <Widget>[
-                        Text(
-                          _buildPrimaryLabel(
-                            isReceive: isReceive,
-                            isTokenTransfer: isTokenTransfer,
-                            token: token,
-                            context: context,
-                          ),
-                          style: TextStyle(
-                            color: palette.text,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        if (isPending)
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 3,
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        spacing: 8,
+                        runSpacing: 4,
+                        children: <Widget>[
+                          Text(
+                            _buildPrimaryLabel(
+                              isReceive: isReceive,
+                              isTokenTransfer: isTokenTransfer,
+                              token: token,
+                              context: context,
                             ),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFF9F43)
-                                  .withValues(alpha: 0.18),
-                              borderRadius: BorderRadius.circular(999),
-                              border: Border.all(
+                            style: TextStyle(
+                              color: palette.text,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          if (isPending)
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 3,
+                              ),
+                              decoration: BoxDecoration(
                                 color: const Color(0xFFFF9F43)
-                                    .withValues(alpha: 0.45),
+                                    .withValues(alpha: 0.18),
+                                borderRadius: BorderRadius.circular(999),
+                                border: Border.all(
+                                  color: const Color(0xFFFF9F43)
+                                      .withValues(alpha: 0.45),
+                                ),
+                              ),
+                              child: Text(
+                                _tr(context, 'pending'),
+                                style: const TextStyle(
+                                  color: Color(0xFFFFC27A),
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
                             ),
-                            child: Text(
-                              _tr(context, 'pending'),
-                              style: const TextStyle(
-                                color: Color(0xFFFFC27A),
-                                fontSize: 10,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      transaction.getShortString(),
-                      style: TextStyle(
-                        color: palette.muted,
-                        fontSize: 16,
+                        ],
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 2),
+                      Text(
+                        transaction.getShortString(),
+                        style: TextStyle(
+                          color: palette.muted,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(width: 8),
-              Text(
-                _formatTimestamp(transaction.timestamp),
-                style: TextStyle(
-                  color: palette.muted,
-                  fontSize: 16,
+                const SizedBox(width: 8),
+                Text(
+                  _formatTimestamp(transaction.timestamp),
+                  style: TextStyle(
+                    color: palette.muted,
+                    fontSize: 16,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -9401,35 +9548,38 @@ class _SectionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: palette.surface,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: palette.outline),
-        boxShadow: const <BoxShadow>[
-          BoxShadow(
-            color: Color(0x42000000),
-            blurRadius: 24,
-            offset: Offset(0, 14),
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(18),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              title,
-              style: TextStyle(
-                color: palette.text,
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-              ),
+    return SizedBox(
+      width: double.infinity,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: palette.surface,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: palette.outline),
+          boxShadow: const <BoxShadow>[
+            BoxShadow(
+              color: Color(0x42000000),
+              blurRadius: 24,
+              offset: Offset(0, 14),
             ),
-            const SizedBox(height: 14),
-            child,
           ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(18),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                title,
+                style: TextStyle(
+                  color: palette.text,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 14),
+              child,
+            ],
+          ),
         ),
       ),
     );
@@ -9663,4 +9813,39 @@ class _Palette {
     required this.muted,
     required this.outline,
   });
+
+  bool get isLight => background.computeLuminance() > 0.5;
+
+  Color get transactionPanelColor => isLight ? surface : surfaceAlt;
+
+  Color get transactionItemColor => isLight ? Colors.white : Colors.transparent;
+
+  Color get transactionBorderColor => isLight ? const Color(0xFFE1E9F2) : outline;
+
+  Color get sendFormColor => isLight ? const Color(0xFFFAFCFE) : surfaceAlt;
+
+  List<BoxShadow> get panelShadows => isLight
+      ? const <BoxShadow>[
+          BoxShadow(
+            color: Color(0x1A5D6C84),
+            blurRadius: 30,
+            offset: Offset(0, 16),
+          ),
+          BoxShadow(
+            color: Color(0x0F5D6C84),
+            blurRadius: 10,
+            offset: Offset(0, 4),
+          ),
+        ]
+      : const <BoxShadow>[];
+
+  List<BoxShadow> get itemShadows => isLight
+      ? const <BoxShadow>[
+          BoxShadow(
+            color: Color(0x0D5D6C84),
+            blurRadius: 12,
+            offset: Offset(0, 4),
+          ),
+        ]
+      : const <BoxShadow>[];
 }
